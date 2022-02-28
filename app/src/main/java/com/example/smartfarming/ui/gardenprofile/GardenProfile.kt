@@ -13,34 +13,42 @@ import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Reviews
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.adduser.ui.theme.BlueWatering
 import com.example.smartfarming.ui.adduser.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.adduser.ui.theme.YellowPesticide
+import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
 import com.example.smartfarming.ui.gardenprofile.composables.ToDos
+import com.example.smartfarming.ui.home.composables.MyFAB
 
 @Composable
-fun GardenProfile(garden : State<Garden?>){
-
+fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
+    val context = LocalContext.current
+    var fabExtended by remember{
+        mutableStateOf(false)
+    }
 
     Scaffold(
         modifier = Modifier
             .background(Color.LightGray)
             .fillMaxSize(1f),
         floatingActionButton = {
-
+            MyFAB(context = context, fabExtended = fabExtended) {
+                fabExtended = !fabExtended
+            }
         }
 
     ) {
@@ -72,8 +80,16 @@ fun GardenProfile(garden : State<Garden?>){
             }
 
 
-            ToDos("irrigation", "آبیاری فروردین", "به توجه به تقویم آبیاری و نیاز باغ، آبیاری انجام شود.")
-            ToDos("pesticide", "سم پاشی", "در فروردین ماه به منظور جلوگیری از طغیان شته سم پاشی انجام شود.")
+            ToDos(ScreensEnumGardenProfile.IrrigationScreen.name,
+                "آبیاری فروردین", "به توجه به تقویم آبیاری و نیاز باغ، آبیاری انجام شود.",
+                navController,
+                gardenName = garden.value!!.name
+            )
+            ToDos("pesticide",
+                "سم پاشی", "در فروردین ماه به منظور جلوگیری از طغیان شته سم پاشی انجام شود.",
+                navController,
+                gardenName = garden.value!!.name
+            )
         }
     }
 }

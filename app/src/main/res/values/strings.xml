@@ -64,6 +64,12 @@
         <item>شخم</item>
     </string-array>
 
+    <string-array name="irrigation_type">
+        <item>غرق آبی</item>
+        <item>قطره ای</item>
+        <item>کم فشار</item>
+    </string-array>
+
     <string name="title_activity_add_user">AddUserActivity</string>
     <string name="title_activity_add_activities">AddActivities</string>
     <string name="title_activity_irrigation">IrrigationActivity</string>

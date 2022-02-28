@@ -1,12 +1,7 @@
 package com.example.smartfarming.ui.addactivities
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -84,18 +79,18 @@ fun ActivityTitleCard(
 ){
 
     val icon = when(currentActivity){
-        ActivitiesScreen.PesticideBody.name -> R.drawable.pesticide_colored
-        ActivitiesScreen.FertilizationBody.name -> R.drawable.fertilizer_color
-        ActivitiesScreen.IrrigationBody.name -> R.drawable.irrigation_colored
-        ActivitiesScreen.OtherActivityBody.name -> R.drawable.shovel_colored
+        ScreensEnumActivities.PesticideBody.name -> R.drawable.pesticide_colored
+        ScreensEnumActivities.FertilizationBody.name -> R.drawable.fertilizer_color
+        ScreensEnumActivities.IrrigationBody.name -> R.drawable.irrigation_colored
+        ScreensEnumActivities.OtherActivityBody.name -> R.drawable.shovel_colored
         else -> R.drawable.shovel_colored
     }
 
     val backgroundColor = when(currentActivity){
-        ActivitiesScreen.PesticideBody.name -> lightGreenPesticide
-        ActivitiesScreen.FertilizationBody.name -> lightRedFertilizer
-        ActivitiesScreen.IrrigationBody.name -> lightBlueIrrigation
-        ActivitiesScreen.OtherActivityBody.name -> lightBrownOtherActivities
+        ScreensEnumActivities.PesticideBody.name -> lightGreenPesticide
+        ScreensEnumActivities.FertilizationBody.name -> lightRedFertilizer
+        ScreensEnumActivities.IrrigationBody.name -> lightBlueIrrigation
+        ScreensEnumActivities.OtherActivityBody.name -> lightBrownOtherActivities
         else -> lightBrownOtherActivities
     }
 
@@ -145,19 +140,19 @@ fun SideBar(
     ) {
 
         val irrigationIconTint by animateColorAsState(
-            if (currentActivity == ActivitiesScreen.IrrigationBody.name) MainGreen else Color.Black
+            if (currentActivity == ScreensEnumActivities.IrrigationBody.name) MainGreen else Color.Black
         )
         val irrigationIconSize by animateDpAsState(
-            if (currentActivity == ActivitiesScreen.IrrigationBody.name) 50.dp else 40.dp
+            if (currentActivity == ScreensEnumActivities.IrrigationBody.name) 50.dp else 40.dp
         )
         val otherActivitiesIconSize by animateDpAsState(
-            if (currentActivity == ActivitiesScreen.OtherActivityBody.name) 50.dp else 40.dp
+            if (currentActivity == ScreensEnumActivities.OtherActivityBody.name) 50.dp else 40.dp
         )
         val fertilizationIconSize by animateDpAsState(
-            if (currentActivity == ActivitiesScreen.FertilizationBody.name) 50.dp else 40.dp
+            if (currentActivity == ScreensEnumActivities.FertilizationBody.name) 50.dp else 40.dp
         )
         val pesticideIconSize by animateDpAsState(
-            if (currentActivity == ActivitiesScreen.PesticideBody.name) 50.dp else 40.dp
+            if (currentActivity == ScreensEnumActivities.PesticideBody.name) 50.dp else 40.dp
         )
 
         Icon(
@@ -165,7 +160,7 @@ fun SideBar(
             contentDescription = "",
             modifier = Modifier
                 .clickable {
-                    currentActivityChange(ActivitiesScreen.IrrigationBody.name)
+                    currentActivityChange(ScreensEnumActivities.IrrigationBody.name)
                 }
                 .padding(horizontal = 15.dp, vertical = 35.dp)
                 .size(irrigationIconSize)
@@ -178,39 +173,39 @@ fun SideBar(
             contentDescription = "",
             modifier = Modifier
                 .clickable {
-                    currentActivityChange(ActivitiesScreen.OtherActivityBody.name)
+                    currentActivityChange(ScreensEnumActivities.OtherActivityBody.name)
                 }
                 .padding(horizontal = 15.dp, vertical = 35.dp)
                 .size(otherActivitiesIconSize)
 
             ,
-            tint = if (currentActivity == ActivitiesScreen.OtherActivityBody.name) MainGreen else Color.Black
+            tint = if (currentActivity == ScreensEnumActivities.OtherActivityBody.name) MainGreen else Color.Black
         )
         Icon(
             painter = painterResource(id = R.drawable.fertilizer_line),
             contentDescription = "",
             modifier = Modifier
                 .clickable {
-                    currentActivityChange(ActivitiesScreen.FertilizationBody.name)
+                    currentActivityChange(ScreensEnumActivities.FertilizationBody.name)
                 }
                 .padding(horizontal = 15.dp, vertical = 35.dp)
                 .size(fertilizationIconSize)
 
             ,
-            tint = if (currentActivity == ActivitiesScreen.FertilizationBody.name) MainGreen else Color.Black
+            tint = if (currentActivity == ScreensEnumActivities.FertilizationBody.name) MainGreen else Color.Black
         )
         Icon(
             painter = painterResource(id = R.drawable.pesticide_line),
             contentDescription = "",
             modifier = Modifier
                 .clickable {
-                    currentActivityChange(ActivitiesScreen.PesticideBody.name)
+                    currentActivityChange(ScreensEnumActivities.PesticideBody.name)
                 }
                 .padding(horizontal = 15.dp, vertical = 35.dp)
                 .size(pesticideIconSize)
 
             ,
-            tint = if (currentActivity == ActivitiesScreen.PesticideBody.name) MainGreen else Color.Black
+            tint = if (currentActivity == ScreensEnumActivities.PesticideBody.name) MainGreen else Color.Black
         )
     }
 }
@@ -247,10 +242,10 @@ fun DecideActivityPart(
     gardenName: String
 ){
     when(currentActivity){
-        ActivitiesScreen.FertilizationBody.name -> FertilizationPart(gardenName)
-        ActivitiesScreen.IrrigationBody.name -> IrrigationPart(gardenName)
-        ActivitiesScreen.PesticideBody.name -> PesticidePart()
-        ActivitiesScreen.OtherActivityBody.name -> OtherActivityPart()
+        ScreensEnumActivities.FertilizationBody.name -> FertilizationPart(gardenName)
+        ScreensEnumActivities.IrrigationBody.name -> IrrigationPart(gardenName)
+        ScreensEnumActivities.PesticideBody.name -> PesticidePart()
+        ScreensEnumActivities.OtherActivityBody.name -> OtherActivityPart()
     }
 }
 

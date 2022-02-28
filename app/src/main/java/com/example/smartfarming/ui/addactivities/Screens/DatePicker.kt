@@ -56,7 +56,7 @@ fun DatePicker(
         Surface(
             modifier = Modifier
                 .width(370.dp)
-                .height(400.dp)
+                .height(410.dp)
                 .padding(vertical = 30.dp, horizontal = 15.dp)
             ,
             shape = RoundedCornerShape(15.dp),

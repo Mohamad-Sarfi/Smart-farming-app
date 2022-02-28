@@ -1,7 +1,6 @@
 package com.example.smartfarming.ui.addactivities
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,16 +12,16 @@ fun SetupNavGraph(
     viewModel: AddActivitiesViewModel
 ){
     // Routes
-    val homeActivity = ActivitiesScreen.HomeActivity.name
-    val irrigation = ActivitiesScreen.Irrigation.name
-    val activityScreen = ActivitiesScreen.ActivityScreen.name
+    val homeActivity = ScreensEnumActivities.HomeActivity.name
+    val irrigation = ScreensEnumActivities.Irrigation.name
+    val activityScreen = ScreensEnumActivities.ActivityScreen.name
 
 
     NavHost(
         navController = navController,
-        startDestination = ActivitiesScreen.HomeActivity.name){
+        startDestination = ScreensEnumActivities.HomeActivity.name){
             composable(
-                route = ActivitiesScreen.HomeActivity.name
+                route = ScreensEnumActivities.HomeActivity.name
             ){
                 AddActivitiesMain(navController, viewModel)
             }

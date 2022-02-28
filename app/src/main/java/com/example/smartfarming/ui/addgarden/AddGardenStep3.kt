@@ -1,9 +1,5 @@
 package com.example.smartfarming.ui.addgarden
 
-import android.content.Intent
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,9 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.rounded.SquareFoot
-import androidx.compose.material.icons.rounded.Water
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,13 +19,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
-import com.example.smartfarming.ui.addactivities.ActivitiesScreen
-import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.google.android.gms.maps.model.Circle
-import com.google.android.gms.maps.model.LatLng
+import com.example.smartfarming.ui.addactivities.ScreensEnumActivities
 
 @Composable
 fun AddGardenStep3(
@@ -58,7 +48,7 @@ fun AddGardenStep3(
             contentDescription = "",
             modifier = Modifier
                 .clickable {
-                    navController.navigate(ActivitiesScreen.MapScreen.name)
+                    navController.navigate(ScreensEnumActivities.MapScreen.name)
                 }
                 .size(120.dp)
                 .clip(RoundedCornerShape(100))

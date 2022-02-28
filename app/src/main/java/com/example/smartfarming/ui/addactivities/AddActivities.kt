@@ -132,11 +132,11 @@ fun Cards(
         ) {
             Card("آبیاری", R.drawable.watering, BlueWatering, clicked) {
                 clicked.value = !clicked.value
-                navigateToScreens(navController, currentGarden, ActivitiesScreen.IrrigationBody.name)
+                navigateToScreens(navController, currentGarden, ScreensEnumActivities.IrrigationBody.name)
             }
             Card("تغذیه", R.drawable.npk, RedFertilizer, clicked) {
                 clicked.value = !clicked.value
-                navigateToScreens(navController, currentGarden, ActivitiesScreen.FertilizationBody.name)
+                navigateToScreens(navController, currentGarden, ScreensEnumActivities.FertilizationBody.name)
             }
         }
         Row(
@@ -146,11 +146,11 @@ fun Cards(
         ) {
             Card("محلول پاشی", R.drawable.pesticide1, YellowPesticide,clicked ){
                 clicked.value = !clicked.value
-                navigateToScreens(navController, currentGarden, ActivitiesScreen.PesticideBody.name)
+                navigateToScreens(navController, currentGarden, ScreensEnumActivities.PesticideBody.name)
             }
             Card("سایر", R.drawable.shovel, MaterialTheme.colors.primary, clicked) {
                 clicked.value = !clicked.value
-                navigateToScreens(navController, currentGarden, ActivitiesScreen.PesticideBody.name)
+                navigateToScreens(navController, currentGarden, ScreensEnumActivities.PesticideBody.name)
             }
         }
         Row(
@@ -311,14 +311,14 @@ private fun navigateToScreens(
     gardenName: String,
     activityName: String
 ){
-    val route = ActivitiesScreen.ActivityScreen.name
+    val route = ScreensEnumActivities.ActivityScreen.name
     val icon =
         when(activityName){
-            ActivitiesScreen.FertilizationBody.name -> ActivitiesScreen.FertilizationBody.icon
-            ActivitiesScreen.IrrigationBody.name -> ActivitiesScreen.IrrigationBody.icon
-            ActivitiesScreen.PesticideBody.name -> ActivitiesScreen.PesticideBody.icon
-            ActivitiesScreen.OtherActivityBody.name -> ActivitiesScreen.OtherActivityBody.icon
-            else -> ActivitiesScreen.OtherActivityBody.icon
+            ScreensEnumActivities.FertilizationBody.name -> ScreensEnumActivities.FertilizationBody.icon
+            ScreensEnumActivities.IrrigationBody.name -> ScreensEnumActivities.IrrigationBody.icon
+            ScreensEnumActivities.PesticideBody.name -> ScreensEnumActivities.PesticideBody.icon
+            ScreensEnumActivities.OtherActivityBody.name -> ScreensEnumActivities.OtherActivityBody.icon
+            else -> ScreensEnumActivities.OtherActivityBody.icon
         }
     navController.navigate("$route/$gardenName/$activityName")
 }

@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
@@ -32,25 +34,21 @@ class GardenProfileActivity : ComponentActivity() {
         val inputIntent = intent
         val gardenName = inputIntent.getStringExtra("gardenName")
 
-        val garden = viewModel.getGarden(gardenName!!)
-
         setContent {
             SmartFarmingTheme() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val garden = viewModel.getGarden(gardenName).observeAsState()
-                    GardenProfile(garden)
+                    val garden = viewModel.getGarden(gardenName!!).observeAsState()
+                    val navController : NavHostController = rememberNavController()
+                    NavGraphGardenProfile(navController = navController, garden = garden, viewModel)
                 }
             }
         }
     }
 }
 
-fun getGarden(){
-
-}
 
 @Preview(showBackground = true)
 @Composable

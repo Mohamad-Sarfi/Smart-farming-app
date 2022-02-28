@@ -14,7 +14,7 @@ class GardenProfileViewModel(val repo : GardenRepo) : ViewModel() {
             0.0, 0)
     }
 
-    fun getGardenByName(gardenName : String) {
+    private fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
             garden.value  = repo.getGardenByName(gardenName)
         }

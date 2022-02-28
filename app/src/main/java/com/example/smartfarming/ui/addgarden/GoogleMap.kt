@@ -31,7 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
-import com.example.smartfarming.ui.addactivities.ActivitiesScreen
+import com.example.smartfarming.ui.addactivities.ScreensEnumActivities
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
@@ -107,7 +107,7 @@ fun MapCompose(
         Button(
             onClick = {
                 viewModel.isLocationSet.value = true
-                navController.navigate(ActivitiesScreen.AddGardenScreen.name){
+                navController.navigate(ScreensEnumActivities.AddGardenScreen.name){
                     popUpTo(0)
                 }
                       },

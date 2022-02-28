@@ -29,7 +29,11 @@ val Typography = Typography(
         fontSize = 20.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
-
+    h2 = TextStyle(
+        fontFamily = sina,
+        fontSize = 34.sp,
+        textDirection = TextDirection.ContentOrRtl
+    ),
     h3 = TextStyle(
         fontFamily = sina,
         fontSize = 28.sp,

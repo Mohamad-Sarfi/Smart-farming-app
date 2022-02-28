@@ -1,19 +1,15 @@
 package com.example.smartfarming.ui.addgarden
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavArgs
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.example.smartfarming.ui.addactivities.ActivitiesScreen
+import com.example.smartfarming.ui.addactivities.ScreensEnumActivities
 
 @Composable
 fun GardenNavGraph(navController: NavHostController, viewModel: AddGardenViewModel){
-    val addGarden = ActivitiesScreen.AddGardenScreen.name
-    val maps = ActivitiesScreen.MapScreen.name
+    val addGarden = ScreensEnumActivities.AddGardenScreen.name
+    val maps = ScreensEnumActivities.MapScreen.name
 
     NavHost(
         navController = navController, startDestination = addGarden
