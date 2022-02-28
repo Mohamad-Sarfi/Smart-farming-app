@@ -66,7 +66,6 @@ fun AddActivitiesMain(navController : NavHostController, viewModel : AddActiviti
     val gardensList = viewModel.getGardens().observeAsState()
     val gardensNameList = arrayListOf<String>()
 
-
     if (gardensList.value != null){
         for (garden in gardensList.value!!){
             gardensNameList.add(garden.name)
