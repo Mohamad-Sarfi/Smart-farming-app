@@ -4,6 +4,8 @@ import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -25,7 +27,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartfarming.R
+import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.adduser.ui.theme.BlueWatering
 import com.example.smartfarming.ui.adduser.ui.theme.RedFertilizer
@@ -40,6 +44,52 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
     var fabExtended by remember{
         mutableStateOf(false)
     }
+
+    val tasks = listOf<Task>(
+        Task(0,
+            "ولک پاشی",
+            activity_type = ActivityTypesEnum.FERTILIZATION.name,
+            description = "به دلیل عدم تامین نیاز سرمایی",
+            start_date = "",
+            finish_date = "",
+            garden_name = "محمد",
+            recommendations = "روغن ولک",
+            user_id = 5
+        ),
+        Task(0,
+            "سم پاشی",
+            activity_type = ActivityTypesEnum.PESTICIDE.name,
+            description = "مبارزه با پسیل",
+            start_date = "",
+            finish_date = "",
+            garden_name = "محمد",
+            recommendations = "روغن ولک",
+            user_id = 5
+        )
+        ,
+        Task(0,
+            "آبیاری اسفند",
+            activity_type = ActivityTypesEnum.IRRIGATION.name,
+            description = "موعد آبیاری اسفند",
+            start_date = "",
+            finish_date = "",
+            garden_name = "محمد",
+            recommendations = "",
+            user_id = 5
+        )
+        ,
+        Task(0,
+            "کود دامی",
+            activity_type = ActivityTypesEnum.FERTILIZATION.name,
+            description = "با توجه به ماده عالی خاک نیاز به تامین کود دامی",
+            start_date = "",
+            finish_date = "",
+            garden_name = "اکبری",
+            recommendations = "کود گاو",
+            user_id = 5
+        )
+    )
+
 
     Scaffold(
         modifier = Modifier
@@ -79,17 +129,18 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
 
             }
 
+            val thisGardenTask = ArrayList<Task>()
+            for (task in tasks){
+                if (task.garden_name == garden.value!!.name){
+                    thisGardenTask.add(task)
+                }
+            }
 
-            ToDos(ScreensEnumGardenProfile.IrrigationScreen.name,
-                "آبیاری فروردین", "به توجه به تقویم آبیاری و نیاز باغ، آبیاری انجام شود.",
-                navController,
-                gardenName = garden.value!!.name
-            )
-            ToDos("pesticide",
-                "سم پاشی", "در فروردین ماه به منظور جلوگیری از طغیان شته سم پاشی انجام شود.",
-                navController,
-                gardenName = garden.value!!.name
-            )
+            LazyColumn{
+                items(thisGardenTask){ task ->
+                    ToDos(task = task, navController = navController)
+                }
+            }
         }
     }
 }

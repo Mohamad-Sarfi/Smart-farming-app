@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.smartfarming.FarmApplication
-import com.example.smartfarming.databinding.FragmentHomeBinding
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.addgarden.AddGarden
 import com.example.smartfarming.ui.home.composables.HomeCompose

@@ -90,6 +90,13 @@ fun AddGardenCompose(
     val irrigationDuration by viewModel.irrigationDuration.observeAsState()
     val irrigationVolume by viewModel.irrigationVolume.observeAsState()
 
+
+
+    // Animation transitions
+    var step1Transition by remember {
+        mutableStateOf(false)
+    }
+
     Scaffold(
         modifier = Modifier
             .padding(0.dp)
@@ -143,8 +150,11 @@ fun AddGardenCompose(
                 // Main column, consisting fields
                 Column {
 
+
+
                     when(step.value){
-                        1 -> AddGardenStep1(
+                        1 ->
+                            AddGardenStep1(
                             gardenName!!, {viewModel.setGardenName(it)},
                             gardenAge!!, {viewModel.setGardenAge(it)},
                             varietiesList, {
@@ -153,7 +163,8 @@ fun AddGardenCompose(
                                 viewModel.removeFromTypeArray(it)
                             }
                         )
-                        2 -> AddGardenStep2(
+                        2 ->
+                            AddGardenStep2(
                             irrigationDuration!!,
                             {viewModel.setIrrigationDuration(it)},
                             irrigationCycle!!,
@@ -318,9 +329,7 @@ fun ManageTopCard(step: Int){
     }
 }
 
-fun addTodatabase(){
 
-}
 
 @Preview(showBackground = true)
 @Composable

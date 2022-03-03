@@ -9,6 +9,8 @@ import kotlinx.coroutines.SupervisorJob
 class FarmApplication : Application() {
 
     private val database : GardenDb by lazy { GardenDb.getDatabase(this) }
-    val repo by lazy { GardenRepo(database.gardenDao()) }
+    val repo by lazy {
+        GardenRepo(database.gardenDao(), database.taskDao())
+    }
 
 }

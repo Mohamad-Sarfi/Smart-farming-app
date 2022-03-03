@@ -16,7 +16,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Dangerous
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -35,6 +37,7 @@ import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.AddActivities
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addgarden.AddGarden
+import com.example.smartfarming.ui.adduser.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.gardens.GardensViewModel
 import com.example.smartfarming.ui.home.composables.MyFAB
 
@@ -89,20 +92,35 @@ fun GardenCompose(viewModel: GardensViewModel){
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
+                    //.verticalScroll(rememberScrollState())
                     .weight(1f, false)
                 ,
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-            }
                 if (gardenList.isNullOrEmpty()){
-                    Text(
-                        text = "هنوز باغی وارد نشده!",
-                        style = MaterialTheme.typography.body1,
-                        color = MainGreen
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        Icon(
+                            Icons.Default.Warning,
+                            contentDescription = "",
+                            tint = YellowPesticide,
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(50.dp)
+
+                        )
+
+                        Text(
+                            text = "هنوز باغی وارد نشده!",
+                            style = MaterialTheme.typography.body2,
+                            color = BorderGray
+                        )
+
+                    }
                 } else {
                     LazyColumn{
                         items(gardenList!!){
@@ -110,6 +128,7 @@ fun GardenCompose(viewModel: GardensViewModel){
                         }
                     }
                 }
+            }
         }
     }
 }

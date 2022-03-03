@@ -19,25 +19,28 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.smartfarming.data.room.entities.ActivityTypesEnum
+import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.adduser.ui.theme.BlueWatering
+import com.example.smartfarming.ui.adduser.ui.theme.PurplePrune
 import com.example.smartfarming.ui.adduser.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.adduser.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
 
+
 @Composable
 fun ToDos(
-    activityType: String,
-    title : String, data: String,
-    navController: NavHostController,
-    gardenName: String
+    task: Task,
+    navController: NavHostController
 ){
 
-    val barColor = when(activityType){
-        "irrigation" -> BlueWatering
-        "fertilizarion" -> RedFertilizer
-        "pesticide" -> YellowPesticide
+    val barColor = when(task.activity_type){
+        ActivityTypesEnum.IRRIGATION.name -> BlueWatering
+        ActivityTypesEnum.FERTILIZATION.name  -> RedFertilizer
+        ActivityTypesEnum.PESTICIDE.name  -> YellowPesticide
+        ActivityTypesEnum.PRUNE.name  -> PurplePrune
         else -> MainGreen
     }
 
@@ -84,9 +87,9 @@ fun ToDos(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = title, style = MaterialTheme.typography.body2, color = BorderGray)
-            DetailsText(expanded, data)
-            Buttons(expanded, barColor, activityType, gardenName = gardenName, navController = navController)
+            Text(text = task.name, style = MaterialTheme.typography.body2, color = BorderGray)
+            DetailsText(expanded, task.description)
+            Buttons(expanded, barColor, task.activity_type, gardenName = task.garden_name, navController = navController)
         }
 
     }
@@ -172,20 +175,16 @@ fun Buttons(
 
 fun manageButtonAction(activityType: String,gardenName : String, navController: NavHostController){
     when(activityType){
-        ScreensEnumGardenProfile.IrrigationScreen.name ->
-            navController.navigate("${ScreensEnumGardenProfile.IrrigationScreen.name}/$gardenName"){
+        ActivityTypesEnum.IRRIGATION.name ->
+            navController.navigate("${ScreensEnumGardenProfile.IrrigationScreen.name}/$gardenName")
 
-            }
-        "fertilization" ->
-            navController.navigate("${ScreensEnumGardenProfile.FertilizationScreen.name}/$gardenName"){
+        ActivityTypesEnum.FERTILIZATION.name ->
+            navController.navigate("${ScreensEnumGardenProfile.FertilizationScreen.name}/$gardenName")
 
-            }
-        "pesticide" ->
-            navController.navigate("${ScreensEnumGardenProfile.PesticideScreen.name}/$gardenName"){
+        ActivityTypesEnum.PESTICIDE.name ->
+            navController.navigate("${ScreensEnumGardenProfile.PesticideScreen.name}/$gardenName")
 
-            }
-        else -> navController.navigate("${ScreensEnumGardenProfile.OtherScreen.name}/$gardenName"){
-
-        }
+        else ->
+            navController.navigate("${ScreensEnumGardenProfile.OtherScreen.name}/$gardenName")
     }
 }

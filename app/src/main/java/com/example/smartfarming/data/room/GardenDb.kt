@@ -8,13 +8,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.smartfarming.data.room.daos.GardenDao
+import com.example.smartfarming.data.room.daos.TaskDao
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.Task
 import kotlinx.coroutines.CoroutineScope
 
-@Database(entities = [Garden::class], version = 1, exportSchema = false)
+@Database(entities = [Garden::class, Task::class], version = 1, exportSchema = false)
 abstract class GardenDb : RoomDatabase() {
 
     abstract fun gardenDao() : GardenDao
+    abstract fun taskDao() : TaskDao
 
     companion object {
         @Volatile

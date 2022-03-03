@@ -41,7 +41,11 @@ import com.example.smartfarming.ui.gardenprofile.GardenProfileViewModel
 import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
 
 @Composable
-fun Irrigation(gardenName: String, viewModel: GardenProfileViewModel, navController: NavHostController){
+fun Irrigation(
+    gardenName: String,
+    viewModel: GardenProfileViewModel,
+    navController: NavHostController
+){
     val garden = viewModel.getGarden(gardenName).observeAsState()
     var irrigationDate = remember {
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
@@ -52,6 +56,10 @@ fun Irrigation(gardenName: String, viewModel: GardenProfileViewModel, navControl
 
     val irrigationDuration = remember {
         mutableStateOf(garden.value!!.irrigation_duration)
+    }
+
+    var fertilizer by remember {
+        mutableStateOf("")
     }
     
     Scaffold(
@@ -67,7 +75,7 @@ fun Irrigation(gardenName: String, viewModel: GardenProfileViewModel, navControl
             val (main, button) = createRefs()
 
             Column(modifier = Modifier
-                .constrainAs(main){
+                .constrainAs(main) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
@@ -83,7 +91,7 @@ fun Irrigation(gardenName: String, viewModel: GardenProfileViewModel, navControl
                     navController.navigate(route = ScreensEnumGardenProfile.MainScreen.name)
                 },
                 modifier = Modifier
-                    .constrainAs(button){
+                    .constrainAs(button) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)

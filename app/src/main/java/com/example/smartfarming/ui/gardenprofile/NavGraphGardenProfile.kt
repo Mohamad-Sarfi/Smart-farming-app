@@ -46,7 +46,11 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            Fertilization(gardenName = gardenName!!, viewModel = viewModel)
+            Fertilization(
+                gardenName = gardenName!!,
+                viewModel = viewModel,
+                navController = navController
+            )
         }
         composable(
             route = "${ScreensEnumGardenProfile.PesticideScreen.name}/{gardenName}",

@@ -1,9 +1,5 @@
 package com.example.smartfarming.ui.addgarden
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
@@ -133,7 +129,7 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
     // Database
     fun addGardenToDb(garden : Garden){
         viewModelScope.launch(Dispatchers.IO) {
-            repo.insert(garden)
+            repo.insertGarden(garden)
         }
     }
 
