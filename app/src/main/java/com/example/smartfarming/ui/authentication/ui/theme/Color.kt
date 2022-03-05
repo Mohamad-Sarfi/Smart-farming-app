@@ -1,4 +1,4 @@
-package com.example.smartfarming.ui.adduser.ui.theme
+package com.example.smartfarming.ui.authentication.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.smartfarming.ui.adduser.AddUserActivity
+import com.example.smartfarming.ui.authentication.AddUserActivity
 import com.example.smartfarming.databinding.FragmentNotificationsBinding
 
 class UserProfileFragment : Fragment() {

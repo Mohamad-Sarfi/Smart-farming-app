@@ -90,6 +90,9 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:2.4.1"
 
 
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

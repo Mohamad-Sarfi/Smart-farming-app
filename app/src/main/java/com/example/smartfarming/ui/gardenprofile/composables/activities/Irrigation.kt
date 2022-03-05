@@ -1,9 +1,6 @@
 package com.example.smartfarming.ui.gardenprofile.composables.activities
 
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,19 +10,15 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Bottom
-import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Alignment.Companion.CenterVertically
-import androidx.compose.ui.Alignment.Companion.End
-import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
@@ -34,9 +27,8 @@ import androidx.navigation.NavHostController
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.Screens.DatePicker
-import com.example.smartfarming.ui.addactivities.Screens.DateSpinner
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
-import com.example.smartfarming.ui.adduser.ui.theme.BlueWatering
+import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.gardenprofile.GardenProfileViewModel
 import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
 
@@ -46,6 +38,9 @@ fun Irrigation(
     viewModel: GardenProfileViewModel,
     navController: NavHostController
 ){
+
+    val Max_STEPS = 1
+
     val garden = viewModel.getGarden(gardenName).observeAsState()
     var irrigationDate = remember {
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
@@ -61,15 +56,21 @@ fun Irrigation(
     var fertilizer by remember {
         mutableStateOf("")
     }
+
+    var step by remember {
+        mutableStateOf(0)
+    }
     
     Scaffold(
         modifier = Modifier
-            .background(BlueWatering)
             .fillMaxSize()
     ) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
+                .background(BlueWatering)
+                .padding(25.dp)
+
         ) {
 
             val (main, button) = createRefs()
@@ -84,11 +85,15 @@ fun Irrigation(
                 verticalArrangement = Arrangement.spacedBy((-32.dp))
             ) {
                 TitleBar()
-                Body(garden.value!!, irrigationDate, irrigationType, irrigationDuration)
+                Body(garden.value!!, irrigationDate, irrigationType, irrigationDuration, step)
             }
             Button(
                 onClick = {
-                    navController.navigate(route = ScreensEnumGardenProfile.MainScreen.name)
+                    if (step < Max_STEPS){
+                        step++
+                    } else {
+                        navController.navigate(route = ScreensEnumGardenProfile.MainScreen.name)
+                    }
                 },
                 modifier = Modifier
                     .constrainAs(button) {
@@ -100,12 +105,14 @@ fun Irrigation(
                     .fillMaxWidth()
                     .padding(2.dp),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = BlueWatering,
-                    contentColor = Color.White
+                    backgroundColor = Color.White,
+                    contentColor = BlueWatering
                 ),
                 shape = MaterialTheme.shapes.large
             ) {
-                Text(text = "تایید", style = MaterialTheme.typography.h5)
+                Text(
+                    text = if (step < Max_STEPS) "بعدی" else "تایید",
+                    style = MaterialTheme.typography.h5)
             }
         }
     }
@@ -127,36 +134,71 @@ fun TitleBar(){
                 contentDescription = "",
                 modifier = Modifier
                     .padding(10.dp)
-                    .size(60.dp),
+                    .size(70.dp),
                 tint = Color.White
             )
             //Text(text = "ثبت آبیاری", style = MaterialTheme.typography.h5, color = Color.White)
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Body(
     garden: Garden,
     irrigationDate: MutableState<MutableMap<String,String>>,
     irrigationType: MutableState<String>,
-    irrigationDuration : MutableState<Double>
+    irrigationDuration : MutableState<Double>,
+    step : Int
 ){
     Column(
         Modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Max)
-            .clip(RoundedCornerShape(topEnd = 30.dp, topStart = 30.dp))
+            .height(400.dp)
+            .graphicsLayer {
+                shadowElevation = 5.dp.toPx()
+                shape = RoundedCornerShape(27.dp)
+                clip = true
+            }
+            .clip(RoundedCornerShape(27.dp))
             .background(Color.White)
-            .padding(10.dp),
+            .padding(vertical = 70.dp, horizontal = 10.dp)
+
+            ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "ثبت آبیاری باغ " + garden.name, style = MaterialTheme.typography.h3, color = BlueWatering, modifier = Modifier.padding(vertical = 30.dp, horizontal = 10.dp))
-        WaterVolume(garden.irrigation_volume)
-        IrrigationDuration(irrigationDuration)
-        DateSelect(irrigationDate)
-        IrrigationTypeSpinner(irrigationType)
+        Text(
+            text = "ثبت آبیاری باغ " + garden.name,
+            style = MaterialTheme.typography.h3,
+            color = BlueWatering, modifier = Modifier.padding(bottom = 30.dp))
 
+            AnimatedVisibility(
+                visible = step == 0,
+                enter = slideInHorizontally(),
+                exit = slideOutHorizontally() + fadeOut()
+
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    WaterVolume(garden.irrigation_volume)
+                    IrrigationDuration(irrigationDuration)
+                }
+            }
+            AnimatedVisibility(
+                visible = step == 1,
+                enter = slideInHorizontally(),
+                exit = slideOutHorizontally() + fadeOut()
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    DateSelect(irrigationDate)
+                    IrrigationTypeSpinner(irrigationType)
+                }
+            }
 
     }
 }

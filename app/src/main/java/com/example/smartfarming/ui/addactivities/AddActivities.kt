@@ -28,9 +28,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModel
-import com.example.smartfarming.ui.adduser.ui.theme.RedFertilizer
-import com.example.smartfarming.ui.adduser.ui.theme.YellowPesticide
-import com.example.smartfarming.ui.adduser.ui.theme.BlueWatering
+import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
+import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
+import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController

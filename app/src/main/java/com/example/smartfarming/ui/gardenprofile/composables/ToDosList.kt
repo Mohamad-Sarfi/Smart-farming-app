@@ -1,7 +1,5 @@
 package com.example.smartfarming.ui.gardenprofile.composables
 
-import android.util.Log
-import android.widget.Button
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
@@ -16,17 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.adduser.ui.theme.BlueWatering
-import com.example.smartfarming.ui.adduser.ui.theme.PurplePrune
-import com.example.smartfarming.ui.adduser.ui.theme.RedFertilizer
-import com.example.smartfarming.ui.adduser.ui.theme.YellowPesticide
+import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
+import com.example.smartfarming.ui.authentication.ui.theme.PurplePrune
+import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
+import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
 
 

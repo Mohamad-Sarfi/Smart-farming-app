@@ -1,15 +1,16 @@
-package com.example.smartfarming.ui.adduser
+package com.example.smartfarming.ui.authentication
 
-import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,67 +20,40 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.smartfarming.ui.adduser.ui.theme.SmartFarmingTheme
-
-class AddUserActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            SmartFarmingTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    AddUser()
-                }
-            }
-        }
-    }
-}
-
+import androidx.navigation.NavHostController
+import com.example.smartfarming.R
+import com.example.smartfarming.ui.AppScreensEnum
+import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
 
 @Composable
-fun AddUser(){
+fun Login(navController: NavHostController){
+
+    // Username TextField
+    var usernameText by remember {
+        mutableStateOf("")
+    }
+
+    var passwordText by remember {
+        mutableStateOf("")
+    }
+
+    var isUsernameEmpty by remember {
+        mutableStateOf(false)
+    }
+
+    var isPassEmpty by remember {
+        mutableStateOf(false)
+    }
+
+    var context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colors.primary)
-                .fillMaxWidth()
-                .padding(horizontal = 35.dp, vertical = 45.dp)
-            ,
-        ) {
-            Image(
-                painter = painterResource(id = com.example.smartfarming.R.drawable.user),
-                contentDescription = "User icon",
-                modifier = Modifier
-                    .clip(shape = CircleShape)
-                    .align(Alignment.CenterHorizontally)
-                    .size(120.dp)
-            )
-            Text(
-                text = "کشت افزار",
-                color = Color.White,
-                style = MaterialTheme.typography.h3,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(5.dp)
 
-            )
-            Text(
-                text = "اپلیکشن مزرعه هوشمند",
-                style = MaterialTheme.typography.body1,
-                color = Color.White,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(5.dp)
-
-            )
-        }
+        Title()
 
         Column(
             modifier = Modifier
@@ -88,30 +62,9 @@ fun AddUser(){
                 .fillMaxHeight(1f)
         ) {
 
-            // Username TextField
-            var usernameText by remember {
-                mutableStateOf("")
-            }
-
-            var passwordText by remember {
-                mutableStateOf("")
-            }
-
-            var isUsernameEmpty by remember {
-                mutableStateOf(false)
-            }
-
-            var isPassEmpty by remember {
-                mutableStateOf(false)
-            }
-
-            var context = LocalContext.current
-
-
-
             OutlinedTextField(value = usernameText,
                 onValueChange = {
-                                usernameText = it
+                    usernameText = it
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -153,7 +106,8 @@ fun AddUser(){
                 textStyle = MaterialTheme.typography.body1,
                 shape = MaterialTheme.shapes.medium,
                 trailingIcon = {
-                    Icon(Icons.Filled.Lock,
+                    Icon(
+                        Icons.Filled.Lock,
                         contentDescription = "icon",
                         tint = if (isPassEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
                     )
@@ -178,8 +132,11 @@ fun AddUser(){
             ){
 
                 OutlinedButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                              navController.navigate(route = AppScreensEnum.RegisterScreen.name)
+                              },
                     modifier = Modifier
+                        .padding(5.dp)
                         .width(150.dp)
                         .padding(top = 80.dp, bottom = 20.dp)
                         .align(Alignment.CenterVertically)
@@ -194,62 +151,96 @@ fun AddUser(){
                 }
 
                 Button(
-                        onClick = {
-                            isUsernameEmpty = usernameText.length < 4
-                            isPassEmpty = passwordText.length < 8
+                    onClick = {
+                        isUsernameEmpty = usernameText.length < 4
+                        isPassEmpty = passwordText.length < 8
 
-                            if (isUsernameEmpty || isPassEmpty){
-                                Toast.makeText(context, "نام کاربری و رمز عبور را صحیح وارد کنید", Toast.LENGTH_SHORT).show()
-                            }
-                        },
-                modifier = Modifier
-                    .width(150.dp)
-                    .padding(top = 80.dp, bottom = 20.dp)
-                ,
-                shape = MaterialTheme.shapes.medium,
+                        if (isUsernameEmpty || isPassEmpty){
+                            Toast.makeText(context, "نام کاربری و رمز عبور را صحیح وارد کنید", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .width(150.dp)
+                        .padding(top = 80.dp, bottom = 20.dp)
+                    ,
+                    shape = MaterialTheme.shapes.medium,
 
-                ) {
-                Text(text = "ورود",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.padding(vertical = 2.dp)
-
-                )
+                    ) {
+                    Text(
+                        text = "ورود",
+                        style = MaterialTheme.typography.body2,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
                 }
-                
-
-                
             }
-            
+
             Row(
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable {
+
+                    }
             ) {
                 Text(
                     text = "با حساب گوگل وارد شوید",
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
-                
+
                 Image(
-                    painter = painterResource(id = com.example.smartfarming.R.drawable.search),
+                    painter = painterResource(id = R.drawable.search),
                     contentDescription = "Google",
                     modifier = Modifier
                         .size(35.dp)
                         .align(Alignment.CenterVertically)
                         .padding(horizontal = 5.dp)
                 )
-                
+
             }
-            
+
 
         }
 
     }
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun DefaultPreview() {
-    SmartFarmingTheme {
-        AddUser()
+fun Title(){
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colors.primary)
+            .fillMaxWidth()
+            .padding(horizontal = 35.dp, vertical = 45.dp)
+        ,
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.user),
+            contentDescription = "User icon",
+            modifier = Modifier
+                .clip(shape = CircleShape)
+                .align(Alignment.CenterHorizontally)
+                .size(120.dp)
+        )
+        Text(
+            text = "کشت افزار",
+            color = Color.White,
+            style = MaterialTheme.typography.h3,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(5.dp)
+
+        )
+        Text(
+            text = "اپلیکشن مزرعه هوشمند",
+            style = MaterialTheme.typography.body1,
+            color = Color.White,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(5.dp)
+
+        )
     }
 }
+

@@ -1,6 +1,5 @@
 package com.example.smartfarming.ui.gardens.composables
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,8 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Reviews
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Reviews
@@ -31,10 +28,8 @@ import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.*
-import com.example.smartfarming.ui.adduser.ui.theme.BlueWatering
-import com.example.smartfarming.ui.adduser.ui.theme.RedFertilizer
-import com.example.smartfarming.ui.adduser.ui.theme.YellowPesticide
-import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
+import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
+import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.gardenprofile.composables.ToDos
 import com.example.smartfarming.ui.home.composables.MyFAB
 

@@ -5,7 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.sp
-import com.example.smartfarming.ui.adduser.ui.theme.sina
+import com.example.smartfarming.ui.authentication.ui.theme.sina
 
 
 

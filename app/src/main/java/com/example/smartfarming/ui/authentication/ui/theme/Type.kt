@@ -1,4 +1,4 @@
-package com.example.smartfarming.ui.adduser.ui.theme
+package com.example.smartfarming.ui.authentication.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
@@ -17,21 +17,42 @@ val sina = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    body1 = TextStyle(
+    subtitle1 = TextStyle(
         fontFamily = sina,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 15.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
-    body2 = TextStyle(
+    body1 = TextStyle(
         fontFamily = sina,
         fontWeight = FontWeight.Normal,
         fontSize = 18.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
+    body2 = TextStyle(
+        fontFamily = sina,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp,
+        textDirection = TextDirection.ContentOrRtl
+    ),
+    h2 = TextStyle(
+        fontFamily = sina,
+        fontSize = 34.sp,
+        textDirection = TextDirection.ContentOrRtl
+    ),
     h3 = TextStyle(
         fontFamily = sina,
         fontSize = 28.sp,
+        textDirection = TextDirection.ContentOrRtl
+    ),
+    h4 = TextStyle(
+        fontFamily = sina,
+        fontSize = 25.sp,
+        textDirection = TextDirection.ContentOrRtl
+    ),
+    h5 = TextStyle(
+        fontFamily = sina,
+        fontSize = 23.sp,
         textDirection = TextDirection.ContentOrRtl
     )
 )
