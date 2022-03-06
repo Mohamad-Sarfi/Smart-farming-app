@@ -6,27 +6,27 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AlternateEmail
-import androidx.compose.material.icons.filled.Badge
-import androidx.compose.material.icons.filled.VerifiedUser
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 
 @Composable
-fun Step1(
-    firstName : String,
-    lastName: String,
-    changeFirstName : (String) -> Unit,
-    changeLastName : (String) -> Unit,
+fun Step2(
+    email : String,
+    phone : String,
+    setEmail : (String) -> Unit,
+    setPhone : (String) -> Unit,
     increaseStep : () -> Unit
 ){
-
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -38,9 +38,9 @@ fun Step1(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = firstName,
+            value = email,
             onValueChange = {
-                changeFirstName(it)
+                setEmail(it)
             },
             textStyle = MaterialTheme.typography.body1,
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -53,31 +53,30 @@ fun Step1(
             shape = MaterialTheme.shapes.medium,
             label = {
                 Text(
-                    text = "نام",
+                    text = "ایمیل",
                     style = MaterialTheme.typography.body1
                 )
             },
             modifier = Modifier
                 .padding(10.dp),
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Email
             ),
             keyboardActions = KeyboardActions(
                 onNext = {focusManager.moveFocus(FocusDirection.Down)}
             ),
             trailingIcon = {
-                Icon(
-                    Icons.Default.VerifiedUser,
-                    contentDescription = "",
-                    tint = MainGreen
-                )
+                Icon(Icons.Default.AlternateEmail, contentDescription = "", tint = MainGreen)
             }
         )
 
+        ShowEmailHint(email)
+
         OutlinedTextField(
-            value = lastName,
+            value = phone,
             onValueChange = {
-                changeLastName(it)
+                setPhone(it)
             },
             textStyle = MaterialTheme.typography.body1,
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -90,14 +89,15 @@ fun Step1(
             shape = MaterialTheme.shapes.medium,
             label = {
                 Text(
-                    text = "نام خانوادگی",
+                    text = "شماره همراه",
                     style = MaterialTheme.typography.body1
                 )
             },
             modifier = Modifier
                 .padding(10.dp),
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Phone
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -105,8 +105,38 @@ fun Step1(
                 }
             ),
             trailingIcon = {
-                Icon(Icons.Default.Badge, contentDescription = "", tint = MainGreen)
+                Icon(Icons.Default.Call, contentDescription = "", tint = MainGreen)
             }
         )
+        ShowPhoneNumHint(phone)
+
+    }
+}
+
+@Composable
+fun ShowPhoneNumHint(phone: String){
+    if (phone.length > 0){
+        if (phone[0] != '0' || phone.length != 11){
+            Text(
+                text = "شماره تماس را بصورت ... 0912 وارد کنید",
+                style = MaterialTheme.typography.subtitle1,
+                color = MainGreen,
+                modifier = Modifier.padding(4.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun ShowEmailHint(email: String){
+    if (email.length > 0){
+        if (!email.contains('@') || !email.contains(".com")){
+            Text(
+                text = "یک ایمیل معتبر وارد کنید",
+                style = MaterialTheme.typography.subtitle1,
+                color = MainGreen,
+                modifier = Modifier.padding(4.dp)
+            )
+        }
     }
 }

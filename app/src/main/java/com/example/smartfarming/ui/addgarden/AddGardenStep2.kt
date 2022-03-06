@@ -114,6 +114,9 @@ fun AddGardenStep2(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
+            ),
             trailingIcon = {
                 Icon(Icons.Rounded.Water, contentDescription = "")
             },

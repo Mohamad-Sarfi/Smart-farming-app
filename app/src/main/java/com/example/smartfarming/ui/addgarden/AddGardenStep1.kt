@@ -87,7 +87,7 @@ fun AddGardenStep1(
                 modifier = Modifier
                     .padding(10.dp)
                     .size(width = 260.dp, height = 75.dp),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             )
 
             OutlinedTextField(
@@ -117,7 +117,7 @@ fun AddGardenStep1(
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        focusManager.moveFocus(FocusDirection.Down)
+                        focusManager.clearFocus()
                     }
                 ),
                 trailingIcon = {
