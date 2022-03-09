@@ -7,17 +7,22 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.smartfarming.data.room.daos.GardenDao
-import com.example.smartfarming.data.room.daos.TaskDao
-import com.example.smartfarming.data.room.entities.Garden
-import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.data.room.daos.*
+import com.example.smartfarming.data.room.entities.*
 import kotlinx.coroutines.CoroutineScope
 
-@Database(entities = [Garden::class, Task::class], version = 1, exportSchema = false)
+@Database(
+    entities = [Garden::class, Task::class, FertilizationEntity::class, IrrigationEntity::class, PesticideEntity::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class GardenDb : RoomDatabase() {
 
     abstract fun gardenDao() : GardenDao
     abstract fun taskDao() : TaskDao
+    abstract fun fertilizationDao() : FertilizationDao
+    abstract fun irrigationDao() : IrrigationDao
+    abstract fun pesticideDao() : PesticideDao
 
     companion object {
         @Volatile

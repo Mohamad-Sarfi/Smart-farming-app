@@ -19,7 +19,7 @@ fun AuthNavGraph(
         composable(
             route = "${AppScreensEnum.LoginScreen.name}"
         ){
-            Login(navController = navController)
+            Login(navController = navController){}
         }
 
         composable(

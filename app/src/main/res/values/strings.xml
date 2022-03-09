@@ -70,6 +70,12 @@
         <item>کم فشار</item>
     </string-array>
 
+    <string-array name="fertilization_type">
+        <item>خاک مصرف</item>
+        <item>محلول پاشی</item>
+        <item>کود آبیاری</item>
+    </string-array>
+
     <string name="title_activity_add_user">AddUserActivity</string>
     <string name="title_activity_add_activities">AddActivities</string>
     <string name="title_activity_irrigation">IrrigationActivity</string>

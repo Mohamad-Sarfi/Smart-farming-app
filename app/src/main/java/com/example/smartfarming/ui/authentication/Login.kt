@@ -26,7 +26,10 @@ import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
 
 @Composable
-fun Login(navController: NavHostController){
+fun Login(
+    navController: NavHostController,
+    signIn : (String) -> Unit
+){
 
     // Username TextField
     var usernameText by remember {
@@ -157,6 +160,8 @@ fun Login(navController: NavHostController){
 
                         if (isUsernameEmpty || isPassEmpty){
                             Toast.makeText(context, "نام کاربری و رمز عبور را صحیح وارد کنید", Toast.LENGTH_SHORT).show()
+                        } else{
+                            signIn(usernameText)
                         }
                     },
                     modifier = Modifier

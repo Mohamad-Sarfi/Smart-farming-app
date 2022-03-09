@@ -83,11 +83,11 @@ fun Register(viewModel: AuthViewModel){
                 phone = phone!!,
                 email = email!!,
                 setPhone = {viewModel.setPhone(it)},
-                setEmail = {viewModel.setEmail(it)},
+                setEmail = {viewModel.setEmail(it.trim())},
                 password = password!!,
-                setPassword = {viewModel.setPassword(it)},
+                setPassword = {viewModel.setPassword(it.trim())},
                 repeatPassword = repeatPassword,
-                setRepeatPassword = {repeatPassword = it}
+                setRepeatPassword = {repeatPassword = it.trim()}
             )
 
             Row(

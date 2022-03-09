@@ -8,10 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.smartfarming.data.room.entities.Garden
-import com.example.smartfarming.ui.gardenprofile.composables.activities.Fertilization
-import com.example.smartfarming.ui.gardenprofile.composables.activities.Irrigation
-import com.example.smartfarming.ui.gardenprofile.composables.activities.Others
-import com.example.smartfarming.ui.gardenprofile.composables.activities.Pesticides
+import com.example.smartfarming.ui.addactivities.activityscreens.Fertilization
+import com.example.smartfarming.ui.addactivities.activityscreens.Irrigation
+import com.example.smartfarming.ui.addactivities.activityscreens.Others
+import com.example.smartfarming.ui.addactivities.activityscreens.Pesticides
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
 
 @Composable
@@ -35,7 +35,7 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            Irrigation(gardenName = gardenName!!, viewModel = viewModel, navController)
+            Irrigation(gardenName = gardenName!!, navController)
         }
         composable(
             route = "${ScreensEnumGardenProfile.FertilizationScreen.name}/{gardenName}",
@@ -48,7 +48,6 @@ fun NavGraphGardenProfile(
             val gardenName = entry.arguments?.getString("gardenName")
             Fertilization(
                 gardenName = gardenName!!,
-                viewModel = viewModel,
                 navController = navController
             )
         }
