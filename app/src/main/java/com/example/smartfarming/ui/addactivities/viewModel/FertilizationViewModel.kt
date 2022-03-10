@@ -1,5 +1,7 @@
 package com.example.smartfarming.ui.addactivities.viewModel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,10 +13,33 @@ import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
+
     private val garden = MutableLiveData<Garden>().apply {
         value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
             0.0, 0)
     }
+    val fertilizationType = mutableStateOf(value = "")
+    val fertilizerName = mutableStateOf(value ="")
+    val fertilizationDate = mutableStateOf(value = "")
+    val fertilizationVolume = mutableStateOf<Float>(0f)
+
+    fun setFertilizationType(type : String){
+        fertilizationType.value = type
+    }
+
+    fun setFertilizerName(name : String){
+        fertilizerName.value = name
+    }
+
+    fun setFertilizationDate(date : String){
+        fertilizationDate.value = ""
+    }
+
+    fun setFertilizationVolume(volume : Float){
+        fertilizationVolume.value = volume
+    }
+
+
 
     private fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {

@@ -20,6 +20,7 @@ import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.PurplePrune
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
@@ -35,7 +36,7 @@ fun ToDos(
 
     val barColor = when(task.activity_type){
         ActivityTypesEnum.IRRIGATION.name -> BlueWatering
-        ActivityTypesEnum.FERTILIZATION.name  -> RedFertilizer
+        ActivityTypesEnum.FERTILIZATION.name  -> PurpleFertilizer
         ActivityTypesEnum.PESTICIDE.name  -> YellowPesticide
         ActivityTypesEnum.PRUNE.name  -> PurplePrune
         else -> MainGreen

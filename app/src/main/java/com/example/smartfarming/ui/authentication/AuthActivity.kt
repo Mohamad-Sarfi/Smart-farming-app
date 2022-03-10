@@ -11,12 +11,23 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModelFactory
+import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModel
+import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
 
 class AddUserActivity : ComponentActivity() {
 
     val viewModel : AuthViewModel by viewModels{
-        AuthViewModelFactory((application as FarmApplication).repo)
+        AuthViewModelFactory(
+            (application as FarmApplication).repo,
+            (application as FarmApplication).authRepo
+        )
+    }
+
+    val loginViewModel : LoginViewModel by viewModels{
+        LoginViewModelFactory(
+            (application as FarmApplication).authRepo
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +40,7 @@ class AddUserActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    AuthNavGraph(navController = navController, viewModel)
+                    AuthNavGraph(navController = navController, viewModel, loginViewModel)
                 }
             }
         }

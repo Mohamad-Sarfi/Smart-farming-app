@@ -7,6 +7,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -22,6 +24,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,15 +35,10 @@ import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.addactivities.ui.theme.Purple200
+import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModel
 import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModelFactory
-import com.example.smartfarming.ui.authentication.clickHandler
-import com.example.smartfarming.ui.authentication.clickHandlerStep1
-import com.example.smartfarming.ui.authentication.clickHandlerStep2
-import com.example.smartfarming.ui.authentication.clickHandlerStep3
-import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
-import com.example.smartfarming.ui.authentication.ui.theme.LightBlueFertilizer
-import com.example.smartfarming.ui.authentication.ui.theme.LightGreenFertilizer
 import com.example.smartfarming.ui.commoncomposables.ProgressDots
 import com.example.smartfarming.ui.commoncomposables.TitleIcon
 
@@ -56,8 +55,8 @@ fun Fertilization(
     var fertilizationDate = remember {
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
     }
-    var fertilizationType by remember {
-        mutableStateOf("")
+    val fertilizationType by remember {
+        viewModel.fertilizationType
     }
 
     var step by remember {
@@ -76,7 +75,7 @@ fun Fertilization(
                         .verticalGradient(
                             colors = listOf(
                                 MainGreen,
-                                LightGreenFertilizer
+                                Purple200
                             )
                         )
                 )
@@ -96,7 +95,7 @@ fun Fertilization(
                     .padding(top = 30.dp, bottom = 50.dp),
                 icon = painterResource(id = R.drawable.fertilizer_line)
             )
-            Body(
+            FertilizationBody(
                 modifier = Modifier
                     .constrainAs(main) {
                         start.linkTo(parent.start)
@@ -112,9 +111,16 @@ fun Fertilization(
                     }
                     .clip(RoundedCornerShape(27.dp))
                     .background(Color.White)
-                    .padding(vertical = 70.dp, horizontal = 10.dp),
+                    .padding(vertical = 50.dp, horizontal = 10.dp),
                 garden = garden.value!!,
-                step = step
+                fertilizationType = fertilizationType,
+                setFertilizationType = {viewModel.setFertilizationType(it)},
+                fertilizerName = viewModel.fertilizerName.value,
+                setFertilizationName = {viewModel.setFertilizerName(it)},
+                step = step,
+                increaseStep = {if (step < 2) step++},
+                fertilizerVolume = viewModel.fertilizationVolume.value,
+                setFertilizationVolume = {viewModel.setFertilizationVolume(it)}
                 )
 
             ProgressDots(
@@ -132,7 +138,7 @@ fun Fertilization(
 
             BottomRow(
                 modifier = Modifier
-                    .constrainAs(button){
+                    .constrainAs(button) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
@@ -141,7 +147,7 @@ fun Fertilization(
                     .padding(10.dp),
                 step = step,
                 decreamentStep = {step--},
-                increaseStep = {step++}
+                increaseStep = {if (step < 2) step++}
             )
 
         }
@@ -150,10 +156,17 @@ fun Fertilization(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun Body(
+fun FertilizationBody(
     modifier: Modifier,
     garden : Garden,
-    step : Int
+    fertilizationType: String,
+    setFertilizationType: (String) -> Unit,
+    fertilizerName : String,
+    setFertilizationName: (String) -> Unit,
+    fertilizerVolume : Float,
+    setFertilizationVolume: (Float) -> Unit,
+    step : Int,
+    increaseStep : () -> Unit
 ){
     Column(
         modifier = modifier,
@@ -161,24 +174,107 @@ fun Body(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "ثبت آبیاری باغ " + garden.name,
+            text = "ثبت تغذیه باغ " + garden.name,
             style = MaterialTheme.typography.h3,
             color = MainGreen,
             modifier = Modifier
                 .padding(bottom = 20.dp)
         )
+        Spacer(modifier = Modifier.height(15.dp))
 
+        // Step 0
         AnimatedVisibility(
             visible = step == 0,
             enter = slideInHorizontally(),
-            exit = slideOutHorizontally() + fadeOut()
+            exit = slideOutHorizontally()
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                FertilizationTypeSpinner(fertilizationType, setFertilizationType)
+                Spacer(modifier = Modifier.height(15.dp))
+                OutlinedTextField(
+                    value = fertilizerName,
+                    onValueChange = {setFertilizationName(it)},
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .width(220.dp)
+                        .height(68.dp),
+                    shape = MaterialTheme.shapes.large,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = MainGreen,
+                        focusedLabelColor = MainGreen,
+                        unfocusedLabelColor = MainGreen,
+                        unfocusedBorderColor = MainGreen
+                    ),
+                    singleLine = true,
+                    maxLines = 1,
+                    keyboardActions = KeyboardActions(
+                        onDone = {increaseStep()}
+                    ),
+                    label = {
+                        Text(
+                            text = "نام کود",
+                            style = MaterialTheme.typography.subtitle1,
 
+                        )
+                    }
+                )
             }
+        }
+
+        // Step 1
+        val fertilizationTypeList = stringArrayResource(id = R.array.fertilization_type)
+        AnimatedVisibility(
+            visible = step == 1,
+            enter = slideInHorizontally() + fadeIn(),
+            exit = slideOutHorizontally()
+        ) {
+            OutlinedTextField(
+                value = if (fertilizerVolume != 0f) "$fertilizerVolume" else "",
+                onValueChange = {setFertilizationVolume(it.toFloat())},
+                modifier = Modifier
+                    .padding(5.dp)
+                    .width(220.dp)
+                    .height(68.dp),
+                shape = MaterialTheme.shapes.large,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = MainGreen,
+                    focusedLabelColor = MainGreen,
+                    unfocusedLabelColor = MainGreen,
+                    unfocusedBorderColor = MainGreen,
+                    placeholderColor = BorderGray,
+                    textColor = BorderGray
+                ),
+                singleLine = true,
+                maxLines = 1,
+                keyboardActions = KeyboardActions(
+                    onDone = {increaseStep()}
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
+                placeholder = {
+                    Text(
+                        text =
+                        when(fertilizationType){
+                            fertilizationTypeList[0] -> "به متر مکعب"
+                            fertilizationTypeList[1] -> "به لیتر"
+                            fertilizationTypeList[1] -> "به لیتر"
+                            else -> "به لیتر" },
+                        style = MaterialTheme.typography.subtitle1,
+                    )
+                },
+                label = {
+                    Text(
+                        text = "حجم کود",
+                        style = MaterialTheme.typography.body1,
+                        color = BorderGray
+                    )
+                }
+            )
         }
 
     }
@@ -190,7 +286,7 @@ fun Body(
 @Composable
 fun FertilizationTypeSpinner(
     fertilizationType : String,
-    setFertilizarionType : (String) -> Unit
+    setFertilizationType : (String) -> Unit
 ){
 
     var expanded by remember {
@@ -209,7 +305,7 @@ fun FertilizationTypeSpinner(
             .width(220.dp)
             .height(60.dp)
             .clip(MaterialTheme.shapes.medium)
-            .border(2.dp, color = BlueWatering, shape = MaterialTheme.shapes.large)
+            .border(2.dp, color = MainGreen, shape = MaterialTheme.shapes.large)
             .padding(8.dp)
         ,
     ){
@@ -224,7 +320,7 @@ fun FertilizationTypeSpinner(
             Icon(
                 Icons.Default.ArrowDropDown,
                 contentDescription = "",
-                tint = LightBlueFertilizer,
+                tint = MainGreen,
                 modifier = Modifier
                     .padding(horizontal = 2.dp)
                     .size(40.dp)
@@ -257,7 +353,7 @@ fun FertilizationTypeSpinner(
                     onClick = {
                         counter = 1
                         expanded = false
-                        setFertilizarionType(it)
+                        setFertilizationType(it)
                     }
                 ) {
                     Text(
@@ -295,7 +391,9 @@ fun BottomRow(
             Icon(
                 Icons.Default.ArrowBack,
                 contentDescription = "",
-                tint = MainGreen
+                tint = PurpleFertilizer
+
+
             )
         }
 
@@ -315,7 +413,7 @@ fun BottomRow(
             shape = MaterialTheme.shapes.large,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.White,
-                contentColor = MainGreen
+                contentColor = PurpleFertilizer
             )
 
         ) {
