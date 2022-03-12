@@ -1,5 +1,7 @@
 package com.example.smartfarming.ui.authentication
 
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -28,13 +30,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.smartfarming.MainActivity
 import com.example.smartfarming.R
+import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModel
 import com.example.smartfarming.ui.authentication.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
+import retrofit2.Response
 
 @Composable
 fun Login(
@@ -280,4 +285,3 @@ fun Title(){
         )
     }
 }
-

@@ -2,7 +2,7 @@ package com.example.smartfarming.ui.authentication.authviewmodel
 
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
-import com.example.smartfarming.data.repositories.AuthRepo
+import com.example.smartfarming.data.repositories.authentication.AuthRepo
 import com.example.smartfarming.data.repositories.GardenRepo
 import java.lang.IllegalArgumentException
 

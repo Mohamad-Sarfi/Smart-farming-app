@@ -25,6 +25,7 @@ fun AuthNavGraph(
     val activity = LocalContext.current as Activity
     val context = LocalContext.current
     val response = loginViewModel.loginResponse.observeAsState()
+    val loggedIn = false
 
     NavHost(
         navController = navController,
@@ -34,6 +35,7 @@ fun AuthNavGraph(
             route = AppScreensEnum.LoginScreen.name
         ){
             Login(navController = navController, loginViewModel){
+                // login process
                 loginViewModel.login()
                 when(response.value){
                     is Resource.Success -> {
@@ -43,19 +45,18 @@ fun AuthNavGraph(
                     }
                     is Resource.Failure -> {
                         Toast.makeText(context, "1ورود ناموفق", Toast.LENGTH_SHORT).show()
-                        Log.i("login", "${response}")
+                        Log.i("login11", "${response}")
                     }
                     else -> {
                         Toast.makeText(context, "ورود ناموفق2", Toast.LENGTH_SHORT).show()
-                        Log.i("login", "${response.value}")
+                        Log.i("login22", "${response.value}")
                     }
                 }
-
             }
         }
 
         composable(
-            route = "${AppScreensEnum.RegisterScreen.name}"
+            route = AppScreensEnum.RegisterScreen.name
         ){
             Register(authviewModel)
         }

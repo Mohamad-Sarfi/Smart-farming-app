@@ -3,11 +3,9 @@ package com.example.smartfarming
 import android.app.Application
 import com.example.smartfarming.data.network.AuthApi
 import com.example.smartfarming.data.network.RemoteDataSource
-import com.example.smartfarming.data.repositories.AuthRepo
+import com.example.smartfarming.data.repositories.authentication.AuthRepo
 import com.example.smartfarming.data.repositories.GardenRepo
 import com.example.smartfarming.data.room.GardenDb
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 
 class FarmApplication : Application() {
 

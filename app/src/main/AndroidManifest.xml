@@ -37,7 +37,7 @@
         <activity
             android:name=".ui.authentication.AddUserActivity"
             android:exported="true"
-            android:label="@string/title_activity_add_user"
+            android:label="Keshtafzar"
             android:theme="@style/Theme.SmartFarming" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

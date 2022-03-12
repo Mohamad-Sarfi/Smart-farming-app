@@ -1,16 +1,13 @@
 package com.example.smartfarming.data.network
 
+import com.example.smartfarming.data.network.responses.user.LoginRequest
 import com.example.smartfarming.data.network.responses.user.LoginResponse
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
+import okhttp3.RequestBody
+import retrofit2.http.*
 
 interface AuthApi{
-
-    @FormUrlEncoded
-    @GET("/public/user/login")
+    @POST("/public/user/login/")
     suspend fun login(
-        @Field("usernameOrPhoneNumber") email : String,
-        @Field("password") password : String
+        @Body request: RequestBody
     ) : LoginResponse
 }

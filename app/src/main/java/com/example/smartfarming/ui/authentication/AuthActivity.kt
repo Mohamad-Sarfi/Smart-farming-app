@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.authentication
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.FarmApplication
+import com.example.smartfarming.MainActivity
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModelFactory
 import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModel
@@ -30,6 +32,9 @@ class AddUserActivity : ComponentActivity() {
         )
     }
 
+
+    val loggedIn = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -39,8 +44,12 @@ class AddUserActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navController = rememberNavController()
-                    AuthNavGraph(navController = navController, viewModel, loginViewModel)
+                    if (!loggedIn){
+                        val navController = rememberNavController()
+                        AuthNavGraph(navController = navController, viewModel, loginViewModel)
+                    } else {
+                        startActivity(Intent(this, MainActivity::class.java))
+                    }
                 }
             }
         }
