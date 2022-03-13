@@ -11,10 +11,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.smartfarming.MainActivity
+import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun AuthNavGraph(

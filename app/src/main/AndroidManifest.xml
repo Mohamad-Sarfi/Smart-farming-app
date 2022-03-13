@@ -19,6 +19,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartFarming"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.SmartFarming">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -37,14 +48,8 @@
         <activity
             android:name=".ui.authentication.AddUserActivity"
             android:exported="true"
-            android:label="Keshtafzar"
-            android:theme="@style/Theme.SmartFarming" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="AuthActivity"
+            android:theme="@style/Theme.SmartFarming"/>
         <activity
             android:name=".ui.gardenprofile.GardenProfileActivity"
             android:exported="false"
@@ -53,10 +58,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.SmartFarming">
-
-        </activity>
+            android:label="MainActivity"
+            android:theme="@style/Theme.SmartFarming"/>
     </application>
 
 </manifest>
