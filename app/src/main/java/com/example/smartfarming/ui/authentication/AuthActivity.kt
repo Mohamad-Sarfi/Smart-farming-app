@@ -47,28 +47,18 @@ class AddUserActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         userPreferences = UserPreferences(this)
-        userPreferences.authToken.asLiveData().observe(
-
-            this, Observer {
-            if (it == null){
-                    setContent {
-                        SmartFarmingTheme {
-                            // A surface container using the 'background' color from the theme
-                            Surface(
-                                modifier = Modifier.fillMaxSize(),
-                                color = MaterialTheme.colors.background
-                            ) {
-                                    val navController = rememberNavController()
-                                    AuthNavGraph(navController = navController, viewModel, loginViewModel)
-                            }
-                        }
-                    }
-            } else {
-                finish()
-                startActivity(Intent(this, MainActivity::class.java))
+        setContent {
+            SmartFarmingTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    val navController = rememberNavController()
+                    AuthNavGraph(navController = navController, viewModel, loginViewModel)
+                }
             }
-        })
-
+        }
     }
 }
 
