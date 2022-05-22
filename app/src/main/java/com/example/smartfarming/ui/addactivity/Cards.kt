@@ -60,7 +60,7 @@ fun Cards(
                 .padding(10.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Card("آبیاری", R.drawable.watering, BlueWatering) {
+            Card("آبیاری",  R.drawable.watering, BlueWatering) {
 
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()
