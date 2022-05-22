@@ -30,6 +30,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.authentication.AddUserActivity
 import com.example.smartfarming.ui.authentication.AuthNavGraph
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
 import java.util.*
 
 
@@ -40,7 +41,7 @@ class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        userPreferences = UserPreferences(this)
+        userPreferences = UserPreferences.getInstance(this)
 
         setContent {
             SmartFarmingTheme() {
@@ -68,7 +69,7 @@ class SplashActivity : ComponentActivity() {
                     }
                 }
             )
-        }, 3000)
+        }, 2000)
 
 
 
@@ -93,7 +94,6 @@ fun Splash(){
                     .padding(top = 80.dp)
                     .size(200.dp)
             )
-            Spacer(modifier = Modifier.height(10.dp))
             AnimatedVisibility(
                 visible = true,
                 enter = slideInHorizontally()
@@ -123,6 +123,6 @@ fun Splash(){
 @Composable
 fun DefaultPreview() {
     SmartFarmingTheme {
-
+        Splash()
     }
 }

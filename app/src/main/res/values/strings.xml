@@ -76,6 +76,47 @@
         <item>کود آبیاری</item>
     </string-array>
 
+    <string-array name="states_of_Iran">
+        <item>تهران</item>
+        <item>سمنان</item>
+        <item>یزد</item>
+        <item>کرمان</item>
+        <item>اصفهان</item>
+        <item>خراسان رضوی</item>
+        <item>خراسان شمالی</item>
+        <item>خراسان جنوبی</item>
+        <item>قزوین</item>
+        <item>البرز</item>
+        <item>مرکزی</item>
+        <item>سیستان و بلوچستان</item>
+        <item>فارس</item>
+        <item>قم</item>
+        <item>زنجان</item>
+        <item>آذربایجان شرقی</item>
+        <item>آذربایجان غربی</item>
+        <item>اردبیل</item>
+        <item>همدان</item>
+        <item>لرستان</item>
+        <item>کرمانشاه</item>
+        <item>کردستان</item>
+        <item>چهارمحال و بختیاری</item>
+        <item>کهگیلویه و بویراحمد</item>
+        <item>ایلام</item>
+        <item>مازندران</item>
+        <item>گلستان</item>
+        <item>گیلان</item>
+        <item>هرمزگان</item>
+        <item>بوشهر</item>
+        <item>خوزستان</item>
+
+    </string-array>
+
+    <string-array name="soil_type">
+        <item>سبک</item>
+        <item>متوسط</item>
+        <item>سنگین</item>
+    </string-array>
+
     <string name="title_activity_add_user">AddUserActivity</string>
     <string name="title_activity_add_activities">AddActivities</string>
     <string name="title_activity_irrigation">IrrigationActivity</string>

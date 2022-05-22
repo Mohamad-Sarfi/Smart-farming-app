@@ -3,6 +3,7 @@ package com.example.smartfarming.ui.addactivities
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -35,7 +36,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
+import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModelFactory
+import com.example.smartfarming.ui.addactivity.AddActivity
+import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
 
 
 class AddActivities : ComponentActivity() {
@@ -48,7 +52,9 @@ class AddActivities : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SmartFarmingTheme {
-                HostComposable(viewModel)
+                val navController = rememberNavController()
+                //SetupNavGraph(navController = navController, viewModel)
+                AddActivity(navController = navController, viewModel)
             }
         }
     }
@@ -56,8 +62,7 @@ class AddActivities : ComponentActivity() {
 
 @Composable
 fun HostComposable(viewModel : AddActivitiesViewModel){
-    val navController = rememberNavController()
-    SetupNavGraph(navController = navController, viewModel)
+
 }
 
 @Composable
@@ -71,9 +76,6 @@ fun AddActivitiesMain(navController : NavHostController, viewModel : AddActiviti
             gardensNameList.add(garden.name)
         }
     }
-
-    Log.i("DBX2", "${gardensList}")
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
@@ -101,7 +103,8 @@ fun Cards(
         }
     }
 
-
+    val context = LocalContext.current
+    Toast.makeText(context, "fff", Toast.LENGTH_SHORT).show()
 
 
     var clicked = remember {
@@ -131,11 +134,11 @@ fun Cards(
         ) {
             Card("آبیاری", R.drawable.watering, BlueWatering, clicked) {
                 clicked.value = !clicked.value
-                navigateToScreens(navController, currentGarden, ScreensEnumActivities.IrrigationBody.name)
+                navController.navigate("${ScreensEnumActivities.Irrigation.name}/$currentGarden")
             }
             Card("تغذیه", R.drawable.npk, RedFertilizer, clicked) {
                 clicked.value = !clicked.value
-                navigateToScreens(navController, currentGarden, ScreensEnumActivities.FertilizationBody.name)
+                navController.navigate("${ActivityTypesEnum.FERTILIZATION.name}/${currentGarden}")
             }
         }
         Row(
@@ -145,11 +148,11 @@ fun Cards(
         ) {
             Card("محلول پاشی", R.drawable.pesticide1, YellowPesticide,clicked ){
                 clicked.value = !clicked.value
-                navigateToScreens(navController, currentGarden, ScreensEnumActivities.PesticideBody.name)
+                navigateToScreens(navController, currentGarden, ScreensEnumActivities.Pesticide.name)
             }
             Card("سایر", R.drawable.shovel, MaterialTheme.colors.primary, clicked) {
                 clicked.value = !clicked.value
-                navigateToScreens(navController, currentGarden, ScreensEnumActivities.PesticideBody.name)
+                navigateToScreens(navController, currentGarden, ScreensEnumActivities.Pesticide.name)
             }
         }
         Row(
@@ -310,22 +313,6 @@ private fun navigateToScreens(
     gardenName: String,
     activityName: String
 ){
-    val route = ScreensEnumActivities.ActivityScreen.name
-    val icon =
-        when(activityName){
-            ScreensEnumActivities.FertilizationBody.name -> ScreensEnumActivities.FertilizationBody.icon
-            ScreensEnumActivities.IrrigationBody.name -> ScreensEnumActivities.IrrigationBody.icon
-            ScreensEnumActivities.PesticideBody.name -> ScreensEnumActivities.PesticideBody.icon
-            ScreensEnumActivities.OtherActivityBody.name -> ScreensEnumActivities.OtherActivityBody.icon
-            else -> ScreensEnumActivities.OtherActivityBody.icon
-        }
-    navController.navigate("$route/$gardenName/$activityName")
+    navController.navigate("$activityName/$gardenName")
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview2() {
-    SmartFarmingTheme {
-        //Cards(navController = rememberNavController())
-    }
-}

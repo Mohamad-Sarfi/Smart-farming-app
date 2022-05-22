@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.AddActivities
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.addactivity.AddActivityActivity
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -39,7 +40,7 @@ fun MyFAB(
                 switchFab()
             }
             else{
-                val intent = Intent(context, AddActivities::class.java)
+                val intent = Intent(context, AddActivityActivity::class.java)
                 context.startActivity(intent)
                 switchFab()
             }

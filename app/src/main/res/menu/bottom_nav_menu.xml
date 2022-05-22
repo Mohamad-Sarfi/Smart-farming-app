@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/navigation_gardens"
-        android:icon="@drawable/tree"
+        android:icon="@drawable/sprout_white"
         android:title="@string/orchard" />
 
     <item

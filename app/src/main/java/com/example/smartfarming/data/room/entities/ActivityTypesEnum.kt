@@ -5,5 +5,5 @@ enum class ActivityTypesEnum {
     FERTILIZATION,
     PESTICIDE,
     PRUNE,
-    PLOW,
+    PLOUGH,
 }

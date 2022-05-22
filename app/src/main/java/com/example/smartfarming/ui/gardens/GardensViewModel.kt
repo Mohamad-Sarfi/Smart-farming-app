@@ -1,15 +1,9 @@
 package com.example.smartfarming.ui.gardens
 
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.*
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.smartfarming.data.repositories.GardenRepo
+import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
-import com.example.smartfarming.ui.addgarden.AddGardenViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 

@@ -1,10 +1,10 @@
 package com.example.smartfarming
 
 import android.app.Application
-import com.example.smartfarming.data.network.AuthApi
+import com.example.smartfarming.data.network.api.AuthApi
 import com.example.smartfarming.data.network.RemoteDataSource
 import com.example.smartfarming.data.repositories.authentication.AuthRepo
-import com.example.smartfarming.data.repositories.GardenRepo
+import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.GardenDb
 
 class FarmApplication : Application() {

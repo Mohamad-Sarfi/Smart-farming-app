@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
+import com.example.smartfarming.data.room.entities.Article
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
@@ -99,20 +101,23 @@ fun HomeCompose(viewModel : HomeViewModel){
             Column(
                 modifier = Modifier
                     .padding(5.dp)
-                    .height(250.dp)
+                    .height(300.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.End
 
             ){
                 ManageGardenPreview(gardensList, context, tasks)
             }
+            FarmingArticlesPreview(articlesList = listOf())
         }
     }
 }
 
 @Composable
 fun ManageGardenPreview(gardenList : List<Garden>?, context : Context, tasks : List<Task>){
+
     if (gardenList.isNullOrEmpty()){
+        // When there are no gardens added yet, this will be displayed
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,11 +144,12 @@ fun ManageGardenPreview(gardenList : List<Garden>?, context : Context, tasks : L
             )
         }
     } else {
+        // In case gardens are added
             Text(
                 text = "باغداری شما",
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier
-                    .padding(vertical = 3.dp, horizontal = 10.dp),
+                    .padding(vertical = 15.dp, horizontal = 10.dp),
                 color = MainGreen
             )
             LazyColumn(){
@@ -152,5 +158,39 @@ fun ManageGardenPreview(gardenList : List<Garden>?, context : Context, tasks : L
                 }
         }
     }
+}
+
+@Composable
+fun FarmingArticlesPreview(articlesList : List<Article>?){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp)
+        ,
+        horizontalAlignment = Alignment.End
+    ) {
+        Text(
+            text = "توصیه های باغداری",
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier
+                .padding(vertical = 12.dp, horizontal = 15.dp),
+            color = MainGreen
+        )
+
+        LazyRow(){
+            item(){
+                ArticleItem(
+                    article = Article(0, "آبیاری نهال پسته", "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.", "", "", "Mohamad Sarfi", listOf(), listOf()))
+            }
+            item(){
+                ArticleItem(article = Article(0, "سم پاشی فروردین", "", "", "", "Mohamad Sarfi", listOf(), listOf()))
+            }
+            item(){
+                ArticleItem(article = Article(0, "سم پاشی فروردین", "", "", "", "Mohamad Sarfi", listOf(), listOf()))
+            }
+        }
+
+    }
+
 }
 

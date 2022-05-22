@@ -1,10 +1,8 @@
 package com.example.smartfarming.ui.home
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.smartfarming.data.repositories.GardenRepo
+import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
-import com.example.smartfarming.ui.gardens.GardensViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 

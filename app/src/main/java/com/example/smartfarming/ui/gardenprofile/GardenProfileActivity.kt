@@ -50,10 +50,3 @@ class GardenProfileActivity : ComponentActivity() {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview5() {
-    SmartFarmingTheme {
-
-    }
-}

@@ -31,5 +31,4 @@ data class Garden(
         (name = "area") val area : Double,
     @ColumnInfo
         (name = "user_id") val user_id: Int
-) {
-}
+)

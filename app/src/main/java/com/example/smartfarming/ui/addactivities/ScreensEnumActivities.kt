@@ -23,6 +23,18 @@ enum class ScreensEnumActivities(
         icon = 0
     ),
 
+    Fertilization(
+        icon = 0
+    ),
+
+    Pesticide(
+        icon = 0
+    ),
+
+    OtherActivities(
+        icon = 0
+    ),
+
     ActivityScreen(
         icon = 0
     ),

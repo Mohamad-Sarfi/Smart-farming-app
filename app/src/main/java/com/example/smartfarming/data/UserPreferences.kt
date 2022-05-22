@@ -13,8 +13,9 @@ import kotlinx.coroutines.flow.map
 class UserPreferences(
     context: Context
 ){
+    private val USER_PREFERENCE_NAME = "app_datastore"
     private val applicationContext = context.applicationContext
-    private val Context.dataStore by preferencesDataStore("app_datastore")
+    private val Context.dataStore by preferencesDataStore(USER_PREFERENCE_NAME)
     private val dataStore : DataStore<Preferences> = applicationContext.dataStore
 
     val authToken : Flow<String?>
@@ -30,6 +31,20 @@ class UserPreferences(
 
     companion object{
         private val KEY_AUTH = stringPreferencesKey("auth_key")
+
+        private var INSTANCE : UserPreferences? = null
+
+        fun getInstance(context: Context) : UserPreferences {
+            return INSTANCE?: synchronized(this) {
+                INSTANCE?.let {
+                    return it
+                }
+                val instance = UserPreferences(context)
+                INSTANCE = instance
+                instance
+            }
+        }
+
     }
 
 }

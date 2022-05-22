@@ -1,11 +1,9 @@
 package com.example.smartfarming.ui.authentication
 
 import android.content.Context
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -16,16 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smartfarming.data.network.Resource
+import com.example.smartfarming.data.network.resources.userSignupResponse.SignupResponse
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.register.*
 
 @Composable
-fun Register(viewModel: AuthViewModel){
+fun Register(
+    viewModel: AuthViewModel
+){
 
     val context = LocalContext.current
 
@@ -39,6 +39,7 @@ fun Register(viewModel: AuthViewModel){
         mutableStateOf("")
     }
 
+    val response by viewModel.signupResponse.observeAsState()
 
     Scaffold(
         modifier = Modifier
@@ -87,7 +88,9 @@ fun Register(viewModel: AuthViewModel){
                 password = password!!,
                 setPassword = {viewModel.setPassword(it.trim())},
                 repeatPassword = repeatPassword,
-                setRepeatPassword = {repeatPassword = it.trim()}
+                setRepeatPassword = {repeatPassword = it.trim()},
+                setState = {viewModel.setState(it)},
+                setCity = {viewModel.setCity(it)}
             )
 
             Row(
@@ -135,14 +138,23 @@ fun Register(viewModel: AuthViewModel){
                                 step = step,
                                 MAX_STEP = viewModel.MAX_STEP
                             )
-                            2 -> clickHandlerStep3(
+                            2 ->  clickHandlerStep3(
+                                step = step,
+                                MAX_STEP = viewModel.MAX_STEP
+                            )
+                            3 -> clickHandlerStep4(
                                 context = context,
                                 password = password!!,
                                 repeatPassword = repeatPassword,
                                 step = step,
                                 MAX_STEP = viewModel.MAX_STEP
                             )
-                            else -> clickHandler(step, viewModel.MAX_STEP)
+                            else -> clickHandler(
+                                context = context,
+                                response = response,
+                            ){
+                                viewModel.signup()
+                            }
                         } },
                     modifier = Modifier
                         .padding(10.dp)
@@ -178,7 +190,9 @@ fun Body(
     password : String,
     repeatPassword : String,
     setPassword : (String) -> Unit,
-    setRepeatPassword : (String) -> Unit
+    setRepeatPassword : (String) -> Unit,
+    setState : (String) -> Unit,
+    setCity : (String) -> Unit
 ){
     Row(
         modifier = modifier,
@@ -195,6 +209,7 @@ fun Body(
             StepCircle(step = step.value, numberTag = 0, color = MainGreen)
             StepCircle(step = step.value, numberTag = 1, color = MainGreen)
             StepCircle(step = step.value, numberTag = 2, color = MainGreen)
+            StepCircle(step = step.value, numberTag = 3, color = MainGreen)
         }
         Column(
             Modifier
@@ -219,12 +234,10 @@ fun Body(
                     increaseStep = increaseStep
                 )
                 2 -> Step3(
-                    password = password,
-                    setPassword = setPassword,
-                    repeatPassword = repeatPassword,
-                    setRepeatPassword = setRepeatPassword
+                    setState = {setState(it)},
+                    setCity = {setCity(it)}
                 )
-                else -> Step3(
+                3 -> Step4(
                     password = password,
                     repeatPassword = repeatPassword,
                     setPassword = setPassword,
@@ -237,12 +250,24 @@ fun Body(
 }
 
 
-fun clickHandler(step : MutableState<Int>, MAX_STEP : Int){
-    if (step.value < MAX_STEP){
-        step.value++
-    } else {
-        step.value = MAX_STEP
+fun clickHandler(
+    response : Resource<SignupResponse>?,
+    context: Context,
+    signUp : () -> Unit
+){
+    signUp()
+    when(response){
+        is Resource.Success -> Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+        is Resource.Failure -> Toast.makeText(context, "Signup failed", Toast.LENGTH_SHORT).show()
+        else -> Toast.makeText(context, "Signup failed2", Toast.LENGTH_SHORT).show()
     }
+}
+
+fun increaseStep(
+    step : MutableState<Int>,
+    MAX_STEP : Int,
+){
+    if (step.value <= MAX_STEP) step.value++
 }
 
 fun clickHandlerStep1(
@@ -255,7 +280,7 @@ fun clickHandlerStep1(
     if (name.length < 3 || lastName.length < 3){
         Toast.makeText(context, "نام و نام خانوادگی را به شکل صحیح وارد کنید", Toast.LENGTH_SHORT).show()
     } else {
-        clickHandler(step, MAX_STEP )
+        increaseStep(step, MAX_STEP )
     }
 }
 
@@ -269,10 +294,18 @@ fun clickHandlerStep2(
     if (!email.contains("@") || phone.length < 11){
         Toast.makeText(context, "ایمیل و شماره تلفن را به شکل صحیح وارد کنید", Toast.LENGTH_SHORT).show()
     } else {
-        clickHandler(step, MAX_STEP)
+        increaseStep(step, MAX_STEP)
     }
 }
+
 fun clickHandlerStep3(
+    step: MutableState<Int>,
+    MAX_STEP: Int
+){
+    increaseStep(step, MAX_STEP)
+}
+
+fun clickHandlerStep4(
     context: Context,
     password: String,
     repeatPassword: String,
@@ -282,6 +315,6 @@ fun clickHandlerStep3(
     if (password.length < 7 || password != repeatPassword){
         Toast.makeText(context, "پسورد را به شکل صحیح وارد کنید", Toast.LENGTH_SHORT).show()
     } else {
-        clickHandler(step, MAX_STEP)
+        increaseStep(step, MAX_STEP)
     }
 }

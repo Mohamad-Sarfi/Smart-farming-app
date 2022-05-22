@@ -26,6 +26,7 @@ import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
 
 
 class AddUserActivity : ComponentActivity() {
+
     protected lateinit var userPreferences : UserPreferences
 
     val viewModel : AuthViewModel by viewModels{
@@ -45,8 +46,8 @@ class AddUserActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userPreferences = UserPreferences.getInstance(this)
 
-        userPreferences = UserPreferences(this)
         setContent {
             SmartFarmingTheme {
                 // A surface container using the 'background' color from the theme

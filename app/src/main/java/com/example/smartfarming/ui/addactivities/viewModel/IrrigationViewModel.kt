@@ -1,12 +1,11 @@
 package com.example.smartfarming.ui.addactivities.viewModel
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.smartfarming.data.repositories.GardenRepo
+import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.IrrigationEntity
 import kotlinx.coroutines.Dispatchers

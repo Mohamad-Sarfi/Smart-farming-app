@@ -1,7 +1,7 @@
 package com.example.smartfarming.ui.gardenprofile
 
 import androidx.lifecycle.*
-import com.example.smartfarming.data.repositories.GardenRepo
+import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

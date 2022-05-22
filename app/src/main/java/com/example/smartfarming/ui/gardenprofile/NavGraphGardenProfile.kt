@@ -8,10 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.smartfarming.data.room.entities.Garden
-import com.example.smartfarming.ui.addactivities.activityscreens.Fertilization
-import com.example.smartfarming.ui.addactivities.activityscreens.Irrigation
-import com.example.smartfarming.ui.addactivities.activityscreens.Others
-import com.example.smartfarming.ui.addactivities.activityscreens.Pesticides
+import com.example.smartfarming.ui.AppScreensEnum
+import com.example.smartfarming.ui.addactivity.activityscreens.Fertilization
+import com.example.smartfarming.ui.addactivity.activityscreens.Irrigation
+import com.example.smartfarming.ui.addactivity.activityscreens.Others
+import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
+import com.example.smartfarming.ui.addactivity.AddActivity
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
 
 @Composable
@@ -20,14 +22,24 @@ fun NavGraphGardenProfile(
     garden : State<Garden?>,
     viewModel: GardenProfileViewModel
 ){
+    val irrigation = AppScreensEnum.IrrigationScreen.name
+    val fertilization = AppScreensEnum.FertilizationScreen.name
+    val pesticide = AppScreensEnum.PesticideScreen.name
+    val otherActivity = AppScreensEnum.OtherActivitiesScreen.name
+    val addActivity = AppScreensEnum.AddActivitiesScreen.name
+
     NavHost(navController = navController,
         startDestination = ScreensEnumGardenProfile.MainScreen.name
     ) {
+
+
         composable(route = ScreensEnumGardenProfile.MainScreen.name){
             GardenProfile(garden, navController)
         }
+
+
         composable(
-            route = "${ScreensEnumGardenProfile.IrrigationScreen.name}/{gardenName}",
+            route = "${irrigation}/{gardenName}",
             arguments = listOf(
                 navArgument("gardenName"){
                     type = NavType.StringType
@@ -37,8 +49,10 @@ fun NavGraphGardenProfile(
             val gardenName = entry.arguments?.getString("gardenName")
             Irrigation(gardenName = gardenName!!, navController)
         }
+
+
         composable(
-            route = "${ScreensEnumGardenProfile.FertilizationScreen.name}/{gardenName}",
+            route = "${fertilization}/{gardenName}",
             arguments = listOf(
                 navArgument("gardenName"){
                     type = NavType.StringType
@@ -51,8 +65,10 @@ fun NavGraphGardenProfile(
                 navController = navController
             )
         }
+
+
         composable(
-            route = "${ScreensEnumGardenProfile.PesticideScreen.name}/{gardenName}",
+            route = "${AppScreensEnum.PesticideScreen.name}/{gardenName}",
             arguments = listOf(
                 navArgument("gardenName"){
                     type = NavType.StringType
@@ -60,10 +76,12 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            Pesticides(gardenName = gardenName!!, viewModel = viewModel)
+            Pesticides(gardenName = gardenName!!)
         }
+
+
         composable(
-            route = "${ScreensEnumGardenProfile.OtherScreen.name}/{gardenName}",
+            route = "${otherActivity}/{gardenName}",
             arguments = listOf(
                 navArgument("gardenName"){
                     type = NavType.StringType
@@ -72,6 +90,12 @@ fun NavGraphGardenProfile(
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
             Others(gardenName = gardenName!!, viewModel = viewModel)
+        }
+
+        composable(
+            route = "${addActivity}"
+        ){
+            //AddActivity(navController = navController)
         }
 
     }

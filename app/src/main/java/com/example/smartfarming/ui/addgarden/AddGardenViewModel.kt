@@ -1,7 +1,7 @@
 package com.example.smartfarming.ui.addgarden
 
 import androidx.lifecycle.*
-import com.example.smartfarming.data.repositories.GardenRepo
+import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.google.android.libraries.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +53,10 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
         value = 0
     }
 
+    var soilType = MutableLiveData<String>().apply {
+        value = ""
+    }
+
 
     fun getArea() : MutableLiveData<Int> = gardenArea
     fun setArea(area : Int){
@@ -93,7 +97,9 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
         gardenName.value = name
     }
 
-
+    fun setSoilType(type : String){
+        soilType.value = type
+    }
 
     fun setGardenAge(age : String){
         gardenAge.value = age

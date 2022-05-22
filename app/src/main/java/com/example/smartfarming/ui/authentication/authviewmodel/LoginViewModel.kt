@@ -1,13 +1,10 @@
 package com.example.smartfarming.ui.authentication.authviewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.network.Resource
-import com.example.smartfarming.data.network.responses.user.LoginResponse
-import com.example.smartfarming.data.network.responses.user.request2JSON
+import com.example.smartfarming.data.network.resources.user.LoginResponse
 import com.example.smartfarming.data.repositories.authentication.AuthRepo
-import com.example.smartfarming.data.repositories.authentication.UserAuthenticationRepo
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -29,7 +26,6 @@ class LoginViewModel(
 
     fun login(){
         viewModelScope.launch {
-            Log.i("req", request2JSON(password.value!!, phoneNumber.value!!))
             loginResponse.value =authRepo.login(password = password.value!!, email = phoneNumber.value!!)
             if (loginResponse.value is Resource.Success){
                 userPreferences.saveAuthToken((loginResponse.value as Resource.Success<LoginResponse>).value.response.token)
