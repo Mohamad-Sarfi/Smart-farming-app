@@ -34,8 +34,8 @@ import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.Screens.DatePicker
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.addactivities.viewModel.IrrigationViewModel
-import com.example.smartfarming.ui.addactivities.viewModel.IrrigationViewModelFactory
+import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
+import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.commoncomposables.ProgressDots
 import com.example.smartfarming.ui.commoncomposables.TitleIcon
@@ -74,7 +74,9 @@ fun Irrigation(
                         .verticalGradient(
                             colors = listOf(
                                 MainGreen,
-                                BlueWatering
+                                MainGreen,
+                                MainGreen,
+                                BlueWatering,
                             )
                         )
                 )
@@ -228,7 +230,6 @@ fun Body(
 @Composable
 fun DateSelect(
     irrigationDate : MutableState<MutableMap<String, String>>,
-
 ){
     var dialogue by remember {
         mutableStateOf(false)

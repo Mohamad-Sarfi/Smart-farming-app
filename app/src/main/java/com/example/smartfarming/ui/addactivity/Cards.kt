@@ -91,11 +91,11 @@ fun Cards(
                 }
             }
             Card("سایر", R.drawable.shovel, MaterialTheme.colors.primary) {
-
+                val act = "act"
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()
                 } else{
-                    navController.navigate(route = "${AppScreensEnum.OtherActivitiesScreen.name}/$currentGarden")
+                    navController.navigate(route = "${AppScreensEnum.OtherActivitiesScreen.name}/$currentGarden/$act")
                 }
             }
         }

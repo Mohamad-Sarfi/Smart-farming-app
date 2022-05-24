@@ -75,7 +75,9 @@ fun Fertilization(
                         .verticalGradient(
                             colors = listOf(
                                 MainGreen,
-                                Purple200
+                                MainGreen,
+                                MainGreen,
+                                Purple200,
                             )
                         )
                 )

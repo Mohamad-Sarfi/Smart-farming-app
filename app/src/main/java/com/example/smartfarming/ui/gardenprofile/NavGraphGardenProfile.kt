@@ -76,7 +76,7 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            Pesticides(gardenName = gardenName!!)
+            Pesticides(gardenName = gardenName!!, navController = navController)
         }
 
 
@@ -89,7 +89,7 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            Others(gardenName = gardenName!!, viewModel = viewModel)
+            Others(gardenName = gardenName!!, navController = navController, act = "act")
         }
 
         composable(

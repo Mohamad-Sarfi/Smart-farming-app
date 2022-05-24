@@ -59,7 +59,7 @@ fun DatePicker(
                 .height(410.dp)
                 .padding(vertical = 30.dp, horizontal = 15.dp)
             ,
-            shape = RoundedCornerShape(15.dp),
+            shape = RoundedCornerShape(25.dp),
             color = Color.White
         ) {
             Spacer(modifier = Modifier.padding(10.dp))
@@ -82,7 +82,7 @@ fun DatePicker(
                               },
                     shape = RoundedCornerShape(15.dp),
                     modifier = Modifier
-                        .padding(top = 20.dp)
+                        .padding(top = 10.dp, bottom = 5.dp, end = 5.dp, start = 5.dp)
                         .fillMaxWidth()
                 ) {
                     Text(
@@ -185,7 +185,7 @@ fun getDate(): Map<String, String>{
         date[Calendar.YEAR] - 622
     }
     else {
-        date[Calendar.YEAR] - 623
+        date[Calendar.YEAR] - 621
     }
 
     if (date[Calendar.DAY_OF_MONTH] < 21){

@@ -1,4 +1,4 @@
-package com.example.smartfarming.ui.addactivities.viewModel
+package com.example.smartfarming.ui.addactivity.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData

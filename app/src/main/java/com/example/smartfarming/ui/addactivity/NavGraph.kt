@@ -9,6 +9,8 @@ import com.example.smartfarming.ui.addactivity.activityscreens.Fertilization
 import com.example.smartfarming.ui.addactivity.activityscreens.Irrigation
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModel
 import com.example.smartfarming.ui.addactivity.AddActivity
+import com.example.smartfarming.ui.addactivity.activityscreens.Others
+import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
 
 @Composable
 fun SetupNavGraph(
@@ -20,6 +22,7 @@ fun SetupNavGraph(
     val irrigation = AppScreensEnum.IrrigationScreen.name
     val fertilization = AppScreensEnum.FertilizationScreen.name
     val activityScreen = AppScreensEnum.OtherActivitiesScreen.name
+    val pesticideScreen = AppScreensEnum.PesticideScreen.name
 
 
     NavHost(
@@ -67,7 +70,19 @@ fun SetupNavGraph(
         ){entry ->
             val gardenName = entry.arguments?.getString("gardenName")
             val act = entry.arguments?.getString("act")
-            HostActivity(gardenName!!, act!!)
+            Others(gardenName = gardenName!!, navController = navController, act = act!!)
+        }
+
+        composable(
+            route = "$pesticideScreen/{name}",
+            arguments = listOf(
+                navArgument("name"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val  gardenName = entry.arguments?.getString("name")
+            Pesticides(gardenName = gardenName!!, navController = navController)
         }
     }
 }

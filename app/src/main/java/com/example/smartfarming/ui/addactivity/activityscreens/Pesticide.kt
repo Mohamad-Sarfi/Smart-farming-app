@@ -1,9 +1,12 @@
 package com.example.smartfarming.ui.addactivity.activityscreens
 
 import android.app.Activity
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -20,20 +23,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.ui.addactivities.Screens.DatePicker
+import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.Purple200
 import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModelFactory
+import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.commoncomposables.ProgressDots
 import com.example.smartfarming.ui.commoncomposables.TitleIcon
 
 @Composable
-fun Pesticides(gardenName: String) {
+fun Pesticides(
+    gardenName: String,
+    navController: NavHostController
+) {
 
     val activity = LocalContext.current as Activity
     val viewModel : PesticideViewModel = viewModel(
@@ -58,7 +69,8 @@ fun Pesticides(gardenName: String) {
                             colors = listOf(
                                 MainGreen,
                                 MainGreen,
-                                YellowPesticide
+                                MainGreen,
+                                YellowPesticide,
                             )
                         )
                 )
@@ -96,7 +108,12 @@ fun Pesticides(gardenName: String) {
                     .clip(RoundedCornerShape(27.dp))
                     .background(Color.White)
                     .padding(vertical = 50.dp, horizontal = 10.dp),
-                garden = garden.value!!
+                garden = garden.value!!,
+                viewModel = viewModel,
+                step = step,
+                increaseStep = {
+                    if (step < 1) step++ else step
+                }
             )
             ProgressDots(
                 modifier = Modifier
@@ -112,7 +129,7 @@ fun Pesticides(gardenName: String) {
 
             )
             BottomRowPesticide(
-                modifier =  Modifier
+                modifier = Modifier
                     .constrainAs(button) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
@@ -129,11 +146,16 @@ fun Pesticides(gardenName: String) {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PesticideBody(
     modifier: Modifier,
-    garden : Garden
+    garden : Garden,
+    viewModel: PesticideViewModel,
+    step: Int,
+    increaseStep: () -> Unit
 ){
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Top,
@@ -146,7 +168,56 @@ fun PesticideBody(
             modifier = Modifier
                 .padding(bottom = 20.dp)
         )
-        Spacer(modifier = Modifier.height(15.dp))
+
+        AnimatedVisibility(
+            visible = step == 0,
+            enter = slideInHorizontally(),
+            exit = slideOutHorizontally() + fadeOut()
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                OutlinedTextField(
+                    value = viewModel.getPesticideName().value,
+                    onValueChange = {viewModel.setPesticideName(it)},
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .width(220.dp)
+                        .height(68.dp),
+                    shape = MaterialTheme.shapes.large,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = MainGreen,
+                        focusedLabelColor = MainGreen,
+                        unfocusedLabelColor = MainGreen,
+                        unfocusedBorderColor = MainGreen,
+                        textColor = MainGreen
+                    ),
+                    singleLine = true,
+                    maxLines = 1,
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+
+                        }
+                    ),
+                    label = {
+                        Text(
+                            text = "نام سم",
+                            style = MaterialTheme.typography.body1,
+                            )
+                    }
+                )
+
+                DateSelectPesticide(
+                    pesticideDate = viewModel.getPesticideDate(),
+                    setPesticideDate = { date ->
+                        viewModel.setPesticideDate(date)
+                })
+            }
+        }
+
+
     }
 }
 
@@ -204,5 +275,44 @@ fun BottomRowPesticide(
                 style = MaterialTheme.typography.h5
             )
         }
+    }
+}
+
+
+@Composable
+fun DateSelectPesticide(
+    pesticideDate : MutableState<MutableMap<String, String>>,
+    setPesticideDate : (MutableMap<String, String>) -> Unit
+){
+    var dialogue by remember {
+        mutableStateOf(false)
+    }
+
+    Button(
+        onClick = { dialogue = !dialogue },
+        modifier = Modifier
+            .padding(20.dp)
+            .width(220.dp)
+            .height(60.dp)
+            .clip(MaterialTheme.shapes.large)
+            .border(2.dp, color = MainGreen, shape = MaterialTheme.shapes.large),
+        colors = ButtonDefaults.outlinedButtonColors(
+            backgroundColor = Color.White
+        )
+    ) {
+        Text(
+            text = if (pesticideDate.value["year"] == "") "تاریخ سم پاشی" else "${pesticideDate.value["day"]} / ${pesticideDate.value["month"]} / ${pesticideDate.value["year"]}",
+            style = MaterialTheme.typography.body1,
+            color = MainGreen,
+            modifier = Modifier.padding(6.dp)
+        )
+    }
+
+    if (dialogue){
+        DatePicker(openDialogue = dialogue,
+            changeOpenDialogue = {dialogue = !dialogue},
+            updateDate = {date ->
+                setPesticideDate(date)
+            })
     }
 }
