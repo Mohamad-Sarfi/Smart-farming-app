@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Thermostat
+import androidx.compose.material.icons.outlined.Inventory
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Reviews
 import androidx.compose.runtime.*
@@ -115,7 +116,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
                 MainIcons(Icons.Default.Thermostat, "آب و هوا", waterBlueDark){
 
                 }
-                MainIcons(Icons.Outlined.Reviews, "توصیه ها", YellowPesticide){
+                MainIcons(Icons.Outlined.Inventory, "محصولات", YellowPesticide){
 
                 }
                 MainIcons(Icons.Outlined.LocationOn, "مکان نما", RedFertilizer){
@@ -182,10 +183,18 @@ fun Report(){
 
 
 @Composable
-fun MainIcons(icon : ImageVector, text : String, color: Color , clickHandler : () -> Unit){
+fun MainIcons(
+    icon : ImageVector,
+    text : String,
+    color: Color ,
+    clickHandler : () -> Unit
+){
 
     Column(
-        modifier = Modifier.padding(13.dp),
+        modifier = Modifier
+            .padding(18.dp)
+            .clickable { clickHandler() }
+            .padding(4.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

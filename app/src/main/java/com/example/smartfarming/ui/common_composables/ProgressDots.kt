@@ -1,4 +1,4 @@
-package com.example.smartfarming.ui.commoncomposables
+package com.example.smartfarming.ui.common_composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

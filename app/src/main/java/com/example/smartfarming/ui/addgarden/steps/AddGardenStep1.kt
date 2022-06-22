@@ -125,7 +125,7 @@ fun AddGardenStep1(
                 },
                 modifier = Modifier
                     .padding(10.dp)
-                    .size(width = 260.dp, height = 75.dp)
+                    .size(width = 260.dp, height = 75.dp),
             )
 
             PlanVarietySpinner(listOf()) {

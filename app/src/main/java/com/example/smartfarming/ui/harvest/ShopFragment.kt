@@ -1,37 +1,37 @@
-package com.example.smartfarming.ui.home
+package com.example.smartfarming.ui.harvest
 
-import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.Text
 import androidx.compose.ui.platform.ComposeView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
-import com.example.smartfarming.ui.addgarden.AddGarden
-import com.example.smartfarming.ui.home.composables.HomeCompose
 
-class HomeFragment : Fragment() {
 
-    val viewModel : HomeViewModel by activityViewModels {
-        HomeViewModelFactory((activity?.application as FarmApplication).repo)
+class ShopFragment : Fragment() {
+
+    val viewModel : HarvestViewModel by activityViewModels {
+        HarvestViewModelFactory((activity?.application as FarmApplication).repo)
     }
 
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         return ComposeView(requireContext()).apply {
             setContent {
                 SmartFarmingTheme() {
-                    HomeCompose(viewModel)
+
+                    val navController = rememberNavController()
+
+                    HarvestNavGraph(
+                        navController = navController
+                    )
                 }
             }
         }

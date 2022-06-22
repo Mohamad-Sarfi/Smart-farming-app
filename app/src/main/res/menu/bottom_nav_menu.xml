@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/home"
+        android:icon="@drawable/home1"
         android:title="@string/home" />
 
     <item
@@ -14,8 +14,8 @@
 
     <item
         android:id="@+id/shopFragment"
-        android:icon="@drawable/cart"
-        android:title="@string/shop" />
+        android:icon="@drawable/inventory"
+        android:title="@string/harvest" />
 
     <item
         android:id="@+id/navigation_notifications"

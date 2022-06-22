@@ -23,22 +23,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.Screens.DatePicker
-import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.addactivities.ui.theme.Purple200
-import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModelFactory
-import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
-import com.example.smartfarming.ui.commoncomposables.ProgressDots
-import com.example.smartfarming.ui.commoncomposables.TitleIcon
+import com.example.smartfarming.ui.common_composables.ProgressDots
+import com.example.smartfarming.ui.common_composables.TitleIcon
 
 @Composable
 fun Pesticides(
@@ -163,7 +158,7 @@ fun PesticideBody(
     ) {
         Text(
             text = "ثبت سم پاشی " + garden.name,
-            style = MaterialTheme.typography.h3,
+            style = MaterialTheme.typography.h4,
             color = YellowPesticide,
             modifier = Modifier
                 .padding(bottom = 20.dp)
@@ -172,7 +167,7 @@ fun PesticideBody(
         AnimatedVisibility(
             visible = step == 0,
             enter = slideInHorizontally(),
-            exit = slideOutHorizontally() + fadeOut()
+            exit = fadeOut()
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -214,6 +209,78 @@ fun PesticideBody(
                     setPesticideDate = { date ->
                         viewModel.setPesticideDate(date)
                 })
+            }
+        }
+        
+        AnimatedVisibility(
+            visible = step == 1,
+            enter = slideInHorizontally(),
+            exit = slideOutHorizontally() + fadeOut()
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                OutlinedTextField(
+                    value = viewModel.getPesticideName().value,
+                    onValueChange = {viewModel.setPesticideName(it)},
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .width(220.dp)
+                        .height(68.dp),
+                    shape = MaterialTheme.shapes.large,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = MainGreen,
+                        focusedLabelColor = MainGreen,
+                        unfocusedLabelColor = MainGreen,
+                        unfocusedBorderColor = MainGreen,
+                        textColor = MainGreen
+                    ),
+                    singleLine = true,
+                    maxLines = 1,
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+
+                        }
+                    ),
+                    label = {
+                        Text(
+                            text = "لیتر در هکتار",
+                            style = MaterialTheme.typography.subtitle1,
+                        )
+                    }
+                )
+
+                OutlinedTextField(
+                    value = viewModel.getPesticideName().value,
+                    onValueChange = {viewModel.setPesticideName(it)},
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .width(220.dp)
+                        .height(68.dp),
+                    shape = MaterialTheme.shapes.large,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = MainGreen,
+                        focusedLabelColor = MainGreen,
+                        unfocusedLabelColor = MainGreen,
+                        unfocusedBorderColor = MainGreen,
+                        textColor = MainGreen
+                    ),
+                    singleLine = true,
+                    maxLines = 1,
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+
+                        }
+                    ),
+                    label = {
+                        Text(
+                            text = "آفت هدف",
+                            style = MaterialTheme.typography.subtitle1,
+                        )
+                    }
+                )
+
             }
         }
 
@@ -295,14 +362,14 @@ fun DateSelectPesticide(
             .width(220.dp)
             .height(60.dp)
             .clip(MaterialTheme.shapes.large)
-            .border(2.dp, color = MainGreen, shape = MaterialTheme.shapes.large),
+            .border(1.dp, color = MainGreen, shape = MaterialTheme.shapes.large),
         colors = ButtonDefaults.outlinedButtonColors(
             backgroundColor = Color.White
         )
     ) {
         Text(
             text = if (pesticideDate.value["year"] == "") "تاریخ سم پاشی" else "${pesticideDate.value["day"]} / ${pesticideDate.value["month"]} / ${pesticideDate.value["year"]}",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.subtitle1,
             color = MainGreen,
             modifier = Modifier.padding(6.dp)
         )

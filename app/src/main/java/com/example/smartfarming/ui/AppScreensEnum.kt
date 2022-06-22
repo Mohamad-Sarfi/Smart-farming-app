@@ -7,5 +7,11 @@ enum class AppScreensEnum {
     FertilizationScreen,
     PesticideScreen,
     OtherActivitiesScreen,
-    AddActivitiesScreen
+    AddActivitiesScreen,
+
+    /* Harvest screens */
+    HarvestHomeScreen,
+    AddHarvestScreen,
+    ArchiveHarvestScreen
+
 }

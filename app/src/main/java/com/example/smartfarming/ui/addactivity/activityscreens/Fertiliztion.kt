@@ -39,8 +39,8 @@ import com.example.smartfarming.ui.addactivities.ui.theme.Purple200
 import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModel
 import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModelFactory
-import com.example.smartfarming.ui.commoncomposables.ProgressDots
-import com.example.smartfarming.ui.commoncomposables.TitleIcon
+import com.example.smartfarming.ui.common_composables.ProgressDots
+import com.example.smartfarming.ui.common_composables.TitleIcon
 
 @Composable
 fun Fertilization(

@@ -1,7 +1,6 @@
-package com.example.smartfarming.ui.commoncomposables
+package com.example.smartfarming.ui.common_composables
 
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
 
 @Composable
 fun HorizontalStepCircle(

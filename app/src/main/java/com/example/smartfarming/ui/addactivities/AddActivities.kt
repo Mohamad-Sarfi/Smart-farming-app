@@ -1,8 +1,6 @@
 package com.example.smartfarming.ui.addactivities
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,18 +10,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.R
@@ -39,7 +33,7 @@ import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModelFactory
 import com.example.smartfarming.ui.addactivity.AddActivity
-import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
+import com.example.smartfarming.ui.common_composables.GardenSpinner
 
 
 class AddActivities : ComponentActivity() {
@@ -224,88 +218,7 @@ fun Card(
     }
 }
 
-@SuppressLint("UnusedTransitionTargetStateParameter")
-@Composable
-fun GardenSpinner(
-    gardensList : List<String>,
-    currentGarden : String,
-    updateCurrentGarden : (garden : String) -> Unit
-){
-    var expanded by remember { mutableStateOf(false) }
-    val transitionState = remember {
-        MutableTransitionState(expanded).apply {
-            targetState = !expanded
-        }
-    }
 
-    val transition = updateTransition(targetState = transitionState, label = "transition")
-    val arrowRotateDegree by transition.animateFloat({
-        tween(delayMillis = 50)
-    }, label = "rotationDegree") {
-        if (expanded) 180f else 0f
-    }
-    val context = LocalContext.current
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth(1f),
-    ){
-        Row(modifier = Modifier
-            .width(350.dp)
-            .padding(vertical = 15.dp, horizontal = 20.dp)
-            .clip(shape = MaterialTheme.shapes.large)
-            .shadow(elevation = 3.dp)
-            .background(Color(0xFFEEEEEE))
-            .clickable {
-                expanded = !expanded
-            }
-            .padding(vertical = 10.dp, horizontal = 30.dp)
-            .align(Alignment.Center)
-
-            ,
-            ) {
-            Icon(
-                imageVector = Icons.Filled.ArrowDropDown,
-                contentDescription = "",
-                tint = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .padding(
-                        start = 0.dp,
-                        end = 90.dp
-                    )
-                    .size(55.dp)
-                    .rotate(arrowRotateDegree)
-                ,
-
-            )
-            Text(
-                text = currentGarden,
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier.padding(5.dp)
-                )
-
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }) {
-                gardensList.forEach { garden ->
-                    DropdownMenuItem(onClick = {
-                        expanded = false
-                        updateCurrentGarden(garden)
-
-                    }) {
-                        Text(
-                            text = garden,
-                            modifier = Modifier
-                                .padding(vertical = 5.dp, horizontal = 20.dp),
-                            style = MaterialTheme.typography.body2
-                        )
-                    }
-
-                }
-            }
-        }
-    }
-}
 
 // Navigation
 private fun navigateToScreens(

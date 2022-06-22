@@ -2,7 +2,6 @@ package com.example.smartfarming.ui.addactivity.activityscreens
 
 import android.app.Activity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -21,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
@@ -30,12 +28,8 @@ import com.example.smartfarming.ui.addactivities.ui.theme.LightGreen1
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivity.viewmodels.OthersViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.OthersViewModelFactory
-import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModel
-import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModelFactory
-import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
-import com.example.smartfarming.ui.commoncomposables.ProgressDots
-import com.example.smartfarming.ui.commoncomposables.TitleIcon
-import com.example.smartfarming.ui.gardenprofile.GardenProfileViewModel
+import com.example.smartfarming.ui.common_composables.ProgressDots
+import com.example.smartfarming.ui.common_composables.TitleIcon
 
 @Composable
 fun Others(

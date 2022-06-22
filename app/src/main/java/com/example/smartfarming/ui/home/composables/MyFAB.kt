@@ -70,7 +70,7 @@ fun MyFAB(
                 Text(
                     text = "ثبت فعالیت",
                     style = MaterialTheme.typography.subtitle1,
-                    modifier = Modifier.padding(6.dp),
+                    modifier = Modifier.padding(end = 10.dp),
                     color = Color.White
                 )
             }
@@ -80,7 +80,7 @@ fun MyFAB(
                 contentDescription = "",
                 modifier = Modifier
                     .padding(4.dp)
-                    .size(32.dp),
+                    .size(27.dp),
                 tint = Color.White
             )
 

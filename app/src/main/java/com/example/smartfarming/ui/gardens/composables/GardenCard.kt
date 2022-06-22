@@ -68,7 +68,7 @@ fun GardenCard(garden : Garden){
                 .align(Alignment.CenterVertically)
                 .width(120.dp)
                 .fillMaxHeight()
-                .background(LightGreen1),
+                .background(MainGreen),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

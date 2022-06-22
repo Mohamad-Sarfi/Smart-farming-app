@@ -1,6 +1,5 @@
 package com.example.smartfarming.ui.addactivity
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -13,10 +12,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.AppScreensEnum
-import com.example.smartfarming.ui.addactivities.GardenSpinner
 import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
+import com.example.smartfarming.ui.common_composables.GardenSpinner
 
 @Composable
 fun Cards(

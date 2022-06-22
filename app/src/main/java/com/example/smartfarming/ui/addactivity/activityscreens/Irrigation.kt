@@ -37,8 +37,8 @@ import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
-import com.example.smartfarming.ui.commoncomposables.ProgressDots
-import com.example.smartfarming.ui.commoncomposables.TitleIcon
+import com.example.smartfarming.ui.common_composables.ProgressDots
+import com.example.smartfarming.ui.common_composables.TitleIcon
 import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
 
 @Composable
