@@ -62,9 +62,9 @@ fun Pesticides(
                     brush = Brush
                         .verticalGradient(
                             colors = listOf(
-                                MainGreen,
-                                MainGreen,
-                                MainGreen,
+                                Color.White,
+                                Color.White,
+                                Color.White,
                                 YellowPesticide,
                             )
                         )
@@ -83,7 +83,8 @@ fun Pesticides(
                     }
                     .fillMaxWidth()
                     .padding(top = 30.dp, bottom = 50.dp),
-                icon = painterResource(id = R.drawable.pesticide_line)
+                icon = painterResource(id = R.drawable.pesticide_line),
+                YellowPesticide
             )
 
             PesticideBody(

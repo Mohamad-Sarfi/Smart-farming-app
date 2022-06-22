@@ -15,7 +15,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TitleIcon(
     modifier : Modifier,
-    icon : Painter
+    icon : Painter,
+    color: Color
 ){
     Column(
         modifier,
@@ -28,7 +29,7 @@ fun TitleIcon(
             modifier = Modifier
                 .padding(10.dp)
                 .size(70.dp),
-            tint = Color.White
+            tint = color
         )
         //Text(text = "ثبت آبیاری", style = MaterialTheme.typography.h5, color = Color.White)
     }

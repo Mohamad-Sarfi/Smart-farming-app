@@ -74,9 +74,9 @@ fun Fertilization(
                     brush = Brush
                         .verticalGradient(
                             colors = listOf(
-                                MainGreen,
-                                MainGreen,
-                                MainGreen,
+                                Color.White,
+                                Color.White,
+                                Color.White,
                                 Purple200,
                             )
                         )
@@ -95,7 +95,8 @@ fun Fertilization(
                     }
                     .fillMaxWidth()
                     .padding(top = 30.dp, bottom = 50.dp),
-                icon = painterResource(id = R.drawable.fertilizer_line)
+                icon = painterResource(id = R.drawable.fertilizer_line),
+                Purple200
             )
             FertilizationBody(
                 modifier = Modifier

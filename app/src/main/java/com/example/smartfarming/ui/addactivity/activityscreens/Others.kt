@@ -58,9 +58,9 @@ fun Others(
                     brush = Brush
                         .verticalGradient(
                             colors = listOf(
-                                MainGreen,
-                                MainGreen,
-                                MainGreen,
+                                Color.White,
+                                Color.White,
+                                Color.White,
                                 LightGreen1,
                             )
                         )
@@ -79,7 +79,8 @@ fun Others(
                     }
                     .fillMaxWidth()
                     .padding(top = 30.dp, bottom = 50.dp),
-                icon = painterResource(id = R.drawable.shove_line)
+                icon = painterResource(id = R.drawable.shove_line),
+                LightGreen1
             )
 
             OthersBody(

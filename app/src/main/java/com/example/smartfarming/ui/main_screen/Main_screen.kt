@@ -37,6 +37,9 @@ fun MainScreen(){
     }
 
     Scaffold(
+        topBar = {
+            TopAppBar()
+        },
         bottomBar = {
             AppBottomNavigation(navController = navController){
                 currentPage = it
