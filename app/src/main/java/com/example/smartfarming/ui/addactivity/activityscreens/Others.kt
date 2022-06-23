@@ -114,6 +114,7 @@ fun Others(
                     .fillMaxWidth()
                     .padding(10.dp),
                 step = step,
+                LightGreen1
                 )
 
 

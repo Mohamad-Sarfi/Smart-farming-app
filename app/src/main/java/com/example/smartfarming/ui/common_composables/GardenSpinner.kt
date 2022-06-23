@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
@@ -47,7 +48,7 @@ fun GardenSpinner(
         modifier = Modifier
             .fillMaxWidth(1f),
     ){
-        Row(modifier = Modifier
+        ConstraintLayout(modifier = Modifier
             .width(300.dp)
             .padding(vertical = 15.dp)
             .clip(shape = MaterialTheme.shapes.large)
@@ -57,17 +58,23 @@ fun GardenSpinner(
                 expanded = !expanded
             }
             .padding(vertical = 5.dp, horizontal = 10.dp)
-            .align(Alignment.Center),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            .align(Alignment.Center)
         ) {
+
+            val (icon, text) = createRefs()
+
             Icon(
                 imageVector = Icons.Filled.ArrowDropDown,
                 contentDescription = "",
                 tint = MaterialTheme.colors.primary,
                 modifier = Modifier
+                    .constrainAs(icon){
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
                     .padding(
-                        end = 80.dp
+                        start = 15.dp
                     )
                     .size(55.dp)
                     .rotate(arrowRotateDegree)
@@ -77,7 +84,13 @@ fun GardenSpinner(
             Text(
                 text = currentGarden,
                 style = MaterialTheme.typography.body2,
-                modifier = Modifier.padding(1.dp)
+                modifier = Modifier
+                    .constrainAs(text){
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(end = 15.dp)
             )
 
             DropdownMenu(
@@ -92,6 +105,7 @@ fun GardenSpinner(
                         Text(
                             text = garden,
                             modifier = Modifier
+                                .width(300.dp)
                                 .padding(vertical = 5.dp, horizontal = 20.dp),
                             style = MaterialTheme.typography.body2
                         )

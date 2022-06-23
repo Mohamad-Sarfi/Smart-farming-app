@@ -136,7 +136,8 @@ fun Fertilization(
                     }
                     .fillMaxWidth()
                     .padding(10.dp),
-                step = step
+                step = step,
+                PurpleFertilizer
             )
 
             BottomRow(

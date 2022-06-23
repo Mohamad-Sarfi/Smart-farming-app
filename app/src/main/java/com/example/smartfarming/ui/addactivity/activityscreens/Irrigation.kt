@@ -135,7 +135,8 @@ fun Irrigation(
                     }
                     .fillMaxWidth()
                     .padding(10.dp),
-                step = step
+                step = step,
+                BlueWatering
             )
 
 

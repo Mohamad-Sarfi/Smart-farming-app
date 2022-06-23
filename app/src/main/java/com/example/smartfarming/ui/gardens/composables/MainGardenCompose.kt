@@ -11,7 +11,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Eco
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Eco
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -62,29 +64,23 @@ fun GardenCompose(){
         Column() {
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .padding(30.dp),
+                .padding(20.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .clickable {
-                            val intent = Intent(context, AddGarden::class.java)
-                            context.startActivity(intent)
-                        }
-                        .size(40.dp)
-                    ,
-                    tint = MainGreen
-                )
-
                 Text(
                     text = "باغ های شما",
                     style = MaterialTheme.typography.h3,
                     color = MainGreen
+                )
+
+                Icon(
+                    Icons.Default.Eco,
+                    contentDescription = null,
+                    tint = MainGreen,
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .size(50.dp)
                 )
             }
             Column(

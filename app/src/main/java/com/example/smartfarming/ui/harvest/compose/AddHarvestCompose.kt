@@ -1,9 +1,11 @@
 package com.example.smartfarming.ui.harvest.compose
 
+import android.app.Activity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -18,12 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.Screens.DatePicker
@@ -33,6 +38,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.common_composables.GardenSpinner
 import com.example.smartfarming.ui.harvest.HarvestViewModel
+import com.example.smartfarming.ui.harvest.HarvestViewModelFactory
 
 
 @Composable
@@ -41,8 +47,12 @@ fun AddHarvestCompose(
     navController: NavHostController
 ){
 
+    val activity = LocalContext.current as Activity
     val gardenList = viewModel.getGardens().observeAsState()
     val gardenNameList = arrayListOf<String>()
+    val viewModel : HarvestViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = HarvestViewModelFactory((activity.application as FarmApplication).repo)
+    )
 
     if (gardenList.value != null){
 
@@ -51,32 +61,26 @@ fun AddHarvestCompose(
         }
     }
 
-    val harvestDate = viewModel.getHarvestDate()
+    val harvestDate = viewModel.harvestDate
 
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MainGreen,
-                        LightGreen,
-                    )
-                )
-            )
+            .background(Color.White)
     ) {
         val (pic, body) = createRefs()
-        Image(
-            painter = painterResource(id = R.drawable.pistachio),
-            contentDescription = "",
+        Icon(
+            painterResource(id = R.drawable.pistachio),
+            contentDescription = null,
+            tint = MainGreen,
             modifier = Modifier
-                .width(140.dp)
                 .constrainAs(pic) {
-                    top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                    top.linkTo(parent.top)
                 }
-                .padding(top = 30.dp)
+                .padding(10.dp)
+                .size(100.dp)
         )
             AddHarvestBody(
                 modifier = Modifier
@@ -85,14 +89,16 @@ fun AddHarvestCompose(
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
                     }
-                    .padding(10.dp)
+                    .padding(20.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(25.dp))
+                    .border(2.dp, MainGreen, RoundedCornerShape(25.dp))
                     .background(Color.White)
                     .padding(20.dp),
                 gardenNameList.ifEmpty { listOf("انتخاب باغ") },
                 harvestDate = harvestDate,
-                navController
+                navController,
+                viewModel = viewModel
             )
     }
 }
@@ -103,7 +109,8 @@ fun AddHarvestBody(
     modifier: Modifier,
     gardenList : List<String>,
     harvestDate: MutableState<MutableMap<String, String>>,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: HarvestViewModel
 ){
     var currentGarden by remember {
         if (gardenList.isNotEmpty()){
@@ -129,7 +136,8 @@ fun AddHarvestBody(
         Text(
             text = "ثبت محصول",
             style = MaterialTheme.typography.h5,
-            modifier = Modifier.padding(15.dp)
+            modifier = Modifier.padding(15.dp),
+            color = MainGreen
         )
 
         GardenSpinner(gardensList = gardenList, currentGarden = currentGarden ){
@@ -179,7 +187,9 @@ fun AddHarvestBody(
 
         }
 
-        DateSelectHarvest(harvestDate = harvestDate)
+        DateSelectHarvest(harvestDate = harvestDate){
+            viewModel.setDate(it)
+        }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -229,31 +239,65 @@ fun AddHarvestBody(
 
 @Composable
 fun HarvestTypeSpinner(
-    modifier: Modifier = Modifier,
     setHarvestType : (String) -> Unit
 ){
+
+    val pistachiosTypeList = stringArrayResource(id = R.array.pistachios_type)
+
+    var selectedType by remember {
+        mutableStateOf(pistachiosTypeList[0])
+    }
+
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    
     Row(modifier = Modifier
         .padding(10.dp)
         .width(90.dp)
-        .height(60.dp)
+        .height(58.dp)
         .clip(MaterialTheme.shapes.large)
+        .clickable { expanded = !expanded }
         .border(2.dp, color = MainGreen, shape = MaterialTheme.shapes.large),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-
-        Text(text = "تر", style = MaterialTheme.typography.body2)
-
+        Text(
+            text = selectedType,
+            style = MaterialTheme.typography.body1)
     }
+    
+    DropdownMenu(
+        expanded = expanded, 
+        onDismissRequest = {  expanded = false }) {
+        pistachiosTypeList.forEach { type ->
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    selectedType = type
+                }) {
+                    Text(
+                        text = type,
+                        modifier = Modifier
+                            .width(100.dp)
+                            .padding(vertical = 5.dp, horizontal = 20.dp),
+                        style = MaterialTheme.typography.body2
+                    )
+                }
+            }
+    }
+
 }
 
 @Composable
 fun DateSelectHarvest(
     harvestDate : MutableState<MutableMap<String, String>>,
+    setHarvestDate : (MutableMap<String, String>) -> Unit
 ){
     var dialogue by remember {
         mutableStateOf(false)
     }
+
+
 
     Button(
         onClick = { dialogue = !dialogue },
@@ -279,7 +323,7 @@ fun DateSelectHarvest(
         DatePicker(openDialogue = dialogue,
             changeOpenDialogue = {dialogue = !dialogue},
             updateDate = {date ->
-                harvestDate.value = date
+                setHarvestDate(date)
             })
     }
 }

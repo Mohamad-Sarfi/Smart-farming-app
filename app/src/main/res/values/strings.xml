@@ -117,6 +117,12 @@
         <item>سنگین</item>
     </string-array>
 
+    <string-array name="pistachios_type">
+        <item>تازه</item>
+        <item>خشک</item>
+        <item>سایر</item>
+    </string-array>
+
     <string name="title_activity_add_user">AddUserActivity</string>
     <string name="title_activity_add_activities">AddActivities</string>
     <string name="title_activity_irrigation">IrrigationActivity</string>

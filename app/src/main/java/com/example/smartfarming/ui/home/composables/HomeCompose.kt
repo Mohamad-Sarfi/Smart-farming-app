@@ -110,7 +110,7 @@ fun HomeCompose(){
                 horizontalAlignment = Alignment.End
 
             ){
-                ManageGardenPreview(gardensList, context, tasks)
+                TasksColumn(tasks, gardensList)
             }
             FarmingArticlesPreview(articlesList = listOf())
         }

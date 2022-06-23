@@ -11,6 +11,7 @@ import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.harvest.compose.AddHarvestCompose
 import com.example.smartfarming.ui.harvest.compose.HarvestCompose
+import com.example.smartfarming.ui.harvest.compose.harvest_archive.HarvestArchiveHome
 
 
 @Composable
@@ -37,7 +38,7 @@ fun HarvestNavGraph(
         }
 
         composable(route = archiveScreen){
-
+            HarvestArchiveHome()
         }
 
     }

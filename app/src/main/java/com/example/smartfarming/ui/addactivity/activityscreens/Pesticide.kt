@@ -50,7 +50,7 @@ fun Pesticides(
     }
     val garden = viewModel.getGarden(gardenName).observeAsState()
 
-
+    //////////////////////////////// SCAFOLD ///////////////////////////////////////////////////////
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -62,6 +62,7 @@ fun Pesticides(
                     brush = Brush
                         .verticalGradient(
                             colors = listOf(
+                                Color.White,
                                 Color.White,
                                 Color.White,
                                 Color.White,
@@ -117,12 +118,12 @@ fun Pesticides(
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                         top.linkTo(main.bottom)
-
                     }
                     .fillMaxWidth()
-                    .padding(10.dp),
+                    .padding(10.dp)
+                ,
                 step = step,
-
+                YellowPesticide
             )
             BottomRowPesticide(
                 modifier = Modifier

@@ -50,7 +50,7 @@ fun HarvestCompose(
             )
 
             OutlinedButton(
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate(route = AppScreensEnum.ArchiveHarvestScreen.name) },
                 colors = ButtonDefaults.outlinedButtonColors(
                     backgroundColor = Color.White,
                     contentColor = MainGreen,

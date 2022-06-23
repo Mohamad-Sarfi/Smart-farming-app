@@ -66,10 +66,10 @@
             android:label="ArticleActivity"
             android:theme="@style/Theme.SmartFarming"/>
         <activity
-                    android:name=".ui.addactivity.AddActivityActivity"
-                    android:exported="false"
-                    android:label="ArticleActivity"
-                    android:theme="@style/Theme.SmartFarming"/>
+            android:name=".ui.addactivity.AddActivityActivity"
+            android:exported="false"
+            android:label="ArticleActivity"
+            android:theme="@style/Theme.SmartFarming"/>
 
     </application>
 
