@@ -70,6 +70,11 @@
             android:exported="false"
             android:label="ArticleActivity"
             android:theme="@style/Theme.SmartFarming"/>
+        <activity
+            android:name=".ui.tasks_notification.TasksNotificationActivity"
+            android:exported="false"
+            android:label="TasksNotificationActivity"
+            android:theme="@style/Theme.SmartFarming"/>
 
     </application>
 

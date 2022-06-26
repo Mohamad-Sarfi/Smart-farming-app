@@ -2,6 +2,7 @@ package com.example.smartfarming.ui.home.composables
 
 import android.app.Activity
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -57,12 +58,12 @@ fun TaskCard(task : Task){
             val (texts, icon) = createRefs()
 
             Column(
-                modifier = Modifier.
-                        constrainAs(texts){
-                            start.linkTo(parent.start)
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                        }
+                modifier = Modifier
+                    .constrainAs(texts) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
                     .padding(start = 55.dp)
             ) {
                 Text(text = task.name, color = Color.White, style = MaterialTheme.typography.h4)
@@ -73,7 +74,7 @@ fun TaskCard(task : Task){
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
-                    .constrainAs(icon){
+                    .constrainAs(icon) {
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
@@ -117,7 +118,8 @@ fun TaskPreview(){
         finish_date = "",
         garden_name = "محمد",
         recommendations = "روغن ولک",
-        user_id = 5
+        user_id = 5,
+        seen = false
     )
     )
 }

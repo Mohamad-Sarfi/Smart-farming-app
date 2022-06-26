@@ -14,5 +14,6 @@ data class Task(
     val start_date : String,
     val finish_date : String,
     val recommendations : String,
-    val user_id : Int
+    val user_id : Int,
+    val seen : Boolean
 )

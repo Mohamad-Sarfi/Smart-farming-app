@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Database(
     entities = [Garden::class, Task::class, FertilizationEntity::class, IrrigationEntity::class, PesticideEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class GardenDb : RoomDatabase() {

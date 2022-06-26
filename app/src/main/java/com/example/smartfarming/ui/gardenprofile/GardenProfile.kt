@@ -31,6 +31,7 @@ import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
+import com.example.smartfarming.ui.gardenprofile.composables.ReportDiagram
 import com.example.smartfarming.ui.gardenprofile.composables.ToDos
 import com.example.smartfarming.ui.home.composables.MyFAB
 
@@ -50,7 +51,8 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
             finish_date = "",
             garden_name = "محمد",
             recommendations = "روغن ولک",
-            user_id = 5
+            user_id = 5,
+            seen = false
         ),
         Task(0,
             "سم پاشی",
@@ -60,7 +62,8 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
             finish_date = "",
             garden_name = "محمد",
             recommendations = "روغن ولک",
-            user_id = 5
+            user_id = 5,
+            seen = false
         )
         ,
         Task(0,
@@ -71,7 +74,8 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
             finish_date = "",
             garden_name = "محمد",
             recommendations = "",
-            user_id = 5
+            user_id = 5,
+            seen = false
         )
         ,
         Task(0,
@@ -82,7 +86,8 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
             finish_date = "",
             garden_name = "اکبری",
             recommendations = "کود گاو",
-            user_id = 5
+            user_id = 5,
+            seen = false
         )
     )
 
@@ -106,6 +111,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
         ) {
 
             GardenTitle(gardenName = garden.value!!.name)
+            ReportDiagram()
             Report()
 
             Row(
@@ -147,13 +153,13 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
 fun Report(){
     Column(modifier = Modifier
         .fillMaxWidth()
-        .padding(15.dp)
+        .padding(30.dp)
         .graphicsLayer {
             shadowElevation = 4.dp.toPx()
             shape = RoundedCornerShape(20.dp)
             clip = true
         }
-        .background(Color.White)
+        .background(LightGray)
         .clip(MaterialTheme.shapes.large)
         .clickable { }
         .padding(20.dp)

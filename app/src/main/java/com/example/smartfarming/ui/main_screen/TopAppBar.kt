@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addgarden.AddGarden
+import com.example.smartfarming.ui.tasks_notification.TasksNotificationActivity
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
@@ -75,7 +76,10 @@ fun TopAppBar(){
 
         }
 
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = {
+            val intent = Intent(activity, TasksNotificationActivity::class.java)
+            activity.startActivity(intent)
+        }) {
             BadgeBox(badgeContent = { Text(text = "5")}) {
                 Icon(
                     Icons.Outlined.Notifications,

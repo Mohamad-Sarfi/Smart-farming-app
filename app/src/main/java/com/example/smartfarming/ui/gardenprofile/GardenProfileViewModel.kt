@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.gardenprofile
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
@@ -10,18 +11,17 @@ import java.lang.IllegalArgumentException
 class GardenProfileViewModel(val repo : GardenRepo) : ViewModel() {
 
     private val garden = MutableLiveData<Garden>().apply {
-        value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
+        value = Garden(0, "sample", 0, "", "", "", "", "", 0.0, 0.0,
             0.0, 0)
     }
 
-    private fun getGardenByName(gardenName : String) {
+    fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
             garden.value  = repo.getGardenByName(gardenName)
         }
     }
 
-    fun getGarden(gardenName : String) : MutableLiveData<Garden> {
-        getGardenByName(gardenName)
+    fun getGarden() : MutableLiveData<Garden> {
         return garden
     }
 

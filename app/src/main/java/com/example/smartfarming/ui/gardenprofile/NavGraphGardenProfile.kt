@@ -1,7 +1,11 @@
 package com.example.smartfarming.ui.gardenprofile
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -22,12 +26,14 @@ fun NavGraphGardenProfile(
     garden : State<Garden?>,
     viewModel: GardenProfileViewModel
 ){
+    val context = LocalContext.current
     val irrigation = AppScreensEnum.IrrigationScreen.name
     val fertilization = AppScreensEnum.FertilizationScreen.name
     val pesticide = AppScreensEnum.PesticideScreen.name
     val otherActivity = AppScreensEnum.OtherActivitiesScreen.name
     val addActivity = AppScreensEnum.AddActivitiesScreen.name
 
+    Toast.makeText(context, "${garden.value!!.name}", Toast.LENGTH_SHORT).show()
     NavHost(navController = navController,
         startDestination = ScreensEnumGardenProfile.MainScreen.name
     ) {
