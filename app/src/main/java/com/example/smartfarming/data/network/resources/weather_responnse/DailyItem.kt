@@ -1,0 +1,20 @@
+package com.example.smartfarming.data.network.resources.weather_responnse
+
+data class DailyItem(val moonset: Int = 0,
+                     val sunrise: Int = 0,
+                     val temp: Temp,
+                     val moonPhase: Int = 0,
+                     val uvi: Double = 0.0,
+                     val moonrise: Int = 0,
+                     val pressure: Int = 0,
+                     val clouds: Int = 0,
+                     val feelsLike: FeelsLike,
+                     val windGust: Double = 0.0,
+                     val dt: Int = 0,
+                     val pop: Int = 0,
+                     val windDeg: Int = 0,
+                     val dewPoint: Double = 0.0,
+                     val sunset: Int = 0,
+                     val weather: List<WeatherItem>?,
+                     val humidity: Int = 0,
+                     val windSpeed: Double = 0.0)

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.LightGray2
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
+import com.example.smartfarming.ui.gardenprofile.weather.DaysWeatherRow
 import com.example.smartfarming.ui.gardenprofile.weather.WeatherCard
 
 @Composable
@@ -32,6 +33,7 @@ fun Weather(gardenName: String = "شماره 1"){
         ) {
             TopRow(gardenName)
             WeatherCard()
+            DaysWeatherRow()
         }
     }
 }
@@ -45,7 +47,7 @@ fun TopRow(gardenName: String){
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
-        Text(text = gardenName, style = MaterialTheme.typography.h4, color = BlueWatering)
+        Text(text = gardenName, style = MaterialTheme.typography.h5, color = BlueWatering)
         Icon(
             Icons.Outlined.PinDrop,
             contentDescription = null,
