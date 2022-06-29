@@ -45,8 +45,6 @@ fun AddGardenStep3(
     val focus = LocalFocusManager.current
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp)
         ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -122,7 +120,7 @@ fun AddGardenStep3(
             ),
             singleLine = true,
             maxLines = 1,
-            modifier = Modifier.padding(vertical = 15.dp)
+            modifier = Modifier.width(260.dp)
         )
         if (area != 0){
             Text(

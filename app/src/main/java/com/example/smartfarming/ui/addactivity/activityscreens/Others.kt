@@ -1,6 +1,10 @@
 package com.example.smartfarming.ui.addactivity.activityscreens
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,6 +55,7 @@ fun Others(
         modifier = Modifier
             .fillMaxSize()
     ) {
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -83,25 +88,18 @@ fun Others(
                 LightGreen1
             )
 
-            OthersBody(
-                modifier = Modifier
-                    .constrainAs(main) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        top.linkTo(title.bottom)
-                    }
-                    .fillMaxWidth()
-                    .height(400.dp)
-                    .graphicsLayer {
-                        shadowElevation = 5.dp.toPx()
-                        shape = RoundedCornerShape(27.dp)
-                        clip = true
-                    }
-                    .clip(RoundedCornerShape(27.dp))
-                    .background(Color.White)
-                    .padding(vertical = 50.dp, horizontal = 10.dp),
-                garden = garden.value!!
-            )
+                OthersBody(
+                    modifier = Modifier
+                        .constrainAs(main) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            top.linkTo(title.bottom)
+                        }
+                        .height(405.dp),
+                    garden = garden.value!!,
+                    step
+                )
+
 
             ProgressDots(
                 modifier = Modifier
@@ -138,10 +136,46 @@ fun Others(
 @Composable
 fun OthersBody(
     modifier: Modifier,
-    garden: Garden
-){
+    garden: Garden,
+    step : Int
+) {
     Column(
         modifier = modifier,
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AnimatedVisibility(
+            visible = step == 0,
+            enter = slideInHorizontally(),
+            exit = slideOutHorizontally() + fadeOut()
+        ) {
+            Step1(garden = garden)
+        }
+        
+        AnimatedVisibility(
+            visible = step == 1,
+            enter = slideInHorizontally(),
+            exit = slideOutHorizontally() + fadeOut()
+        ) {
+            Step2(garden = garden)
+        }
+    }
+}
+
+@Composable
+fun Step1( garden: Garden){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp)
+            .graphicsLayer {
+                shadowElevation = 5.dp.toPx()
+                shape = RoundedCornerShape(27.dp)
+                clip = true
+            }
+            .clip(RoundedCornerShape(27.dp))
+            .background(Color.White)
+            .padding(vertical = 50.dp, horizontal = 10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -156,6 +190,33 @@ fun OthersBody(
     }
 }
 
+@Composable 
+fun Step2(garden: Garden){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp)
+            .graphicsLayer {
+                shadowElevation = 5.dp.toPx()
+                shape = RoundedCornerShape(27.dp)
+                clip = true
+            }
+            .clip(RoundedCornerShape(27.dp))
+            .background(Color.White)
+            .padding(vertical = 50.dp, horizontal = 10.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "ثبت فعالیت برای " + garden.name,
+            style = MaterialTheme.typography.h3,
+            color = LightGreen1,
+            modifier = Modifier
+                .padding(bottom = 20.dp)
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+    }
+}
 
 
 @Composable

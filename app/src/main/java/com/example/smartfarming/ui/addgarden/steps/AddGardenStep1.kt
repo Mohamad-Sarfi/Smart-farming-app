@@ -30,7 +30,6 @@ import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AddGardenStep1(
     gardenName: String,
@@ -39,14 +38,14 @@ fun AddGardenStep1(
     setAge : (String) -> Unit,
     varietiesList: State<List<String>>,
     addVariety: (String) -> Unit,
-    removeVariety: (String) -> Unit
+    removeVariety: (String) -> Unit,
+    step : State<Int?>
 ){
     val focusManager = LocalFocusManager.current
 
     AnimatedVisibility(
-        true,
-        enter = slideInVertically(),
-        exit = slideOutVertically()
+        visible = step.value!! == 1,
+
     ) {
         Column(
             modifier = Modifier,

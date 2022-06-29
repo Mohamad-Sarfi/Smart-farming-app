@@ -28,6 +28,7 @@ import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
@@ -120,7 +121,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
                 horizontalArrangement = Arrangement.Center
             ){
                 MainIcons(Icons.Default.Thermostat, "آب و هوا", waterBlueDark){
-
+                    navController.navigate(route = "${AppScreensEnum.GardenWeatherScreen.name}/${garden.value!!.name}")
                 }
                 MainIcons(Icons.Outlined.Inventory, "محصولات", YellowPesticide){
 

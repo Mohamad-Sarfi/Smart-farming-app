@@ -8,6 +8,7 @@ enum class AppScreensEnum {
     PesticideScreen,
     OtherActivitiesScreen,
     AddActivitiesScreen,
+    GardenWeatherScreen,
 
     /* Harvest screens */
     HarvestHomeScreen,

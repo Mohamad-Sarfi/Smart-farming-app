@@ -69,7 +69,7 @@ fun AddGardenCompose(
             .fillMaxHeight(1f)
             .fillMaxSize(1f)) {
 
-            val (topCard, middle, button) = createRefs()
+            val (topCard, side ,middle, button) = createRefs()
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -85,31 +85,33 @@ fun AddGardenCompose(
                 }
             }
 
+            StepsColumn(modifier =  Modifier
+                .constrainAs(side){
+                    start.linkTo(parent.start)
+                    top.linkTo(topCard.bottom)
+                    bottom.linkTo(parent.bottom)
+                }
+                .padding(
+                    start = 25.dp,
+                    end = 0.dp,
+                    bottom = 60.dp
+                ),
+                step = step
+            )
+
+            //***************************** Main part **********************************************
             Row(modifier = Modifier
                 .constrainAs(middle) {
-                    start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(topCard.bottom)
                     bottom.linkTo(button.top)
+                    start.linkTo(side.end)
                 }
-                .fillMaxWidth(1f)
+                .fillMaxWidth(.8f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(
-                            28.dp
-                        )
-                       ,
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    StepCircle(step = step.value!!, 1)
-                    StepCircle(step = step.value!!, 2)
-                    StepCircle(step = step.value!!, 3)
-                    StepCircle(step = step.value!!, 4)
-                }
 
-                // Main column, consisting fields
                 Column(
                     modifier = Modifier
                 ) {
@@ -122,7 +124,8 @@ fun AddGardenCompose(
                                     viewModel.addType(it)
                                 },{
                                     viewModel.removeFromTypeArray(it)
-                                }
+                                },
+                                step
                             )
                         2 ->
                             AddGardenStep2(
@@ -288,5 +291,23 @@ fun ManageTopCard(step: Int){
                 .padding(8.dp),
             color = Color.White
         )
+    }
+}
+
+@Composable
+fun StepsColumn(
+    modifier: Modifier,
+    step: State<Int?>
+){
+    Column(
+        modifier = modifier
+        ,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        StepCircle(step = step.value!!, 1)
+        StepCircle(step = step.value!!, 2)
+        StepCircle(step = step.value!!, 3)
+        StepCircle(step = step.value!!, 4)
     }
 }
