@@ -27,89 +27,100 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.smartfarming.data.network.resources.weather_response.WeatherResponse
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 
 @Composable
-fun WeatherCard(){
+fun WeatherCard(
+    weatherResponse: WeatherResponse?
+){
     Card(
         modifier = Modifier
             .clip(RoundedCornerShape(25.dp))
             .fillMaxWidth(),
         elevation = 5.dp
-
-
     ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFF5BBEFF),
-                            Color(0xFFAEDEFE),
-                            Color(0xFFAEDEFE),
-                            Color(0xFFF279F2)
+        if (weatherResponse != null){
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFF5BBEFF),
+                                Color(0xFFAEDEFE),
+                                Color(0xFFAEDEFE),
+                                Color(0xFFF279F2)
+                            )
                         )
                     )
-                )
-                .padding(vertical = 20.dp, horizontal = 20.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-
-                val (text, degree, icon) = createRefs()
-
-                Text(
-                    text = "آفتابی",
-                    style = MaterialTheme.typography.h5,
-                    color = Color.White,
-                    modifier = Modifier.constrainAs(text){
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    }
-                )
-                Icon(
-                    Icons.Filled.LightMode,
-                    contentDescription = null,
-                    tint = YellowPesticide,
-                    modifier = Modifier
-                        .constrainAs(icon) {
-                            start.linkTo(parent.start)
-                            top.linkTo(parent.top)
-                        }
-                        .padding(end = 30.dp)
-                        .size(120.dp)
-                )
-                Text(
-                    text = "26",
-                    style = MaterialTheme.typography.h1,
-                    color = Color.White,
-                    modifier = Modifier.constrainAs(degree){
-                        end.linkTo(parent.end)
-                        top.linkTo(text.bottom)
-                        start.linkTo(icon.end)
-                    }
-                )
-            }
-
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                    .padding(vertical = 20.dp, horizontal = 20.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DetailInfo(text = "720hp", icon = Icons.Default.Compress)
-                DetailInfo(text = "32%", icon = Icons.Outlined.WaterDrop)
-                DetailInfo(text = "12 km/h", icon = Icons.Outlined.Air)
-            }
 
-            TemperatureBar()
-            
+                WeatherInfoCard(weatherResponse)
+                TemperatureBar()
+
+            }
+        } else {
+            WeatherWaiting()
         }
     }
+
 }
 
+
+@Composable
+fun WeatherInfoCard(weatherResponse: WeatherResponse){
+    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+
+        val (text, degree, icon) = createRefs()
+
+        Text(
+            text = weatherResponse.current.weather!![0].main,
+            style = MaterialTheme.typography.h5,
+            color = Color.White,
+            modifier = Modifier.constrainAs(text){
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+            }
+        )
+        Icon(
+            Icons.Filled.LightMode,
+            contentDescription = null,
+            tint = YellowPesticide,
+            modifier = Modifier
+                .constrainAs(icon) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                }
+                .padding(end = 30.dp)
+                .size(120.dp)
+        )
+        Text(
+            text = "${(weatherResponse.current.temp - 273.15).toInt()}",
+            style = MaterialTheme.typography.h1,
+            color = Color.White,
+            modifier = Modifier.constrainAs(degree){
+                end.linkTo(parent.end)
+                top.linkTo(text.bottom)
+                start.linkTo(icon.end)
+            }
+        )
+    }
+
+    Row(
+        Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        DetailInfo(text = "720hp", icon = Icons.Default.Compress)
+        DetailInfo(text = "32%", icon = Icons.Outlined.WaterDrop)
+        DetailInfo(text = "12 km/h", icon = Icons.Outlined.Air)
+    }
+}
 
 @Composable
 fun TemperatureBar(){
@@ -184,8 +195,46 @@ fun DetailedTempBar(
     }
 }
 
+
+@Composable
+fun WeatherWaiting(){
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF5BBEFF),
+                        Color(0xFFAEDEFE),
+                        Color(0xFFAEDEFE),
+                        Color(0xFFF279F2)
+                    )
+                )
+            )
+            .padding(vertical = 60.dp, horizontal = 20.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            Icons.Default.HourglassTop,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier
+                .padding(vertical = 10.dp)
+                .size(90.dp)
+        )
+        Text(
+            text = "در حال دریافت اطلاعات آب و هوا",
+            style = MaterialTheme.typography.body1,
+            color = Color.White
+        )
+    }
+}
+
+/*
 @Composable
 @Preview
 fun PreviewWeatherCard(){
     WeatherCard()
 }
+*/

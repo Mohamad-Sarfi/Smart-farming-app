@@ -1,4 +1,4 @@
-package com.example.smartfarming.data.network.resources.weather_responnse
+package com.example.smartfarming.data.network.resources.weather_response
 
 data class Current(val sunrise: Int = 0,
                    val temp: Double = 0.0,

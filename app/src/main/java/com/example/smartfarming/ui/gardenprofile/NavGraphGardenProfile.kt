@@ -35,7 +35,6 @@ fun NavGraphGardenProfile(
     val addActivity = AppScreensEnum.AddActivitiesScreen.name
     val weather = AppScreensEnum.GardenWeatherScreen.name
 
-    Toast.makeText(context, "${garden.value!!.name}", Toast.LENGTH_SHORT).show()
     NavHost(navController = navController,
         startDestination = ScreensEnumGardenProfile.MainScreen.name
     ) {

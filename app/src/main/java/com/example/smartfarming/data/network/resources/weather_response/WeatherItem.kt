@@ -1,4 +1,4 @@
-package com.example.smartfarming.data.network.resources.weather_responnse
+package com.example.smartfarming.data.network.resources.weather_response
 
 data class WeatherItem(val icon: String = "",
                        val description: String = "",

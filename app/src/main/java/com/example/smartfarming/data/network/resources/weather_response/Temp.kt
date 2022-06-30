@@ -1,4 +1,4 @@
-package com.example.smartfarming.data.network.resources.weather_responnse
+package com.example.smartfarming.data.network.resources.weather_response
 
 data class Temp(val min: Double = 0.0,
                 val max: Double = 0.0,

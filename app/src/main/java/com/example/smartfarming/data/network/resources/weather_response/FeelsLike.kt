@@ -1,4 +1,4 @@
-package com.example.smartfarming.data.network.resources.weather_responnse
+package com.example.smartfarming.data.network.resources.weather_response
 
 data class FeelsLike(val eve: Double = 0.0,
                      val night: Double = 0.0,

@@ -1,5 +1,6 @@
 package com.example.smartfarming.data.repositories
 
+import android.util.Log
 import com.example.smartfarming.data.network.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,6 +20,7 @@ abstract class BaseRepo {
                         Resource.Failure(false, throwable.code(), throwable.response()?.errorBody())
                     }
                     else -> {
+                        Log.i("Weather problem", "${throwable}")
                         Resource.Failure(true, null, null)
                     }
                 }
