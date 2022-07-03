@@ -10,6 +10,7 @@ import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import java.util.*
 
 class WeatherViewModel(
     private val weatherRepo: WeatherRepo,
@@ -43,10 +44,27 @@ class WeatherViewModel(
        }
     }
 
-    fun timeConverter(unixTime : String) : String {
+    fun timeConverter(unixTime : Int) : String {
         val sdf = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
         val date = java.util.Date(unixTime.toLong() * 1000)
         return sdf.format(date)
+    }
+
+    private fun getDayOfWeek() : Int {
+        return Calendar.DAY_OF_WEEK
+    }
+
+    fun getPersianDayOfWeek() : String {
+        return when (getDayOfWeek()){
+            1 -> "یکشنبه"
+            2 -> "دوشنبه"
+            3 -> "سه شنبه"
+            4 -> "چهارشنبه"
+            5 -> "پنجشنبه"
+            6 -> "جمعه"
+            7 -> "شنبه"
+            else -> ""
+        }
     }
 
 }

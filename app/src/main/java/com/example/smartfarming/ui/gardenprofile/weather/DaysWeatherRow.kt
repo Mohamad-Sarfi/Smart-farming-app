@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.gardenprofile.weather
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,17 +19,28 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.smartfarming.data.network.resources.weather_response.WeatherResponse
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
+import com.example.smartfarming.utils.PersianCalender
 
 @Composable
-fun DaysWeatherRow(){
+fun DaysWeatherRow(
+    weatherResponse : WeatherResponse?,
+    viewModel: WeatherViewModel,
+    selected: Int,
+    changeSelectedDay : (Int) -> Unit
+){
 
-    var selected by remember {
-        mutableStateOf("شنبه")
+
+    val days = listOf<Int>(0,1,2,3,4,5,6)
+
+    if (weatherResponse != null){
+        Log.i("xxxx" , viewModel.timeConverter(weatherResponse.current.dt).substring(0, 10))
     }
 
-    val days = listOf("شنبه", "یکشنبه", "دوشنبه", "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه", "یکشنبه", "دوشنبه", "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه")
+
+
     Column(
         Modifier
             .padding(top = 10.dp)
@@ -61,7 +73,7 @@ fun DaysWeatherRow(){
                                         Color(0xFFF279F2)
                                     )
                                 ))
-                                .clickable { selected = item }
+                                .clickable {  }
                                 .padding(vertical = 18.dp),
                             day = item,
                             selected
@@ -71,7 +83,7 @@ fun DaysWeatherRow(){
                             modifier = Modifier
                                 .padding(vertical = 5.dp, horizontal = 5.dp)
                                 .width(80.dp)
-                                .clickable { selected = item }
+                                .clickable { changeSelectedDay(item) }
                                 .padding(vertical = 18.dp),
                             day = item,
                             selected
@@ -89,8 +101,8 @@ fun DaysWeatherRow(){
 @Composable
 fun WeatherRowItem(
     modifier: Modifier,
-    day : String,
-    selected : String
+    day : Int,
+    selected : Int
 ){
     Column(
         modifier = modifier,
@@ -99,6 +111,6 @@ fun WeatherRowItem(
     ) {
         Text(text = "32", style = MaterialTheme.typography.body1, color = if (selected == day) Color.White else Color.Black)
         Icon(imageVector = Icons.Default.WbSunny, contentDescription = null, tint = YellowPesticide, modifier = Modifier.size(40.dp))
-        Text(text = day, style = MaterialTheme.typography.subtitle1, color = if (selected == day) Color.White else Color.Black.copy(0.6f))
+        Text(text = day.toString(), style = MaterialTheme.typography.subtitle1, color = if (selected == day) Color.White else Color.Black.copy(0.6f))
     }
 }

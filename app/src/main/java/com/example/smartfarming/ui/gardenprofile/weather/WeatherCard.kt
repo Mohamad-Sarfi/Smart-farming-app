@@ -2,6 +2,7 @@ package com.example.smartfarming.ui.gardenprofile.weather
 
 import android.graphics.drawable.Icon
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -33,7 +35,8 @@ import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 
 @Composable
 fun WeatherCard(
-    weatherResponse: WeatherResponse?
+    weatherResponse: WeatherResponse?,
+    selected : Int
 ){
     Card(
         modifier = Modifier
@@ -59,10 +62,8 @@ fun WeatherCard(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                WeatherInfoCard(weatherResponse)
+                WeatherInfoCard(weatherResponse, selected)
                 TemperatureBar()
-
             }
         } else {
             WeatherWaiting()
@@ -73,13 +74,16 @@ fun WeatherCard(
 
 
 @Composable
-fun WeatherInfoCard(weatherResponse: WeatherResponse){
+fun WeatherInfoCard(
+    weatherResponse: WeatherResponse,
+    selected: Int
+){
     ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
 
         val (text, degree, icon) = createRefs()
 
         Text(
-            text = weatherResponse.current.weather!![0].main,
+            text = weatherResponse.daily!![selected].weather!![0].main,
             style = MaterialTheme.typography.h5,
             color = Color.White,
             modifier = Modifier.constrainAs(text){
@@ -100,7 +104,7 @@ fun WeatherInfoCard(weatherResponse: WeatherResponse){
                 .size(120.dp)
         )
         Text(
-            text = "${(weatherResponse.current.temp - 273.15).toInt()}",
+            text = "${(weatherResponse.daily[selected].temp.day - 273.15).toInt()}",
             style = MaterialTheme.typography.h1,
             color = Color.White,
             modifier = Modifier.constrainAs(degree){
@@ -116,9 +120,9 @@ fun WeatherInfoCard(weatherResponse: WeatherResponse){
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        DetailInfo(text = "720hp", icon = Icons.Default.Compress)
-        DetailInfo(text = "32%", icon = Icons.Outlined.WaterDrop)
-        DetailInfo(text = "12 km/h", icon = Icons.Outlined.Air)
+        DetailInfo(text = "${weatherResponse.daily!![selected].pressure} pa", icon = Icons.Default.Compress, "فشار هوا")
+        DetailInfo(text = "${weatherResponse.daily[selected].humidity}%", icon = Icons.Outlined.WaterDrop, "رطوبت هوا")
+        DetailInfo(text = "${weatherResponse.daily[selected].windSpeed} km/h", icon = Icons.Outlined.Air, "سرعت وزش باد")
     }
 }
 
@@ -147,11 +151,20 @@ fun TemperatureBar(){
 }
 
 @Composable
-fun DetailInfo(text : String, icon: ImageVector){
+fun DetailInfo(text : String, icon: ImageVector, title : String){
+
+    val context = LocalContext.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
+        modifier = Modifier
+            .padding(vertical = 5.dp, horizontal = 10.dp)
+            .clickable {
+                Toast
+                    .makeText(context, title, Toast.LENGTH_SHORT)
+                    .show()
+            }
     ) {
         Text(text = text, style = MaterialTheme.typography.subtitle1, color = Color.White)
 

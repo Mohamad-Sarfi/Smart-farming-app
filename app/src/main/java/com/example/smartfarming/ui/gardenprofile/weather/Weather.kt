@@ -50,6 +50,10 @@ fun Weather(gardenName: String = "شماره 1"){
     var latLong : List<String>? = listOf<String>()
     var weatherResponse : State<WeatherResponse?> = mutableStateOf(null)
 
+    var selectedDay by remember {
+        mutableStateOf(value = 0)
+    }
+
     if (garden.value != null ) {
         latLong = garden.value?.lat_long?.split("-")
     }
@@ -69,8 +73,10 @@ fun Weather(gardenName: String = "شماره 1"){
                     .padding(vertical = 10.dp, horizontal = 15.dp)
             ) {
                 TopRow(gardenName)
-                WeatherCard(weatherResponse.value)
-                DaysWeatherRow()
+                WeatherCard(weatherResponse.value, selectedDay)
+                DaysWeatherRow(weatherResponse.value, viewModel = weatherViewModel, selected = selectedDay){
+                    selectedDay = it
+                }
             }
         }
     }
