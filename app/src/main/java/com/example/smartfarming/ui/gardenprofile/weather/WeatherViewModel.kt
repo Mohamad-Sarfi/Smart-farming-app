@@ -8,6 +8,7 @@ import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.repositories.weather.WeatherRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
+import com.example.smartfarming.utils.PersianCalender
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -50,20 +51,68 @@ class WeatherViewModel(
         return sdf.format(date)
     }
 
-    private fun getDayOfWeek() : Int {
+    fun getDayOfWeek() : Int {
         return Calendar.DAY_OF_WEEK
     }
 
-    fun getPersianDayOfWeek() : String {
-        return when (getDayOfWeek()){
-            1 -> "یکشنبه"
-            2 -> "دوشنبه"
-            3 -> "سه شنبه"
-            4 -> "چهارشنبه"
-            5 -> "پنجشنبه"
-            6 -> "جمعه"
-            7 -> "شنبه"
+    fun getPersianDayOfWeek(day : Int = getDayOfWeek()) : String {
+        return when (day){
+            7 -> "یکشنبه"
+            1 -> "دوشنبه"
+            2 -> "سه شنبه"
+            3 -> "چهارشنبه"
+            4 -> "پنجشنبه"
+            5 -> "جمعه"
+            6 -> "شنبه"
             else -> ""
+        }
+    }
+
+    fun getPersianDayOfWeekWeather(index : Int) : Int {
+        /*
+        returns respective week days for each row item in weather screen
+         */
+        val today = getDayOfWeek()
+        if (today + index <= 7){
+            return today + index
+        } else {
+            return 7 - today + index
+        }
+
+    }
+
+   fun getDayOfMonth(index : Int) : Int{
+       var day = PersianCalender.getShamsiDateMap()["day"]!!
+       val month = PersianCalender.getShamsiDateMap()["month"]!!
+       day += index
+       if (month < 7){
+           if (day <= 31){
+               return day
+           } else {
+               return day - 31
+           }
+       } else {
+           if (day < 31){
+               return day
+           } else {
+               return day - 30
+           }
+       }
+
+   }
+
+    fun getPersianWeatherDescription(englishDescription : String) : String {
+        return when(englishDescription){
+            "clear sky" -> "آسمان صاف"
+            "few clouds" -> "لکه های ابر"
+            "scattered clouds" -> "کمی ابری"
+            "broken clouds" -> "ابری"
+            "shower rain" -> "رگبار"
+            "rain" -> "بارانی"
+            "thunderstorm" -> "رعد و برق"
+            "snow" -> "برفی"
+            "mist" -> "مه آلود"
+            else -> "آسمان صاف"
         }
     }
 

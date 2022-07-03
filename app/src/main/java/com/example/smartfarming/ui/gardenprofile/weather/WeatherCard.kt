@@ -7,6 +7,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -32,11 +34,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.smartfarming.data.network.resources.weather_response.WeatherResponse
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
+import com.example.smartfarming.utils.PersianCalender
 
 @Composable
 fun WeatherCard(
     weatherResponse: WeatherResponse?,
-    selected : Int
+    viewModel: WeatherViewModel
 ){
     Card(
         modifier = Modifier
@@ -62,8 +65,8 @@ fun WeatherCard(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                WeatherInfoCard(weatherResponse, selected)
-                TemperatureBar()
+                WeatherInfoCard(weatherResponse, viewModel)
+                TemperatureBar(weatherResponse,viewModel)
             }
         } else {
             WeatherWaiting()
@@ -76,20 +79,44 @@ fun WeatherCard(
 @Composable
 fun WeatherInfoCard(
     weatherResponse: WeatherResponse,
-    selected: Int
+    viewModel: WeatherViewModel
 ){
     ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
 
-        val (text, degree, icon) = createRefs()
+        val (text, degree, icon, date) = createRefs()
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .constrainAs(date) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+
+            val persianCalender = PersianCalender.getShamsiDateMap()
+            val month = PersianCalender.getMonthName()
+            Text(
+                text = month, style = MaterialTheme.typography.body1, color = Color.White, modifier = Modifier.padding(horizontal = 4.dp))
+            Text(
+                text = persianCalender["day"].toString(), style = MaterialTheme.typography.body1, color = Color.White, modifier = Modifier.padding(horizontal = 4.dp))
+            Text(
+                text = viewModel.getPersianDayOfWeek(), style = MaterialTheme.typography.body1, color = Color.White, modifier = Modifier.padding(horizontal = 4.dp))
+        }
 
         Text(
-            text = weatherResponse.daily!![selected].weather!![0].main,
-            style = MaterialTheme.typography.h5,
+            text = viewModel.getPersianWeatherDescription(weatherResponse.current.weather!![0].description),
+            style = MaterialTheme.typography.body1,
             color = Color.White,
-            modifier = Modifier.constrainAs(text){
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
-            }
+            modifier = Modifier
+                .constrainAs(text) {
+                    end.linkTo(parent.end)
+                    top.linkTo(date.bottom)
+                }
+                .padding(end = 6.dp)
         )
         Icon(
             Icons.Filled.LightMode,
@@ -98,13 +125,13 @@ fun WeatherInfoCard(
             modifier = Modifier
                 .constrainAs(icon) {
                     start.linkTo(parent.start)
-                    top.linkTo(parent.top)
+                    top.linkTo(date.bottom)
                 }
                 .padding(end = 30.dp)
                 .size(120.dp)
         )
         Text(
-            text = "${(weatherResponse.daily[selected].temp.day - 273.15).toInt()}",
+            text = "${(weatherResponse.current.temp - 273.15).toInt()}°",
             style = MaterialTheme.typography.h1,
             color = Color.White,
             modifier = Modifier.constrainAs(degree){
@@ -117,35 +144,42 @@ fun WeatherInfoCard(
 
     Row(
         Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.Center
     ) {
-        DetailInfo(text = "${weatherResponse.daily!![selected].pressure} pa", icon = Icons.Default.Compress, "فشار هوا")
-        DetailInfo(text = "${weatherResponse.daily[selected].humidity}%", icon = Icons.Outlined.WaterDrop, "رطوبت هوا")
-        DetailInfo(text = "${weatherResponse.daily[selected].windSpeed} km/h", icon = Icons.Outlined.Air, "سرعت وزش باد")
+        DetailInfo(text = "${weatherResponse.current.pressure} pa", icon = Icons.Default.Compress, "فشار هوا")
+        DetailInfo(text = "${weatherResponse.current.humidity}%", icon = Icons.Outlined.WaterDrop, "رطوبت هوا")
+        DetailInfo(text = "${weatherResponse.current.windSpeed} km/h", icon = Icons.Outlined.Air, "سرعت وزش باد")
     }
 }
 
 @Composable
-fun TemperatureBar(){
-        Row(
-            Modifier
-                .padding(top = 10.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(15.dp))
-                .background(BlueWatering.copy(0.3f))
-                .padding(vertical = 10.dp)
+fun TemperatureBar(
+    weatherResponse: WeatherResponse,
+    viewModel: WeatherViewModel
+){
+    Row(
+        Modifier
+            .padding(top = 10.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(15.dp))
+            .background(BlueWatering.copy(0.3f))
+            .padding(vertical = 10.dp, horizontal = 15.dp)
 
-            ,
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            DetailedTempBar(4, 32.0f, Icons.Outlined.WbSunny)
-            DetailedTempBar(8, 30.0f, Icons.Outlined.WbSunny)
-            DetailedTempBar(12, 28.0f, Icons.Outlined.WbSunny)
-            DetailedTempBar(16, 32.0f, Icons.Outlined.WbSunny)
-            DetailedTempBar(16, 32.0f, Icons.Outlined.WbSunny)
-            DetailedTempBar(16, 32.0f, Icons.Outlined.WbSunny)
+        ,
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+
+        LazyRow(){
+            items(items = weatherResponse.hourly!!){ item ->
+                DetailedTempBar(
+                    hour = viewModel.timeConverter(item.dt).substring(11,13).toInt() ,
+                    temperature = (item.temp - 273.15).toInt() ,
+                    icon = Icons.Default.WbSunny
+                )
+            }
+        }
         }
 
 }
@@ -180,30 +214,27 @@ fun DetailInfo(text : String, icon: ImageVector, title : String){
 @Composable
 fun DetailedTempBar(
     hour : Int,
-    temperature : Float,
+    temperature : Int,
     icon: ImageVector
 ){
-    val min = 23f
-    val max = 37.5f
-    val bar_height = (((temperature - min)/(max - min) ) * 100).toInt()
-    Log.i("temperature", "${bar_height}")
     Column(
         modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .border(2.dp, BlueWatering)
-                .clip(RectangleShape)
-                .background(Color.White)
-                .width(10.dp)
-                .height(bar_height.dp)
-            ,
-
+        Text(
+            text = "${temperature}°" ,
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.padding(bottom = 3.dp),
+            color = Color.White
         )
         Icon(icon, contentDescription = null, tint = YellowPesticide)
-        Text(text = "${hour}:00", style = MaterialTheme.typography.subtitle2, color = Color.White)
+        Text(
+            text = "${hour}:00",
+            style = MaterialTheme.typography.subtitle2,
+            color = Color.White,
+            modifier = Modifier.padding(top = 3.dp),
+        )
 
     }
 }

@@ -61,7 +61,6 @@ fun Weather(gardenName: String = "شماره 1"){
     if (!latLong.isNullOrEmpty()){
         weatherViewModel.getWeather("${latLong[0].trim()}0", "${latLong[1].trim()}0")
         weatherResponse = weatherViewModel.weatherResponse.observeAsState()
-
         Scaffold(
             Modifier
                 .fillMaxSize()
@@ -73,7 +72,7 @@ fun Weather(gardenName: String = "شماره 1"){
                     .padding(vertical = 10.dp, horizontal = 15.dp)
             ) {
                 TopRow(gardenName)
-                WeatherCard(weatherResponse.value, selectedDay)
+                WeatherCard(weatherResponse.value,weatherViewModel)
                 DaysWeatherRow(weatherResponse.value, viewModel = weatherViewModel, selected = selectedDay){
                     selectedDay = it
                 }
