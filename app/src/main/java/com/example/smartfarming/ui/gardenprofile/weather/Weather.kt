@@ -89,7 +89,7 @@ fun TopRow(gardenName: String){
             .fillMaxWidth()
             .padding(vertical = 20.dp, horizontal = 30.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End
+        horizontalArrangement = Arrangement.Center
     ) {
         Text(text = gardenName, style = MaterialTheme.typography.h5, color = BlueWatering)
         Icon(

@@ -2,6 +2,7 @@ package com.example.smartfarming.ui.gardenprofile.weather
 
 import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -114,7 +115,9 @@ fun WeatherRowItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "${(item.temp.day - 273.15).toInt()}°", style = MaterialTheme.typography.body1, color = if (selected == day) Color.White else Color.Black)
-        Icon(imageVector = Icons.Default.WbSunny, contentDescription = null, tint = YellowPesticide, modifier = Modifier.size(40.dp))
+        Icon(
+            WeatherIcon(weatherDescription = item.weather!![0].description, false),
+            contentDescription = null, modifier = Modifier.size(45.dp).padding(vertical = 5.dp))
         Text(text = day.toString(), style = MaterialTheme.typography.subtitle1, color = if (selected == day) Color.White else Color.Black.copy(0.6f))
     }
 }
@@ -132,7 +135,7 @@ fun WeatherRowItemExpanded(
             .padding(vertical = 5.dp, horizontal = 5.dp)
             .clip(RoundedCornerShape(30.dp))
             .background(Color.White)
-            .border(2.dp, BlueWatering ,RoundedCornerShape(30.dp))
+            .border(2.dp, BlueWatering, RoundedCornerShape(30.dp))
             .clickable { }
             .padding(vertical = 15.dp, horizontal = 20.dp),
         verticalArrangement = Arrangement.Center,
@@ -144,11 +147,12 @@ fun WeatherRowItemExpanded(
             color = Color.Black
         )
 
-        Icon(
-            Icons.Outlined.WbSunny,
+        Image(
+            WeatherIcon(weatherDescription = item.weather!![0].description),
             contentDescription =null,
-            tint = YellowPesticide,
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier
+                .size(45.dp)
+                .padding(vertical = 5.dp)
         )
         Text(text =viewModel.getPersianDayOfWeek(viewModel.getPersianDayOfWeekWeather(index)) + " " + day.toString() , style = MaterialTheme.typography.subtitle1, color = Color.Black)
     }

@@ -1,10 +1,8 @@
 package com.example.smartfarming.ui.gardenprofile.weather
 
-import android.graphics.drawable.Icon
-import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -18,19 +16,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Air
 import androidx.compose.material.icons.outlined.WaterDrop
-import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.smartfarming.data.network.resources.weather_response.HourlyItem
 import com.example.smartfarming.data.network.resources.weather_response.WeatherResponse
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
@@ -118,16 +114,15 @@ fun WeatherInfoCard(
                 }
                 .padding(end = 6.dp)
         )
-        Icon(
-            Icons.Filled.LightMode,
+        Image(
+            painter = WeatherIcon(weatherDescription = weatherResponse.current.weather!![0].description),
             contentDescription = null,
-            tint = YellowPesticide,
             modifier = Modifier
                 .constrainAs(icon) {
                     start.linkTo(parent.start)
                     top.linkTo(date.bottom)
                 }
-                .padding(end = 30.dp)
+                .padding(end = 30.dp, top = 10.dp)
                 .size(120.dp)
         )
         Text(
@@ -173,9 +168,9 @@ fun TemperatureBar(
 
         LazyRow(){
             items(items = weatherResponse.hourly!!){ item ->
-                DetailedTempBar(
+                HourlyTemp(
                     hour = viewModel.timeConverter(item.dt).substring(11,13).toInt() ,
-                    temperature = (item.temp - 273.15).toInt() ,
+                    hourlyItem = item ,
                     icon = Icons.Default.WbSunny
                 )
             }
@@ -212,9 +207,9 @@ fun DetailInfo(text : String, icon: ImageVector, title : String){
 }
 
 @Composable
-fun DetailedTempBar(
+fun HourlyTemp(
     hour : Int,
-    temperature : Int,
+    hourlyItem: HourlyItem,
     icon: ImageVector
 ){
     Column(
@@ -223,12 +218,12 @@ fun DetailedTempBar(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "${temperature}°" ,
+            text = "${(hourlyItem.temp - 273.15).toInt()}°" ,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.padding(bottom = 3.dp),
             color = Color.White
         )
-        Icon(icon, contentDescription = null, tint = YellowPesticide)
+        Icon(WeatherIcon(weatherDescription = hourlyItem.weather!![0].description), contentDescription = null, tint = Color.White, modifier = Modifier.size(30.dp))
         Text(
             text = "${hour}:00",
             style = MaterialTheme.typography.subtitle2,
