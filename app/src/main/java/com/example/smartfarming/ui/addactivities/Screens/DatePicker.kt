@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.addactivities.Screens
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.CalendarViewMonth
+import androidx.compose.material.icons.filled.Event
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
+import com.example.smartfarming.utils.PersianCalender
 import java.util.*
 
 @Composable
@@ -56,39 +60,75 @@ fun DatePicker(
         Surface(
             modifier = Modifier
                 .width(370.dp)
-                .height(410.dp)
-                .padding(vertical = 30.dp, horizontal = 15.dp)
+                .padding(vertical = 40.dp, horizontal = 15.dp)
             ,
-            shape = RoundedCornerShape(25.dp),
+            shape = RoundedCornerShape(35.dp),
             color = Color.White
         ) {
             Spacer(modifier = Modifier.padding(10.dp))
 
             Column(
                 modifier = Modifier
-                    .padding(10.dp)
-                    .fillMaxSize(),
+                    .padding(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+                DateTopRow()
 
                 DateSpinner(daysList, "روز", day){day.value = it}
                 DateSpinner(rangeList = monthList, titleText = "ماه", month){month.value = it}
                 DateSpinner(rangeList = yearList, titleText = "سال" , year){year.value = it}
 
-                Button(
-                    onClick = {
-                        changeOpenDialogue(false)
-                        updateDate(mutableMapOf("day" to day.value!!, "month" to month.value!!, "year" to year.value!!))
-                              },
-                    shape = RoundedCornerShape(15.dp),
-                    modifier = Modifier
-                        .padding(top = 10.dp, bottom = 5.dp, end = 5.dp, start = 5.dp)
-                        .fillMaxWidth()
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = "تایید",
-                        style = MaterialTheme.typography.body2
-                    )
+                    // Select today as date
+                    OutlinedButton(
+                        shape = RoundedCornerShape(15.dp),
+                        modifier = Modifier
+                            .padding(top = 10.dp, bottom = 5.dp, end = 5.dp)
+                            .fillMaxWidth(0.3f),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            backgroundColor = Color.White,
+                            contentColor = MainGreen,
+                        ),
+                        border = BorderStroke(2.dp, MainGreen),
+                        onClick = {
+                        changeOpenDialogue(false)
+
+                        val persianCalender = PersianCalender.getShamsiDateMap()
+
+                        updateDate(
+                            mutableMapOf(
+                                "day" to persianCalender["day"].toString(),
+                                "month" to persianCalender["month"].toString(),
+                                "year" to persianCalender["year"].toString()))
+
+                    }) {
+                        Text(
+                            text = "امروز",
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
+
+                    // submit customized date selected in spinners
+                    Button(
+                        onClick = {
+                            changeOpenDialogue(false)
+                            updateDate(mutableMapOf("day" to day.value!!, "month" to month.value!!, "year" to year.value!!))
+                                  },
+                        shape = RoundedCornerShape(15.dp),
+                        modifier = Modifier
+                            .padding(top = 10.dp, bottom = 5.dp, start = 5.dp)
+                            .fillMaxWidth(0.7f)
+                    ) {
+                        Text(
+                            text = "تایید",
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
                 }
             }
         }
@@ -121,7 +161,7 @@ fun DateSpinner(
 
         Row(
             modifier = Modifier
-                .padding(15.dp)
+                .padding(vertical = 5.dp, horizontal = 15.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .width(110.dp)
                 .background(LightGray)
@@ -224,6 +264,18 @@ fun getDate(): Map<String, String>{
     }
 
     return mapOf("year" to year.toString(), "month" to month.toString(), "day" to date[Calendar.DAY_OF_MONTH].toString())
+}
+
+@Composable
+fun DateTopRow(){
+    Row(
+        modifier = Modifier.padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(text = "انتخاب تاریخ", style = MaterialTheme.typography.body1, color = MainGreen)
+        Icon(Icons.Default.Event, contentDescription = null, tint = MainGreen, modifier = Modifier.padding(start = 5.dp))
+    }
 }
 
 

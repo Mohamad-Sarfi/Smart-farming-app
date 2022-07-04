@@ -32,10 +32,7 @@ import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.Screens.DatePicker
-import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
-import com.example.smartfarming.ui.addactivities.ui.theme.LightGreen
-import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
+import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.common_composables.GardenSpinner
 import com.example.smartfarming.ui.harvest.HarvestViewModel
 import com.example.smartfarming.ui.harvest.HarvestViewModelFactory
@@ -66,7 +63,7 @@ fun AddHarvestCompose(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(LightGray2)
     ) {
         val (pic, body) = createRefs()
         Icon(
@@ -288,42 +285,3 @@ fun HarvestTypeSpinner(
 
 }
 
-@Composable
-fun DateSelectHarvest(
-    harvestDate : MutableState<MutableMap<String, String>>,
-    setHarvestDate : (MutableMap<String, String>) -> Unit
-){
-    var dialogue by remember {
-        mutableStateOf(false)
-    }
-
-
-
-    Button(
-        onClick = { dialogue = !dialogue },
-        modifier = Modifier
-            .padding(20.dp)
-            .width(300.dp)
-            .height(60.dp)
-            .clip(MaterialTheme.shapes.large)
-            .border(2.dp, color = MainGreen, shape = MaterialTheme.shapes.large),
-        colors = ButtonDefaults.outlinedButtonColors(
-            backgroundColor = Color.White
-        )
-    ) {
-        Text(
-            text = if (harvestDate.value["year"] == "") "تاریخ آبیاری" else "${harvestDate.value["day"]} / ${harvestDate.value["month"]} / ${harvestDate.value["year"]}",
-            style = MaterialTheme.typography.body2,
-            color = BorderGray,
-            modifier = Modifier.padding(6.dp)
-        )
-    }
-
-    if (dialogue){
-        DatePicker(openDialogue = dialogue,
-            changeOpenDialogue = {dialogue = !dialogue},
-            updateDate = {date ->
-                setHarvestDate(date)
-            })
-    }
-}
