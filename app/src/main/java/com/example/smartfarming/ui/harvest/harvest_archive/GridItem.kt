@@ -3,6 +3,7 @@ package com.example.smartfarming.ui.harvest.harvest_archive
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,24 +20,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
+import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 
 @Composable
-fun GridItem(gardenName : String){
+fun GridItem(
+    garden: Garden,
+    navController: NavController
+){
     Card(
         shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(2.dp, MainGreen)
+        border = BorderStroke(2.dp, MainGreen),
+        modifier = Modifier.padding(10.dp)
     ) {
         ConstraintLayout(
             modifier = Modifier
+
                 .size(130.dp)
+                .clickable {  }
                 .background(Color.White)
                 .padding(16.dp)
         ) {
             val (icon, name) = createRefs()
 
             Text(
-                text = gardenName,
+                text = garden.name,
                 style = MaterialTheme.typography.h5,
                 color = MainGreen,
                 modifier = Modifier
@@ -61,8 +70,3 @@ fun GridItem(gardenName : String){
     }
 }
 
-@Composable
-@Preview
-fun PreviewGridItem(){
-    GridItem(gardenName = "محمد")
-}

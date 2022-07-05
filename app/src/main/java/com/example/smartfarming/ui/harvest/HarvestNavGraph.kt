@@ -38,7 +38,7 @@ fun HarvestNavGraph(
         }
 
         composable(route = archiveScreen){
-            HarvestArchiveHome()
+            HarvestArchiveHome(viewModel, navController)
         }
 
     }
