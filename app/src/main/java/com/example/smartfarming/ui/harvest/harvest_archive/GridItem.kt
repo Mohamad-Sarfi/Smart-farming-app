@@ -21,13 +21,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 
 @Composable
 fun GridItem(
     garden: Garden,
-    navController: NavController
+    navController: NavHostController
 ){
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -36,9 +38,13 @@ fun GridItem(
     ) {
         ConstraintLayout(
             modifier = Modifier
-
                 .size(130.dp)
-                .clickable {  }
+                .clickable {
+                    navController.navigate(
+                        "${AppScreensEnum.GardenHarvestScreen.name}/${garden.name}"
+                    )
+
+                }
                 .background(Color.White)
                 .padding(16.dp)
         ) {

@@ -12,13 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.harvest.HarvestViewModel
 import com.example.smartfarming.ui.harvest.harvest_archive.GridItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HarvestArchiveHome(viewModel: HarvestViewModel, navController : NavController){
+fun HarvestArchiveHome(viewModel: HarvestViewModel, navController : NavHostController){
 
     val gardenList = viewModel.getGardens().observeAsState()
 
