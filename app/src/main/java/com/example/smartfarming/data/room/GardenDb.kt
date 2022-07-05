@@ -12,8 +12,15 @@ import com.example.smartfarming.data.room.entities.*
 import kotlinx.coroutines.CoroutineScope
 
 @Database(
-    entities = [Garden::class, Task::class, FertilizationEntity::class, IrrigationEntity::class, PesticideEntity::class],
-    version = 2,
+    entities = [
+        Garden::class,
+        Task::class,
+        FertilizationEntity::class,
+        IrrigationEntity::class,
+        PesticideEntity::class,
+        Harvest::class
+               ],
+    version = 3,
     exportSchema = false
 )
 abstract class GardenDb : RoomDatabase() {
@@ -23,6 +30,7 @@ abstract class GardenDb : RoomDatabase() {
     abstract fun fertilizationDao() : FertilizationDao
     abstract fun irrigationDao() : IrrigationDao
     abstract fun pesticideDao() : PesticideDao
+    abstract fun harvestDao() : HarvestDao
 
     companion object {
         @Volatile
