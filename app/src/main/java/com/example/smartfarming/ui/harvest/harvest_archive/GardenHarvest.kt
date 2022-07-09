@@ -1,5 +1,7 @@
 package com.example.smartfarming.ui.harvest.harvest_archive
 
+import android.app.Activity
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,14 +19,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smartfarming.FarmApplication
+import com.example.smartfarming.data.network.resources.weather_response.Current
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.harvest.HarvestViewModel
+import com.example.smartfarming.ui.harvest.HarvestViewModelFactory
 
 @Composable
 fun GardenHarvestScreen(gardenName: String){
+
+    val activity = LocalContext.current as Activity
+    val viewmodel : HarvestViewModel by viewModel(factory = HarvestViewModelFactory((activity.application as FarmApplication).repo))
 
     var annualHarvest = "4500kg"
 
@@ -43,11 +54,11 @@ fun GardenHarvestScreen(gardenName: String){
         HarvestTitle(
             Modifier
                 .padding(top = 20.dp)
-                .constrainAs(title){
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            },
+                .constrainAs(title) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
             gardenName,
             annualHarvest,
             year

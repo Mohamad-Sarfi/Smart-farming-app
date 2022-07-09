@@ -32,7 +32,7 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
         return list
     }
 
-    var selectedGarden = MutableLiveData<String>()
+    var selectedGarden = MutableLiveData<String>("")
     var harvestWeight = MutableLiveData<Double>()
     var harvestType = MutableLiveData<String>()
 }

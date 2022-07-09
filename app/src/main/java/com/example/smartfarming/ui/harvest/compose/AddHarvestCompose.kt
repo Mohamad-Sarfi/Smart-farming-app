@@ -2,7 +2,6 @@ package com.example.smartfarming.ui.harvest.compose
 
 import android.app.Activity
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,7 +17,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -31,7 +29,6 @@ import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.AppScreensEnum
-import com.example.smartfarming.ui.addactivities.Screens.DatePicker
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.common_composables.GardenSpinner
 import com.example.smartfarming.ui.harvest.HarvestViewModel
@@ -52,13 +49,15 @@ fun AddHarvestCompose(
     )
 
     if (gardenList.value != null){
-
         for (g in gardenList.value!!){
             gardenNameList.add(g.name)
         }
     }
 
     val harvestDate = viewModel.harvestDate
+    val harvestWeight = viewModel.harvestWeight.observeAsState()
+    val selectedGarden by viewModel.selectedGarden.observeAsState()
+    val harvestType by viewModel.harvestType.observeAsState()
 
     ConstraintLayout(
         modifier = Modifier
@@ -95,7 +94,11 @@ fun AddHarvestCompose(
                 gardenNameList.ifEmpty { listOf("انتخاب باغ") },
                 harvestDate = harvestDate,
                 navController,
-                viewModel = viewModel
+                viewModel = viewModel,
+                currentGarden = selectedGarden!!,
+                setGarden = {viewModel.selectedGarden.value = it},
+                weight = harvestWeight.value!!,
+                setWeight = {viewModel.harvestWeight.value = it}
             )
     }
 }
@@ -107,22 +110,15 @@ fun AddHarvestBody(
     gardenList : List<String>,
     harvestDate: MutableState<MutableMap<String, String>>,
     navController: NavHostController,
-    viewModel: HarvestViewModel
+    viewModel: HarvestViewModel,
+    currentGarden: String,
+    setGarden : (String) -> Unit,
+    weight : Double,
+    setWeight : (Double) -> Unit
 ){
-    var currentGarden by remember {
-        if (gardenList.isNotEmpty()){
-            mutableStateOf(gardenList[0])
-        }
-        else {
-            mutableStateOf("انتخاب باغ")
-        }
-    }
+
 
     val focusManager = LocalFocusManager.current
-
-    var volume by remember {
-        mutableStateOf("")
-    }
 
 
     Column(
@@ -138,7 +134,7 @@ fun AddHarvestBody(
         )
 
         GardenSpinner(gardensList = gardenList, currentGarden = currentGarden ){
-            currentGarden = it
+            setGarden(it)
         }
 
         Row(
@@ -149,9 +145,9 @@ fun AddHarvestBody(
             HarvestTypeSpinner(setHarvestType = {})
 
             OutlinedTextField(
-                value = volume,
+                value = weight.toString(),
                 onValueChange = {
-                    volume = it
+                    setWeight(it.toDouble())
                 } ,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     backgroundColor = Color.White,
