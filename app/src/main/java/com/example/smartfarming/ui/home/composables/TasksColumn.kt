@@ -30,7 +30,7 @@ import com.example.smartfarming.ui.addgarden.AddGarden
 @Composable
 fun TasksColumn(taskList : List<Task>, gardenList : List<Garden>?){
     
-    //val context = LocalContext.current
+    val context = LocalContext.current
     
     if (gardenList.isNullOrEmpty()){
         // When there are no gardens added yet, this will be displayed
@@ -38,10 +38,10 @@ fun TasksColumn(taskList : List<Task>, gardenList : List<Garden>?){
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    //val intent = Intent(context, AddGarden::class.java)
-                    //context.startActivity(intent)
+                    val intent = Intent(context, AddGarden::class.java)
+                    context.startActivity(intent)
                 }
-                .padding(top = 50.dp),
+                .padding(vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {

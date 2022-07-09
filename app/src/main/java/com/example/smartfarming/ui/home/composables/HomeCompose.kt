@@ -90,7 +90,7 @@ fun HomeCompose(){
                 description = "با توجه به ماده عالی خاک نیاز به تامین کود دامی",
                 start_date = "",
                 finish_date = "",
-                garden_name = gardensList?.get(1)?.name!!,
+                garden_name = gardensList?.get(0)?.name!!,
                 recommendations = "کود گاو",
                 user_id = 5,
                 seen = false

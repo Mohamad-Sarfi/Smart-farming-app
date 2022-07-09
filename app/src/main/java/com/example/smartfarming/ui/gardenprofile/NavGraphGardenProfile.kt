@@ -20,6 +20,7 @@ import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
 import com.example.smartfarming.ui.addactivity.AddActivity
 import com.example.smartfarming.ui.gardenprofile.composables.Weather
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
+import com.example.smartfarming.ui.harvest.harvest_archive.GardenHarvestScreen
 
 @Composable
 fun NavGraphGardenProfile(
@@ -34,6 +35,7 @@ fun NavGraphGardenProfile(
     val otherActivity = AppScreensEnum.OtherActivitiesScreen.name
     val addActivity = AppScreensEnum.AddActivitiesScreen.name
     val weather = AppScreensEnum.GardenWeatherScreen.name
+    val harvest = AppScreensEnum.GardenHarvestScreen.name
 
     NavHost(navController = navController,
         startDestination = ScreensEnumGardenProfile.MainScreen.name
@@ -112,6 +114,18 @@ fun NavGraphGardenProfile(
         ){ entry ->
             val gardeName = entry.arguments?.getString("gardenName")
             Weather(gardenName = gardeName!!)
+        }
+
+        composable(
+            route = "${harvest}/{gardenName}",
+            arguments = listOf(
+                navArgument("gardenName"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val gardenName = entry.arguments?.getString("gardenName")
+            GardenHarvestScreen(gardenName = gardenName!!)
         }
         
 

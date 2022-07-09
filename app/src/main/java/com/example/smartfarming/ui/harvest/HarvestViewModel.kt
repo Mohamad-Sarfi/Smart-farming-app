@@ -29,13 +29,12 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
         viewModelScope.launch() {
             list = repo.getGardens().asLiveData()
         }
-
         return list
     }
 
-
-
-
+    var selectedGarden = MutableLiveData<String>()
+    var harvestWeight = MutableLiveData<Double>()
+    var harvestType = MutableLiveData<String>()
 }
 
 class HarvestViewModelFactory(val repo : GardenRepo) : ViewModelProvider.Factory{

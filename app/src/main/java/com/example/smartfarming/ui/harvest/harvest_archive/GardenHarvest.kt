@@ -41,7 +41,9 @@ fun GardenHarvestScreen(gardenName: String){
     ) {
         val (title, annualInfo, detailColumn, filters) = createRefs()
         HarvestTitle(
-            Modifier.constrainAs(title){
+            Modifier
+                .padding(top = 20.dp)
+                .constrainAs(title){
             top.linkTo(parent.top)
             start.linkTo(parent.start)
             end.linkTo(parent.end)

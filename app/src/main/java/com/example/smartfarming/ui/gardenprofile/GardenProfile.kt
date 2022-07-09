@@ -124,7 +124,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
                     navController.navigate(route = "${AppScreensEnum.GardenWeatherScreen.name}/${garden.value!!.name}")
                 }
                 MainIcons(Icons.Outlined.Inventory, "محصولات", YellowPesticide){
-
+                    navController.navigate("${AppScreensEnum.GardenHarvestScreen.name}/${garden.value!!.name}")
                 }
                 MainIcons(Icons.Outlined.LocationOn, "مکان نما", RedFertilizer){
 
