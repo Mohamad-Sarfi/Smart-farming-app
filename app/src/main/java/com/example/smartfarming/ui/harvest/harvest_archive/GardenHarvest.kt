@@ -44,14 +44,22 @@ fun GardenHarvestScreen(gardenName: String){
     val activity = LocalContext.current as Activity
     val viewModel : HarvestViewModel = viewModel(factory = HarvestViewModelFactory((activity.application as FarmApplication).repo))
 
-    var annualHarvest = "4500kg"
 
     viewModel.getHarvestByGardenName(gardenName)
     val harvestList = viewModel.harvestList
 
 
+
     var year by remember {
         mutableStateOf("1401")
+    }
+
+    var yearSum by remember {
+        mutableStateOf(0.0)
+    }
+
+    if (!harvestList.value.isEmpty()){
+        yearSum = viewModel.getYearSum(year)
     }
 
     var harvestType by remember {
@@ -71,7 +79,7 @@ fun GardenHarvestScreen(gardenName: String){
                     end.linkTo(parent.end)
                 },
             gardenName,
-            annualHarvest,
+            yearSum.toString(),
             year
         )
 

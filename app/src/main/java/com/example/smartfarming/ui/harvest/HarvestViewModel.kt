@@ -47,6 +47,16 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
         }
     }
 
+    fun getYearSum(year:String) : Double{
+        var sum = 0.0
+        for (h in harvestList.value){
+            if (h.year == year){
+                sum += h.weight
+            }
+        }
+        return sum
+    }
+
 }
 
 class HarvestViewModelFactory(val repo : GardenRepo) : ViewModelProvider.Factory{
