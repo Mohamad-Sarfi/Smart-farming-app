@@ -2,6 +2,7 @@ package com.example.smartfarming.data.room.daos
 
 import androidx.room.*
 import com.example.smartfarming.data.room.entities.Harvest
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HarvestDao {
@@ -19,5 +20,8 @@ interface HarvestDao {
 
     @Query("SELECT * FROM harvest_table WHERE gardenName = :gardenName AND year = :year ORDER BY month DESC")
     suspend fun getHarvestByYear(gardenName: String, year: String) : List<Harvest>
+
+    @Query("SELECT * FROM harvest_table WHERE gardenName = :gardenName ORDER BY year DESC, month, day")
+    fun getHarvestByGarden(gardenName: String) : Flow<List<Harvest>>
 
 }

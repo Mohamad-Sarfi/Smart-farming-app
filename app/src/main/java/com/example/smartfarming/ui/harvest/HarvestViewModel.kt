@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Harvest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -13,12 +14,11 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
 
     var harvestDate =
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
+    var selectedGarden = MutableLiveData<String>("")
+    var harvestWeight = MutableLiveData<Float>()
+    var harvestType = MutableLiveData<String>()
 
-
-    @JvmName("getHarvestDate1")
-    fun getHarvestDate() : MutableState<MutableMap<String, String>> {
-        return harvestDate
-    }
+    var harvestList = mutableStateOf<List<Harvest>>(value = listOf<Harvest>())
 
     fun setDate(date : MutableMap<String, String>){
         harvestDate.value = date
@@ -33,14 +33,17 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
         return list
     }
 
-    var selectedGarden = MutableLiveData<String>("")
-    var harvestWeight = MutableLiveData<Float>()
-    var harvestType = MutableLiveData<String>()
-
-
     fun addHarvest2DB(harvest: Harvest){
         viewModelScope.launch {
             repo.insertHarvest(harvest)
+        }
+    }
+
+    fun getHarvestByGardenName(gardeName : String){
+        viewModelScope.launch {
+            repo.getHarvestByGardenName(gardeName).collect{
+                harvestList.value = it
+            }
         }
     }
 

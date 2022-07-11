@@ -86,5 +86,9 @@ class GardenRepo(
         harvestDao.insertHarvest(harvest)
     }
 
+    @WorkerThread
+    suspend fun getHarvestByGardenName(gardenName : String) : Flow<List<Harvest>>{
+        return harvestDao.getHarvestByGarden(gardenName)
+    }
 
 }
