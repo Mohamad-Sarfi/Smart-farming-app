@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.harvest.compose
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,6 +29,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
+import com.example.smartfarming.data.network.resources.weather_response.Current
+import com.example.smartfarming.data.room.entities.Harvest
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.common_composables.GardenSpinner
@@ -41,12 +44,8 @@ fun AddHarvestCompose(
     navController: NavHostController
 ){
 
-    val activity = LocalContext.current as Activity
     val gardenList = viewModel.getGardens().observeAsState()
     val gardenNameList = arrayListOf<String>()
-    val viewModel : HarvestViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        factory = HarvestViewModelFactory((activity.application as FarmApplication).repo)
-    )
 
     if (gardenList.value != null){
         for (g in gardenList.value!!){
@@ -95,10 +94,12 @@ fun AddHarvestCompose(
                 harvestDate = harvestDate,
                 navController,
                 viewModel = viewModel,
-                currentGarden = selectedGarden!!,
+                currentGarden = selectedGarden,
                 setGarden = {viewModel.selectedGarden.value = it},
-                weight = harvestWeight.value!!,
-                setWeight = {viewModel.harvestWeight.value = it}
+                weight = harvestWeight.value,
+                setWeight = {viewModel.harvestWeight.value = it},
+                harvestType = harvestType,
+                setHarvestType = {viewModel.harvestType.value = it}
             )
     }
 }
@@ -111,15 +112,19 @@ fun AddHarvestBody(
     harvestDate: MutableState<MutableMap<String, String>>,
     navController: NavHostController,
     viewModel: HarvestViewModel,
-    currentGarden: String,
+    currentGarden: String?,
     setGarden : (String) -> Unit,
-    weight : Double,
-    setWeight : (Double) -> Unit
+    weight : Float?,
+    setWeight : (Float?) -> Unit,
+    harvestType : String?,
+    setHarvestType: (String) -> Unit
 ){
 
-
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-
+    var strWeight by remember {
+        mutableStateOf("")
+    }
 
     Column(
         modifier = modifier,
@@ -142,12 +147,14 @@ fun AddHarvestBody(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            HarvestTypeSpinner(setHarvestType = {})
+
+            HarvestTypeSpinner(harvestType ,setHarvestType = {setHarvestType(it)})
 
             OutlinedTextField(
-                value = weight.toString(),
+                value = strWeight,
                 onValueChange = {
-                    setWeight(it.toDouble())
+                  strWeight = it
+                    setWeight(strWeight.toFloatOrNull())
                 } ,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     backgroundColor = Color.White,
@@ -212,7 +219,25 @@ fun AddHarvestBody(
 
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    if (weight == null || harvestType.isNullOrEmpty() || harvestDate.value.isEmpty()){
+                        Toast.makeText(context, "تمام اطلاعات را وارد کنید", Toast.LENGTH_SHORT).show()
+                    } else {
+                        viewModel.addHarvest2DB(
+                            Harvest(
+                                0,
+                                weight,
+                                harvestType,
+                                year = harvestDate.value["year"]!!,
+                                month = harvestDate.value["month"]!!,
+                                day = harvestDate.value["day"]!!,
+                                gardenName = currentGarden!!
+                            )
+                        )
+                        Toast.makeText(context, "اطلاعات ثبت شد :)", Toast.LENGTH_SHORT).show()
+                        navController.navigate(route = AppScreensEnum.HarvestHomeScreen.name)
+                    }
+                          },
                 shape = MaterialTheme.shapes.large,
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.White,
@@ -229,17 +254,18 @@ fun AddHarvestBody(
     }
 }
 
+fun submitClickHandler(insertHarvest: (Harvest) -> Unit) {
+}
+
 
 @Composable
 fun HarvestTypeSpinner(
+    harvestType: String?,
     setHarvestType : (String) -> Unit
 ){
 
     val pistachiosTypeList = stringArrayResource(id = R.array.pistachios_type)
 
-    var selectedType by remember {
-        mutableStateOf(pistachiosTypeList[0])
-    }
 
     var expanded by remember {
         mutableStateOf(false)
@@ -256,7 +282,7 @@ fun HarvestTypeSpinner(
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = selectedType,
+            text = if (harvestType.isNullOrBlank()) pistachiosTypeList[0] else harvestType,
             style = MaterialTheme.typography.body1)
     }
     
@@ -266,7 +292,7 @@ fun HarvestTypeSpinner(
         pistachiosTypeList.forEach { type ->
                 DropdownMenuItem(onClick = {
                     expanded = false
-                    selectedType = type
+                    setHarvestType(type)
                 }) {
                     Text(
                         text = type,

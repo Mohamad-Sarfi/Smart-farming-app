@@ -26,7 +26,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 @Composable
 fun GardenSpinner(
     gardensList : List<String>,
-    currentGarden : String,
+    currentGarden : String?,
     updateCurrentGarden : (garden : String) -> Unit
 ){
     var expanded by remember { mutableStateOf(false) }
@@ -82,7 +82,7 @@ fun GardenSpinner(
 
                 )
             Text(
-                text = currentGarden,
+                text = if (currentGarden.isNullOrEmpty()) "انتخاب باغ" else currentGarden,
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier
                     .constrainAs(text){

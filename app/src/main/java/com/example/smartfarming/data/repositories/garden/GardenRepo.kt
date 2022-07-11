@@ -81,5 +81,10 @@ class GardenRepo(
         return harvestDao.getHarvestByYearType(gardenName, year, harvestType)
     }
 
+    @WorkerThread
+    suspend fun insertHarvest(harvest: Harvest) {
+        harvestDao.insertHarvest(harvest)
+    }
+
 
 }

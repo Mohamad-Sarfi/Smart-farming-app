@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.Harvest
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -33,8 +34,16 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
     }
 
     var selectedGarden = MutableLiveData<String>("")
-    var harvestWeight = MutableLiveData<Double>()
+    var harvestWeight = MutableLiveData<Float>()
     var harvestType = MutableLiveData<String>()
+
+
+    fun addHarvest2DB(harvest: Harvest){
+        viewModelScope.launch {
+            repo.insertHarvest(harvest)
+        }
+    }
+
 }
 
 class HarvestViewModelFactory(val repo : GardenRepo) : ViewModelProvider.Factory{
