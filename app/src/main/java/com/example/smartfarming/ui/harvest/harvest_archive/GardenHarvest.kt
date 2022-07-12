@@ -2,6 +2,9 @@ package com.example.smartfarming.ui.harvest.harvest_archive
 
 import android.app.Activity
 import android.app.Application
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,6 +19,7 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Eco
 import androidx.compose.material.icons.filled.Filter1
 import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -45,34 +49,37 @@ fun GardenHarvestScreen(gardenName: String){
     val viewModel : HarvestViewModel = viewModel(factory = HarvestViewModelFactory((activity.application as FarmApplication).repo))
 
 
-    viewModel.getHarvestByGardenName(gardenName)
-    val harvestList = viewModel.harvestList
 
 
-
-    var year by remember {
-        mutableStateOf("1401")
-    }
+    var selectedYear = viewModel.selectedYear
+    var selectedType = viewModel.selectedType
 
     var yearSum by remember {
         mutableStateOf(0.0)
     }
 
-    if (!harvestList.value.isEmpty()){
-        yearSum = viewModel.getYearSum(year)
+    if (selectedType.value == "همه"){
+        viewModel.getHarvestByYear(gardenName, selectedYear.value)
+    } else {
+        viewModel.getHarvestByYearType(gardenName, selectedYear.value, selectedType.value)
+    }
+    val harvestList = viewModel.harvestList.observeAsState()
+
+
+
+    if (!harvestList.value.isNullOrEmpty()){
+        yearSum = viewModel.getYearSum(selectedYear.value)
     }
 
-    var harvestType by remember {
-        mutableStateOf("خشک")
-    }
+
 
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
-        val (title, annualInfo, detailColumn, filters) = createRefs()
+        val (title, detailColumn, filters) = createRefs()
         HarvestTitle(
             Modifier
-                .padding(top = 20.dp)
+                .padding(top = 1.dp)
                 .constrainAs(title) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -80,21 +87,22 @@ fun GardenHarvestScreen(gardenName: String){
                 },
             gardenName,
             yearSum.toString(),
-            year
+            selectedYear.value
         )
 
         HarvestListCompose(
             Modifier
                 .padding(15.dp)
-                .fillMaxSize()
+                .fillMaxWidth()
                 .constrainAs(detailColumn) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(title.bottom)
-                    bottom.linkTo(parent.bottom)
                 }
             ,
-            harvestList = harvestList.value)
+            harvestList = harvestList.value,
+            viewModel
+        )
 
         FilterHarvest(
             modifier = Modifier
@@ -104,10 +112,10 @@ fun GardenHarvestScreen(gardenName: String){
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
                 },
-            year,
-            harvestType,
-            changeYear = {year = it},
-            changeHarvestType = {harvestType = it}
+            selectedYear.value,
+            selectedType.value,
+            changeYear = {selectedYear.value = it},
+            changeHarvestType = {selectedType.value = it}
         )
         
         
@@ -138,7 +146,7 @@ fun HarvestTitle(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "در سال " + year, style = MaterialTheme.typography.body1, color = MainGreen)
+            Text(text = " کیلو در سال" + year, style = MaterialTheme.typography.body1, color = MainGreen)
             Text(text = " ${annualHarvest}", style = MaterialTheme.typography.body2, color = MainGreen)
 
         }
@@ -225,7 +233,7 @@ fun FilterHarvestSpinner(
 }
 
 @Composable
-fun HarvestListCompose(modifier: Modifier, harvestList: List<Harvest>?){
+fun HarvestListCompose(modifier: Modifier, harvestList: List<Harvest>?, viewModel: HarvestViewModel){
     if (harvestList.isNullOrEmpty()){
         Column(
             modifier,
@@ -243,7 +251,7 @@ fun HarvestListCompose(modifier: Modifier, harvestList: List<Harvest>?){
         ) {
             LazyColumn{
                 items(harvestList.size){ index ->
-                    HarvestListItem(harvest = harvestList[index])
+                    HarvestListItem(harvest = harvestList[index], viewModel)
                 }
             }
         }
@@ -251,28 +259,69 @@ fun HarvestListCompose(modifier: Modifier, harvestList: List<Harvest>?){
 }
 
 @Composable
-fun HarvestListItem(harvest: Harvest){
+fun HarvestListItem(harvest: Harvest, viewModel: HarvestViewModel){
+    
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    
+    val height by animateDpAsState(
+        if (expanded) 120.dp else 70.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
+    
     Card(
         Modifier
             .padding(vertical = 15.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .height(height)
+            ,
         shape = RoundedCornerShape(25.dp),
         elevation = 2.dp,
         border = BorderStroke(2.dp, MainGreen)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
+                .clickable {
+                    expanded = !expanded
+                }
                 .padding(horizontal = 30.dp, vertical = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "${harvest.weight} kg", style = MaterialTheme.typography.h5, color = MainGreen)
-            Text(
-                text = harvest.day + " " + PersianCalender.getMonthNameFromNum(harvest.month.toInt()),
-                style = MaterialTheme.typography.h5
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "${harvest.weight} kg", style = MaterialTheme.typography.h5, color = MainGreen)
+                Text(
+                    text = harvest.day + " " + PersianCalender.getMonthNameFromNum(harvest.month.toInt()),
+                    style = MaterialTheme.typography.h5
+                )
+            }
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        deleteItem(harvest, viewModel)
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(text = "حذف", style = MaterialTheme.typography.body2, color = Color.Red, modifier = Modifier.padding(5.dp))
+                Icon(Icons.Outlined.Delete, contentDescription = null, tint = Color.Red, modifier = Modifier)
+            }
+
         }
     }
+}
+
+fun deleteItem(harvest: Harvest, viewModel: HarvestViewModel){
+    viewModel.deleteHarvestItem(harvest)
 }

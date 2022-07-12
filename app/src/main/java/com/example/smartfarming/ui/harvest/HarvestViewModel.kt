@@ -18,7 +18,9 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
     var harvestWeight = MutableLiveData<Float>()
     var harvestType = MutableLiveData<String>()
 
-    var harvestList = mutableStateOf<List<Harvest>>(value = listOf<Harvest>())
+    var harvestList = MutableLiveData<List<Harvest>>(listOf())
+    var selectedYear = mutableStateOf("1401")
+    var selectedType = mutableStateOf("همه")
 
     fun setDate(date : MutableMap<String, String>){
         harvestDate.value = date
@@ -47,14 +49,43 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
         }
     }
 
+    fun getHarvestByYear(gardeName: String, year: String){
+        viewModelScope.launch {
+            harvestList.value = repo.getHarvestByYear(gardeName, year)
+        }
+    }
+
+    fun getHarvestByYearType(gardeName: String, year: String, type : String){
+        viewModelScope.launch {
+            harvestList.value = repo.getHarvestByYearType(gardeName, year, type)
+        }
+    }
+
+    fun getHarvestByType(gardeName: String, type : String){
+        viewModelScope.launch {
+            harvestList.value = repo.getHarvestByType(gardeName, type)
+        }
+    }
+
     fun getYearSum(year:String) : Double{
         var sum = 0.0
-        for (h in harvestList.value){
-            if (h.year == year){
-                sum += h.weight
+        if (harvestList.value.isNullOrEmpty()){
+            sum = 0.0
+        } else {
+            for (h in harvestList.value!!){
+                if (h.year == year){
+                    sum += h.weight
+                }
             }
+
         }
         return sum
+    }
+
+    fun deleteHarvestItem(harvest: Harvest){
+        viewModelScope.launch {
+            repo.deleteHarvest(harvest)
+        }
     }
 
 }

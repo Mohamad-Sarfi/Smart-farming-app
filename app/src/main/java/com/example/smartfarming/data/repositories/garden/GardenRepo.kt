@@ -87,6 +87,11 @@ class GardenRepo(
     }
 
     @WorkerThread
+    suspend fun deleteHarvest(harvest: Harvest){
+        harvestDao.deleteHarvest(harvest)
+    }
+
+    @WorkerThread
     suspend fun getHarvestByGardenName(gardenName : String) : Flow<List<Harvest>>{
         return harvestDao.getHarvestByGarden(gardenName)
     }
