@@ -120,7 +120,7 @@ fun Irrigation(
                 irrigationDate,
                 irrigationType,
                 irrigationDuration,
-                setWaterVolume = {viewModel.waterVolume = it},
+                setWaterVolume = {viewModel.waterVolume.value = it},
                 step
             )
 
