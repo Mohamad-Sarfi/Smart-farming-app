@@ -1,19 +1,15 @@
 package com.example.smartfarming.ui.gardens.composables
 
 import android.app.Activity
-import android.content.Intent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Eco
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.outlined.Eco
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -28,7 +24,6 @@ import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.*
-import com.example.smartfarming.ui.addgarden.AddGarden
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.gardens.GardensViewModel
 import com.example.smartfarming.ui.gardens.GardensViewModelFactory
@@ -139,7 +134,7 @@ fun ActivitySticker(job : String){
         .clip(RoundedCornerShape(100))
         .background(
             when (job) {
-                activities[0] -> blueIrrigation
+                activities[0] -> BlueIrrigation
                 activities[1] -> redFertilizer
                 activities[2] -> greenPesticide
                 activities[3] -> Purple500

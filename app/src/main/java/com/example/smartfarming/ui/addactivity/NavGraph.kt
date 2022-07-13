@@ -43,7 +43,8 @@ fun SetupNavGraph(
                 )
             ){ entry ->
                 val gardenName = entry.arguments?.getString("name")
-                Irrigation(gardenName = gardenName!!, navController = navController)
+                //Irrigation(gardenName = gardenName!!, navController = navController)
+                com.example.smartfarming.ui.addactivity.activityscreens.irrigation.Irrigation()
             }
         composable(
                 route = "$fertilization/{name}",
