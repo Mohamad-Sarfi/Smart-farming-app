@@ -14,6 +14,19 @@ import java.lang.IllegalArgumentException
 
 class IrrigationViewModel(val repo : GardenRepo) : ViewModel() {
 
+    // Step management *********************************************************
+    var step = mutableStateOf(0)
+
+    fun increaseStep(){
+        if (step.value == 0) step.value++
+    }
+    fun decreaseStep(){
+        if (step.value == 1) step.value--
+    }
+
+
+
+
     private val garden = MutableLiveData<Garden>().apply {
         value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
             0.0, 0)
