@@ -184,6 +184,7 @@ fun IrrigationBody1(viewModel: IrrigationViewModel){
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             IrrigationType(viewModel)
+
             IrrigationWorker(viewModel)
         }
     }
