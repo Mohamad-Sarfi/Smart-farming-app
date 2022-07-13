@@ -63,7 +63,7 @@ fun AppBottomNavigation(
                             },
                     selected = currentRoute == item.navRoute ,
                     selectedContentColor = MainGreen,
-                    unselectedContentColor = MainGreen.copy(0.8f),
+                    unselectedContentColor = MainGreen.copy(0.7f),
                     onClick = {
                         navController.navigate(item.navRoute) {
                             navController.graph.startDestinationRoute?.let { screen_route ->

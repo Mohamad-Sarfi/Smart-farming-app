@@ -110,7 +110,7 @@ fun HomeCompose(){
             Column(
                 modifier = Modifier
                     .padding(5.dp)
-                    .height(300.dp)
+                    .fillMaxHeight(0.55f)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.End
 

@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Article
 import com.example.smartfarming.ui.article.ArticleActivity
@@ -28,7 +29,7 @@ fun ArticleItem(article: Article){
 
     Card(modifier = Modifier
         .width(180.dp)
-        .height(190.dp)
+        .fillMaxHeight(0.9f)
         .padding(7.dp)
         .clickable {
             val intent = Intent(context, ArticleActivity::class.java)
@@ -38,23 +39,33 @@ fun ArticleItem(article: Article){
         ,
         elevation = 8.dp,
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+        ConstraintLayout(
             modifier = Modifier
                 .padding(10.dp)
         ) {
-
+            val (title, pic) = createRefs()
             Image(
                 painter = painterResource(id = randomIcon()),
                 contentDescription = "",
                 modifier = Modifier.width(120.dp)
+                    .constrainAs(pic){
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(title.top)
+                    }
             )
             Text(
                 text = article.title,
                 style = MaterialTheme.typography.subtitle1,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .constrainAs(title){
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
+                    }
             )
         }
     }
