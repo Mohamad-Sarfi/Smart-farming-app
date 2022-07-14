@@ -34,6 +34,7 @@ import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.Screens.DatePicker
 import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigation
+import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationDark
 import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationLight
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBlue
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
@@ -62,13 +63,13 @@ fun Irrigation(gardenName : String = "محمد"){
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 30.dp, bottom = 10.dp, end = 40.dp),
-                verticalAlignment = Alignment.CenterVertically,
+                    .padding(top = 30.dp, bottom = 5.dp, end = 40.dp),
+                verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.End
             ) {
-                Text(text = "باغ " +  gardenName, style = MaterialTheme.typography.h5, color = BlueIrrigation, modifier = Modifier.padding(end = 15.dp))
-                Text(text = "آبیاری", style = MaterialTheme.typography.h3, color = BlueIrrigation)
-                Icon(Icons.Outlined.WaterDrop, contentDescription = null, modifier = Modifier.padding(5.dp).size(40.dp), tint = BlueIrrigation)
+                Text(text = "باغ " +  gardenName, style = MaterialTheme.typography.h5, color = BlueIrrigationDark, modifier = Modifier.padding(end = 10.dp))
+                Text(text = "آبیاری", style = MaterialTheme.typography.h3, color = BlueIrrigationDark)
+                Icon(Icons.Outlined.WaterDrop, contentDescription = null, modifier = Modifier.padding(5.dp).size(40.dp), tint = BlueIrrigationDark)
             }
 
             StepManager(viewmodel.step.value)
@@ -194,26 +195,26 @@ fun IrrigationBody1(viewModel: IrrigationViewModel){
 fun StepManager(step : Int){
 
     val firstWidth by animateDpAsState(
-        if (step == 0) 140.dp else 80.dp
+        if (step == 0) 170.dp else 80.dp
     )
     val secondtWidth by animateDpAsState(
-        if (step == 1) 140.dp else 80.dp
+        if (step == 1) 170.dp else 80.dp
     )
 
     Row(
         Modifier
-            .padding(15.dp)
+            .padding(vertical = 5.dp, horizontal = 40.dp)
             .fillMaxWidth()
         ,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.End
     ) {
         Box(modifier = Modifier
             .padding(8.dp)
             .width(firstWidth)
             .height(10.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(if (step == 0) BlueIrrigation else BlueIrrigationLight)
+            .background(if (step == 0) BlueIrrigationDark else BlueIrrigationLight)
 
         )
         Box(modifier = Modifier
@@ -221,7 +222,7 @@ fun StepManager(step : Int){
             .width(secondtWidth)
             .height(10.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(if (step == 1) BlueIrrigation else BlueIrrigationLight)
+            .background(if (step == 1) BlueIrrigationDark else BlueIrrigationLight)
 
 
         )
