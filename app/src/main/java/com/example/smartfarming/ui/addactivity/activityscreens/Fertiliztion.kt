@@ -34,7 +34,6 @@ import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
-import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.Purple200
 import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModel
@@ -118,8 +117,8 @@ fun Fertilization(
                 garden = garden.value!!,
                 fertilizationType = fertilizationType,
                 setFertilizationType = {viewModel.setFertilizationType(it)},
-                fertilizerName = viewModel.fertilizerName.value,
-                setFertilizationName = {viewModel.setFertilizerName(it)},
+                fertilizerName = "",
+                setFertilizationName = {viewModel.addFertilizer(it)},
                 step = step,
                 increaseStep = {if (step < 2) step++},
                 fertilizerVolume = viewModel.fertilizationVolume.value,

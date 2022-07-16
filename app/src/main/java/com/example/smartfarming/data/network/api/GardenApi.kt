@@ -6,7 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface GardenApi {
-    @POST()
+    @POST("/privileged/garden")
     suspend fun addGarden(
         @Body request : RequestBody
     ) : GardenResponse

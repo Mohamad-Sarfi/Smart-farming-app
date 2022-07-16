@@ -120,7 +120,7 @@ fun AddGardenStep3(
             ),
             singleLine = true,
             maxLines = 1,
-            modifier = Modifier.width(260.dp)
+            modifier = Modifier.width(260.dp).padding(top = 20.dp)
         )
         if (area != 0){
             Text(

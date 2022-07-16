@@ -55,7 +55,7 @@ fun SetupNavGraph(
                 )
             ){ entry ->
                 val gardenName = entry.arguments?.getString("name")
-                Fertilization(gardenName = gardenName!!, navController = navController)
+                com.example.smartfarming.ui.addactivity.activityscreens.fertilization.Fertilization(gardenName!!)
             }
 
         composable(

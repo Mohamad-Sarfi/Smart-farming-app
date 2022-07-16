@@ -43,97 +43,93 @@ fun AddGardenStep1(
 ){
     val focusManager = LocalFocusManager.current
 
-    AnimatedVisibility(
-        visible = step.value!! == 1,
-
+    Column(
+        modifier = Modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier,
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            OutlinedTextField(
-                value = gardenName,
-                onValueChange = {
-                    setName(it)
-                },
-                shape = MaterialTheme.shapes.large,
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.White,
-                    textColor = Color.White,
-                    placeholderColor = Color.White,
-                    trailingIconColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    unfocusedIndicatorColor = Color.White
-                ),
-                singleLine = true,
-                maxLines = 1,
-                label = {
-                    Text(
-                        "نام باغ",
-                        style = MaterialTheme.typography.body1
-                    )
-                },
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }
-                ),
-                trailingIcon = {
-                    Icon(Icons.Rounded.Park, contentDescription = "")
-                },
-                modifier = Modifier
-                    .padding(10.dp)
-                    .size(width = 260.dp, height = 75.dp),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            )
+        OutlinedTextField(
+            value = gardenName,
+            onValueChange = {
+                setName(it)
+            },
+            shape = MaterialTheme.shapes.large,
+            colors = TextFieldDefaults.textFieldColors(
+                focusedIndicatorColor = Color.White,
+                textColor = Color.White,
+                placeholderColor = Color.White,
+                trailingIconColor = Color.White,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White,
+                unfocusedIndicatorColor = Color.White
+            ),
+            singleLine = true,
+            maxLines = 1,
+            label = {
+                Text(
+                    "نام باغ",
+                    style = MaterialTheme.typography.body1
+                )
+            },
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            ),
+            trailingIcon = {
+                Icon(Icons.Rounded.Park, contentDescription = "")
+            },
+            modifier = Modifier
+                .padding(10.dp)
+                .size(width = 260.dp, height = 75.dp),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        )
 
-            OutlinedTextField(
-                value = gardenAge,
-                onValueChange = {
-                    setAge(it)
-                },
-                shape = MaterialTheme.shapes.large,
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.White,
-                    textColor = Color.White,
-                    placeholderColor = Color.White,
-                    trailingIconColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    unfocusedIndicatorColor = Color.White
-                ),
-                label = {
-                    Text(
-                        "سن باغ",
-                        style = MaterialTheme.typography.body1
-                    )
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        focusManager.clearFocus()
-                    }
-                ),
-                trailingIcon = {
-                    Icon(Icons.Rounded.Pin, contentDescription = "")
-                },
-                modifier = Modifier
-                    .padding(10.dp)
-                    .size(width = 260.dp, height = 75.dp),
-            )
+        OutlinedTextField(
+            value = gardenAge,
+            onValueChange = {
+                setAge(it)
+            },
+            shape = MaterialTheme.shapes.large,
+            colors = TextFieldDefaults.textFieldColors(
+                focusedIndicatorColor = Color.White,
+                textColor = Color.White,
+                placeholderColor = Color.White,
+                trailingIconColor = Color.White,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White,
+                unfocusedIndicatorColor = Color.White
+            ),
+            label = {
+                Text(
+                    "سن باغ",
+                    style = MaterialTheme.typography.body1
+                )
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            ),
+            trailingIcon = {
+                Icon(Icons.Rounded.Pin, contentDescription = "")
+            },
+            modifier = Modifier
+                .padding(10.dp)
+                .size(width = 260.dp, height = 75.dp),
+        )
 
-            PlanVarietySpinner(listOf()) {
-                addVariety(it)
-            }
-
-            plantVarietiesTexts(varietiesList) { removeVariety(it) }
+        PlanVarietySpinner(listOf()) {
+            addVariety(it)
         }
+
+        plantVarietiesTexts(varietiesList) { removeVariety(it) }
     }
+
 }
 
 

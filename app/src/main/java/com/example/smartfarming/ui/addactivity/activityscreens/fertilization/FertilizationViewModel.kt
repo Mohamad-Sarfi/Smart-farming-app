@@ -13,25 +13,40 @@ import java.lang.IllegalArgumentException
 
 class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
 
+    var step = mutableStateOf(0)
+
+    fun increaseStep(){
+        if (step.value == 0) step.value++
+    }
+    fun decreaseStep(){
+        if (step.value == 1) step.value--
+    }
+
+
     private val garden = MutableLiveData<Garden>().apply {
         value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
             0.0, 0)
     }
     val fertilizationType = mutableStateOf(value = "")
-    val fertilizerName = mutableStateOf(value ="")
-    val fertilizationDate = mutableStateOf(value = "")
+
+    val fertilizerName = mutableStateOf(mutableListOf<String>())
+    val currentFertilizerName = mutableStateOf("")
+
+    val fertilizationDate =
+        mutableStateOf(value = mutableMapOf<String, String>("day" to "", "month" to "", "year" to ""))
+
     val fertilizationVolume = mutableStateOf<Float>(0f)
 
     fun setFertilizationType(type : String){
         fertilizationType.value = type
     }
 
-    fun setFertilizerName(name : String){
-        fertilizerName.value = name
+    fun addFertilizer(name : String){
+        fertilizerName.value.add(name)
     }
 
-    fun setFertilizationDate(date : String){
-        fertilizationDate.value = ""
+    fun removeFertilizer(name : String){
+        fertilizerName.value.remove(name)
     }
 
     fun setFertilizationVolume(volume : Float){

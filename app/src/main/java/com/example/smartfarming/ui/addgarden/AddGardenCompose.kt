@@ -3,8 +3,8 @@ package com.example.smartfarming.ui.addgarden
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
@@ -85,8 +86,8 @@ fun AddGardenCompose(
                 }
             }
 
-            StepsColumn(modifier =  Modifier
-                .constrainAs(side){
+            StepsColumn(modifier = Modifier
+                .constrainAs(side) {
                     start.linkTo(parent.start)
                     top.linkTo(topCard.bottom)
                     bottom.linkTo(parent.bottom)
@@ -162,7 +163,11 @@ fun AddGardenCompose(
             ) {
                 OutlinedButton(
                     onClick = {
-                        viewModel.decrementStep()
+                        if (step.value == 1){
+                            activity.finish()
+                        } else {
+                            viewModel.decrementStep()
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MainGreen,
@@ -171,12 +176,13 @@ fun AddGardenCompose(
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier
                         .padding(5.dp)
-                        .size(width = 90.dp, height = 60.dp),
+                        .height(60.dp)
+                        .fillMaxWidth(0.3f),
                     border = BorderStroke(2.dp, Color.White)
                 )
                 {
                     Text(
-                        text = "قبلی",
+                        text = if (step.value == 1) "بازگشت" else "قبلی",
                         style = MaterialTheme.typography.h5,
                         modifier = Modifier.padding(
                             vertical = 2.dp
@@ -204,8 +210,6 @@ fun AddGardenCompose(
                                 0
                             )
                             viewModel.addGardenToDb(garden)
-                            val intent = Intent(context, MainActivity::class.java)
-                            context.startActivity(intent)
                             activity.finish()
                         }
                     },
@@ -215,7 +219,8 @@ fun AddGardenCompose(
                     ),
                     modifier = Modifier
                         .padding(5.dp)
-                        .size(width = 180.dp, height = 60.dp)
+                        .height(60.dp)
+                        .fillMaxWidth(0.7f)
                 ) {
                     Text(
                         text = if (step.value!! < viewModel.MAX_STEPS) "ادامه" else "ثبت",
@@ -264,8 +269,11 @@ fun StepCircle(
 
 @Composable
 fun ManageTopCard(step: Int){
-    Column() {
-
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Image(
             painter = painterResource(id = R.drawable.sprout_white),
             contentDescription = "",
@@ -274,24 +282,41 @@ fun ManageTopCard(step: Int){
                 .size(
                     130.dp
                 )
-                .align(Alignment.CenterHorizontally)
-
         )
 
-        Text(
-            text = when(step){
-                1 -> "ثبت باغ جدید"
-                2-> "اطلاعات آبیاری باغ"
-                3-> "موقعیت مکانی باغ"
-                4 -> "نتایج آزمایش آب و خاک"
-                else -> "ثبت باغ جدید" },
-            style = MaterialTheme.typography.h4,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(8.dp),
-            color = Color.White
-        )
+        Crossfade(targetState = step) { screenStep ->
+            when(screenStep){
+                1 ->
+                    Text(
+                    text = "ثبت باغ جدید",
+                    style = MaterialTheme.typography.h4, modifier = Modifier
+                        .padding(8.dp),
+                    color = Color.White)
+                2 ->
+                    Text(
+                        text = "اطلاعات آبیاری باغ",
+                        style = MaterialTheme.typography.h4, modifier = Modifier
+                            .padding(8.dp),
+                        color = Color.White
+                    )
+                3 ->
+                    Text(
+                        text = "موقعیت مکانی باغ",
+                        style = MaterialTheme.typography.h4, modifier = Modifier
+                            .padding(8.dp),
+                        color = Color.White
+                    )
+                4 ->
+                    Text(
+                        text = "نتایج آزمایش آب و خاک",
+                        style = MaterialTheme.typography.h4, modifier = Modifier
+                            .padding(8.dp),
+                        color = Color.White
+                    )
+            }
+        }
     }
+    
 }
 
 @Composable
