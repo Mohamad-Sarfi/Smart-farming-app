@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
@@ -84,7 +85,7 @@ fun AddGardenCompose(
                     .fillMaxWidth()
             ) {
                 Column {
-                    ManageTopCard(step = step.value!!)
+                    ManageTopCard(step = step.value!!){viewModel.decideIconSource(step.value!!)}
                 }
             }
 
@@ -250,20 +251,21 @@ fun StepCircle(
 }
 
 @Composable
-fun ManageTopCard(step: Int){
+fun ManageTopCard(step: Int, decideIcon : (Int) -> ImageVector){
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.sprout_white),
+        Icon(
+            decideIcon(step),
             contentDescription = "",
             modifier = Modifier
                 .padding(20.dp)
                 .size(
-                    110.dp
-                )
+                    120.dp
+                ),
+            tint = Color.White
         )
 
         Crossfade(

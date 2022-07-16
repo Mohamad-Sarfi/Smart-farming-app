@@ -3,10 +3,10 @@ package com.example.smartfarming.ui.addactivity.activityscreens.common_compose
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +20,7 @@ import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 
 @Composable
 fun DateSelector(
+    title : String,
     date : Map<String, String>,
     color: Color,
     colorLight: Color,
@@ -34,8 +35,14 @@ fun DateSelector(
         modifier = Modifier.padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
-
-        Text(text = "تاریخ آبیاری", style = MaterialTheme.typography.subtitle1, color = color, modifier = Modifier.padding(bottom = 15.dp))
+        Row(
+            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(text = "تاریخ " + title, style = MaterialTheme.typography.subtitle1, color = color)
+            Icon(Icons.Outlined.CalendarToday, contentDescription = null, tint = color, modifier = Modifier.padding(start = 10.dp))
+        }
 
         OutlinedButton(
             onClick = {

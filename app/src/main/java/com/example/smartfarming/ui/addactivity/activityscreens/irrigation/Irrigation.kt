@@ -3,8 +3,10 @@ package com.example.smartfarming.ui.addactivity.activityscreens.irrigation
 import android.app.Activity
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +16,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Shower
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,6 +45,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationLight
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBlue
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
+import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.WorkerNumber
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.sina
@@ -153,37 +159,51 @@ fun IrrigationBody(viewModel: IrrigationViewModel){
 @Composable
 fun IrrigationBody1(viewModel: IrrigationViewModel){
 
-    AnimatedVisibility(
-        viewModel.step.value == 0
-    ) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(30.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            DateSelector(date = viewModel.irrigationDate.value, BlueIrrigationDark, LightBlue){
-                viewModel.irrigationDate.value = it
-            }
-            IrrigationVolume(viewModel)
-            IrrigationTime(viewModel)
+    Crossfade(
+        viewModel.step.value,
+        animationSpec = tween(1000)
+    ) { stepPage ->
+        when (stepPage){
+            0 ->
+                Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(30.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    DateSelector(
+                        "آبیاری",
+                        date = viewModel.irrigationDate.value,
+                        BlueIrrigationDark,
+                        LightBlue){
+                        viewModel.irrigationDate.value = it
+                    }
+                    IrrigationVolume(viewModel)
+                    IrrigationTime(viewModel)
+                }
+            1 ->
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(30.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    IrrigationType(viewModel)
+
+                    WorkerNumber(
+                        viewModel.step.value,
+                        BlueIrrigationDark,
+                        LightBlue
+                    ){
+                        viewModel.irrigationWorkers.value = it
+                    }
+                }
         }
+
     }
 
-    AnimatedVisibility(visible = viewModel.step.value == 1) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(30.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            IrrigationType(viewModel)
-
-            IrrigationWorker(viewModel)
-        }
-    }
 
 }
 
@@ -195,7 +215,14 @@ fun IrrigationVolume(viewModel: IrrigationViewModel){
         modifier = Modifier.padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
-        Text(text = "حجم آب", style = MaterialTheme.typography.subtitle1, color = BlueIrrigationDark, modifier = Modifier.padding(bottom = 15.dp))
+        Row(
+            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(text = "حجم آب", style = MaterialTheme.typography.subtitle1, color = BlueIrrigationDark)
+            Icon(Icons.Outlined.WaterDrop, contentDescription = null, tint = BlueIrrigationDark, modifier = Modifier.padding(start = 3.dp))
+        }
 
         OutlinedTextField(
             value = viewModel.waterVolume.value.toString() + " لیتر" ,
@@ -256,7 +283,18 @@ fun IrrigationTime(viewModel: IrrigationViewModel){
         modifier = Modifier.padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
-        Text(text = "مدت آبیاری", style = MaterialTheme.typography.subtitle1, color = BlueIrrigationDark, modifier = Modifier.padding(bottom = 15.dp))
+        Row(
+            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "مدت آبیاری",
+                style = MaterialTheme.typography.subtitle1,
+                color = BlueIrrigationDark,
+            )
+            Icon(Icons.Outlined.Timer, contentDescription = null, tint = BlueIrrigationDark, modifier = Modifier.padding(start = 3.dp))
+        }
 
         OutlinedTextField(
             value = viewModel.irrigationDuration.value.toString() + " ساعت" ,
@@ -322,12 +360,19 @@ fun IrrigationType(viewModel: IrrigationViewModel){
         modifier = Modifier.padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
-        Text(
-            text = "نوع آبیاری",
-            style = MaterialTheme.typography.subtitle1,
-            color = BlueIrrigationDark,
-            modifier = Modifier.padding(bottom = 15.dp)
-        )
+
+        Row(
+            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = "نوع آبیاری",
+                style = MaterialTheme.typography.subtitle1,
+                color = BlueIrrigationDark,
+            )
+            Icon(Icons.Outlined.Shower, contentDescription = null, tint = BlueIrrigationDark, modifier = Modifier.padding(start = 3.dp))
+        }
 
         OutlinedButton(
             onClick = { clicked = !clicked},
@@ -383,63 +428,3 @@ fun IrrigationType(viewModel: IrrigationViewModel){
 
 }
 
-@Composable
-fun IrrigationWorker(viewModel: IrrigationViewModel){
-    Column(
-        modifier = Modifier.padding(20.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.End) {
-        Text(text = "تعداد کارگر", style = MaterialTheme.typography.subtitle1, color = BlueIrrigation, modifier = Modifier.padding(bottom = 15.dp))
-
-        OutlinedTextField(
-            value = viewModel.irrigationWorkers.value.toString() + " نفر" ,
-            onValueChange = {
-                viewModel.irrigationWorkers.value = it.toInt()
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .padding(horizontal = 0.dp)
-                .background(LightBlue, RoundedCornerShape(20.dp))
-            ,
-            shape = RoundedCornerShape(20.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = LightBlue,
-                textColor = BlueIrrigationDark,
-                focusedBorderColor = LightBlue,
-                trailingIconColor = BlueIrrigationDark,
-                leadingIconColor = BlueIrrigationDark,
-                unfocusedBorderColor = LightBlue,
-
-
-                ),
-            leadingIcon = {
-                Icon(
-                    Icons.Default.Remove,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(35.dp)
-                        .clickable { if (viewModel.irrigationWorkers.value > 1) viewModel.irrigationWorkers.value -= 1 }
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(35.dp)
-                        .clickable { viewModel.irrigationWorkers.value += 1 }
-                )
-            },
-            readOnly = true,
-            textStyle = TextStyle(
-                fontFamily = sina,
-                fontWeight = FontWeight.Normal,
-                fontSize = 18.sp,
-                textDirection = TextDirection.ContentOrRtl,
-                textAlign = TextAlign.Center
-            ),
-        )
-
-    }
-}

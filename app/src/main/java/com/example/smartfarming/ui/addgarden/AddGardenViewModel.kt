@@ -1,6 +1,9 @@
 package com.example.smartfarming.ui.addgarden
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
@@ -107,6 +110,16 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
             list = repo.getGardens().asLiveData()
         }
         return list
+    }
+
+    fun decideIconSource(step : Int) : ImageVector {
+        return when(step) {
+            1 -> Icons.Default.Eco
+            2 -> Icons.Default.WaterDrop
+            3 -> Icons.Default.Public
+            4 -> Icons.Default.Science
+            else -> Icons.Default.Eco
+        }
     }
 
 }

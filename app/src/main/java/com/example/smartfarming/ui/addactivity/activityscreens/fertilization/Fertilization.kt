@@ -2,6 +2,8 @@ package com.example.smartfarming.ui.addactivity.activityscreens.fertilization
 
 import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +18,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.outlined.Compost
+import androidx.compose.material.icons.outlined.Spa
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +49,7 @@ import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewMode
 import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModelFactory
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
+import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.WorkerNumber
 import com.example.smartfarming.ui.addactivity.activityscreens.irrigation.IrrigationBody1
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
@@ -102,23 +108,48 @@ fun FertilizationBody(viewModel: FertilizationViewModel) {
                         bottom.linkTo(bottomRow.top)
                     }
             ) {
-                androidx.compose.animation.AnimatedVisibility(
-                    viewModel.step.value == 0
-                ) {
-                    Column(
-                        Modifier
-                            .fillMaxSize()
-                            .padding(30.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        DateSelector(date = viewModel.fertilizationDate.value, Purple700, PurpleLight){
-                            viewModel.fertilizationDate.value = it
-                        }
-                        FertilizationType(viewModel)
-                        FertilizerName(viewModel)
+                Crossfade(
+                    targetState = viewModel.step.value,
+                    animationSpec = tween(500)
+                ) { stepPage ->
+                    when(stepPage){
+                        0 ->
+                            Column(
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(30.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                DateSelector(
+                                    "تغذیه",
+                                    date = viewModel.fertilizationDate.value,
+                                    Purple700,
+                                    PurpleLight){
+                                    viewModel.fertilizationDate.value = it
+                                }
+                                FertilizationType(viewModel)
+                                FertilizerName(viewModel)
+                            }
+                        1 ->
+                            Column(
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(30.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                WorkerNumber(
+                                    wNumber =viewModel.fertilizationWorker.value ,
+                                    color = Purple700,
+                                    colorLight = PurpleLight,
+                                    ){
+                                    viewModel.fertilizationWorker.value = it
+                                }
+                            }
                     }
                 }
+
             }
 
             // Button row **************************************************************************
@@ -183,12 +214,18 @@ fun FertilizationType(viewModel: FertilizationViewModel){
         modifier = Modifier.padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
-        Text(
-            text = "نوع تغذیه",
-            style = MaterialTheme.typography.subtitle1,
-            color = Purple500,
-            modifier = Modifier.padding(bottom = 15.dp)
-        )
+        Row(
+            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "نوع تغذیه",
+                style = MaterialTheme.typography.subtitle1,
+                color = Purple500,
+            )
+            Icon(Icons.Outlined.Spa, contentDescription = null, tint = Purple700, modifier = Modifier.padding(start = 10.dp))
+        }
 
         OutlinedButton(
             onClick = { clicked = !clicked},
@@ -258,12 +295,19 @@ fun FertilizerName(viewModel: FertilizationViewModel){
         modifier = Modifier.padding(20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
-        Text(
-            text = "نام کود",
-            style = MaterialTheme.typography.subtitle1,
-            color = Purple500,
-            modifier = Modifier.padding(bottom = 15.dp)
-        )
+
+        Row(
+            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = "نام کود",
+                style = MaterialTheme.typography.subtitle1,
+                color = Purple500
+            )
+            Icon(Icons.Outlined.Compost, contentDescription = null, tint = Purple700, modifier = Modifier.padding(start = 10.dp))
+        }
 
         OutlinedTextField(
             value = viewModel.currentFertilizerName.value,
@@ -357,8 +401,3 @@ fun FertilizerName(viewModel: FertilizationViewModel){
     }
 }
 
-@Composable
-@Preview
-fun previewFertilization(){
-    Fertilization()
-}

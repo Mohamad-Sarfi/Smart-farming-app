@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -49,7 +51,7 @@ fun TopAppBar(){
 
             AnimatedVisibility(
                 visible = addClicked,
-                enter = slideInHorizontally()
+                enter = fadeIn(animationSpec = tween())
             ) {
                 Text(text = "افزودن باغ", style = MaterialTheme.typography.subtitle2, color = MainGreen)
             }

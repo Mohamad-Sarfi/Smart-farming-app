@@ -61,15 +61,7 @@ fun AddGardenStep3(
         )
 
 
-        if (viewModel.isLocationSet.value){
-            Text(
-                text =  "",
-                style = MaterialTheme.typography.body1,
-                color = Color.White
-            )
-
-        }
-        else {
+        if (!viewModel.isLocationSet.value){
             Text(
                 text ="موقعیت باغ را مشخص کنید",
                 style = MaterialTheme.typography.subtitle1,
@@ -88,14 +80,14 @@ fun AddGardenStep3(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "وسعت باغ شما: ",
+                    text = "وسعت باغ شما به هکتار: ",
                     style = MaterialTheme.typography.body1,
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 0.dp)
                 )
                 Text(
-                    text =viewModel.gardenArea.value.toString() + " متر مربع",
-                    style = MaterialTheme.typography.body2,
+                    text = "${viewModel.gardenArea.value / 10000}" ,
+                    style = MaterialTheme.typography.h5,
                     color = Color.White,
                     modifier = Modifier.padding(end = 5.dp)
                 )

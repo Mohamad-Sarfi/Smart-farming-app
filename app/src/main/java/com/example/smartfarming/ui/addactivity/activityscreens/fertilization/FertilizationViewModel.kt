@@ -37,6 +37,8 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
 
     val fertilizationVolume = mutableStateOf<Float>(0f)
 
+    val fertilizationWorker = mutableStateOf(1)
+
     fun setFertilizationType(type : String){
         fertilizationType.value = type
     }
