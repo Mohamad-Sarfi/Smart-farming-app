@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AreaChart
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.LocationOn
@@ -34,24 +35,21 @@ import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 @Composable
 fun AddGardenStep3(
     navController: NavHostController,
-    isLocationSet: Boolean,
-    gardenName: String,
-    latLng: Map<String, String>,
-    area : Int,
-    setArea: (Int) -> Unit,
-    setSoilType: (String) -> Unit
+    viewModel: AddGardenViewModel
 ){
     val context = LocalContext.current
     val focus = LocalFocusManager.current
     Column(
         modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
         ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
 
         Icon(
-            if (isLocationSet) Icons.Filled.LocationOn else Icons.Outlined.LocationOn,
+            if (viewModel.isLocationSet.value) Icons.Filled.LocationOn else Icons.Outlined.LocationOn,
             contentDescription = "",
             tint = Color.White,
             modifier = Modifier
@@ -63,9 +61,9 @@ fun AddGardenStep3(
         )
 
 
-        if (isLocationSet){
+        if (viewModel.isLocationSet.value){
             Text(
-                text =  "موقعیت مکانی باغ دریافت شد",
+                text =  "",
                 style = MaterialTheme.typography.body1,
                 color = Color.White
             )
@@ -83,53 +81,29 @@ fun AddGardenStep3(
                 color = Color.White
             )
         }
-
-        OutlinedTextField(
-            value = if (area != 0) area.toString() else "",
-            onValueChange = {
-                if (!it.isDigitsOnly() || it == null || it == "") setArea(0)
-                else setArea(it.toInt())
-            },
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.White,
-                textColor = Color.White,
-                placeholderColor = Color.White,
-                trailingIconColor = Color.White,
-                focusedLabelColor = Color.White,
-                unfocusedLabelColor = Color.White,
-                unfocusedIndicatorColor = Color.White
-            ),
-            shape = MaterialTheme.shapes.large,
-            trailingIcon = {
-                Icon(Icons.Rounded.SquareFoot, contentDescription = "")
-            },
-            label = {
+        if (viewModel.isLocationSet.value){
+            Column(
+                modifier = Modifier.padding(top = 10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
-                    "وسعت باغ",
-                    style = MaterialTheme.typography.body1
+                    text = "وسعت باغ شما: ",
+                    style = MaterialTheme.typography.body1,
+                    color = Color.White,
+                    modifier = Modifier.padding(bottom = 0.dp)
                 )
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focus.clearFocus()
-                }
-            ),
-            singleLine = true,
-            maxLines = 1,
-            modifier = Modifier.width(260.dp).padding(top = 20.dp)
-        )
-        if (area != 0){
-            Text(
-                text = "${area.toDouble()/10000}" + " هکتار",
-                style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier.padding(3.dp),
-                color = Color.White
-            )
+                Text(
+                    text =viewModel.gardenArea.value.toString() + " متر مربع",
+                    style = MaterialTheme.typography.body2,
+                    color = Color.White,
+                    modifier = Modifier.padding(end = 5.dp)
+                )
+
+
+            }
         }
+
     }
 }
 

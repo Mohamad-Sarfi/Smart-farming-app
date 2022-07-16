@@ -1,8 +1,10 @@
 package com.example.smartfarming.ui.addgarden
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
@@ -37,19 +39,17 @@ fun AddGardenCompose(
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
-    var step = viewModel.step.observeAsState()
-    val gardenName by viewModel.gardenName.observeAsState("")
-    val isLocationSet by viewModel.isLocationSet.observeAsState()
+    var step = viewModel.step
+    val isLocationSet by viewModel.isLocationSet
     val latLong by viewModel.location.observeAsState()
-    val gardenArea by viewModel.getArea().observeAsState()
+    val gardenArea by viewModel.gardenArea
 
-    val gardenAge by viewModel.getGardenAge().observeAsState()
+    val gardenAge by viewModel.gardenAge
 
-    val varietiesList = viewModel.typeArray.observeAsState(arrayListOf())
+    val varietiesList = viewModel.typeArray
 
-    val irrigationCycle by viewModel.irrigationCycle.observeAsState()
-    val irrigationDuration by viewModel.irrigationDuration.observeAsState()
-    val irrigationVolume by viewModel.irrigationVolume.observeAsState()
+    val irrigationDuration by viewModel.irrigationDuration
+    val irrigationVolume by viewModel.irrigationVolume
     val soilType by viewModel.soilType.observeAsState()
 
 
@@ -77,7 +77,9 @@ fun AddGardenCompose(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .constrainAs(topCard) {
-                        top.linkTo(parent.top, margin = 5.dp)
+                        top.linkTo(parent.top, margin = 30.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                     }
                     .fillMaxWidth()
             ) {
@@ -108,44 +110,24 @@ fun AddGardenCompose(
                     bottom.linkTo(button.top)
                     start.linkTo(side.end)
                 }
-                .fillMaxWidth(.8f),
+                .fillMaxWidth(.8f)
+                .fillMaxHeight(0.7f),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
 
-                Column(
-                    modifier = Modifier
+                Crossfade(
+                    targetState = step.value,
+                    animationSpec = tween(1000)
                 ) {
-                    when(step.value){
+                    when(it){
                         1 ->
-                            AddGardenStep1(
-                                gardenName!!, {viewModel.setGardenName(it)},
-                                gardenAge!!, {viewModel.setGardenAge(it)},
-                                varietiesList, {
-                                    viewModel.addType(it)
-                                },{
-                                    viewModel.removeFromTypeArray(it)
-                                },
-                                step
-                            )
+                            AddGardenStep1(viewModel)
                         2 ->
                             AddGardenStep2(
-                                irrigationDuration!!,
-                                {viewModel.setIrrigationDuration(it)},
-                                irrigationCycle!!,
-                                {viewModel.setIrrigationCycle(it)},
-                                irrigationVolume!!,
-                                {viewModel.setIrrigationVolume(it)}
+                                viewModel
                             )
-                        3 -> AddGardenStep3(
-                            navController,
-                            isLocationSet!!,
-                            gardenName,
-                            latLong!!,
-                            gardenArea!!,
-                            {viewModel.setArea(it)},
-                            setSoilType = {viewModel.setSoilType(it)}
-                        )
+                        3 -> AddGardenStep3(navController, viewModel)
                         else -> AddGardenStep4()
 
                     }
@@ -193,11 +175,11 @@ fun AddGardenCompose(
                 Button(
                     onClick = {
                         if (step.value != viewModel.MAX_STEPS){
-                            viewModel.incrementStep()
+                            handleIncrementButton(viewModel, context)
                         } else {
                             val garden = Garden(
                                 0,
-                                gardenName,
+                                viewModel.gardenName.value,
                                 gardenAge!!.toInt(),
                                 "${latLong!!["lat"]} - ${latLong!!["long"]}",
                                 "pistachios",
@@ -280,11 +262,13 @@ fun ManageTopCard(step: Int){
             modifier = Modifier
                 .padding(20.dp)
                 .size(
-                    130.dp
+                    110.dp
                 )
         )
 
-        Crossfade(targetState = step) { screenStep ->
+        Crossfade(
+            targetState = step
+        ) { screenStep ->
             when(screenStep){
                 1 ->
                     Text(
@@ -334,5 +318,29 @@ fun StepsColumn(
         StepCircle(step = step.value!!, 2)
         StepCircle(step = step.value!!, 3)
         StepCircle(step = step.value!!, 4)
+    }
+}
+
+fun handleIncrementButton(viewModel: AddGardenViewModel, context: Context){
+    when(viewModel.step.value){
+        1 ->
+            if (viewModel.checkFirstStep()){
+                viewModel.incrementStep()
+            } else {
+                Toast.makeText(context, "تمام فیلدها را کامل کنید", Toast.LENGTH_SHORT).show()
+            }
+        2 ->
+            if (viewModel.checkSecondStep()){
+                viewModel.incrementStep()
+            } else {
+                Toast.makeText(context, "تمام فیلدها را کامل کنید", Toast.LENGTH_SHORT).show()
+            }
+        3 ->
+            if (viewModel.checkThirdStep()){
+                viewModel.incrementStep()
+            } else {
+                Toast.makeText(context, "تمام فیلدها را کامل کنید", Toast.LENGTH_SHORT).show()
+            }
+
     }
 }

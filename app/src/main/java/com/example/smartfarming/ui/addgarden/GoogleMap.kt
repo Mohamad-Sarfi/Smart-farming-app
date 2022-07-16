@@ -33,6 +33,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavHostController
 import com.example.smartfarming.ui.addactivities.ScreensEnumActivities
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
+import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.utils.PolygonUtils
 import com.google.android.libraries.maps.CameraUpdateFactory
 import com.google.android.libraries.maps.GoogleMap
 import com.google.android.libraries.maps.MapView
@@ -42,6 +44,7 @@ import com.google.android.libraries.maps.model.Polygon
 import com.google.android.libraries.maps.model.PolygonOptions
 import com.google.maps.android.ktx.R
 import java.lang.IllegalStateException
+import kotlin.math.roundToInt
 
 val REQUEST_LOCATION_PERMISSION = 1
 
@@ -107,6 +110,8 @@ fun MapCompose(
         Button(
             onClick = {
                 viewModel.isLocationSet.value = true
+                viewModel.polygonPath.add(viewModel.polygonPath.first())
+                viewModel.gardenArea.value = PolygonUtils.computeArea(viewModel.polygonPath).roundToInt().toDouble()
                 navController.navigate(ScreensEnumActivities.AddGardenScreen.name){
                     popUpTo(0)
                 }
@@ -166,6 +171,7 @@ fun GoogleMap(
                        var markers = arrayListOf<com.google.android.libraries.maps.model.Marker>()
                        var polygon : Polygon? = null
                        val polygonOptions = PolygonOptions()
+                           .fillColor(0x770E9145)
 
                        // User location
                        enableMyLocation(activity, googleMap, context)
@@ -173,18 +179,20 @@ fun GoogleMap(
 
                        googleMap.setOnMapClickListener { latLng ->
                            points.add(latLng)
+                           viewModel.polygonPath.add(latLng)
                            val mark = googleMap.addMarker(
                                MarkerOptions()
                                    .position(latLng)
                                    .title("باغ شما")
                            )
+
                            markers.add(mark)
 
                            polygonOptions
                                .add(
                                    points[points.size - 1]
                                )
-                               .fillColor(0x0E9145)
+
 
                            if (polygon != null) polygon!!.remove()
                            polygon = googleMap.addPolygon(polygonOptions)

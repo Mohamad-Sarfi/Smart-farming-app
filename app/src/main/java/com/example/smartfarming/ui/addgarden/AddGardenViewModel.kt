@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addgarden
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
@@ -11,57 +12,36 @@ import java.lang.IllegalArgumentException
 class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
     val MAX_STEPS = 4
 
-    val typeArray = MutableLiveData<List<String>>().apply {
-        value = listOf()
-    }
-    var gardenName = MutableLiveData<String>().apply {
-        value = ""
-    }
+    val typeArray = mutableStateOf(listOf<String>())
+    var gardenName = mutableStateOf("")
 
-    private var gardenAge = MutableLiveData<String>().apply {
-        value = ""
-    }
+    var gardenAge = mutableStateOf<Int>(0)
 
     var location = MutableLiveData<Map<String, String>>().apply {
         value = mutableMapOf("lat" to "0", "long" to "0")
     }
 
-    var irrigationDuration = MutableLiveData<String>().apply {
-        value = ""
-    }
+    var polygonPath = mutableListOf<LatLng>()
 
-    var irrigationCycle = MutableLiveData<String>().apply {
-        value = ""
-    }
-    var irrigationVolume = MutableLiveData<String>().apply {
-            value = ""
-    }
+    var irrigationDuration = mutableStateOf("")
 
-    var step = MutableLiveData<Int>().apply {
-        value = 1
-    }
+    var irrigationCycle = mutableStateOf("")
+    var irrigationVolume = mutableStateOf("")
 
-    var isLocationSet = MutableLiveData<Boolean>().apply{
-        value = false
-    }
+    var step = mutableStateOf(1)
+
+    var isLocationSet = mutableStateOf(false)
 
     private var locationList = MutableLiveData<List<LatLng>>().apply {
         value = listOf()
     }
 
-    private val gardenArea = MutableLiveData<Int>().apply {
-        value = 0
-    }
+    val gardenArea = mutableStateOf(0.0)
 
     var soilType = MutableLiveData<String>().apply {
         value = ""
     }
 
-
-    fun getArea() : MutableLiveData<Int> = gardenArea
-    fun setArea(area : Int){
-        gardenArea.value = area
-    }
 
     fun incrementStep(){
         if (step.value!! < MAX_STEPS){
@@ -93,43 +73,25 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
     }
 
 
-    fun setGardenName(name : String) {
-        gardenName.value = name
-    }
-
-    fun setSoilType(type : String){
-        soilType.value = type
-    }
-
-    fun setGardenAge(age : String){
-        gardenAge.value = age
-    }
-
-    fun getGardenAge() : MutableLiveData<String> = gardenAge
-
-    fun setLocation(lat : String, lon : String){
-        location.value = mutableMapOf("lat" to lat.substring(0,6), "long" to lon.substring(0,6))
-    }
-
     fun setLocationList(locations : List<LatLng>){
         locationList.value = locations
         location.value = mutableMapOf("lat" to locations[0].latitude.toString().substring(0,6), "long" to locations[0].longitude.toString().substring(0,6))
     }
 
-    fun getLocationList() : List<LatLng> = locationList.value!!
 
-    fun setIrrigationDuration(duration : String){
-        irrigationDuration.value = duration
+    // Button click handler
+
+    fun checkFirstStep() : Boolean{
+        return gardenName.value != "" && gardenAge.value != 0 && !typeArray.value.isNullOrEmpty()
     }
 
-    fun setIrrigationCycle(cycle : String){
-        irrigationCycle.value = cycle
+    fun checkSecondStep() : Boolean {
+        return irrigationDuration.value != "" && irrigationCycle.value != "" && irrigationVolume.value != ""
     }
 
-    fun setIrrigationVolume(volume : String){
-        irrigationVolume.value = volume
+    fun checkThirdStep() : Boolean {
+        return isLocationSet.value && gardenArea.value != 0.0
     }
-
 
 
     // Database

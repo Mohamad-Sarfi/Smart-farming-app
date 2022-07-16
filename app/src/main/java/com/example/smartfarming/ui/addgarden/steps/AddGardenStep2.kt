@@ -31,12 +31,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
 // Irrigation cycle
 @Composable
 fun AddGardenStep2(
-    duration : String,
-    setDuration : (String) -> Unit,
-    cycle : String,
-    setCycle: (String) -> Unit,
-    volume: String,
-    setVolume: (String) -> Unit
+    viewModel: AddGardenViewModel
 ){
     var final_note_show by remember {
         mutableStateOf(false)
@@ -45,15 +40,17 @@ fun AddGardenStep2(
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier,
-        verticalArrangement = Arrangement.Top,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = duration,
+            value = viewModel.irrigationDuration.value,
             onValueChange = {
-                if (it.length < 4){
-                    setDuration(it)
+                if (it.length < 5){
+                    viewModel.irrigationDuration.value = it
                 }
             },
             shape = MaterialTheme.shapes.large,
@@ -89,13 +86,13 @@ fun AddGardenStep2(
                 .size(width = 260.dp, height = 75.dp)
         )
 
-        IrrigationCycleSpinner({ final_note_show = it }){setCycle(it)}
+        IrrigationCycleSpinner({ final_note_show = it }){viewModel.irrigationCycle.value = it}
 
         OutlinedTextField(
-            value = volume,
+            value = viewModel.irrigationVolume.value,
             onValueChange = {
-                if (it.length < 2){
-                    setVolume(it)
+                if (it.length < 3){
+                    viewModel.irrigationVolume.value = it
                     final_note_show = true
                 }
             },

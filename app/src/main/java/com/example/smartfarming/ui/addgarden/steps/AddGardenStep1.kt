@@ -32,26 +32,19 @@ import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
 
 @Composable
 fun AddGardenStep1(
-    gardenName: String,
-    setName : (String) -> Unit,
-    gardenAge : String,
-    setAge : (String) -> Unit,
-    varietiesList: State<List<String>>,
-    addVariety: (String) -> Unit,
-    removeVariety: (String) -> Unit,
-    step : State<Int?>
+    viewModel: AddGardenViewModel
 ){
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = Modifier,
+        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = gardenName,
+            value = viewModel.gardenName.value,
             onValueChange = {
-                setName(it)
+                viewModel.gardenName.value = it
             },
             shape = MaterialTheme.shapes.large,
             colors = TextFieldDefaults.textFieldColors(
@@ -86,9 +79,9 @@ fun AddGardenStep1(
         )
 
         OutlinedTextField(
-            value = gardenAge,
+            value = if (viewModel.gardenAge.value == 0) "" else viewModel.gardenAge.value.toString(),
             onValueChange = {
-                setAge(it)
+                viewModel.gardenAge.value = it.toInt()
             },
             shape = MaterialTheme.shapes.large,
             colors = TextFieldDefaults.textFieldColors(
@@ -124,10 +117,10 @@ fun AddGardenStep1(
         )
 
         PlanVarietySpinner(listOf()) {
-            addVariety(it)
+            viewModel.addType(it)
         }
 
-        plantVarietiesTexts(varietiesList) { removeVariety(it) }
+        plantVarietiesTexts(viewModel.typeArray) { viewModel.removeFromTypeArray(it)}
     }
 
 }

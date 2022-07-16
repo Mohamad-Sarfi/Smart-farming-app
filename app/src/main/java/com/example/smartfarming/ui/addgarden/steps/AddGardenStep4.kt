@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 fun AddGardenStep4(){
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth().fillMaxHeight()
             .padding(20.dp)
         ,
         verticalArrangement = Arrangement.Center,
