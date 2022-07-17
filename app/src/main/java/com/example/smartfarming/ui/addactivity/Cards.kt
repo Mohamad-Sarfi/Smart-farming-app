@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -13,6 +14,7 @@ import androidx.navigation.NavHostController
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
+import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModel
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.common_composables.GardenSpinner
@@ -20,11 +22,15 @@ import com.example.smartfarming.ui.common_composables.GardenSpinner
 @Composable
 fun Cards(
     navController: NavHostController,
+    viewModel: AddActivitiesViewModel,
     gardenList : List<String>
 ){
     val context = LocalContext.current
+
+    val gardenListState = viewModel.getGardens().observeAsState()
+
     var currentGarden by remember {
-        if (gardenList.isNotEmpty()){
+        if (!gardenListState.value.isNullOrEmpty()){
             mutableStateOf(gardenList[0])
         }
         else {
@@ -56,7 +62,7 @@ fun Cards(
         )
         Row(
             modifier = Modifier
-                .padding(10.dp)
+                .padding(0.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
             Card("آبیاری",  R.drawable.watering, BlueWatering) {
@@ -81,7 +87,7 @@ fun Cards(
                 .padding(2.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Card("سم پاشی", R.drawable.pesticide1, YellowPesticide){
+            Card("سم پاشی", R.drawable.pesticide_line, YellowPesticide){
 
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()

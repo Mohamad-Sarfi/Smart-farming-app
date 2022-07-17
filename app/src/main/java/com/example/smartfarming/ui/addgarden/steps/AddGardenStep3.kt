@@ -91,8 +91,6 @@ fun AddGardenStep3(
                     color = Color.White,
                     modifier = Modifier.padding(end = 5.dp)
                 )
-
-
             }
         }
 

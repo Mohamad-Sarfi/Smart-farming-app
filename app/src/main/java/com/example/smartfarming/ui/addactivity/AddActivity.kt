@@ -31,6 +31,7 @@ fun AddActivity(
     ) { innerPadding ->
         Cards(
             navController,
+            viewModel = viewModel,
             gardensNameList
         )
     }

@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.harvest.compose
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -31,8 +32,8 @@ fun DateSelectHarvest(
     Button(
         onClick = { dialogue = !dialogue },
         modifier = Modifier
-            .padding(20.dp)
-            .width(300.dp)
+            .padding(vertical = 15.dp)
+            .fillMaxWidth(0.8f)
             .height(60.dp)
             .clip(MaterialTheme.shapes.large)
             .border(2.dp, color = MainGreen, shape = MaterialTheme.shapes.large),
@@ -44,7 +45,7 @@ fun DateSelectHarvest(
             text = if (harvestDate.value["year"] == "") "تاریخ آبیاری" else "${harvestDate.value["day"]} / ${harvestDate.value["month"]} / ${harvestDate.value["year"]}",
             style = MaterialTheme.typography.body2,
             color = BorderGray,
-            modifier = Modifier.padding(6.dp)
+            modifier = Modifier.padding(0.dp)
         )
     }
 

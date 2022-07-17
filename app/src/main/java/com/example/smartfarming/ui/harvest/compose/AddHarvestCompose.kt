@@ -143,10 +143,10 @@ fun AddHarvestBody(
         }
 
         Row(
+            modifier = Modifier.fillMaxWidth(0.8f),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceAround
         ) {
-
 
             HarvestTypeSpinner(harvestType ,setHarvestType = {setHarvestType(it)})
 
@@ -174,9 +174,9 @@ fun AddHarvestBody(
                 maxLines = 1,
                 singleLine = true,
                 modifier = Modifier
-                    .padding(10.dp)
-                    .width(180.dp)
-                    .height(65.dp),
+                    .padding(2.dp)
+                    .fillMaxWidth(1f)
+                    .height(60.dp),
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
@@ -272,12 +272,14 @@ fun HarvestTypeSpinner(
     }
     
     Row(modifier = Modifier
-        .padding(10.dp)
-        .width(90.dp)
-        .height(58.dp)
+        .padding(end = 8.dp)
+        .fillMaxWidth(0.4f)
+        .height(53.dp)
         .clip(MaterialTheme.shapes.large)
         .clickable { expanded = !expanded }
-        .border(2.dp, color = MainGreen, shape = MaterialTheme.shapes.large),
+        .border(2.dp, color = MainGreen, shape = MaterialTheme.shapes.large)
+        .padding(end = 1.dp)
+        ,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {

@@ -44,21 +44,21 @@ fun GardenSpinner(
     }
     val context = LocalContext.current
 
-    Box(
+    Card(
         modifier = Modifier
-            .fillMaxWidth(1f),
+            .padding(vertical = 15.dp)
+            .fillMaxWidth(0.8f),
+        elevation = 3.dp,
+        shape = MaterialTheme.shapes.large
     ){
         ConstraintLayout(modifier = Modifier
             .width(300.dp)
-            .padding(vertical = 15.dp)
-            .clip(shape = MaterialTheme.shapes.large)
             .shadow(elevation = 3.dp)
             .background(Color(0xFFEEEEEE))
             .clickable {
                 expanded = !expanded
             }
             .padding(vertical = 5.dp, horizontal = 10.dp)
-            .align(Alignment.Center)
         ) {
 
             val (icon, text) = createRefs()
@@ -74,7 +74,7 @@ fun GardenSpinner(
                         bottom.linkTo(parent.bottom)
                     }
                     .padding(
-                        start = 15.dp
+                        start = 2.dp
                     )
                     .size(55.dp)
                     .rotate(arrowRotateDegree)
@@ -112,6 +112,7 @@ fun GardenSpinner(
                     }
 
                 }
+
             }
         }
     }

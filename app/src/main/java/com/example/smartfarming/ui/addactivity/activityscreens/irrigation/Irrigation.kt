@@ -48,6 +48,7 @@ import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.Da
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.WorkerNumber
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModelFactory
+import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 
@@ -158,7 +159,7 @@ fun IrrigationBody(viewModel: IrrigationViewModel){
 
 @Composable
 fun IrrigationBody1(viewModel: IrrigationViewModel){
-
+    val x = YellowPesticide
     Crossfade(
         viewModel.step.value,
         animationSpec = tween(1000)
