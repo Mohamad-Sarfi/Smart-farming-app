@@ -21,6 +21,7 @@ import com.example.smartfarming.data.network.resources.userSignupResponse.Signup
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.register.*
+import com.example.smartfarming.utlils.CommonUtils
 
 @Composable
 fun Register(
@@ -149,7 +150,7 @@ fun Register(
                                 step = step,
                                 MAX_STEP = viewModel.MAX_STEP
                             )
-                            else -> clickHandler(
+                            4 -> clickHandler(
                                 context = context,
                                 response = response,
                             ){
@@ -257,8 +258,9 @@ fun clickHandler(
 ){
     signUp()
     when(response){
-        is Resource.Success -> Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-        is Resource.Failure -> Toast.makeText(context, "Signup failed", Toast.LENGTH_SHORT).show()
+        is Resource.Loading -> Toast.makeText(context , "درحال ثبت نام..." , Toast.LENGTH_SHORT).show()
+        is Resource.Success -> Toast.makeText(context, "ثبت نام با موفقیت انجام شد.", Toast.LENGTH_SHORT).show()
+        is Resource.Failure -> Toast.makeText(context, Resource.Failure().errorMessage + "   " + Resource.Failure().errorCode.toString(), Toast.LENGTH_SHORT).show()
         else -> Toast.makeText(context, "Signup failed2", Toast.LENGTH_SHORT).show()
     }
 }

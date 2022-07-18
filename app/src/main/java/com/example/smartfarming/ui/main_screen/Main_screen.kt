@@ -20,6 +20,7 @@ import com.example.smartfarming.ui.harvest.compose.HarvestCompose
 import com.example.smartfarming.ui.home.composables.HomeCompose
 import com.example.smartfarming.ui.home.composables.MyFAB
 import com.example.smartfarming.ui.main_screen.bottom_navigation.*
+import com.example.smartfarming.ui.profile.ProfileCompose
 
 @Composable
 fun MainScreen(){
@@ -63,7 +64,7 @@ fun MainScreen(){
                         navController = harvestNavController
                     )
                 }
-                composable(NAV_PROFILE) { AppScreen(text = "Profile Screen") }
+                composable(NAV_PROFILE) { ProfileCompose()}
             }
         }
     }

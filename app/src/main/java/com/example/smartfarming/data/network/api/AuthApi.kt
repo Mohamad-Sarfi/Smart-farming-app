@@ -1,6 +1,7 @@
 package com.example.smartfarming.data.network.api
 
 import com.example.smartfarming.data.network.resources.user.LoginResponse
+import com.example.smartfarming.data.network.resources.user.User
 import com.example.smartfarming.data.network.resources.userSignupResponse.SignupResponse
 import okhttp3.RequestBody
 import retrofit2.http.*

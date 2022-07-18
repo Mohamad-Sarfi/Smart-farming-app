@@ -6,6 +6,9 @@ import com.example.smartfarming.data.network.RemoteDataSource
 import com.example.smartfarming.data.repositories.authentication.AuthRepo
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.GardenDb
+import com.example.smartfarming.data.room.cacheMappers.AddressCacheMapper
+import com.example.smartfarming.data.room.cacheMappers.UserCacheMapper
+import com.example.smartfarming.data.room.daos.UserDao
 
 class FarmApplication : Application() {
 
@@ -16,6 +19,9 @@ class FarmApplication : Application() {
     }
 
     protected val remoteDataSource = RemoteDataSource()
-    val authRepo = AuthRepo(remoteDataSource.buildApi(AuthApi::class.java))
+    val authRepo by lazy {
+
+        AuthRepo(remoteDataSource.buildApi(AuthApi::class.java), database.userDao())
+    }
 
 }

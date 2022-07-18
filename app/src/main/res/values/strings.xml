@@ -130,6 +130,7 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="title_activity_garden_profile">GardenProfileActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="enter_username_and_password">نام کاربری و رمز عبور را صحیح وارد کنید</string>
 
 
 </resources>

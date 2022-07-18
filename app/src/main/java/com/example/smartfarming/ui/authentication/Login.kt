@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -24,10 +25,14 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartfarming.MainActivity
@@ -44,10 +49,10 @@ import retrofit2.Response
 @Composable
 fun Login(
     navController: NavHostController,
-    viewModel : LoginViewModel,
-    signIn : () -> Unit
-){
-
+    viewModel: LoginViewModel,
+    loading: Boolean,
+    signIn: () -> Unit,
+) {
     // Username TextField
     val usernameText by viewModel.phoneNumber.observeAsState()
     val passwordText by viewModel.password.observeAsState()
@@ -87,8 +92,7 @@ fun Login(
                     .align(Alignment.CenterHorizontally)
                     .background(Color.White)
                     .width(300.dp)
-                    .padding(vertical = 10.dp)
-                ,
+                    .padding(vertical = 10.dp),
                 label = {
                     Text(text = "نام کاربری", style = MaterialTheme.typography.body1)
                 },
@@ -108,7 +112,7 @@ fun Login(
                     imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
-                    onNext = { focus.moveFocus(FocusDirection.Down)}
+                    onNext = { focus.moveFocus(FocusDirection.Down) }
                 ),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedLabelColor = MainGreen,
@@ -122,15 +126,17 @@ fun Login(
             OutlinedTextField(
                 value = passwordText!!,
                 onValueChange = {
-                    viewModel.password.value = it.trim() },
+                    viewModel.password.value = it.trim()
+                },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .background(Color.White)
                     .width(300.dp)
+
                     .padding(vertical = 10.dp),
                 label = {
                     Text(text = "رمز عبور", style = MaterialTheme.typography.body1)
-                        },
+                },
                 textStyle = MaterialTheme.typography.body1,
                 shape = MaterialTheme.shapes.medium,
                 trailingIcon = {
@@ -145,7 +151,7 @@ fun Login(
                     keyboardType = KeyboardType.Password
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = {focus.clearFocus()}
+                    onDone = { focus.clearFocus() }
                 ),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedLabelColor = MainGreen,
@@ -154,108 +160,123 @@ fun Login(
                 )
             )
 
-                        Text(
-                            text = "فراموشی رمز",
-                            style = MaterialTheme.typography.body1,
-                            color = MaterialTheme.colors.primary,
-                            modifier = Modifier
-                                .clickable {
-                                    // Go to password recovery
-                                }
-                                .align(Alignment.CenterHorizontally)
-                                .padding(6.dp)
-                        )
-
-                        Row(
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        ){
-
-                            OutlinedButton(
-                                onClick = {
-                                    navController.navigate(route = AppScreensEnum.RegisterScreen.name)
-                                },
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .width(150.dp)
-                                    .padding(top = 80.dp, bottom = 20.dp)
-                                    .align(Alignment.CenterVertically)
-                                ,
-                                border = BorderStroke(2.dp, MaterialTheme.colors.primary),
-                                shape = MaterialTheme.shapes.medium
-                            ) {
-                                Text(
-                                    text = "ثبت نام", style = MaterialTheme.typography.body2,
-                                    modifier = Modifier.padding(vertical = 2.dp)
-                                )
-                            }
-
-                            // ******************************************************** Submit button
-                            Button(
-                                onClick = {
-                                    isUsernameEmpty = usernameText!!.length < 4
-                                    isPassEmpty = passwordText!!.length < 6
-
-                                    if (isUsernameEmpty || isPassEmpty){
-                                        Toast.makeText(context, "نام کاربری و رمز عبور را صحیح وارد کنید", Toast.LENGTH_SHORT).show()
-                                    } else{
-                                        signIn()
-                                    }
-                                },
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .width(150.dp)
-                                    .padding(top = 80.dp, bottom = 20.dp)
-                                ,
-                                shape = MaterialTheme.shapes.medium,
-
-                                ) {
-                                Text(
-                                    text = "ورود",
-                                    style = MaterialTheme.typography.body2,
-                                    modifier = Modifier.padding(vertical = 2.dp)
-                                )
-                            }
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .clickable {
-
-                                }
-                        ) {
-                            Text(
-                                text = "با حساب گوگل وارد شوید",
-                                style = MaterialTheme.typography.body1,
-                                modifier = Modifier.align(Alignment.CenterVertically)
-                            )
-
-                            Image(
-                                painter = painterResource(id = R.drawable.search),
-                                contentDescription = "Google",
-                                modifier = Modifier
-                                    .size(35.dp)
-                                    .align(Alignment.CenterVertically)
-                                    .padding(horizontal = 5.dp)
-                            )
-
-                        }
+            Text(
+                text = "فراموشی رمز",
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .clickable {
+                        // Go to password recovery
                     }
+                    .align(Alignment.CenterHorizontally)
+                    .padding(6.dp)
+            )
 
+            Row(
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
 
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate(route = AppScreensEnum.RegisterScreen.name)
+                    },
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .width(150.dp)
+                        .padding(top = 80.dp, bottom = 20.dp)
+                        .align(Alignment.CenterVertically),
+                    border = BorderStroke(2.dp, MaterialTheme.colors.primary),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Text(
+                        text = "ثبت نام", style = MaterialTheme.typography.body2,
+                        modifier = Modifier.padding(vertical = 2.dp)
+                    )
+                }
+
+                // ******************************************************** Submit button
+                Button(
+                    onClick = {
+                        isUsernameEmpty = usernameText!!.length < 4
+                        isPassEmpty = passwordText!!.length < 6
+
+                        if (isUsernameEmpty || isPassEmpty) {
+                            Toast.makeText(
+                                context,
+                                R.string.enter_username_and_password,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            signIn()
+                        }
+
+                    },
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .width(150.dp)
+                        .padding(top = 80.dp, bottom = 20.dp),
+                    shape = MaterialTheme.shapes.medium,
+
+                    ) {
+
+                    showLoginLoading(loading = loading)
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable {
+
+                    }
+            ) {
+                Text(
+                    text = "با حساب گوگل وارد شوید",
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+
+                Image(
+                    painter = painterResource(id = R.drawable.search),
+                    contentDescription = "Google",
+                    modifier = Modifier
+                        .size(35.dp)
+                        .align(Alignment.CenterVertically)
+                        .padding(horizontal = 5.dp)
+                )
+
+            }
         }
 
+
+    }
+
+}
+
+@Composable
+fun showLoginLoading(loading: Boolean) {
+    if (!loading)
+        Text(
+            text = "ورود",
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier.padding(vertical = 2.dp)
+        )
+    else
+        CircularProgressIndicator(
+            modifier = Modifier.padding(2.dp),
+            color = colorResource(id = R.color.white),
+            strokeWidth = Dp(value = 2F)
+        )
 }
 
 
 @Composable
-fun Title(){
+fun Title() {
     Column(
         modifier = Modifier
             .background(MaterialTheme.colors.primary)
             .fillMaxWidth()
-            .padding(horizontal = 35.dp, vertical = 45.dp)
-        ,
+            .padding(horizontal = 35.dp, vertical = 45.dp),
     ) {
         Image(
             painter = painterResource(id = R.drawable.user),
