@@ -316,7 +316,7 @@ fun FertilizerName(viewModel: FertilizationViewModel){
                 viewModel.currentFertilizerName.value = it},
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(55.dp)
                 .padding(horizontal = 0.dp)
                 .background(PurpleLight, RoundedCornerShape(20.dp))
             ,

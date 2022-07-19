@@ -40,8 +40,13 @@ fun DateSelector(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ){
-            Text(text = "تاریخ " + title, style = MaterialTheme.typography.subtitle1, color = color)
+            Text(
+                text = "تاریخ " + title,
+                style = MaterialTheme.typography.subtitle1,
+                color = color
+            )
             Icon(Icons.Outlined.CalendarToday, contentDescription = null, tint = color, modifier = Modifier.padding(start = 10.dp))
+
         }
 
         OutlinedButton(

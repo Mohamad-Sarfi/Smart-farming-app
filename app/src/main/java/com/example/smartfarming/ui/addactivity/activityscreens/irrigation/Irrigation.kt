@@ -159,7 +159,6 @@ fun IrrigationBody(viewModel: IrrigationViewModel){
 
 @Composable
 fun IrrigationBody1(viewModel: IrrigationViewModel){
-    val x = YellowPesticide
     Crossfade(
         viewModel.step.value,
         animationSpec = tween(1000)

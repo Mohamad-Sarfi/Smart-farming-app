@@ -71,7 +71,7 @@ fun SetupNavGraph(
         ){entry ->
             val gardenName = entry.arguments?.getString("gardenName")
             val act = entry.arguments?.getString("act")
-            Others(gardenName = gardenName!!, navController = navController, act = act!!)
+            com.example.smartfarming.ui.addactivity.activityscreens.others.Others(gardenName = gardenName!!)
         }
 
         composable(

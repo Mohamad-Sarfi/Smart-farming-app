@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity.viewmodels
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +12,22 @@ import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class OthersViewModel(val repo : GardenRepo) : ViewModel() {
+
+    val activityName = mutableStateOf("")
+    val step = mutableStateOf(0)
+    val date = mutableStateOf(mutableMapOf("year" to "", "month" to "", "day" to ""))
+
+    fun increaseStep(){
+        if (step.value == 0) step.value++
+    }
+
+    fun decreaseStep(){
+        if (step.value == 1) step.value--
+    }
+
+
+
+
     private val garden = MutableLiveData<Garden>().apply {
         value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
             0.0, 0)
