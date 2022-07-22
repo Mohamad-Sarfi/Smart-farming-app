@@ -17,6 +17,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigation
 import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationLight
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBlue
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
+import com.example.smartfarming.ui.common_composables.PersianDatePicker
 
 @Composable
 fun DateSelector(
@@ -36,7 +37,9 @@ fun DateSelector(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
         Row(
-            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -70,11 +73,12 @@ fun DateSelector(
         }
 
         if (dialog){
-            DatePicker(openDialogue = dialog,
-                changeOpenDialogue = {dialog = !dialog},
-                updateDate = {date ->
-                    setDate(date)
-                })
+//            DatePicker(openDialogue = dialog,
+//                changeOpenDialogue = {dialog = !dialog},
+//                updateDate = {date ->
+//                    setDate(date)
+//                })
+            PersianDatePicker(setOpenDialog = {dialog = it}, updateDate = {setDate(it)})
         }
 
     }

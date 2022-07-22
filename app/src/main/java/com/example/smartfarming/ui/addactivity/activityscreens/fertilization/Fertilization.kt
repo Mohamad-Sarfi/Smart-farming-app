@@ -85,10 +85,11 @@ fun Fertilization(gardenName : String = "محمد"){
 fun FertilizationBody(viewModel: FertilizationViewModel) {
     Card(
         modifier = Modifier
-            .padding(10.dp)
+            .padding(15.dp)
             .fillMaxHeight()
             .fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
+        elevation = 3.dp
     ) {
         ConstraintLayout(
             Modifier

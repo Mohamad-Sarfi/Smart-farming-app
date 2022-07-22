@@ -76,11 +76,12 @@ fun Others(gardenName : String){
 fun OthersBody(viewModel: OthersViewModel){
     Card(
         modifier = Modifier
-            .padding(10.dp)
+            .padding(15.dp)
             .fillMaxHeight()
             .fillMaxWidth()
         ,
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
+        elevation = 3.dp
     ) {
         ConstraintLayout(
             Modifier

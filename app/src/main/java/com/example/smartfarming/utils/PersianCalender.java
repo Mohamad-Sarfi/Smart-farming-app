@@ -242,8 +242,8 @@ public class PersianCalender {
         Locale loc = new Locale("en_US");
         PersianCalender persianCalender = new PersianCalender();
         SolarCalendar sc = persianCalender.new SolarCalendar();
-        return
-                String.valueOf(sc.year) + "/" + String.format(loc, "%02d", sc.month) + "/" + String.format(loc, "%02d", sc.date);
+
+        return String.valueOf(sc.year) + "/" + String.format(loc, "%02d", sc.month) + "/" + String.format(loc, "%02d", sc.date);
     }
 
     public static String getMonthName() {
@@ -266,6 +266,7 @@ public class PersianCalender {
         return map;
     }
 
+
     public static String getMonthNameFromNum(int num){
         String month = "";
         switch (num){
@@ -284,5 +285,6 @@ public class PersianCalender {
         }
         return month;
     }
+
 
 }

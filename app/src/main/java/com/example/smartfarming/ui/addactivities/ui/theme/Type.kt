@@ -35,6 +35,11 @@ val Typography = Typography(
         fontSize = 20.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
+    h1 = TextStyle(
+        fontFamily = sina,
+        fontSize = 60.sp,
+        textDirection = TextDirection.ContentOrRtl
+    ),
     h2 = TextStyle(
         fontFamily = sina,
         fontSize = 34.sp,
