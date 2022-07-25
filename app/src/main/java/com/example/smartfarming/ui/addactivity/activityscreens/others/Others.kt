@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.addactivity.activityscreens.others
 
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -19,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -76,7 +78,7 @@ fun Others(gardenName : String){
 fun OthersBody(viewModel: OthersViewModel){
     Card(
         modifier = Modifier
-            .padding(15.dp)
+            .padding(horizontal = 15.dp, vertical = 30.dp)
             .fillMaxHeight()
             .fillMaxWidth()
         ,
@@ -118,6 +120,10 @@ fun OthersBody(viewModel: OthersViewModel){
                                     viewModel.date.value = it
                                 }
                                 ActivityName(viewModel)
+
+                                AnimatedVisibility(visible = (viewModel.activityName.value == "سایر")) {
+                                    ActivityNameSpecify(viewModel = viewModel)
+                                }
                             }
                         1 ->
                             Column(
@@ -151,7 +157,7 @@ fun OthersBody(viewModel: OthersViewModel){
                         backgroundColor = MainGreen,
                         contentColor = Color.White
                     ),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier
                         .padding(6.dp)
                         .height(55.dp)
@@ -166,10 +172,10 @@ fun OthersBody(viewModel: OthersViewModel){
                         backgroundColor = MainGreen,
                         contentColor = Color.White
                     ),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier
                         .padding(6.dp)
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.9f)
                         .height(55.dp)
                 ) {
                     Text(
@@ -249,6 +255,71 @@ fun ActivityName(viewModel: OthersViewModel){
                 }
             }
         }
+
+    }
+}
+
+@Composable
+fun ActivityNameSpecify(viewModel: OthersViewModel){
+
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = Modifier.padding(20.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.End) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "نوع فعالیت",
+                style = MaterialTheme.typography.subtitle1,
+                color = MainGreen
+            )
+            Icon(
+                Icons.Outlined.Agriculture,
+                contentDescription = null,
+                tint = MainGreen,
+                modifier = Modifier.padding(start = 10.dp)
+            )
+        }
+
+        OutlinedTextField(
+            value = viewModel.activityName.value,
+            onValueChange = {
+                viewModel.activityNameSpecify.value = it},
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp)
+                .padding(horizontal = 0.dp)
+                .background(PurpleLight, RoundedCornerShape(20.dp))
+            ,
+            shape = RoundedCornerShape(20.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = PurpleLight,
+                textColor = Purple700,
+                focusedBorderColor = PurpleLight,
+                unfocusedBorderColor = PurpleLight),
+            textStyle = TextStyle(
+                fontFamily = sina,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp,
+                textDirection = TextDirection.ContentOrRtl,
+                textAlign = TextAlign.Center
+            ),
+            singleLine = true,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
+            )
+        )
 
     }
 }

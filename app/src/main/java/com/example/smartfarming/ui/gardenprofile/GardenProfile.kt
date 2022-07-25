@@ -113,7 +113,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
 
             GardenTitle(gardenName = garden.value!!.name)
             ReportDiagram()
-            Report()
+            Report(navController, garden.value!!.name)
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -151,7 +151,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
 
 
 @Composable
-fun Report(){
+fun Report(navController: NavHostController, gardenName: String){
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(30.dp)
@@ -162,7 +162,9 @@ fun Report(){
         }
         .background(LightGray)
         .clip(MaterialTheme.shapes.large)
-        .clickable { }
+        .clickable {
+            navController.navigate(route = "${AppScreensEnum.GardenReportScreen.name}/${gardenName}")
+        }
         .padding(20.dp)
         ,
         verticalArrangement = Arrangement.Center,

@@ -14,6 +14,7 @@ import java.lang.IllegalArgumentException
 class OthersViewModel(val repo : GardenRepo) : ViewModel() {
 
     val activityName = mutableStateOf("")
+    val activityNameSpecify = mutableStateOf("")
     val step = mutableStateOf(0)
     val date = mutableStateOf(mutableMapOf("year" to "", "month" to "", "day" to ""))
 

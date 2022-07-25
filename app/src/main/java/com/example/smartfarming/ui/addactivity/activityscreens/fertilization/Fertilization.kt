@@ -85,7 +85,7 @@ fun Fertilization(gardenName : String = "محمد"){
 fun FertilizationBody(viewModel: FertilizationViewModel) {
     Card(
         modifier = Modifier
-            .padding(15.dp)
+            .padding(horizontal =  15.dp, vertical = 30.dp)
             .fillMaxHeight()
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -172,7 +172,7 @@ fun FertilizationBody(viewModel: FertilizationViewModel) {
                         backgroundColor = Purple700,
                         contentColor = Color.White
                     ),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier
                         .padding(6.dp)
                         .height(55.dp)
@@ -187,10 +187,10 @@ fun FertilizationBody(viewModel: FertilizationViewModel) {
                         backgroundColor = Purple700,
                         contentColor = Color.White
                     ),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier
                         .padding(6.dp)
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.9f)
                         .height(55.dp)
                 ) {
                     Text(

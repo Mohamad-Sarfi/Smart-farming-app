@@ -82,7 +82,7 @@ fun Irrigation(gardenName : String = "محمد"){
 fun IrrigationBody(viewModel: IrrigationViewModel){
     Card(
         modifier = Modifier
-            .padding(15.dp)
+            .padding(horizontal =  15.dp, vertical = 30.dp)
             .fillMaxHeight()
             .fillMaxWidth()
             ,
@@ -127,7 +127,7 @@ fun IrrigationBody(viewModel: IrrigationViewModel){
                         backgroundColor = BlueIrrigation,
                         contentColor = Color.White
                     ),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier
                         .padding(6.dp)
                         .height(55.dp)
@@ -142,10 +142,10 @@ fun IrrigationBody(viewModel: IrrigationViewModel){
                         backgroundColor = BlueIrrigation,
                         contentColor = Color.White
                     ),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = RoundedCornerShape(20.dp),
                     modifier = Modifier
                         .padding(6.dp)
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.9f)
                         .height(55.dp)
                 ) {
                     Text(text = if (viewModel.step.value == 0 ) "بعدی" else "ثبت اطلاعات", style = MaterialTheme.typography.body2)
