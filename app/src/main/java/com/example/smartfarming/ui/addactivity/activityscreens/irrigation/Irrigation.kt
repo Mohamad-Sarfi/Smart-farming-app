@@ -71,7 +71,7 @@ fun Irrigation(gardenName : String = "محمد"){
             Modifier
                 .fillMaxSize()
                 .background(LightBlue)) {
-            ActivityTitle(gardenName = gardenName, activityName = "آبیاری", icon = painterResource(id = R.drawable.irrigation_line1), BlueIrrigationDark)
+            ActivityTitle(gardenName = gardenName, activityName = "آبیاری", icon =Icons.Default.WaterDrop, BlueIrrigationDark)
             ActivitiesStepBars(viewmodel.step.value, BlueIrrigationDark, BlueIrrigationLight)
             IrrigationBody(viewmodel)
         }

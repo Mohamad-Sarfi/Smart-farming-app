@@ -139,7 +139,7 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            Report()
+            Report(navController, gardenName!!)
         }
         
 

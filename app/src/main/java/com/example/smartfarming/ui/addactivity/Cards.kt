@@ -4,6 +4,11 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Agriculture
+import androidx.compose.material.icons.filled.Compost
+import androidx.compose.material.icons.filled.PestControl
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -65,7 +70,7 @@ fun Cards(
                 .padding(0.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Card("آبیاری",  R.drawable.watering, BlueWatering) {
+            Card("آبیاری",  Icons.Default.WaterDrop, BlueWatering) {
 
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()
@@ -73,7 +78,7 @@ fun Cards(
                     navController.navigate("${AppScreensEnum.IrrigationScreen.name}/$currentGarden")
                 }
             }
-            Card("تغذیه", R.drawable.npk, PurpleFertilizer) {
+            Card("تغذیه", Icons.Default.Compost, PurpleFertilizer) {
 
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()
@@ -87,7 +92,7 @@ fun Cards(
                 .padding(2.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Card("سم پاشی", R.drawable.pesticide_line, YellowPesticide){
+            Card("سم پاشی", Icons.Default.PestControl, YellowPesticide){
 
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()
@@ -95,7 +100,7 @@ fun Cards(
                     navController.navigate(route = "${AppScreensEnum.PesticideScreen.name}/${currentGarden}")
                 }
             }
-            Card("سایر", R.drawable.shovel, MaterialTheme.colors.primary) {
+            Card("سایر", Icons.Default.Agriculture, MaterialTheme.colors.primary) {
                 val act = "act"
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()

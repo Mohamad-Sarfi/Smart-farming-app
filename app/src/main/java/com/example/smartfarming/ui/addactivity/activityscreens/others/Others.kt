@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Agriculture
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.outlined.Agriculture
@@ -65,7 +66,7 @@ fun Others(gardenName : String){
             ActivityTitle(
                 gardenName = gardenName,
                 activityName = "سایر" ,
-                icon = painterResource(id = R.drawable.shovel),
+                icon = Icons.Default.Agriculture,
                 color = MainGreen
             )
             ActivitiesStepBars(step = viewModel.step.value, colorDark = MainGreen, colorLight = LightGreen1)

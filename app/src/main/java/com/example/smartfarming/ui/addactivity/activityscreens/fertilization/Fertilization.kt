@@ -74,7 +74,7 @@ fun Fertilization(gardenName : String = "محمد"){
                 .fillMaxSize()
                 .background(PurpleLight)
         ){
-            ActivityTitle(gardenName = gardenName, activityName = "تغذیه", icon = painterResource(id = R.drawable.npk), Purple700)
+            ActivityTitle(gardenName = gardenName, activityName = "تغذیه", icon = Icons.Outlined.Compost, Purple700)
             ActivitiesStepBars(viewModel.step.value, Purple700, Purple200)
             FertilizationBody(viewModel)
         }

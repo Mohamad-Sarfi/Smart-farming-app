@@ -19,7 +19,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationDark
 fun ActivityTitle(
     gardenName : String,
     activityName : String,
-    icon : Painter,
+    icon : ImageVector,
     color: Color
 ){
     Row(

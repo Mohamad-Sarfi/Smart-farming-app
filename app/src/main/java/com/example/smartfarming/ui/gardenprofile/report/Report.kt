@@ -2,22 +2,28 @@ package com.example.smartfarming.ui.gardenprofile.report
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 
 @Composable
-fun Report(){
+fun Report(
+    navHostController: NavHostController,
+    gardenName : String
+){
 
     Scaffold(
         modifier = Modifier
@@ -27,7 +33,8 @@ fun Report(){
             Modifier
                 .fillMaxSize()
                 .background(LightGray2)
-                .padding(vertical = 30.dp, horizontal = 15.dp),
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 30.dp, horizontal = 5.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -35,6 +42,11 @@ fun Report(){
             Text(text = "باغ محمد", color = MainGreen, style = MaterialTheme.typography.h4)
             GraphsRow()
             WorkerReport()
+            IrrigationReport()
+            HarvestGraph(navHostController, gardenName )
+            PesticideReport()
+            FertilizationReport()
+            OthersReport()
         }
     }
 }
@@ -51,15 +63,23 @@ fun WorkerReport(){
         elevation = 3.dp
     ) {
         Row(
-            Modifier.fillMaxSize(),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 50.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.fillMaxWidth(0.6f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(text = "کارگران استفاده شده", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
                 Text(text = "16" + " نفر", style = MaterialTheme.typography.h3, color = Color.Black, )
             }
-            Icon(Icons.Outlined.Person, contentDescription = null, tint = BorderGray, modifier = Modifier.padding(start = 15.dp).size(55.dp))
+            Icon(Icons.Outlined.Person, contentDescription = null, tint = BorderGray, modifier = Modifier
+                .padding(start = 15.dp)
+                .size(55.dp))
         }
     }
 }
@@ -190,7 +210,135 @@ fun GraphsRow(){
 }
 
 @Composable
-@Preview
-fun PreviewReport(){
-    Report()
+fun IrrigationReport(){
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 5.dp, vertical = 2.dp)
+            .fillMaxWidth()
+            .height(135.dp)
+            .padding(5.dp),
+        shape = RoundedCornerShape(10.dp),
+        elevation = 3.dp
+    ) {
+        Row(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 50.dp)
+            ,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(0.6f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "تعداد آبیاری", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
+                Text(text = "4", style = MaterialTheme.typography.h3, color = Color.Black, )
+            }
+            Icon(Icons.Outlined.WaterDrop, contentDescription = null, tint = BlueIrrigation, modifier = Modifier
+                .padding(start = 15.dp)
+                .size(55.dp))
+        }
+    }
+}
+
+@Composable
+fun PesticideReport(){
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 5.dp, vertical = 2.dp)
+            .fillMaxWidth()
+            .height(135.dp)
+            .padding(5.dp),
+        shape = RoundedCornerShape(10.dp),
+        elevation = 3.dp
+    ) {
+        Row(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 50.dp)
+            ,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(0.6f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "تعداد سمپاشی", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
+                Text(text = "10", style = MaterialTheme.typography.h3, color = Color.Black, )
+            }
+            Icon(Icons.Outlined.PestControl, contentDescription = null, tint = YellowPesticide, modifier = Modifier
+                .padding(start = 15.dp)
+                .size(55.dp))
+        }
+    }
+}
+
+@Composable
+fun FertilizationReport() {
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 5.dp, vertical = 2.dp)
+            .fillMaxWidth()
+            .height(135.dp)
+            .padding(5.dp),
+        shape = RoundedCornerShape(10.dp),
+        elevation = 3.dp
+    ) {
+        Row(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 50.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(0.6f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "تعداد تغذیه", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
+                Text(text = "16", style = MaterialTheme.typography.h3, color = Color.Black, )
+            }
+            Icon(Icons.Outlined.Compost, contentDescription = null, tint = Purple500, modifier = Modifier
+                .padding(start = 15.dp)
+                .size(55.dp))
+        }
+    }
+}
+
+@Composable
+fun OthersReport(){
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 5.dp, vertical = 2.dp)
+            .fillMaxWidth()
+            .height(135.dp)
+            .padding(5.dp),
+        shape = RoundedCornerShape(10.dp),
+        elevation = 3.dp
+    ) {
+        Row(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 50.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(0.6f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "دیگر فعالیتها", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
+                Text(text = "8", style = MaterialTheme.typography.h3, color = Color.Black, )
+            }
+            Icon(Icons.Outlined.Agriculture, contentDescription = null, tint = MainGreen, modifier = Modifier
+                .padding(start = 15.dp)
+                .size(55.dp))
+        }
+    }
 }
