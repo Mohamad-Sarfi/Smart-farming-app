@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.gardenprofile.weather
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.data.network.resources.weather_response.WeatherResponse
@@ -21,6 +22,8 @@ class WeatherViewModel(
 
     private var _garden = MutableLiveData<Garden>()
     val garden : LiveData<Garden> = _garden
+
+    val selectedDay = mutableStateOf(0)
 
     fun getGarden(gardenName : String){
         viewModelScope.launch {

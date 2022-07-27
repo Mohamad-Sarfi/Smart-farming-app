@@ -154,7 +154,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
 fun Report(navController: NavHostController, gardenName: String){
     Column(modifier = Modifier
         .fillMaxWidth()
-        .padding(30.dp)
+        .padding(17.dp)
         .graphicsLayer {
             shadowElevation = 4.dp.toPx()
             shape = RoundedCornerShape(20.dp)
@@ -223,7 +223,7 @@ fun GardenTitle(gardenName : String){
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(30.dp)
+            .padding(20.dp)
         ,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center

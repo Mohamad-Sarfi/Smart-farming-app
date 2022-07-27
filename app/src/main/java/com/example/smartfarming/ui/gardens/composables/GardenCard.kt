@@ -17,11 +17,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Agriculture
-import androidx.compose.material.icons.outlined.Comment
-import androidx.compose.material.icons.outlined.Compost
-import androidx.compose.material.icons.outlined.WaterDrop
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,12 +40,19 @@ import androidx.compose.ui.unit.dp
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.*
+import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
+import com.example.smartfarming.ui.gardens.GardensViewModel
 
 @Composable
-fun GardenCard(garden : Garden){
+fun GardenCard(garden : Garden, viewModel : GardensViewModel){
 
     val context = LocalContext.current
+    viewModel.getTasks(garden.name)
+
+    val tasks = viewModel.gardenTasks.observeAsState()
+
+
 
     Card(
         modifier = Modifier
@@ -97,9 +102,18 @@ fun GardenCard(garden : Garden){
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Row() {
-                    ActivityBadge(BlueIrrigation, Icons.Outlined.WaterDrop)
-                    ActivityBadge(Purple500, Icons.Outlined.Compost)
-                    ActivityBadge(MainGreen, Icons.Outlined.Agriculture)
+                    if (garden.name == "محمد"){
+                        ActivityBadge(BlueIrrigation, Icons.Outlined.WaterDrop)
+                        ActivityBadge(Purple500, Icons.Outlined.Compost)
+                        ActivityBadge(MainGreen, Icons.Outlined.Agriculture)
+                        ActivityBadge(YellowPesticide, Icons.Outlined.PestControl)
+                    } else if (garden.name == "سعید"){
+                        ActivityBadge(Purple500, Icons.Outlined.Compost)
+                        ActivityBadge(BlueIrrigation, Icons.Outlined.WaterDrop)
+                    } else {
+                        ActivityBadge(MainGreen, Icons.Outlined.Agriculture)
+                        ActivityBadge(YellowPesticide, Icons.Outlined.PestControl)
+                    }
                 }
             }
 

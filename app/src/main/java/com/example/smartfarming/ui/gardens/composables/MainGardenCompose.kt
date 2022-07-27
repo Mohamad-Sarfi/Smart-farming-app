@@ -100,7 +100,6 @@ fun GardenCompose(){
                             modifier = Modifier
                                 .padding(10.dp)
                                 .size(50.dp)
-
                         )
 
                         Text(
@@ -113,7 +112,7 @@ fun GardenCompose(){
                 } else {
                     LazyColumn{
                         items(gardenList!!){
-                            GardenCard(garden = it)
+                            GardenCard(garden = it, viewModel)
                         }
                     }
                 }
@@ -122,42 +121,3 @@ fun GardenCompose(){
     }
 }
 
-
-
-
-@Composable
-fun ActivitySticker(job : String){
-
-    val activities = stringArrayResource(id = R.array.garden_activities)
-
-    Box(modifier = Modifier
-        .clip(RoundedCornerShape(100))
-        .background(
-            when (job) {
-                activities[0] -> BlueIrrigation
-                activities[1] -> redFertilizer
-                activities[2] -> greenPesticide
-                activities[3] -> Purple500
-                else -> MainGreen
-            }
-        )
-        .size(55.dp)
-    ) {
-
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun showGardenCard(){
-    GardenCard(garden = Garden(
-        0,
-        "اکبری", 20, "25", "s", "", "",
-        "",
-        5.5,
-    5.5,
-        5.5,
-        0
-        )
-    )
-}
