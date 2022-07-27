@@ -6,14 +6,21 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Agriculture
+import androidx.compose.material.icons.outlined.Compost
+import androidx.compose.material.icons.outlined.PestControl
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -40,7 +47,9 @@ fun TaskCard(task : Task){
                 val intent = Intent(activity, GardenProfileActivity::class.java)
                 intent.putExtra("gardenName", task.garden_name)
                 activity.startActivity(intent)
-            }
+            },
+        shape = RoundedCornerShape(15.dp),
+        elevation = 2.dp
     ) {
         Image(
             painter = painterResource(id = cardBackground(task.activity_type)),
@@ -66,11 +75,11 @@ fun TaskCard(task : Task){
                     }
                     .padding(start = 55.dp)
             ) {
-                Text(text = task.name, color = Color.White, style = MaterialTheme.typography.h4)
+                Text(text = task.name, color = Color.White, style = MaterialTheme.typography.h5)
                 Text(text = task.garden_name, color = Color.White, style = MaterialTheme.typography.body1)
             }
             Icon(
-                painter = painterResource(taskIcon(task.activity_type)),
+                taskIcon(task.activity_type),
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
@@ -79,7 +88,8 @@ fun TaskCard(task : Task){
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                     }
-                    .padding(10.dp)
+                    .size(75.dp)
+                    .padding(5.dp)
                     .padding(end = 20.dp)
             )
         }
@@ -97,12 +107,12 @@ fun cardBackground(activityType : String) : Int {
     }
 }
 
-fun taskIcon(activityType: String) : Int {
+fun taskIcon(activityType: String) : ImageVector {
     return when (activityType) {
-        ActivityTypesEnum.FERTILIZATION.name -> R.drawable.fertilizer_line
-        ActivityTypesEnum.IRRIGATION.name -> R.drawable.irrigation_line1
-        ActivityTypesEnum.PESTICIDE.name -> R.drawable.pesticide_line
-        else -> R.drawable.pruning_line
+        ActivityTypesEnum.FERTILIZATION.name -> Icons.Outlined.Compost
+        ActivityTypesEnum.IRRIGATION.name -> Icons.Outlined.WaterDrop
+        ActivityTypesEnum.PESTICIDE.name -> Icons.Outlined.PestControl
+        else -> Icons.Outlined.Agriculture
     }
 }
 

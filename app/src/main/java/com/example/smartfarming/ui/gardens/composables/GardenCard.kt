@@ -9,11 +9,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Agriculture
+import androidx.compose.material.icons.outlined.Comment
+import androidx.compose.material.icons.outlined.Compost
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +33,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Density
@@ -33,9 +41,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
-import com.example.smartfarming.ui.addactivities.ui.theme.LightGreen
-import com.example.smartfarming.ui.addactivities.ui.theme.LightGreen1
-import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
 
 @Composable
@@ -43,63 +49,76 @@ fun GardenCard(garden : Garden){
 
     val context = LocalContext.current
 
-
-    Row(
+    Card(
         modifier = Modifier
-            .fillMaxWidth(1f)
-            .height(100.dp)
-            .padding(8.dp)
-            .graphicsLayer {
-                shadowElevation = 4.dp.toPx()
-                shape = RoundedCornerShape(25.dp)
-                clip = true
-            }
-            .clickable {
-                    val intent = Intent(context, GardenProfileActivity::class.java)
-                    intent.putExtra("gardenName", garden.name)
-                    context.startActivity(intent)
-            }
-            .background(LightGreen)
-        ,
-    ) {
-        // Profile pic column
-        Column(
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .width(120.dp)
-                .fillMaxHeight()
-                .background(MainGreen),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Icon(painter = painterResource(id = R.drawable.sprout_white),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(40.dp),
-                tint = Color.White
-            )
-
-        }
-
-        // Info column
-        Column(modifier = Modifier
-            .fillMaxHeight()
+            .padding(vertical = 8.dp, horizontal = 15.dp)
             .fillMaxWidth()
-            .padding(10.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = garden.name,
-                style = MaterialTheme.typography.h5,
-                color = MainGreen
-            )
-            Row() {
-
+            .height(110.dp)
+            .clip(MaterialTheme.shapes.large)
+            .clickable {
+                val intent = Intent(context, GardenProfileActivity::class.java)
+                intent.putExtra("gardenName", garden.name)
+                context.startActivity(intent)
+            },
+        shape = MaterialTheme.shapes.large,
+        elevation = 5.dp,
+    ) {
+        Row() {
+            // Profile pic column
+            Column(
+                modifier = Modifier
+                    .width(120.dp)
+                    .fillMaxHeight()
+                    .background(MainGreen),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(painter = painterResource(id = R.drawable.sprout_white),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(40.dp),
+                    tint = Color.White
+                )
             }
+
+            // Info column
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .background(LightGreen),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = garden.name,
+                    style = MaterialTheme.typography.h5,
+                    color = MainGreen,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Row() {
+                    ActivityBadge(BlueIrrigation, Icons.Outlined.WaterDrop)
+                    ActivityBadge(Purple500, Icons.Outlined.Compost)
+                    ActivityBadge(MainGreen, Icons.Outlined.Agriculture)
+                }
+            }
+
         }
 
+    }
+}
+
+@Composable
+fun ActivityBadge(color: Color, icon : ImageVector){
+    Box(
+        modifier = Modifier
+            .padding(4.dp)
+            .clip(CircleShape)
+            .background(color)
+            .padding(2.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(imageVector = icon, contentDescription = null, tint = Color.White)
     }
 }
 
