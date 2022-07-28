@@ -56,7 +56,9 @@ fun GardenCompose(){
             }
         }
     ) {
-        Column() {
+        Column(
+            Modifier.fillMaxSize().background(LightBackground)
+        ) {
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
