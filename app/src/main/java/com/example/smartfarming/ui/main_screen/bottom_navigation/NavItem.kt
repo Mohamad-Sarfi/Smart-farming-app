@@ -9,6 +9,10 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Hardware
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.HomeMax
+import androidx.compose.material.icons.outlined.House
 import androidx.compose.material.icons.rounded.Eco
 import androidx.compose.material.icons.rounded.Grass
 import androidx.compose.material.icons.rounded.Park

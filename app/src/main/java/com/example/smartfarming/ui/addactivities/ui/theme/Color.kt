@@ -10,6 +10,7 @@ val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
 val Teal200 = Color(0xFF03DAC5)
 val MainGreen = Color(0xFF0E9145)
+val MainOrange = Color(0xFFE2882E)
 
 val waterBlueDark = Color(0xFF0082BC)
 val BlueIrrigation = Color(0xFF03A9F4)

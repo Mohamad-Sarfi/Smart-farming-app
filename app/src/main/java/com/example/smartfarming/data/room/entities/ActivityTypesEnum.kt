@@ -4,6 +4,7 @@ enum class ActivityTypesEnum {
     IRRIGATION,
     FERTILIZATION,
     PESTICIDE,
+    Other,
     PRUNE,
     PLOUGH,
 }

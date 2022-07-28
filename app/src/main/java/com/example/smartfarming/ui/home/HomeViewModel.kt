@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.home
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
@@ -7,6 +8,16 @@ import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class HomeViewModel(val repo : GardenRepo) : ViewModel() {
+
+    val selectedActivityGroup = mutableStateOf("all")
+
+    fun setSelectedActivityGroup(newValue : String){
+        if (selectedActivityGroup.value == newValue){
+            selectedActivityGroup.value = "all"
+        } else {
+            selectedActivityGroup.value = newValue
+        }
+    }
 
     fun getGardens() : LiveData<List<Garden>> {
         var gardensList = liveData<List<Garden>>(){}

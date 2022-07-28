@@ -66,7 +66,7 @@ fun GardenCard(garden : Garden, viewModel : GardensViewModel){
                 context.startActivity(intent)
             },
         shape = MaterialTheme.shapes.large,
-        elevation = 5.dp,
+        elevation = 1.dp,
     ) {
         Row() {
             // Profile pic column
@@ -91,7 +91,7 @@ fun GardenCard(garden : Garden, viewModel : GardensViewModel){
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth()
-                    .background(LightGreen),
+                    .background(LightGreen3),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

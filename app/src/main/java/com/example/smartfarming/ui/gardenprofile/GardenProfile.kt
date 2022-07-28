@@ -106,7 +106,8 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(LightBackground),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

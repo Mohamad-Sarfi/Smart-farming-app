@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.addactivity
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.AppScreensEnum
+import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
 import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModel
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
@@ -54,6 +56,7 @@ fun Cards(
             .fillMaxSize()
             .fillMaxWidth()
             .fillMaxHeight()
+            .background(LightBackground)
             .padding(top = 50.dp)
     ) {
         Text(

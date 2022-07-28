@@ -54,40 +54,42 @@ fun ToDos(
         )
     )
 
-    Row(
+    Card(
         modifier = Modifier
+            .padding(vertical = 5.dp, horizontal = 15.dp)
             .fillMaxWidth()
             .height(cardHeight)
-            .padding(horizontal = 10.dp, vertical = 4.dp)
-            .graphicsLayer {
-                shadowElevation = 4.dp.toPx()
-                shape = RoundedCornerShape(15.dp)
-                clip = true
-            }
-            .background(Color.White)
-            .clip(MaterialTheme.shapes.large)
             .clickable {
                 expanded = !expanded
-            }
-            .padding(15.dp)
-        ,
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        Box(modifier = Modifier
-            .fillMaxHeight()
-            .width(4.dp)
-            .background(barColor)
-            .padding(vertical = 2.dp, horizontal = 5.dp)
-        )
+            },
+        elevation = 2.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 4.dp)
+                .background(Color.White)
+                .padding(15.dp)
+            ,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Box(modifier = Modifier
+                .fillMaxHeight()
+                .width(4.dp)
+                .background(barColor)
+                .padding(vertical = 2.dp, horizontal = 5.dp)
+            )
 
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = task.name, style = MaterialTheme.typography.body2, color = BorderGray)
-            DetailsText(expanded, task.description)
-            Buttons(expanded, barColor, task.activity_type, gardenName = task.garden_name, navController = navController)
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = task.name, style = MaterialTheme.typography.body2, color = BorderGray)
+                DetailsText(expanded, task.description)
+                Buttons(expanded, barColor, task.activity_type, gardenName = task.garden_name, navController = navController)
+            }
+
         }
 
     }

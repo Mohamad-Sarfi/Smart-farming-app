@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowRight
@@ -21,6 +24,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -32,7 +38,9 @@ import com.example.smartfarming.data.room.entities.Article
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
+import com.example.smartfarming.ui.addactivities.ui.theme.LightGreen3
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.addactivities.ui.theme.MainOrange
 import com.example.smartfarming.ui.addgarden.AddGarden
 import com.example.smartfarming.ui.home.HomeViewModel
 import com.example.smartfarming.ui.home.HomeViewModelFactory
@@ -100,30 +108,51 @@ fun HomeCompose(){
         )
 
     }
-
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(LightGreen3),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
         Column(
             modifier = Modifier
+                .padding(0.dp)
                 .fillMaxWidth()
-                .fillMaxHeight()
-                .background(LightBackground)
+                .padding(top = 80.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ){
-            Column(
-                modifier = Modifier
-                    .padding(5.dp)
-                    .fillMaxHeight(0.55f)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.End
-
-            ){
-                TasksColumn(tasks, gardensList)
+            //TasksColumn(tasks, gardensList)
+            Card(
+                Modifier
+                    .padding(bottom = 30.dp)
+                    .width(230.dp),
+                backgroundColor = MainGreen,
+                shape = RoundedCornerShape(30.dp)
+            ) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            val intent = Intent(activity, AddGarden::class.java)
+                            activity.startActivity(intent)
+                        }
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = null, tint = Color.White, modifier = Modifier.size(30.dp))
+                    Text(text = "افزودن باغ جدید", color = Color.White, style = MaterialTheme.typography.body1)
+                }
             }
-            FarmingArticlesPreview(articlesList = listOf())
+            Image(painter = painterResource(id = R.drawable.farmer2), contentDescription = null, modifier = Modifier.size(150.dp))
         }
+        //FarmingArticlesPreview(articlesList = listOf())
+        TasksRow(tasks, viewModel)
     }
+
 }
 
 @Composable
@@ -234,3 +263,106 @@ fun FarmingArticlesPreview(articlesList : List<Article>?){
 
 }
 
+@Composable
+fun TasksRow(tasks: List<Task>, viewModel: HomeViewModel){
+    Card(
+        modifier = Modifier.fillMaxHeight(1f),
+        backgroundColor = LightBackground,
+        shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
+        elevation = 2.dp
+    ) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(end = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(
+                    text = "باغداری شما",
+                    style = MaterialTheme.typography.h5,
+                    modifier = Modifier
+                        .padding(vertical = 15.dp, horizontal = 10.dp),
+                    color = MainGreen
+                )
+                Icon(
+                    Icons.Default.ArrowDownward,
+                    contentDescription = "",
+                    tint = MainGreen
+                )
+            }
+
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp, horizontal = 10.dp)
+                ,
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                ActivityGroupSelector(
+                    ActivityTypesEnum.IRRIGATION.name,
+                    viewModel.selectedActivityGroup.value)
+                {viewModel.setSelectedActivityGroup(it)}
+
+                ActivityGroupSelector(
+                    ActivityTypesEnum.FERTILIZATION.name,
+                    viewModel.selectedActivityGroup.value)
+                {viewModel.setSelectedActivityGroup(it)}
+
+                ActivityGroupSelector(
+                    ActivityTypesEnum.PESTICIDE.name,
+                    viewModel.selectedActivityGroup.value)
+                {viewModel.setSelectedActivityGroup(it)}
+
+                ActivityGroupSelector(
+                    ActivityTypesEnum.Other.name,
+                    viewModel.selectedActivityGroup.value)
+                {viewModel.setSelectedActivityGroup(it)}
+            }
+
+            LazyRow(){
+                items(tasks){ item ->
+                    if (viewModel.selectedActivityGroup.value == "all"){
+                        TaskCard2(item)
+                    } else if (item.activity_type == viewModel.selectedActivityGroup.value){
+                        TaskCard2(item)
+                    }
+
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+fun ActivityGroupSelector(activityName : String ,
+                          selectedActivity : String,
+                          setSelectedActivity : (String) -> Unit
+){
+    Box(
+        modifier = Modifier
+            .padding(5.dp)
+            .clip(CircleShape)
+            .background(
+                if (activityName == selectedActivity) taskIconTint(activityName) else Color.White
+            )
+            .clickable {
+                setSelectedActivity(activityName)
+            }
+            .padding(8.dp)
+    ) {
+        Icon(
+            taskIcon2(activityName),
+            contentDescription = null,
+            modifier = Modifier.size(35.dp),
+            tint = if (activityName == selectedActivity) Color.White else taskIconTint(activityName).copy(alpha = 0.7f)
+        )
+    }
+}

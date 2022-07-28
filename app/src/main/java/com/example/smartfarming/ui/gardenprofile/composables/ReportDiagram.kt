@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.gardenprofile.composables
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
 import com.example.smartfarming.ui.addactivities.ui.theme.PurpleFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
@@ -36,6 +38,8 @@ fun ReportDiagram(){
                 .width(200.dp)
                 .height(202.dp)
                 .padding(10.dp),
+            elevation = 0.dp,
+            backgroundColor = LightBackground
         ) {
             CircularProgressIndicator(
                 progress = irrigationProgress,
