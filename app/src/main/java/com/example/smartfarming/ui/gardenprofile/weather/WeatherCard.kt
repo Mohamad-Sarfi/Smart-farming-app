@@ -122,8 +122,8 @@ fun WeatherInfoCard(
                     start.linkTo(parent.start)
                     top.linkTo(date.bottom)
                 }
-                .padding(end = 30.dp, top = 10.dp)
-                .size(120.dp)
+                .padding(end = 30.dp, top = 10.dp, start = 10.dp)
+                .size(110.dp)
         )
         Text(
             text = "${(weatherResponse.current.temp - 273.15).toInt()}°",
@@ -138,7 +138,9 @@ fun WeatherInfoCard(
     }
 
     Row(
-        Modifier.fillMaxWidth(),
+        Modifier
+            .padding(vertical = 5.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -155,7 +157,7 @@ fun TemperatureBar(
 ){
     Row(
         Modifier
-            .padding(top = 10.dp)
+            .padding(top = 13.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(15.dp))
             .background(BlueWatering.copy(0.3f))

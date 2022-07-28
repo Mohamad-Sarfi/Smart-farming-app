@@ -37,7 +37,7 @@ fun ArticleItem(article: Article){
             context.startActivity(intent)
         }
         ,
-        elevation = 8.dp,
+        elevation = 3.dp,
     ) {
         ConstraintLayout(
             modifier = Modifier

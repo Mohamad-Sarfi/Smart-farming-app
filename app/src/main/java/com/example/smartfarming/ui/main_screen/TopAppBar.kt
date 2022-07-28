@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addgarden.AddGarden
 import com.example.smartfarming.ui.tasks_notification.TasksNotificationActivity
@@ -38,7 +39,7 @@ fun TopAppBar(){
 
     Row(modifier = Modifier
         .fillMaxWidth()
-        .background(Color.White)
+        .background(LightBackground)
         .padding(vertical = 15.dp, horizontal = 35.dp)
         ,
         verticalAlignment = Alignment.CenterVertically,

@@ -61,7 +61,7 @@ fun Others(gardenName : String){
         Column(
             Modifier
                 .fillMaxSize()
-                .background(LightGreen)
+                .background(LightGreen3)
         ) {
             ActivityTitle(
                 gardenName = gardenName,
