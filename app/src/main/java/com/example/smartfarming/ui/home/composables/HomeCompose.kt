@@ -3,7 +3,6 @@ package com.example.smartfarming.ui.home.composables
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.activity.viewModels
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,13 +18,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -38,14 +35,12 @@ import com.example.smartfarming.data.room.entities.Article
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
-import com.example.smartfarming.ui.addactivities.ui.theme.LightGreen3
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.addactivities.ui.theme.MainOrange
 import com.example.smartfarming.ui.addgarden.AddGarden
 import com.example.smartfarming.ui.home.HomeViewModel
 import com.example.smartfarming.ui.home.HomeViewModelFactory
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeCompose(){
 
@@ -106,8 +101,30 @@ fun HomeCompose(){
                 seen = false
             )
         )
-
     }
+
+    val backDropState = rememberBackdropScaffoldState( BackdropValue.Concealed)
+
+    BackdropScaffold(
+        appBar = { 
+                 Row(
+                     Modifier.fillMaxWidth(),
+                     verticalAlignment = Alignment.CenterVertically,
+                     horizontalArrangement = Arrangement.Center
+                 ) {
+                     Text(text = "افزودن باغ", style = MaterialTheme.typography.body2, color = Color.White)
+                 }
+        },
+        backLayerContent = { BackdropBackLayer(activity) },
+        scaffoldState = backDropState,
+        frontLayerContent = {TasksRow(tasks, viewModel)},
+        frontLayerElevation = 4.dp,
+        persistentAppBar = false,
+        frontLayerScrimColor = Color.Unspecified
+    ) {
+        SnackbarHost(hostState = it)
+    }
+    /*
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -152,7 +169,44 @@ fun HomeCompose(){
         //FarmingArticlesPreview(articlesList = listOf())
         TasksRow(tasks, viewModel)
     }
+    */
+}
 
+@Composable
+fun BackdropBackLayer(activity: Activity){
+    Column(
+        modifier = Modifier
+            .padding(0.dp)
+            .fillMaxWidth()
+            .padding(top = 80.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ){
+        //TasksColumn(tasks, gardensList)
+        Card(
+            Modifier
+                .padding(bottom = 30.dp)
+                .width(230.dp),
+            backgroundColor = LightBackground,
+            shape = RoundedCornerShape(30.dp)
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        val intent = Intent(activity, AddGarden::class.java)
+                        activity.startActivity(intent)
+                    }
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null, tint = MainGreen, modifier = Modifier.size(30.dp))
+                Text(text = "افزودن باغ جدید", color = MainGreen, style = MaterialTheme.typography.body1)
+            }
+        }
+        Image(painter = painterResource(id = R.drawable.farmer2), contentDescription = null, modifier = Modifier.size(150.dp))
+    }
 }
 
 @Composable
@@ -268,7 +322,6 @@ fun TasksRow(tasks: List<Task>, viewModel: HomeViewModel){
     Card(
         modifier = Modifier.fillMaxHeight(1f),
         backgroundColor = LightBackground,
-        shape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
         elevation = 2.dp
     ) {
         Column(
