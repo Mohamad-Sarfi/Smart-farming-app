@@ -66,7 +66,7 @@ fun GardenCard(garden : Garden, viewModel : GardensViewModel){
                 context.startActivity(intent)
             },
         shape = MaterialTheme.shapes.large,
-        elevation = 1.dp,
+        elevation = 3.dp,
     ) {
         Row() {
             // Profile pic column

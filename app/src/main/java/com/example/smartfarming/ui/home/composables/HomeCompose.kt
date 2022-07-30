@@ -4,9 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.*
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -36,6 +35,8 @@ import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.addactivities.ui.theme.MainOrange
+import com.example.smartfarming.ui.addactivities.ui.theme.Purple500
 import com.example.smartfarming.ui.addgarden.AddGarden
 import com.example.smartfarming.ui.home.HomeViewModel
 import com.example.smartfarming.ui.home.HomeViewModelFactory
@@ -103,7 +104,7 @@ fun HomeCompose(){
         )
     }
 
-    val backDropState = rememberBackdropScaffoldState( BackdropValue.Concealed)
+    val backDropState = rememberBackdropScaffoldState( BackdropValue.Revealed)
 
     BackdropScaffold(
         appBar = { 
@@ -117,7 +118,7 @@ fun HomeCompose(){
         },
         backLayerContent = { BackdropBackLayer(activity) },
         scaffoldState = backDropState,
-        frontLayerContent = {TasksRow(tasks, viewModel)},
+        frontLayerContent = {TasksRow(tasks, viewModel, backDropState)},
         frontLayerElevation = 4.dp,
         persistentAppBar = false,
         frontLayerScrimColor = Color.Unspecified
@@ -178,7 +179,7 @@ fun BackdropBackLayer(activity: Activity){
         modifier = Modifier
             .padding(0.dp)
             .fillMaxWidth()
-            .padding(top = 80.dp),
+            .padding(top = 60.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
@@ -187,7 +188,7 @@ fun BackdropBackLayer(activity: Activity){
             Modifier
                 .padding(bottom = 30.dp)
                 .width(230.dp),
-            backgroundColor = LightBackground,
+            backgroundColor = MainOrange,
             shape = RoundedCornerShape(30.dp)
         ) {
             Row(
@@ -201,11 +202,13 @@ fun BackdropBackLayer(activity: Activity){
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Icon(Icons.Default.Add, contentDescription = null, tint = MainGreen, modifier = Modifier.size(30.dp))
-                Text(text = "افزودن باغ جدید", color = MainGreen, style = MaterialTheme.typography.body1)
+                Icon(Icons.Default.Add, contentDescription = null, tint = Color.White, modifier = Modifier.size(30.dp))
+                Text(text = "افزودن باغ جدید", color = Color.White, style = MaterialTheme.typography.body1)
             }
         }
-        Image(painter = painterResource(id = R.drawable.farmer2), contentDescription = null, modifier = Modifier.size(150.dp))
+        Image(painter = painterResource(id = R.drawable.sprout_white), contentDescription = null, modifier = Modifier
+            .size(135.dp)
+            .padding(15.dp))
     }
 }
 
@@ -317,8 +320,12 @@ fun FarmingArticlesPreview(articlesList : List<Article>?){
 
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TasksRow(tasks: List<Task>, viewModel: HomeViewModel){
+fun TasksRow(tasks: List<Task>, viewModel: HomeViewModel, backdropState : BackdropScaffoldState){
+
+
+
     Card(
         modifier = Modifier.fillMaxHeight(1f),
         backgroundColor = LightBackground,
@@ -327,7 +334,7 @@ fun TasksRow(tasks: List<Task>, viewModel: HomeViewModel){
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding(10.dp)
         ) {
             Row(
                 Modifier
@@ -350,48 +357,83 @@ fun TasksRow(tasks: List<Task>, viewModel: HomeViewModel){
                 )
             }
 
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp, horizontal = 10.dp)
-                ,
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+            Crossfade(
+                backdropState.currentValue,
+                animationSpec = tween(500)
             ) {
-                ActivityGroupSelector(
-                    ActivityTypesEnum.IRRIGATION.name,
-                    viewModel.selectedActivityGroup.value)
-                {viewModel.setSelectedActivityGroup(it)}
-
-                ActivityGroupSelector(
-                    ActivityTypesEnum.FERTILIZATION.name,
-                    viewModel.selectedActivityGroup.value)
-                {viewModel.setSelectedActivityGroup(it)}
-
-                ActivityGroupSelector(
-                    ActivityTypesEnum.PESTICIDE.name,
-                    viewModel.selectedActivityGroup.value)
-                {viewModel.setSelectedActivityGroup(it)}
-
-                ActivityGroupSelector(
-                    ActivityTypesEnum.Other.name,
-                    viewModel.selectedActivityGroup.value)
-                {viewModel.setSelectedActivityGroup(it)}
-            }
-
-            LazyRow(){
-                items(tasks){ item ->
-                    if (viewModel.selectedActivityGroup.value == "all"){
-                        TaskCard2(item)
-                    } else if (item.activity_type == viewModel.selectedActivityGroup.value){
-                        TaskCard2(item)
-                    }
-
+                when(it){
+                    BackdropValue.Revealed -> RevealedFrontLayer(tasks, viewModel)
+                    BackdropValue.Concealed -> ConcealedFrontLayer(tasks, viewModel)
                 }
             }
         }
+        
     }
 
+}
+
+
+@Composable
+fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel){
+    Column() {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp, horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            ActivityGroupSelector(
+                ActivityTypesEnum.IRRIGATION.name,
+                viewModel.selectedActivityGroup.value
+            )
+            { viewModel.setSelectedActivityGroup(it) }
+
+            ActivityGroupSelector(
+                ActivityTypesEnum.FERTILIZATION.name,
+                viewModel.selectedActivityGroup.value
+            )
+            { viewModel.setSelectedActivityGroup(it) }
+
+            ActivityGroupSelector(
+                ActivityTypesEnum.PESTICIDE.name,
+                viewModel.selectedActivityGroup.value
+            )
+            { viewModel.setSelectedActivityGroup(it) }
+
+            ActivityGroupSelector(
+                ActivityTypesEnum.Other.name,
+                viewModel.selectedActivityGroup.value
+            )
+            { viewModel.setSelectedActivityGroup(it) }
+        }
+
+        LazyRow() {
+            items(tasks) { item ->
+                if (viewModel.selectedActivityGroup.value == "all") {
+                    TaskCard2(item)
+                } else if (item.activity_type == viewModel.selectedActivityGroup.value) {
+                    TaskCard2(item)
+                }
+
+            }
+        }
+    }
+}
+
+@Composable
+fun ConcealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel){
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(5.dp)
+    ) {
+        RevealedRow(tasks, ActivityTypesEnum.FERTILIZATION.name, viewModel)
+        RevealedRow(tasks, ActivityTypesEnum.IRRIGATION.name, viewModel)
+        RevealedRow(tasks, ActivityTypesEnum.PESTICIDE.name, viewModel)
+        RevealedRow(tasks, ActivityTypesEnum.Other.name, viewModel)
+    }
 }
 
 @Composable
@@ -417,5 +459,46 @@ fun ActivityGroupSelector(activityName : String ,
             modifier = Modifier.size(35.dp),
             tint = if (activityName == selectedActivity) Color.White else taskIconTint(activityName).copy(alpha = 0.7f)
         )
+    }
+}
+
+@Composable
+fun RevealedRow(tasks: List<Task>, activityName: String, viewModel: HomeViewModel){
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+        ,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Box(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Color.White
+                    )
+                    .padding(8.dp)
+            ) {
+                Icon(
+                    taskIcon2(activityName),
+                    contentDescription = null,
+                    modifier = Modifier.size(35.dp),
+                    tint = taskIconTint(activityName).copy(alpha = 0.7f)
+                )
+            }
+            Text(text = viewModel.taskName(activityName), style = MaterialTheme.typography.body1, color = viewModel.taskColor(activityName), modifier = Modifier.padding(4.dp))
+
+        }
+
+        LazyRow{
+            items(tasks){ item ->
+                if (item.activity_type == activityName){
+                    TaskCard2(task = item)
+                }
+            }
+        }
     }
 }

@@ -3,12 +3,18 @@ package com.example.smartfarming.ui.harvest.compose
 import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Archive
+import androidx.compose.material.icons.filled.Eco
+import androidx.compose.material.icons.filled.Inventory2
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -21,6 +27,7 @@ import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.common_composables.CommonTopBar
 import com.example.smartfarming.ui.harvest.HarvestViewModel
 import com.example.smartfarming.ui.harvest.HarvestViewModelFactory
 
@@ -28,11 +35,11 @@ import com.example.smartfarming.ui.harvest.HarvestViewModelFactory
 fun HarvestCompose(
     navController: NavHostController
 ){
-
-
-
     Scaffold(
         Modifier.fillMaxSize(),
+        topBar = {
+            CommonTopBar(title = "بایگانی محصولات", Icons.Outlined.Inventory2)
+        }
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (pic, archive, add) = createRefs()
@@ -44,6 +51,7 @@ fun HarvestCompose(
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
+
                     }
                     .width(400.dp)
                     .padding(top = 100.dp)
@@ -106,10 +114,6 @@ fun HarvestCompose(
                 )
             }
         }
-
-
-
-
-
-        }
     }
+}
+

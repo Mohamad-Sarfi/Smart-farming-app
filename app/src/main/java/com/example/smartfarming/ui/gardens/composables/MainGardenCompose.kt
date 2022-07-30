@@ -10,11 +10,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Eco
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Eco
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +27,7 @@ import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
+import com.example.smartfarming.ui.common_composables.CommonTopBar
 import com.example.smartfarming.ui.gardens.GardensViewModel
 import com.example.smartfarming.ui.gardens.GardensViewModelFactory
 import com.example.smartfarming.ui.home.composables.MyFAB
@@ -48,8 +51,7 @@ fun GardenCompose(){
     }
 
     Scaffold(
-        topBar = {
-        },
+        topBar = { CommonTopBar(title = "باغ های شما", icon = Icons.Outlined.Eco)},
         floatingActionButton = {
             MyFAB(context = context, fabExtended = fabExtended) {
                 fabExtended =! fabExtended
@@ -57,29 +59,12 @@ fun GardenCompose(){
         }
     ) {
         Column(
-            Modifier.fillMaxSize().background(LightBackground)
+            Modifier
+                .fillMaxSize()
+                .background(LightBackground)
+                .padding(vertical = 20.dp, horizontal = 10.dp)
         ) {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "باغ های شما",
-                    style = MaterialTheme.typography.h3,
-                    color = MainGreen
-                )
 
-                Icon(
-                    Icons.Default.Eco,
-                    contentDescription = null,
-                    tint = MainGreen,
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                        .size(50.dp)
-                )
-            }
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

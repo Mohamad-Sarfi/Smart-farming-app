@@ -73,6 +73,7 @@ fun AddHarvestCompose(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
+                    bottom.linkTo(body.top)
                 }
                 .padding(10.dp)
                 .size(100.dp)
