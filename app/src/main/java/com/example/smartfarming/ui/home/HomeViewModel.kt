@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.home
 
+import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.*
@@ -24,6 +25,7 @@ class HomeViewModel(val repo : GardenRepo) : ViewModel() {
             selectedActivityGroup.value = newValue
         }
     }
+
 
     fun getGardens() : LiveData<List<Garden>> {
         var gardensList = liveData<List<Garden>>(){}

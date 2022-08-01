@@ -38,6 +38,11 @@ class GardenRepo(
         return gardenDao.getGardenByName(gardenName)
     }
 
+    @WorkerThread
+    suspend fun getGardenById(gardenId : Int) : Garden {
+        return gardenDao.getGardenById(gardenId)
+    }
+
     // Task repo
     @WorkerThread
     suspend fun insertTask(task : Task){

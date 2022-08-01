@@ -30,6 +30,7 @@ fun HarvestGraph(
     navController: NavHostController,
     gardenName : String
 ){
+    
     Card(
         modifier = Modifier
             .padding(horizontal = 5.dp, vertical = 2.dp)
@@ -54,7 +55,8 @@ fun HarvestGraph(
             Row(
                 Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 10.dp),
+                    .padding(horizontal = 10.dp)
+                    ,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -63,7 +65,7 @@ fun HarvestGraph(
                 val normalized = normalizer(harvestList)
                 LazyRow{
                     items(harvestList.size){ index ->
-                            Bars(value = normalized[index], year = yearList[index])
+                            Bars(value = normalized[index], year = yearList[index], harvestList[index])
                     }
                 }
             }
@@ -72,7 +74,7 @@ fun HarvestGraph(
 }
 
 @Composable
-fun Bars(value : Float, year: String){
+fun Bars(value : Float, year: String, realValue : Double){
 
     val maxHeight = 130
     var clicked by remember {
@@ -89,13 +91,18 @@ fun Bars(value : Float, year: String){
     ) {
         Box(
             modifier = Modifier
-                .width(30.dp)
+                .width(35.dp)
                 .height((value * maxHeight).dp)
                 .background(MainGreen, RoundedCornerShape(4.dp))
                 .clip(RoundedCornerShape(4.dp))
-                .clickable { clicked = !clicked }
-        )
-        Text(text = year, color = Color.Black, style = MaterialTheme.typography.subtitle1, modifier = Modifier.padding(top = 10.dp))
+                .clickable { clicked = !clicked },
+            contentAlignment = Alignment.Center
+        ){
+            if (clicked){
+                Text(text = realValue.toInt().toString(), color = Color.White, modifier = Modifier.rotate(-90f), style = MaterialTheme.typography.subtitle1)
+            }
+        }
+        Text(text = year, color = Color.Black, style = MaterialTheme.typography.subtitle2, modifier = Modifier.padding(top = 10.dp))
     }
 }
 

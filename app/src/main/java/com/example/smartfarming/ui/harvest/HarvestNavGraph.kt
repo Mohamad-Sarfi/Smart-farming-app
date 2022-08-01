@@ -21,7 +21,7 @@ import com.example.smartfarming.ui.harvest.harvest_archive.GardenHarvestScreen
 fun HarvestNavGraph(
     navController: NavHostController
 ){
-    val homeScreen = AppScreensEnum.HarvestHomeScreen.name
+    val harvesthomeScreen = AppScreensEnum.HarvestHomeScreen.name
     val addScreen = AppScreensEnum.AddHarvestScreen.name
     val archiveScreen = AppScreensEnum.ArchiveHarvestScreen.name
 
@@ -30,9 +30,9 @@ fun HarvestNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = homeScreen
+        startDestination = harvesthomeScreen
     ){
-        composable(route = homeScreen){
+        composable(route = harvesthomeScreen){
             HarvestCompose(navController = navController)
         }
 

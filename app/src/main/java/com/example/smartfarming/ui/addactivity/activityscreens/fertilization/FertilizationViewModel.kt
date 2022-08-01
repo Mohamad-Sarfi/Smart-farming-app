@@ -63,9 +63,15 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
         }
     }
 
-    fun getGarden(gardenName : String) : MutableLiveData<Garden> {
-        getGardenByName(gardenName)
+    fun getGarden(gardenId : Int) : MutableLiveData<Garden> {
+        getGardenById(gardenId)
         return garden
+    }
+
+    fun getGardenById(gardenId: Int) {
+        viewModelScope.launch {
+            garden.value = repo.getGardenById(gardenId)
+        }
     }
 
 

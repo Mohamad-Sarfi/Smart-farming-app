@@ -101,6 +101,7 @@ fun GardenSpinner(
                         expanded = false
                         updateCurrentGarden(garden)
 
+
                     }) {
                         Text(
                             text = garden,

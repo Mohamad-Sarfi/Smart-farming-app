@@ -2,9 +2,12 @@ package com.example.smartfarming.ui.gardens.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -32,65 +35,77 @@ import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
+import com.example.smartfarming.ui.gardenprofile.GardenProfileViewModel
 import com.example.smartfarming.ui.gardenprofile.composables.ReportDiagram
 import com.example.smartfarming.ui.gardenprofile.composables.ToDos
+import com.example.smartfarming.ui.gardens.GardensViewModel
 import com.example.smartfarming.ui.home.composables.MyFAB
+import com.example.smartfarming.utils.getTaskList
 
 @Composable
-fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
+fun GardenProfile(garden : State<Garden?>, navController: NavHostController, viewModel: GardenProfileViewModel){
     val context = LocalContext.current
     var fabExtended by remember{
         mutableStateOf(false)
     }
 
-    val tasks = listOf<Task>(
-        Task(0,
-            "ولک پاشی",
-            activity_type = ActivityTypesEnum.FERTILIZATION.name,
-            description = "به دلیل عدم تامین نیاز سرمایی",
-            start_date = "",
-            finish_date = "",
-            garden_name = "محمد",
-            recommendations = "روغن ولک",
-            user_id = 5,
-            seen = false
-        ),
-        Task(0,
-            "سم پاشی",
-            activity_type = ActivityTypesEnum.PESTICIDE.name,
-            description = "مبارزه با پسیل",
-            start_date = "",
-            finish_date = "",
-            garden_name = "محمد",
-            recommendations = "روغن ولک",
-            user_id = 5,
-            seen = false
+    viewModel.getAllGardens()
+    val gardenList = viewModel.gardensList.collectAsState(initial = listOf())
+
+    var tasks = listOf<Task>()
+
+    if (gardenList.value.isNullOrEmpty()){
+        tasks = listOf<Task>(
+            Task(0,
+                "ولک پاشی",
+                activity_type = ActivityTypesEnum.FERTILIZATION.name,
+                description = "به دلیل عدم تامین نیاز سرمایی",
+                start_date = "",
+                finish_date = "",
+                garden_name = "محمد",
+                recommendations = "روغن ولک",
+                user_id = 5,
+                seen = false
+            ),
+            Task(0,
+                "سم پاشی",
+                activity_type = ActivityTypesEnum.PESTICIDE.name,
+                description = "مبارزه با پسیل",
+                start_date = "",
+                finish_date = "",
+                garden_name = "محمد",
+                recommendations = "روغن ولک",
+                user_id = 5,
+                seen = false
+            )
+            ,
+            Task(0,
+                "آبیاری اسفند",
+                activity_type = ActivityTypesEnum.IRRIGATION.name,
+                description = "موعد آبیاری اسفند",
+                start_date = "",
+                finish_date = "",
+                garden_name = "محمد",
+                recommendations = "",
+                user_id = 5,
+                seen = false
+            )
+            ,
+            Task(0,
+                "کود دامی",
+                activity_type = ActivityTypesEnum.FERTILIZATION.name,
+                description = "با توجه به ماده عالی خاک نیاز به تامین کود دامی",
+                start_date = "",
+                finish_date = "",
+                garden_name = "اکبری",
+                recommendations = "کود گاو",
+                user_id = 5,
+                seen = false
+            )
         )
-        ,
-        Task(0,
-            "آبیاری اسفند",
-            activity_type = ActivityTypesEnum.IRRIGATION.name,
-            description = "موعد آبیاری اسفند",
-            start_date = "",
-            finish_date = "",
-            garden_name = "محمد",
-            recommendations = "",
-            user_id = 5,
-            seen = false
-        )
-        ,
-        Task(0,
-            "کود دامی",
-            activity_type = ActivityTypesEnum.FERTILIZATION.name,
-            description = "با توجه به ماده عالی خاک نیاز به تامین کود دامی",
-            start_date = "",
-            finish_date = "",
-            garden_name = "اکبری",
-            recommendations = "کود گاو",
-            user_id = 5,
-            seen = false
-        )
-    )
+    } else {
+        tasks = getTaskList(gardenList.value)
+    }
 
 
     Scaffold(
@@ -101,12 +116,14 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
             MyFAB(context = context, fabExtended = fabExtended) {
                 fabExtended = !fabExtended
             }
-        }
+        },
+        backgroundColor = LightBackground
 
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .scrollable(rememberScrollState(), Orientation.Vertical)
                 .background(LightBackground),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -155,7 +172,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController){
 fun Report(navController: NavHostController, gardenName: String){
     Column(modifier = Modifier
         .fillMaxWidth()
-        .padding(17.dp)
+        .padding(horizontal = 20.dp, vertical = 8.dp)
         .graphicsLayer {
             shadowElevation = 4.dp.toPx()
             shape = RoundedCornerShape(20.dp)
@@ -224,7 +241,7 @@ fun GardenTitle(gardenName : String){
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp)
+            .padding(15.dp)
         ,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
@@ -232,7 +249,7 @@ fun GardenTitle(gardenName : String){
         Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier
             .clickable { }
             .padding(5.dp))
-        Text(text = gardenName, style = MaterialTheme.typography.h3, color = MainGreen, modifier = Modifier.padding(5.dp))
+        Text(text = gardenName, style = MaterialTheme.typography.h4, color = MainGreen, modifier = Modifier.padding(5.dp))
 
     }
 }

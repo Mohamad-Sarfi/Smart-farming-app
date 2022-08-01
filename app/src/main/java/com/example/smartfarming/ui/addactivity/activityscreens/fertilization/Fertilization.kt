@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.Compost
 import androidx.compose.material.icons.outlined.Spa
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.*
@@ -57,12 +59,15 @@ import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 
 @Composable
-fun Fertilization(gardenName : String = "محمد"){
+fun Fertilization(gardenId : Int, navController : NavHostController){
     val activity = LocalContext.current as Activity
 
     val viewModel : FertilizationViewModel =
         viewModel(factory = FertilizationViewModelFactory((activity.application as FarmApplication).repo))
 
+
+    val garden = viewModel.getGarden(gardenId).observeAsState()
+    var gardenName = garden.value?.name ?: ""
 
     Scaffold(
         Modifier
@@ -76,16 +81,16 @@ fun Fertilization(gardenName : String = "محمد"){
         ){
             ActivityTitle(gardenName = gardenName, activityName = "تغذیه", icon = Icons.Outlined.Compost, Purple700)
             ActivitiesStepBars(viewModel.step.value, Purple700, Purple200)
-            FertilizationBody(viewModel)
+            FertilizationBody(viewModel, navController)
         }
     }
 }
 
 @Composable
-fun FertilizationBody(viewModel: FertilizationViewModel) {
+fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostController) {
     Card(
         modifier = Modifier
-            .padding(horizontal =  15.dp, vertical = 30.dp)
+            .padding(horizontal = 15.dp, vertical = 30.dp)
             .fillMaxHeight()
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -167,7 +172,12 @@ fun FertilizationBody(viewModel: FertilizationViewModel) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = { viewModel.decreaseStep() },
+                    onClick = {
+                        viewModel.decreaseStep()
+                        if (viewModel.step.value == 0){
+                            navController.popBackStack()
+                        }
+                              },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Purple700,
                         contentColor = Color.White
@@ -216,7 +226,9 @@ fun FertilizationType(viewModel: FertilizationViewModel){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
         Row(
-            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -298,7 +310,9 @@ fun FertilizerName(viewModel: FertilizationViewModel){
         horizontalAlignment = Alignment.End) {
 
         Row(
-            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ){

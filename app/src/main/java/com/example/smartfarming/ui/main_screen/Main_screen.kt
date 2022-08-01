@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.ui.gardens.composables.GardenCompose
 import com.example.smartfarming.ui.harvest.HarvestNavGraph
 import com.example.smartfarming.ui.harvest.compose.HarvestCompose
+import com.example.smartfarming.ui.home.HomeNavGraph
 import com.example.smartfarming.ui.home.composables.HomeCompose
 import com.example.smartfarming.ui.home.composables.MyFAB
 import com.example.smartfarming.ui.main_screen.bottom_navigation.*
@@ -36,6 +37,10 @@ fun MainScreen(){
         mutableStateOf<String?>(null)
     }
 
+    var showFAB by remember {
+        mutableStateOf(true)
+    }
+
     Scaffold(
         topBar = {
             //TopAppBar()
@@ -46,7 +51,7 @@ fun MainScreen(){
             }
                     },
         floatingActionButton = {
-            if (currentPage != null && currentPage == NAV_HOME){
+            if (currentPage != null && currentPage == NAV_HOME && showFAB){
                 MyFAB(context = context, fabExtended = fabExtended) {
                     fabExtended =! fabExtended
                 }
@@ -55,7 +60,10 @@ fun MainScreen(){
     ) {
         Column(modifier = Modifier.padding(bottom = 90.dp)) {
             NavHost(navController = navController, startDestination = NAV_HOME ){
-                composable(NAV_HOME) { HomeCompose() }
+                composable(NAV_HOME) {
+                    val homeNavController = rememberNavController()
+                    HomeNavGraph(navController = homeNavController){ showFAB = it }
+                }
                 composable(NAV_GARDENS) { GardenCompose() }
                 composable(NAV_HARVEST) {
                     val harvestNavController = rememberNavController()

@@ -31,7 +31,7 @@ fun ReportDiagram(){
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(1.dp)
     ) {
         Card(
             Modifier
@@ -83,7 +83,8 @@ fun SideInfo(
 ){
     Column(
         Modifier
-            .height(200.dp),
+            .height(200.dp)
+            .padding(5.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End
     ) {

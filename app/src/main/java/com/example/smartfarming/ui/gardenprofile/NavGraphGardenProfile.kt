@@ -1,10 +1,7 @@
 package com.example.smartfarming.ui.gardenprofile
 
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -17,9 +14,9 @@ import com.example.smartfarming.ui.addactivity.activityscreens.Fertilization
 import com.example.smartfarming.ui.addactivity.activityscreens.Irrigation
 import com.example.smartfarming.ui.addactivity.activityscreens.Others
 import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
-import com.example.smartfarming.ui.addactivity.AddActivity
 import com.example.smartfarming.ui.gardenprofile.composables.Weather
 import com.example.smartfarming.ui.gardenprofile.report.Report
+import com.example.smartfarming.ui.gardenprofile.taskScreen.TaskScreen
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
 import com.example.smartfarming.ui.harvest.harvest_archive.GardenHarvestScreen
 
@@ -27,7 +24,8 @@ import com.example.smartfarming.ui.harvest.harvest_archive.GardenHarvestScreen
 fun NavGraphGardenProfile(
     navController: NavHostController,
     garden : State<Garden?>,
-    viewModel: GardenProfileViewModel
+    viewModel: GardenProfileViewModel,
+    taskScreen : Boolean = false
 ){
     val context = LocalContext.current
     val irrigation = AppScreensEnum.IrrigationScreen.name
@@ -40,12 +38,12 @@ fun NavGraphGardenProfile(
     val report = AppScreensEnum.GardenReportScreen.name
 
     NavHost(navController = navController,
-        startDestination = ScreensEnumGardenProfile.MainScreen.name
+        startDestination = if (!taskScreen) ScreensEnumGardenProfile.MainScreen.name else AppScreensEnum.GardenTasksScreen.name
     ) {
 
 
         composable(route = ScreensEnumGardenProfile.MainScreen.name){
-            GardenProfile(garden, navController)
+            GardenProfile(garden, navController, viewModel)
         }
         
         composable(
@@ -57,7 +55,10 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            Irrigation(gardenName = gardenName!!, navController)
+            com.example.smartfarming.ui.addactivity.activityscreens.irrigation.Irrigation(
+                gardenName!!,
+                navHostController = navController
+            )
         }
         composable(
             route = "${fertilization}/{gardenName}",
@@ -68,10 +69,10 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            Fertilization(
-                gardenName = gardenName!!,
-                navController = navController
-            )
+//            Fertilization(
+//                gardenId = gardenName!!,
+//                navController = navController
+//            )
         }
 
 
@@ -97,7 +98,10 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            Others(gardenName = gardenName!!, navController = navController, act = "act")
+            com.example.smartfarming.ui.addactivity.activityscreens.others.Others(
+                gardenName = gardenName!!,
+                navHostController = navController
+            )
         }
 
         composable(
@@ -140,6 +144,10 @@ fun NavGraphGardenProfile(
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
             Report(navController, gardenName!!)
+        }
+
+        composable(route = AppScreensEnum.GardenTasksScreen.name){
+            TaskScreen(viewModel, navController)
         }
         
 

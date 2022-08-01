@@ -37,6 +37,7 @@ class GardenProfileActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val inputIntent = intent
         val gardenName = inputIntent.getStringExtra("gardenName")
+        val taskScreenShow = inputIntent.getBooleanExtra("taskScreenShow", false)
         setContent {
             SmartFarmingTheme() {
                 Surface(
@@ -50,7 +51,8 @@ class GardenProfileActivity : ComponentActivity() {
                     NavGraphGardenProfile(
                         navController = navController,
                         garden = garden,
-                        viewModel
+                        viewModel,
+                        taskScreen = taskScreenShow
                     )
 
                 }

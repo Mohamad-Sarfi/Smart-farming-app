@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.Screens.DatePicker
@@ -54,7 +55,7 @@ import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 
 
 @Composable
-fun Irrigation(gardenName : String = "محمد"){
+fun Irrigation(gardenName : String = "محمد", navHostController: NavHostController){
 
     val activity = LocalContext.current as Activity
 
@@ -73,16 +74,16 @@ fun Irrigation(gardenName : String = "محمد"){
                 .background(LightBlue)) {
             ActivityTitle(gardenName = gardenName, activityName = "آبیاری", icon =Icons.Default.WaterDrop, BlueIrrigationDark)
             ActivitiesStepBars(viewmodel.step.value, BlueIrrigationDark, BlueIrrigationLight)
-            IrrigationBody(viewmodel)
+            IrrigationBody(viewmodel, navHostController)
         }
     }
 }
 
 @Composable
-fun IrrigationBody(viewModel: IrrigationViewModel){
+fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostController){
     Card(
         modifier = Modifier
-            .padding(horizontal =  15.dp, vertical = 30.dp)
+            .padding(horizontal =  15.dp, vertical = 15.dp)
             .fillMaxHeight()
             .fillMaxWidth()
             ,
@@ -122,7 +123,11 @@ fun IrrigationBody(viewModel: IrrigationViewModel){
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = { viewModel.decreaseStep() },
+                    onClick = {
+                        if ( viewModel.step.value == 0){
+                            navHostController.popBackStack()
+                        }
+                        viewModel.decreaseStep() },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = BlueIrrigation,
                         contentColor = Color.White

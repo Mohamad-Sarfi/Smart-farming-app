@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.addactivity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -18,12 +19,21 @@ class AddActivityActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val activityName = intent.getStringExtra("activityName")
+        val gardenId = intent.getIntExtra("gardenId", -1)
+
         setContent {
             SmartFarmingTheme {
                 val navController = rememberNavController()
-                SetupNavGraph(navController = navController, viewModel = viewModel)
+
+                SetupNavGraph(
+                    navController = navController,
+                    viewModel = viewModel,
+                    startScreen = activityName,
+                    gardenId = gardenId
+                )
             }
         }
     }
-
 }

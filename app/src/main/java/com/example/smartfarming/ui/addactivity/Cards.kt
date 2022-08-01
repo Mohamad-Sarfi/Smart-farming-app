@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -45,6 +46,11 @@ fun Cards(
         }
     }
 
+    var gardenId by remember {
+        mutableStateOf(0)
+    }
+
+
 
 
     var clicked = remember {
@@ -86,7 +92,8 @@ fun Cards(
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()
                 } else {
-                    navController.navigate("${AppScreensEnum.FertilizationScreen.name}/${currentGarden}")
+                    Log.i("xxxxx", "${AppScreensEnum.FertilizationScreen.name}/${gardenId}")
+                    navController.navigate("${AppScreensEnum.FertilizationScreen.name}/${gardenId}")
                 }
             }
         }
@@ -127,6 +134,11 @@ fun Cards(
                 )
                 GardenSpinner(gardenList, currentGarden){
                     currentGarden = it
+                    gardenListState.value?.forEach { g ->
+                        if (g.name == it){
+                            gardenId = g.id
+                        }
+                    }
                 }
 
             }

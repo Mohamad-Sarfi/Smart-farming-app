@@ -1,6 +1,11 @@
 package com.example.smartfarming.ui.gardenprofile.report
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,9 +14,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +47,7 @@ fun Report(
             Text(text = "گزارش فعالیت های", color = MainGreen, style = MaterialTheme.typography.h3)
             Text(text = "باغ محمد", color = MainGreen, style = MaterialTheme.typography.h4)
             GraphsRow()
+            ColdExposureTime()
             WorkerReport()
             IrrigationReport()
             HarvestGraph(navHostController, gardenName )
@@ -342,3 +349,51 @@ fun OthersReport(){
         }
     }
 }
+
+@Composable
+fun ColdExposureTime(){
+
+    var clicked by remember {
+        mutableStateOf(false)
+    }
+
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 5.dp, vertical = 2.dp)
+            .fillMaxWidth()
+            .height(135.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .padding(5.dp)
+            .clickable { clicked = !clicked },
+        shape = RoundedCornerShape(10.dp),
+        elevation = 3.dp
+    ) {
+        Column(
+            Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 50.dp)
+                ,
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(0.6f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "نیاز سرمایی باغ", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
+                    Text(text = "70%", style = MaterialTheme.typography.h3, color = Color.Black, )
+                }
+                Icon(Icons.Outlined.AcUnit, contentDescription = null, tint = BlueIrrigationDark, modifier = Modifier
+                    .padding(start = 15.dp)
+                    .size(55.dp))
+            }
+        }
+    }
+}
+

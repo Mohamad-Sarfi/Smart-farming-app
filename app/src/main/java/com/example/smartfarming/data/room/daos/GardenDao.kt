@@ -19,4 +19,7 @@ interface GardenDao {
 
     @Query("SELECT * FROM garden_table WHERE name = :name")
     suspend fun getGardenByName(name : String) : Garden
+
+    @Query("SELECT * FROM garden_table WHERE rowid = :id")
+    suspend fun getGardenById(id : Int) : Garden
 }

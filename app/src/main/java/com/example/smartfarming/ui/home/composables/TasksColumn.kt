@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
@@ -29,7 +30,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addgarden.AddGarden
 
 @Composable
-fun TasksColumn(taskList : List<Task>, gardenList : List<Garden>?){
+fun TasksColumn(taskList : List<Task>, gardenList : List<Garden>?, navController : NavHostController){
     
     val context = LocalContext.current
     
@@ -88,7 +89,7 @@ fun TasksColumn(taskList : List<Task>, gardenList : List<Garden>?){
         } else {
             LazyRow(){
                 items(taskList){
-                    TaskCard2(task = it)
+                    //TaskCard2(task = it, navController){setShowFAB(it)}
                 }
             }
         }

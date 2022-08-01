@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
@@ -38,12 +39,19 @@ import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.MainOrange
 import com.example.smartfarming.ui.addactivities.ui.theme.Purple500
 import com.example.smartfarming.ui.addgarden.AddGarden
+import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
 import com.example.smartfarming.ui.home.HomeViewModel
 import com.example.smartfarming.ui.home.HomeViewModelFactory
+import com.example.smartfarming.utils.getTaskColor
+import com.example.smartfarming.utils.getTaskIcon
+import com.example.smartfarming.utils.getTaskList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun HomeCompose(){
+fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit){
 
     val context = LocalContext.current
 
@@ -54,71 +62,34 @@ fun HomeCompose(){
     val gardensList by viewModel.getGardens().observeAsState()
     var tasks = listOf<Task>()
     if (!gardensList.isNullOrEmpty()){
-        tasks = listOf<Task>(
-            Task(0,
-                "ولک پاشی",
-                activity_type = ActivityTypesEnum.FERTILIZATION.name,
-                description = "به دلیل عدم تامین نیاز سرمایی",
-                start_date = "",
-                finish_date = "",
-                garden_name =  gardensList?.get(0)?.name!!,
-                recommendations = "روغن ولک",
-                user_id = 5,
-                seen = false
-            ),
-            Task(0,
-                "سم پاشی",
-                activity_type = ActivityTypesEnum.PESTICIDE.name,
-                description = "مبارزه با پسیل",
-                start_date = "",
-                finish_date = "",
-                garden_name = gardensList?.get(0)?.name!!,
-                recommendations = "روغن ولک",
-                user_id = 5,
-                seen = false
-            )
-            ,
-            Task(0,
-                "آبیاری اسفند",
-                activity_type = ActivityTypesEnum.IRRIGATION.name,
-                description = "موعد آبیاری اسفند",
-                start_date = "",
-                finish_date = "",
-                garden_name = gardensList?.get(0)?.name!!,
-                recommendations = "",
-                user_id = 5,
-                seen = false
-            )
-            ,
-            Task(0,
-                "کود دامی",
-                activity_type = ActivityTypesEnum.FERTILIZATION.name,
-                description = "با توجه به ماده عالی خاک نیاز به تامین کود دامی",
-                start_date = "",
-                finish_date = "",
-                garden_name = gardensList?.get(0)?.name!!,
-                recommendations = "کود گاو",
-                user_id = 5,
-                seen = false
-            )
-        )
+        tasks = getTaskList(gardensList!!)
     }
 
     val backDropState = rememberBackdropScaffoldState( BackdropValue.Revealed)
 
+    val composableScope = rememberCoroutineScope()
+
     BackdropScaffold(
         appBar = { 
                  Row(
-                     Modifier.fillMaxWidth(),
+                     Modifier
+                         .fillMaxWidth()
+                         .clickable {
+                            composableScope.launch {
+                                backDropState.reveal()
+                            }
+                         }
+                     ,
                      verticalAlignment = Alignment.CenterVertically,
                      horizontalArrangement = Arrangement.Center
                  ) {
+                     Icon(Icons.Default.Add, contentDescription = null, tint = Color.White, modifier = Modifier.padding(end = 10.dp))
                      Text(text = "افزودن باغ", style = MaterialTheme.typography.body2, color = Color.White)
                  }
         },
         backLayerContent = { BackdropBackLayer(activity) },
         scaffoldState = backDropState,
-        frontLayerContent = {TasksRow(tasks, viewModel, backDropState)},
+        frontLayerContent = {TasksRow(tasks, viewModel, backDropState, navController){setShowFAB(it)} },
         frontLayerElevation = 4.dp,
         persistentAppBar = false,
         frontLayerScrimColor = Color.Unspecified
@@ -322,9 +293,13 @@ fun FarmingArticlesPreview(articlesList : List<Article>?){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TasksRow(tasks: List<Task>, viewModel: HomeViewModel, backdropState : BackdropScaffoldState){
-
-
+fun TasksRow(
+    tasks: List<Task>,
+    viewModel: HomeViewModel,
+    backdropState : BackdropScaffoldState,
+    navController: NavHostController,
+    setShowFAB: (Boolean) -> Unit
+){
 
     Card(
         modifier = Modifier.fillMaxHeight(1f),
@@ -362,8 +337,8 @@ fun TasksRow(tasks: List<Task>, viewModel: HomeViewModel, backdropState : Backdr
                 animationSpec = tween(500)
             ) {
                 when(it){
-                    BackdropValue.Revealed -> RevealedFrontLayer(tasks, viewModel)
-                    BackdropValue.Concealed -> ConcealedFrontLayer(tasks, viewModel)
+                    BackdropValue.Revealed -> RevealedFrontLayer(tasks, viewModel, navController){setShowFAB(it)}
+                    BackdropValue.Concealed -> ConcealedFrontLayer(tasks, viewModel, navController){setShowFAB(it)}
                 }
             }
         }
@@ -374,7 +349,10 @@ fun TasksRow(tasks: List<Task>, viewModel: HomeViewModel, backdropState : Backdr
 
 
 @Composable
-fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel){
+fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navController : NavHostController, setShowFAB: (Boolean) -> Unit){
+
+    val activity = LocalContext.current as Activity
+
     Column() {
         Row(
             Modifier
@@ -410,29 +388,29 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel){
 
         LazyRow() {
             items(tasks) { item ->
-                if (viewModel.selectedActivityGroup.value == "all") {
-                    TaskCard2(item)
-                } else if (item.activity_type == viewModel.selectedActivityGroup.value) {
-                    TaskCard2(item)
+                TaskCard2(item, navController){
+                    val intent = Intent(activity, GardenProfileActivity::class.java)
+                    intent.putExtra("gardenName", item.garden_name)
+                    intent.putExtra("taskScreenShow", true)
+                    activity.startActivity(intent)
                 }
-
             }
         }
     }
 }
 
 @Composable
-fun ConcealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel){
+fun ConcealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navController : NavHostController, setShowFAB: (Boolean) -> Unit){
     Column(
         Modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
             .padding(5.dp)
     ) {
-        RevealedRow(tasks, ActivityTypesEnum.FERTILIZATION.name, viewModel)
-        RevealedRow(tasks, ActivityTypesEnum.IRRIGATION.name, viewModel)
-        RevealedRow(tasks, ActivityTypesEnum.PESTICIDE.name, viewModel)
-        RevealedRow(tasks, ActivityTypesEnum.Other.name, viewModel)
+        RevealedRow(tasks, ActivityTypesEnum.FERTILIZATION.name, viewModel, navController){setShowFAB(it)}
+        RevealedRow(tasks, ActivityTypesEnum.IRRIGATION.name, viewModel, navController){setShowFAB(it)}
+        RevealedRow(tasks, ActivityTypesEnum.PESTICIDE.name, viewModel, navController){setShowFAB(it)}
+        RevealedRow(tasks, ActivityTypesEnum.Other.name, viewModel, navController){setShowFAB(it)}
     }
 }
 
@@ -446,7 +424,7 @@ fun ActivityGroupSelector(activityName : String ,
             .padding(5.dp)
             .clip(CircleShape)
             .background(
-                if (activityName == selectedActivity) taskIconTint(activityName) else Color.White
+                if (activityName == selectedActivity) getTaskColor(activityName) else Color.White
             )
             .clickable {
                 setSelectedActivity(activityName)
@@ -454,16 +432,19 @@ fun ActivityGroupSelector(activityName : String ,
             .padding(8.dp)
     ) {
         Icon(
-            taskIcon2(activityName),
+            getTaskIcon(activityName),
             contentDescription = null,
             modifier = Modifier.size(35.dp),
-            tint = if (activityName == selectedActivity) Color.White else taskIconTint(activityName).copy(alpha = 0.7f)
+            tint = if (activityName == selectedActivity) Color.White else getTaskColor(activityName).copy(alpha = 0.7f)
         )
     }
 }
 
 @Composable
-fun RevealedRow(tasks: List<Task>, activityName: String, viewModel: HomeViewModel){
+fun RevealedRow(tasks: List<Task>, activityName: String, viewModel: HomeViewModel, navController : NavHostController, setShowFAB: (Boolean) -> Unit){
+
+    val activity = LocalContext.current as Activity
+
     Column(
         Modifier
             .fillMaxWidth()
@@ -483,10 +464,10 @@ fun RevealedRow(tasks: List<Task>, activityName: String, viewModel: HomeViewMode
                     .padding(8.dp)
             ) {
                 Icon(
-                    taskIcon2(activityName),
+                    getTaskIcon(activityName),
                     contentDescription = null,
                     modifier = Modifier.size(35.dp),
-                    tint = taskIconTint(activityName).copy(alpha = 0.7f)
+                    tint = getTaskColor(activityName).copy(alpha = 0.7f)
                 )
             }
             Text(text = viewModel.taskName(activityName), style = MaterialTheme.typography.body1, color = viewModel.taskColor(activityName), modifier = Modifier.padding(4.dp))
@@ -496,7 +477,12 @@ fun RevealedRow(tasks: List<Task>, activityName: String, viewModel: HomeViewMode
         LazyRow{
             items(tasks){ item ->
                 if (item.activity_type == activityName){
-                    TaskCard2(task = item)
+                    TaskCard2(task = item, navController){
+                        val intent = Intent(activity, GardenProfileActivity::class.java)
+                        intent.putExtra("gardenName", item.garden_name)
+                        intent.putExtra("taskScreenShow", true)
+                        activity.startActivity(intent)
+                    }
                 }
             }
         }

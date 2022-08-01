@@ -43,14 +43,14 @@ import com.example.smartfarming.ui.common_composables.TitleIcon
 
 @Composable
 fun Fertilization(
-    gardenName: String,
+    gardenId: Int,
     navController: NavHostController
 ){
     val activity = LocalContext.current as Activity
     val viewModel : FertilizationViewModel =
-        viewModel(factory = FertilizationViewModelFactory((activity?.application as FarmApplication).repo))
+        viewModel(factory = FertilizationViewModelFactory((activity.application as FarmApplication).repo))
 
-    val garden = viewModel.getGarden(gardenName).observeAsState()
+    val garden = viewModel.getGarden(gardenId).observeAsState()
     var fertilizationDate = remember {
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
     }

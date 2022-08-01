@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui
 
 enum class AppScreensEnum {
+    AddActivityHomeScreen,
     LoginScreen,
     RegisterScreen,
     IrrigationScreen,
@@ -10,11 +11,14 @@ enum class AppScreensEnum {
     AddActivitiesScreen,
     GardenWeatherScreen,
     GardenReportScreen,
+    GardenTasksScreen,
 
     /* Harvest screens */
     HarvestHomeScreen,
     AddHarvestScreen,
     ArchiveHarvestScreen,
-    GardenHarvestScreen
+    GardenHarvestScreen,
+
+    HomeScreen
 
 }

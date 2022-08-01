@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +27,8 @@ import com.example.smartfarming.ui.authentication.ui.theme.PurplePrune
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
+import com.example.smartfarming.utils.getTaskColor
+import com.example.smartfarming.utils.getTaskIcon
 
 
 @Composable
@@ -81,11 +84,26 @@ fun ToDos(
             )
 
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = task.name, style = MaterialTheme.typography.body2, color = BorderGray)
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 25.dp, vertical = 5.dp)
+                    ,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = task.name, style = MaterialTheme.typography.body2, color = BorderGray)
+                    Icon(
+                        getTaskIcon(task.activity_type),
+                        contentDescription = null,
+                        tint = getTaskColor(task.activity_type),
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
                 DetailsText(expanded, task.description)
                 Buttons(expanded, barColor, task.activity_type, gardenName = task.garden_name, navController = navController)
             }

@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.*
@@ -47,7 +48,7 @@ import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 
 @Composable
-fun Others(gardenName : String){
+fun Others(gardenName : String, navHostController : NavHostController){
 
     val activity = LocalContext.current as Activity
     val viewModel : OthersViewModel =
@@ -70,13 +71,13 @@ fun Others(gardenName : String){
                 color = MainGreen
             )
             ActivitiesStepBars(step = viewModel.step.value, colorDark = MainGreen, colorLight = LightGreen1)
-            OthersBody(viewModel)
+            OthersBody(viewModel, navHostController)
         }
     }
 }
 
 @Composable
-fun OthersBody(viewModel: OthersViewModel){
+fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController){
     Card(
         modifier = Modifier
             .padding(horizontal = 15.dp, vertical = 30.dp)
@@ -153,7 +154,11 @@ fun OthersBody(viewModel: OthersViewModel){
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = { viewModel.decreaseStep() },
+                    onClick = {
+                        if (viewModel.step.value == 0){
+                            navHostController.popBackStack()
+                        }
+                        viewModel.decreaseStep() },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MainGreen,
                         contentColor = Color.White
