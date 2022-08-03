@@ -1,9 +1,8 @@
-package com.example.smartfarming.ui.addactivity.activityscreens.fertilization
+package com.example.smartfarming.ui.addactivity.activityscreens.pesticide
 
 import android.app.Activity
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,9 +14,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.outlined.Compost
-import androidx.compose.material.icons.outlined.Spa
+import androidx.compose.material.icons.outlined.PestControl
+import androidx.compose.material.icons.outlined.Science
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -41,21 +40,21 @@ import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.*
-import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModel
-import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModelFactory
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.WorkerNumber
+import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModel
+import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 
 @Composable
-fun Fertilization(gardenName : String, navController : NavHostController){
+fun Pesticide(gardenName : String, navController : NavHostController){
     val activity = LocalContext.current as Activity
 
-    val viewModel : FertilizationViewModel =
-        viewModel(factory = FertilizationViewModelFactory((activity.application as FarmApplication).repo))
+    val viewModel : PesticideViewModel =
+        viewModel(factory = PesticideViewModelFactory((activity.application as FarmApplication).repo))
 
 
     val garden = viewModel.getGarden(gardenName).observeAsState()
@@ -63,23 +62,23 @@ fun Fertilization(gardenName : String, navController : NavHostController){
 
     Scaffold(
         Modifier
-            .background(Purple100)
+            .background(Yellow100)
             .fillMaxSize()
     ){
         Column(
             Modifier
                 .fillMaxSize()
-                .background(Purple100)
+                .background(Yellow100)
         ){
-            ActivityTitle(gardenName = gardenName, activityName = "تغذیه", icon = Icons.Outlined.Compost, Purple700)
-            ActivitiesStepBars(viewModel.step.value, Purple700, Purple200)
-            FertilizationBody(viewModel, navController, gardenName)
+            ActivityTitle(gardenName = gardenName, activityName = "سمپاشی", icon = Icons.Outlined.PestControl, Yellow700)
+            ActivitiesStepBars(viewModel.step.value, Yellow700, Yellow200)
+            PesticideBody(viewModel, navController, gardenName)
         }
     }
 }
 
 @Composable
-fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostController, gardenName: String) {
+fun PesticideBody(viewModel: PesticideViewModel, navController: NavHostController, gardenName: String) {
 
     val context = LocalContext.current
 
@@ -92,8 +91,6 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
         elevation = 3.dp
     ) {
 
-
-
         ConstraintLayout(
             Modifier
                 .fillMaxSize()
@@ -103,9 +100,9 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
             val (bottomRow, body, backgroundPic) = createRefs()
 
             Icon(
-                Icons.Outlined.Compost,
+                Icons.Outlined.PestControl,
                 contentDescription = null,
-                tint = Purple200.copy(.1f),
+                tint = Yellow100.copy(0.4f),
                 modifier = Modifier
                     .padding(bottom = 1.dp)
                     .size(300.dp)
@@ -140,14 +137,13 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 DateSelector(
-                                    "تغذیه",
-                                    date = viewModel.fertilizationDate.value,
-                                    Purple700,
-                                    Purple100){
-                                    viewModel.fertilizationDate.value = it
+                                    "سمپاشی",
+                                    date = viewModel.getPesticideDate().value,
+                                    Yellow700,
+                                    Yellow100){
+                                    viewModel.setPesticideDate(it)
                                 }
-                                FertilizationType(viewModel)
-                                FertilizerName(viewModel)
+                                PesticideName(viewModel)
                             }
                         1 ->
                             Column(
@@ -158,13 +154,13 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 WorkerNumber(
-                                    wNumber =viewModel.fertilizationWorker.value ,
-                                    color = Purple700,
-                                    colorLight = Purple100,
-                                    ){
-                                    viewModel.fertilizationWorker.value = it
+                                    wNumber =viewModel.pesticideWorker.value ,
+                                    color = Yellow700,
+                                    colorLight = Yellow100,
+                                ){
+                                    viewModel.pesticideWorker.value = it
                                 }
-                                FertilizationVolume(viewModel)
+                                PesticideVolume(viewModel)
                             }
                     }
                 }
@@ -190,9 +186,9 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                             navController.popBackStack()
                         }
                         viewModel.decreaseStep()
-                              },
+                    },
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Purple700,
+                        backgroundColor = Yellow700,
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(20.dp),
@@ -205,9 +201,11 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                 }
 
                 Button(
-                    onClick = { viewModel.submitBtnHandler(context, gardenName, navController) },
+                    onClick = {
+                              //viewModel.submitBtnHandler(context, gardenName, navController)
+                         },
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Purple700,
+                        backgroundColor = Yellow700,
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(20.dp),
@@ -227,90 +225,9 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
 }
 
 
-@Composable
-fun FertilizationType(viewModel: FertilizationViewModel){
-    val typeList = stringArrayResource(id = R.array.fertilization_type)
-    var clicked by remember {
-        mutableStateOf(false)
-    }
-
-    Column(
-        modifier = Modifier.padding(20.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.End) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "نوع تغذیه",
-                style = MaterialTheme.typography.subtitle1,
-                color = Purple500,
-            )
-            Icon(Icons.Outlined.Spa, contentDescription = null, tint = Purple700, modifier = Modifier.padding(start = 10.dp))
-        }
-
-        OutlinedButton(
-            onClick = { clicked = !clicked},
-            shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                backgroundColor = Purple100,
-                contentColor = Purple700
-            ),
-            border = BorderStroke(1.dp, Purple100)
-        ) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                ,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Default.ArrowDropDown,
-                    contentDescription = null,
-                    tint = Purple700,
-                    modifier = Modifier
-                        .size(40.dp)
-                )
-                Text(
-                    text = viewModel.fertilizationType.value,
-                    style = MaterialTheme.typography.body1, color = Purple700, modifier = Modifier.padding(end = 20.dp))
-            }
-        }
-
-        DropdownMenu(
-            modifier = Modifier
-                .fillMaxWidth(0.7f),
-            expanded = clicked,
-            onDismissRequest = { clicked = false }
-        ) {
-            typeList.forEach {
-                DropdownMenuItem(
-                    onClick = {
-                        clicked = false
-                        viewModel.fertilizationType.value = it
-                    }
-                ) {
-                    Text(
-                        text = it,
-                        modifier = Modifier
-                            .padding(vertical = 5.dp, horizontal = 20.dp),
-                        style = MaterialTheme.typography.subtitle1
-                    )
-                }
-            }
-        }
-
-    }
-
-}
 
 @Composable
-fun FertilizerName(viewModel: FertilizationViewModel){
+fun PesticideName(viewModel: PesticideViewModel){
 
     val focusManager = LocalFocusManager.current
     var clicked by remember {
@@ -330,30 +247,30 @@ fun FertilizerName(viewModel: FertilizationViewModel){
             verticalAlignment = Alignment.CenterVertically
         ){
             Text(
-                text = "نام کود",
+                text = "نام سم",
                 style = MaterialTheme.typography.subtitle1,
-                color = Purple500
+                color = Yellow700
             )
-            Icon(Icons.Outlined.Compost, contentDescription = null, tint = Purple700, modifier = Modifier.padding(start = 10.dp))
+            Icon(Icons.Outlined.Science, contentDescription = null, tint = Yellow700, modifier = Modifier.padding(start = 10.dp))
         }
 
         OutlinedTextField(
-            value = viewModel.currentFertilizerName.value,
+            value = viewModel.getPesticideName().value,
             onValueChange = {
                 clicked = true
-                viewModel.currentFertilizerName.value = it},
+                viewModel.setPesticideName(it)},
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp)
                 .padding(horizontal = 0.dp)
-                .background(Purple100, RoundedCornerShape(20.dp))
+                .background(Yellow100, RoundedCornerShape(20.dp))
             ,
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Purple100,
-                textColor = Purple700,
-                focusedBorderColor = Purple100,
-                unfocusedBorderColor = Purple100),
+                backgroundColor = Yellow100,
+                textColor = Yellow700,
+                focusedBorderColor = Yellow100,
+                unfocusedBorderColor = Yellow100),
             textStyle = TextStyle(
                 fontFamily = sina,
                 fontWeight = FontWeight.Normal,
@@ -369,19 +286,19 @@ fun FertilizerName(viewModel: FertilizationViewModel){
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus()
-                    viewModel.addFertilizer(viewModel.currentFertilizerName.value)
-                    viewModel.currentFertilizerName.value = ""
+                    viewModel.addPesticide(viewModel.getPesticideName().value)
+                    viewModel.setPesticideName("")
                 }
             )
         )
-        
-        if (!viewModel.fertilizerName.value.isNullOrEmpty()){
+
+        if (!viewModel.getPesticideList().isNullOrEmpty()){
             Row(
                 Modifier
                     .fillMaxWidth()
                     .padding(5.dp)) {
                 LazyRow{
-                    items(viewModel.fertilizerName.value.size){ index ->
+                    items(viewModel.getPesticideList().size){ index ->
                         var deleted by remember {
                             mutableStateOf(false)
                         }
@@ -389,31 +306,31 @@ fun FertilizerName(viewModel: FertilizationViewModel){
                             modifier = Modifier
                                 .padding(4.dp)
                                 .clip(RoundedCornerShape(15.dp))
-                                .background(if (deleted) RedFertilizer else Purple500)
+                                .background(if (deleted) RedFertilizer else Yellow500)
                                 .clickable {
                                     deleted = true
-                                    viewModel.removeFertilizer(viewModel.fertilizerName.value[index])
+                                    viewModel.removeFromPesticideList(viewModel.getPesticideList()[index])
                                 }
                                 .padding(vertical = 4.dp, horizontal = 9.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Text(text =if (deleted) "حذف شد" else viewModel.fertilizerName.value[index], color = Color.White, style = MaterialTheme.typography.subtitle1)
+                            Text(text =if (deleted) "حذف شد" else viewModel.getPesticideList()[index], color = Color.White, style = MaterialTheme.typography.subtitle1)
                         }
                     }
                 }
             }
         }
 
-        if (viewModel.currentFertilizerName.value != "" || clicked){
+        if (viewModel.getPesticideName().value != "" || clicked){
             Row(
                 Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
-                        viewModel.addFertilizer(viewModel.currentFertilizerName.value)
+                        viewModel.addPesticide(viewModel.getPesticideName().value)
+                        viewModel.setPesticideName("")
 
-                        viewModel.currentFertilizerName.value = ""
                     },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
@@ -421,10 +338,10 @@ fun FertilizerName(viewModel: FertilizationViewModel){
                 Text(
                     text = "افزودن کود",
                     style = MaterialTheme.typography.subtitle1,
-                    color = Purple500,
+                    color = Yellow700,
                 )
 
-                Icon(Icons.Default.Add, contentDescription = null, tint = Purple500, modifier = Modifier.padding(start = 4.dp))
+                Icon(Icons.Default.Add, contentDescription = null, tint = Yellow700, modifier = Modifier.padding(start = 4.dp))
 
             }
 
@@ -434,7 +351,7 @@ fun FertilizerName(viewModel: FertilizationViewModel){
 }
 
 @Composable
-fun FertilizationVolume(viewModel: FertilizationViewModel){
+fun PesticideVolume(viewModel: PesticideViewModel){
 
     val focusManager = LocalFocusManager.current
     val typeList = stringArrayResource(id = R.array.fertilization_type)
@@ -454,20 +371,20 @@ fun FertilizationVolume(viewModel: FertilizationViewModel){
             Text(
                 text = "حجم کود",
                 style = MaterialTheme.typography.subtitle1,
-                color = Purple500
+                color = Yellow500
             )
             Icon(
                 Icons.Outlined.Compost,
                 contentDescription = null,
-                tint = Purple700,
+                tint = Yellow700,
                 modifier = Modifier.padding(start = 10.dp)
             )
         }
 
 
         OutlinedTextField(
-            value = if (viewModel.fertilizationVolume.value == 0f) ""
-                else viewModel.updateVolumeValueText(viewModel.fertilizationVolume.value.toString()),
+            value = if (viewModel.pesticideVolume.value == 0f) ""
+            else viewModel.updateVolumeValueText(viewModel.pesticideVolume.value.toString()),
             onValueChange = {viewModel.setVolumeValue(it)},
             modifier = Modifier
                 .fillMaxWidth()
@@ -477,10 +394,10 @@ fun FertilizationVolume(viewModel: FertilizationViewModel){
             ,
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Purple100,
-                textColor = Purple700,
-                focusedBorderColor = Purple100,
-                unfocusedBorderColor = Purple100),
+                backgroundColor = Yellow100,
+                textColor = Yellow700,
+                focusedBorderColor = Yellow100,
+                unfocusedBorderColor = Yellow100),
             textStyle = TextStyle(
                 fontFamily = sina,
                 fontWeight = FontWeight.Normal,
@@ -499,9 +416,9 @@ fun FertilizationVolume(viewModel: FertilizationViewModel){
             ),
             placeholder = {
                 Text(
-                    text = viewModel.decideFertilizationVolume(viewModel.fertilizationType.value, typeList),
+                    text = "لیتر",
                     style = MaterialTheme.typography.subtitle1, modifier = Modifier.padding(start = 10.dp),
-                    color = Purple200
+                    color = Yellow200
                 )
             }
         )

@@ -8,8 +8,8 @@ import androidx.navigation.compose.composable
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModel
 import com.example.smartfarming.ui.addactivity.AddActivity
-import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
 import com.example.smartfarming.ui.addactivity.activityscreens.irrigation.Irrigation
+import com.example.smartfarming.ui.addactivity.activityscreens.pesticide.Pesticide
 
 @Composable
 fun SetupNavGraph(
@@ -86,7 +86,7 @@ fun SetupNavGraph(
             )
         ){ entry ->
             val  gardenName = entry.arguments?.getString("name")
-            Pesticides(gardenName = gardenName!!, navController = navController)
+            Pesticide(gardenName!!, navController )
         }
     }
 }

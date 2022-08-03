@@ -10,9 +10,49 @@ import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.lang.IllegalArgumentException
 
 class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
+
+    var step = mutableStateOf(0)
+
+    val pesticideWorker = mutableStateOf(1)
+
+    val pesticideVolume = mutableStateOf(0f)
+
+    fun updateVolumeValueText(value : String) : String{
+
+        if (value == ""){
+            return ""
+        }
+
+        try {
+            val fValue = value.toFloat()
+
+            if (fValue - fValue.toInt() == 0f){
+                return fValue.toInt().toString()
+            }
+            return fValue.toString()
+
+        } catch (e : Exception){
+            return ""
+        }
+
+    }
+
+    fun setVolumeValue(value : String){
+        if (value == ""){
+            pesticideVolume.value = 0f
+        } else {
+            try {
+                pesticideVolume.value = value.toFloat()
+            } catch (e : Exception) {
+                pesticideVolume.value = 0f
+            }
+        }
+    }
+
     private val garden = MutableLiveData<Garden>().apply {
         value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
             0.0, 0)
@@ -29,7 +69,9 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         return garden
     }
 
-    // date
+
+
+    //////////////////////////////////// date
     private var pesticideDate =
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
 
@@ -55,6 +97,28 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
 
     fun getPesticideName() : MutableState<String>{
         return pesticideName
+    }
+
+    private val pesticidesList = mutableStateOf(mutableListOf<String>())
+
+    fun addPesticide(pesticide : String){
+        pesticidesList.value.add(pesticide)
+    }
+
+    fun getPesticideList() = pesticidesList.value
+
+    fun removeFromPesticideList(pesticide: String){
+        pesticidesList.value.remove(pesticide)
+    }
+
+
+
+
+
+
+    ///////////////////////
+    fun decreaseStep(){
+        if (step.value == 1) step.value--
     }
 
 
