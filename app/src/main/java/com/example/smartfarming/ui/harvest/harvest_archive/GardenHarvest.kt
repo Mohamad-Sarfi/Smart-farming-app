@@ -15,12 +15,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.Eco
-import androidx.compose.material.icons.filled.Filter1
-import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FilterAlt
+import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -38,15 +36,19 @@ import com.example.smartfarming.data.network.resources.weather_response.Current
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Harvest
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.harvest.HarvestViewModel
 import com.example.smartfarming.ui.harvest.HarvestViewModelFactory
 import com.example.smartfarming.utils.PersianCalender
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GardenHarvestScreen(gardenName: String){
 
     val activity = LocalContext.current as Activity
-    val viewModel : HarvestViewModel = viewModel(factory = HarvestViewModelFactory((activity.application as FarmApplication).repo))
+    val viewModel : HarvestViewModel =
+        viewModel(factory = HarvestViewModelFactory((activity.application as FarmApplication).repo))
 
 
 
@@ -71,87 +73,73 @@ fun GardenHarvestScreen(gardenName: String){
         yearSum = viewModel.getYearSum(selectedYear.value)
     }
 
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
 
+    )
 
-    ConstraintLayout(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        val (title, detailColumn, filters) = createRefs()
-        HarvestTitle(
-            Modifier
-                .padding(top = 1.dp)
-                .constrainAs(title) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
-            gardenName,
-            yearSum.toString(),
-            selectedYear.value
-        )
+    val coroutineScope = rememberCoroutineScope()
 
-        HarvestListCompose(
-            Modifier
-                .padding(15.dp)
-                .fillMaxWidth()
-                .constrainAs(detailColumn) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(title.bottom)
+    BottomSheetScaffold(
+        topBar = { HarvestTitle(gardenName) },
+        sheetContent = {
+            HarvestBottomSheet(viewModel)
+        },
+        scaffoldState = bottomSheetScaffoldState,
+        sheetPeekHeight = 35.dp,
+        floatingActionButton = {
+            FabHarvest {
+                coroutineScope.launch {
+                    bottomSheetScaffoldState.bottomSheetState.apply {
+                        if (isCollapsed) expand() else collapse()
+                    }
                 }
-            ,
-            harvestList = harvestList.value,
-            viewModel
-        )
+            }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        sheetShape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp)
+    ) {
+        ConstraintLayout(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            val (detailColumn) = createRefs()
 
-        FilterHarvest(
-            modifier = Modifier
-                .padding(25.dp)
-                .constrainAs(filters) {
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end)
-                    start.linkTo(parent.start)
-                },
-            selectedYear.value,
-            selectedType.value,
-            changeYear = {selectedYear.value = it},
-            changeHarvestType = {selectedType.value = it}
-        )
-        
-        
 
+            HarvestListCompose(
+                Modifier
+                    .padding(15.dp)
+                    .fillMaxWidth()
+                    .constrainAs(detailColumn) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                    }
+                ,
+                harvestList = harvestList.value,
+                viewModel
+            )
+        }
     }
 }
 
 @Composable
 fun HarvestTitle(
-    modifier: Modifier,
     gardenName : String,
-    annualHarvest : String,
-    year: String
 ){
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MainGreen)
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center,) {
-            Text(text = "بایگانی محصولات باغ " + gardenName , style = MaterialTheme.typography.h5, color = MainGreen)
-            Icon(Icons.Default.Eco, contentDescription =null, tint = MainGreen , modifier = Modifier
-                .padding(5.dp)
-                .size(40.dp)
-            )
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(text = " کیلو در سال" + year, style = MaterialTheme.typography.body1, color = MainGreen)
-            Text(text = " ${annualHarvest}", style = MaterialTheme.typography.body2, color = MainGreen)
-
-        }
-
+        Text(text = "بایگانی محصولات باغ " + gardenName , style = MaterialTheme.typography.body2, color = Color.White)
+        Icon(Icons.Outlined.Inventory2, contentDescription =null, tint = Color.White , modifier = Modifier
+            .padding(5.dp)
+            .size(35.dp)
+        )
     }
+
 }
 
 @Composable
@@ -182,6 +170,9 @@ fun FilterHarvest(
         }
     }
 }
+
+
+
 
 @Composable
 fun FilterHarvestSpinner(
@@ -236,11 +227,15 @@ fun FilterHarvestSpinner(
 fun HarvestListCompose(modifier: Modifier, harvestList: List<Harvest>?, viewModel: HarvestViewModel){
     if (harvestList.isNullOrEmpty()){
         Column(
-            modifier,
+            modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "اطلاعاتی وارد نشده :(")
+            Icon(
+                Icons.Default.Warning,
+                contentDescription = null, tint = YellowPesticide,
+                modifier = Modifier.padding(20.dp).size(55.dp))
+            Text(text = "اطلاعاتی وارد نشده")
         }
 
     } else {

@@ -11,8 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationDark
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationLight
 
 @Composable
 fun ActivitiesStepBars(step : Int, colorDark: Color, colorLight: Color){

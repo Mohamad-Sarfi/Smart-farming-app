@@ -1,14 +1,8 @@
 package com.example.smartfarming.data.repositories.garden
 
 import androidx.annotation.WorkerThread
-import com.example.smartfarming.data.room.daos.GardenDao
-import com.example.smartfarming.data.room.daos.HarvestDao
-import com.example.smartfarming.data.room.daos.IrrigationDao
-import com.example.smartfarming.data.room.daos.TaskDao
-import com.example.smartfarming.data.room.entities.Garden
-import com.example.smartfarming.data.room.entities.Harvest
-import com.example.smartfarming.data.room.entities.IrrigationEntity
-import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.data.room.daos.*
+import com.example.smartfarming.data.room.entities.*
 import kotlinx.coroutines.flow.Flow
 import java.time.Year
 
@@ -16,7 +10,8 @@ class GardenRepo(
     private val gardenDao : GardenDao,
     private val taskDao : TaskDao,
     private val irrigationDao : IrrigationDao,
-    private val harvestDao: HarvestDao
+    private val harvestDao: HarvestDao,
+    private val fertilizationDao: FertilizationDao
 ) {
 
     // Garden repo
@@ -99,6 +94,23 @@ class GardenRepo(
     @WorkerThread
     suspend fun getHarvestByGardenName(gardenName : String) : Flow<List<Harvest>>{
         return harvestDao.getHarvestByGarden(gardenName)
+    }
+
+
+    //Fertilization
+    @WorkerThread
+    suspend fun insertFertilization(fertilizationEntity: FertilizationEntity) {
+        fertilizationDao.insertFertilization(fertilizationEntity)
+    }
+
+    @WorkerThread
+    fun getFertilizationByGardenName(gardenName: String) : Flow<List<FertilizationEntity>>{
+        return fertilizationDao.getFertilizationByGardenName(gardenName)
+    }
+
+    @WorkerThread
+    suspend fun deleteFertilization(fertilizationEntity: FertilizationEntity){
+        fertilizationDao.deleteFertilization(fertilizationEntity)
     }
 
 }

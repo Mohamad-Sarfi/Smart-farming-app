@@ -19,10 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.smartfarming.R
-import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
-import com.example.smartfarming.ui.addactivities.ui.theme.LightGreen
+import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen100
 import com.example.smartfarming.ui.addactivities.ui.theme.LightGreen1
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
@@ -54,7 +53,7 @@ fun GardenCardHome(
                 intent.putExtra("gardenName", garden.name)
                 context.startActivity(intent)
             }
-            .background(LightGreen),
+            .background(MainGreen100),
         verticalAlignment = Alignment.CenterVertically
     ){
         GardenIcon()

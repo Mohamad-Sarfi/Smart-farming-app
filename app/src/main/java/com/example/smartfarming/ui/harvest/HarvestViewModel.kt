@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Harvest
+import com.example.smartfarming.utils.PersianCalender
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
@@ -18,8 +19,9 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
     var harvestWeight = MutableLiveData<Float>()
     var harvestType = MutableLiveData<String>()
 
+    var thisYear = PersianCalender.getShamsiDateMap()["year"].toString()
     var harvestList = MutableLiveData<List<Harvest>>(listOf())
-    var selectedYear = mutableStateOf("1401")
+    var selectedYear = mutableStateOf(thisYear)
     var selectedType = mutableStateOf("همه")
 
     fun setDate(date : MutableMap<String, String>){

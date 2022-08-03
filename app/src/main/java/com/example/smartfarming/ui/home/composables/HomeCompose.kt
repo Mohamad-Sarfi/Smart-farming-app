@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -326,10 +327,11 @@ fun TasksRow(
                     color = MainGreen
                 )
                 Icon(
-                    Icons.Default.ArrowDownward,
+                    if (backdropState.isRevealed) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
                     contentDescription = "",
                     tint = MainGreen
                 )
+
             }
 
             Crossfade(
@@ -349,7 +351,7 @@ fun TasksRow(
 
 
 @Composable
-fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navController : NavHostController, setShowFAB: (Boolean) -> Unit){
+fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navController : NavHostController, setShowFAB: (Boolean) -> Unit) {
 
     val activity = LocalContext.current as Activity
 
@@ -366,6 +368,7 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
                 viewModel.selectedActivityGroup.value
             )
             { viewModel.setSelectedActivityGroup(it) }
+
 
             ActivityGroupSelector(
                 ActivityTypesEnum.FERTILIZATION.name,
@@ -388,103 +391,153 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
 
         LazyRow() {
             items(tasks) { item ->
-                TaskCard2(item, navController){
-                    val intent = Intent(activity, GardenProfileActivity::class.java)
-                    intent.putExtra("gardenName", item.garden_name)
-                    intent.putExtra("taskScreenShow", true)
-                    activity.startActivity(intent)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ConcealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navController : NavHostController, setShowFAB: (Boolean) -> Unit){
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-            .padding(5.dp)
-    ) {
-        RevealedRow(tasks, ActivityTypesEnum.FERTILIZATION.name, viewModel, navController){setShowFAB(it)}
-        RevealedRow(tasks, ActivityTypesEnum.IRRIGATION.name, viewModel, navController){setShowFAB(it)}
-        RevealedRow(tasks, ActivityTypesEnum.PESTICIDE.name, viewModel, navController){setShowFAB(it)}
-        RevealedRow(tasks, ActivityTypesEnum.Other.name, viewModel, navController){setShowFAB(it)}
-    }
-}
-
-@Composable
-fun ActivityGroupSelector(activityName : String ,
-                          selectedActivity : String,
-                          setSelectedActivity : (String) -> Unit
-){
-    Box(
-        modifier = Modifier
-            .padding(5.dp)
-            .clip(CircleShape)
-            .background(
-                if (activityName == selectedActivity) getTaskColor(activityName) else Color.White
-            )
-            .clickable {
-                setSelectedActivity(activityName)
-            }
-            .padding(8.dp)
-    ) {
-        Icon(
-            getTaskIcon(activityName),
-            contentDescription = null,
-            modifier = Modifier.size(35.dp),
-            tint = if (activityName == selectedActivity) Color.White else getTaskColor(activityName).copy(alpha = 0.7f)
-        )
-    }
-}
-
-@Composable
-fun RevealedRow(tasks: List<Task>, activityName: String, viewModel: HomeViewModel, navController : NavHostController, setShowFAB: (Boolean) -> Unit){
-
-    val activity = LocalContext.current as Activity
-
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-        ,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.Start
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-            Box(
-                modifier = Modifier
-                    .padding(5.dp)
-                    .clip(CircleShape)
-                    .background(
-                        Color.White
-                    )
-                    .padding(8.dp)
-            ) {
-                Icon(
-                    getTaskIcon(activityName),
-                    contentDescription = null,
-                    modifier = Modifier.size(35.dp),
-                    tint = getTaskColor(activityName).copy(alpha = 0.7f)
-                )
-            }
-            Text(text = viewModel.taskName(activityName), style = MaterialTheme.typography.body1, color = viewModel.taskColor(activityName), modifier = Modifier.padding(4.dp))
-
-        }
-
-        LazyRow{
-            items(tasks){ item ->
-                if (item.activity_type == activityName){
-                    TaskCard2(task = item, navController){
+                if (viewModel.selectedActivityGroup.value == "all") {
+                    TaskCard2(item, navController) {
                         val intent = Intent(activity, GardenProfileActivity::class.java)
                         intent.putExtra("gardenName", item.garden_name)
                         intent.putExtra("taskScreenShow", true)
                         activity.startActivity(intent)
                     }
+                } else if (viewModel.selectedActivityGroup.value == item.activity_type) {
+                    TaskCard2(item, navController) {
+                        val intent = Intent(activity, GardenProfileActivity::class.java)
+                        intent.putExtra("gardenName", item.garden_name)
+                        intent.putExtra("taskScreenShow", true)
+                        activity.startActivity(intent)
+                    }
+
                 }
             }
         }
     }
 }
+
+    @Composable
+    fun ConcealedFrontLayer(
+        tasks: List<Task>,
+        viewModel: HomeViewModel,
+        navController: NavHostController,
+        setShowFAB: (Boolean) -> Unit
+    ) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(5.dp)
+        ) {
+            RevealedRow(
+                tasks,
+                ActivityTypesEnum.FERTILIZATION.name,
+                viewModel,
+                navController
+            ) { setShowFAB(it) }
+            RevealedRow(
+                tasks,
+                ActivityTypesEnum.IRRIGATION.name,
+                viewModel,
+                navController
+            ) { setShowFAB(it) }
+            RevealedRow(
+                tasks,
+                ActivityTypesEnum.PESTICIDE.name,
+                viewModel,
+                navController
+            ) { setShowFAB(it) }
+            RevealedRow(tasks, ActivityTypesEnum.Other.name, viewModel, navController) {
+                setShowFAB(
+                    it
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun ActivityGroupSelector(
+        activityName: String,
+        selectedActivity: String,
+        setSelectedActivity: (String) -> Unit
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(5.dp)
+                .clip(CircleShape)
+                .background(
+                    if (activityName == selectedActivity) getTaskColor(activityName) else Color.White
+                )
+                .clickable {
+                    setSelectedActivity(activityName)
+                }
+                .padding(8.dp)
+        ) {
+            Icon(
+                getTaskIcon(activityName),
+                contentDescription = null,
+                modifier = Modifier.size(35.dp),
+                tint = if (activityName == selectedActivity) Color.White else getTaskColor(
+                    activityName
+                ).copy(alpha = 0.7f)
+            )
+        }
+    }
+
+    @Composable
+    fun RevealedRow(
+        tasks: List<Task>,
+        activityName: String,
+        viewModel: HomeViewModel,
+        navController: NavHostController,
+        setShowFAB: (Boolean) -> Unit
+    ) {
+
+        val activity = LocalContext.current as Activity
+
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .clip(CircleShape)
+                        .background(
+                            Color.White
+                        )
+                        .padding(8.dp)
+                ) {
+                    Icon(
+                        getTaskIcon(activityName),
+                        contentDescription = null,
+                        modifier = Modifier.size(35.dp),
+                        tint = getTaskColor(activityName).copy(alpha = 0.7f)
+                    )
+                }
+                Text(
+                    text = viewModel.taskName(activityName),
+                    style = MaterialTheme.typography.body1,
+                    color = viewModel.taskColor(activityName),
+                    modifier = Modifier.padding(4.dp)
+                )
+
+            }
+
+            LazyRow {
+                items(tasks) { item ->
+                    if (item.activity_type == activityName) {
+                        TaskCard2(task = item, navController) {
+                            val intent = Intent(activity, GardenProfileActivity::class.java)
+                            intent.putExtra("gardenName", item.garden_name)
+                            intent.putExtra("taskScreenShow", true)
+                            activity.startActivity(intent)
+                        }
+                    }
+                }
+            }
+        }
+    }

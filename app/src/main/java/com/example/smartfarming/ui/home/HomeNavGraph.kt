@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
-import com.example.smartfarming.ui.addactivity.activityscreens.fertilization.Fertilization
 import com.example.smartfarming.ui.addactivity.activityscreens.irrigation.Irrigation
 import com.example.smartfarming.ui.addactivity.activityscreens.others.Others
 import com.example.smartfarming.ui.home.composables.HomeCompose

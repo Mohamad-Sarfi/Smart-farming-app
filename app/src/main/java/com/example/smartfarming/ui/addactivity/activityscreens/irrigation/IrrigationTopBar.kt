@@ -13,21 +13,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigation
-import com.example.smartfarming.ui.addactivities.ui.theme.LightBlue
+import com.example.smartfarming.ui.addactivities.ui.theme.Blue500
+import com.example.smartfarming.ui.addactivities.ui.theme.Blue50
 
 @Composable
 fun IrrigationTopBar(){
     Row(
         Modifier
             .fillMaxWidth()
-            .background(LightBlue)
+            .background(Blue50)
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
         IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Default.ArrowBack, contentDescription = null, tint = BlueIrrigation)
+            Icon(Icons.Default.ArrowBack, contentDescription = null, tint = Blue500)
         }
     }
 }

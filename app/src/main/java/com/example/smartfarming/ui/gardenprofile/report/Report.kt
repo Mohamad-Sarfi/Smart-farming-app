@@ -1,9 +1,6 @@
 package com.example.smartfarming.ui.gardenprofile.report
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,28 +9,60 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Report(
     navHostController: NavHostController,
     gardenName : String
 ){
 
-    Scaffold(
+    val activity = LocalContext.current as Activity
+
+    val viewModel : ReportViewModel =
+        viewModel(factory = ReportViewModelFactory((activity.application as FarmApplication).repo))
+
+
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+
+    )
+
+    val coroutineScope = rememberCoroutineScope()
+
+
+    BottomSheetScaffold(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        floatingActionButton = {
+            ReportFab {
+                coroutineScope.launch {
+                    bottomSheetScaffoldState.bottomSheetState.apply {
+                        if (isCollapsed) expand() else collapse()
+                    }
+                }
+            }
+        },
+        sheetContent = {
+            BottomSheetContent(viewModel)
+        },
+        scaffoldState = bottomSheetScaffoldState,
+        sheetPeekHeight = 35.dp,
+        floatingActionButtonPosition = FabPosition.Center,
+        sheetShape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp)
     ) {
         Column(
             Modifier
@@ -157,7 +186,7 @@ fun GraphsRow(){
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 CircularProgressIndicator(
                     progress = 0.75f,
-                    color = BlueIrrigation,
+                    color = Blue500,
                     strokeWidth = 10.dp,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -243,7 +272,7 @@ fun IrrigationReport(){
                 Text(text = "تعداد آبیاری", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
                 Text(text = "4", style = MaterialTheme.typography.h3, color = Color.Black, )
             }
-            Icon(Icons.Outlined.WaterDrop, contentDescription = null, tint = BlueIrrigation, modifier = Modifier
+            Icon(Icons.Outlined.WaterDrop, contentDescription = null, tint = Blue500, modifier = Modifier
                 .padding(start = 15.dp)
                 .size(55.dp))
         }

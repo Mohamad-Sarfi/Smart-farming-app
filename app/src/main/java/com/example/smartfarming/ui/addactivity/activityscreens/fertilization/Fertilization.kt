@@ -1,7 +1,6 @@
 package com.example.smartfarming.ui.addactivity.activityscreens.fertilization
 
 import android.app.Activity
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -9,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,28 +18,24 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.outlined.Compost
 import androidx.compose.material.icons.outlined.Spa
-import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
@@ -52,42 +46,43 @@ import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewMode
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.WorkerNumber
-import com.example.smartfarming.ui.addactivity.activityscreens.irrigation.IrrigationBody1
-import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 
 @Composable
-fun Fertilization(gardenId : Int, navController : NavHostController){
+fun Fertilization(gardenName : String, navController : NavHostController){
     val activity = LocalContext.current as Activity
 
     val viewModel : FertilizationViewModel =
         viewModel(factory = FertilizationViewModelFactory((activity.application as FarmApplication).repo))
 
 
-    val garden = viewModel.getGarden(gardenId).observeAsState()
+    val garden = viewModel.getGarden(gardenName).observeAsState()
     var gardenName = garden.value?.name ?: ""
 
     Scaffold(
         Modifier
-            .background(PurpleLight)
+            .background(Purple100)
             .fillMaxSize()
     ){
         Column(
             Modifier
                 .fillMaxSize()
-                .background(PurpleLight)
+                .background(Purple100)
         ){
             ActivityTitle(gardenName = gardenName, activityName = "تغذیه", icon = Icons.Outlined.Compost, Purple700)
             ActivitiesStepBars(viewModel.step.value, Purple700, Purple200)
-            FertilizationBody(viewModel, navController)
+            FertilizationBody(viewModel, navController, gardenName)
         }
     }
 }
 
 @Composable
-fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostController) {
+fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostController, gardenName: String) {
+
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .padding(horizontal = 15.dp, vertical = 30.dp)
@@ -96,13 +91,30 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
         shape = RoundedCornerShape(20.dp),
         elevation = 3.dp
     ) {
+
+
+
         ConstraintLayout(
             Modifier
                 .fillMaxSize()
                 .background(Color.White)
         ) {
 
-            val (bottomRow, body) = createRefs()
+            val (bottomRow, body, backgroundPic) = createRefs()
+
+            Icon(
+                Icons.Outlined.Compost,
+                contentDescription = null,
+                tint = Purple200.copy(.1f),
+                modifier = Modifier
+                    .padding(bottom = 1.dp)
+                    .size(300.dp)
+                    .constrainAs(backgroundPic) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            )
 
             Column(
                 Modifier
@@ -131,7 +143,7 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                                     "تغذیه",
                                     date = viewModel.fertilizationDate.value,
                                     Purple700,
-                                    PurpleLight){
+                                    Purple100){
                                     viewModel.fertilizationDate.value = it
                                 }
                                 FertilizationType(viewModel)
@@ -148,10 +160,11 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                                 WorkerNumber(
                                     wNumber =viewModel.fertilizationWorker.value ,
                                     color = Purple700,
-                                    colorLight = PurpleLight,
+                                    colorLight = Purple100,
                                     ){
                                     viewModel.fertilizationWorker.value = it
                                 }
+                                FertilizationVolume(viewModel)
                             }
                     }
                 }
@@ -173,10 +186,10 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
             ) {
                 Button(
                     onClick = {
-                        viewModel.decreaseStep()
                         if (viewModel.step.value == 0){
                             navController.popBackStack()
                         }
+                        viewModel.decreaseStep()
                               },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Purple700,
@@ -192,7 +205,7 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                 }
 
                 Button(
-                    onClick = { viewModel.increaseStep() },
+                    onClick = { viewModel.submitBtnHandler(context, gardenName, navController) },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Purple700,
                         contentColor = Color.White
@@ -244,10 +257,10 @@ fun FertilizationType(viewModel: FertilizationViewModel){
             onClick = { clicked = !clicked},
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                backgroundColor = PurpleLight,
+                backgroundColor = Purple100,
                 contentColor = Purple700
             ),
-            border = BorderStroke(1.dp, PurpleLight)
+            border = BorderStroke(1.dp, Purple100)
         ) {
             Row(
                 Modifier
@@ -333,14 +346,14 @@ fun FertilizerName(viewModel: FertilizationViewModel){
                 .fillMaxWidth()
                 .height(55.dp)
                 .padding(horizontal = 0.dp)
-                .background(PurpleLight, RoundedCornerShape(20.dp))
+                .background(Purple100, RoundedCornerShape(20.dp))
             ,
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = PurpleLight,
+                backgroundColor = Purple100,
                 textColor = Purple700,
-                focusedBorderColor = PurpleLight,
-                unfocusedBorderColor = PurpleLight),
+                focusedBorderColor = Purple100,
+                unfocusedBorderColor = Purple100),
             textStyle = TextStyle(
                 fontFamily = sina,
                 fontWeight = FontWeight.Normal,
@@ -413,6 +426,81 @@ fun FertilizerName(viewModel: FertilizationViewModel){
 
         }
 
+    }
+}
+
+@Composable
+fun FertilizationVolume(viewModel: FertilizationViewModel){
+
+    val focusManager = LocalFocusManager.current
+    val typeList = stringArrayResource(id = R.array.fertilization_type)
+
+    Column(
+        modifier = Modifier.padding(20.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.End) {
+
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "حجم کود",
+                style = MaterialTheme.typography.subtitle1,
+                color = Purple500
+            )
+            Icon(
+                Icons.Outlined.Compost,
+                contentDescription = null,
+                tint = Purple700,
+                modifier = Modifier.padding(start = 10.dp)
+            )
+        }
+
+
+        OutlinedTextField(
+            value = if (viewModel.fertilizationVolume.value == 0f) ""
+                else viewModel.updateVolumeValueText(viewModel.fertilizationVolume.value.toString()),
+            onValueChange = {viewModel.setVolumeValue(it)},
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp)
+                .padding(horizontal = 0.dp)
+                .background(Purple100, RoundedCornerShape(20.dp))
+            ,
+            shape = RoundedCornerShape(20.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Purple100,
+                textColor = Purple700,
+                focusedBorderColor = Purple100,
+                unfocusedBorderColor = Purple100),
+            textStyle = TextStyle(
+                fontFamily = sina,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp,
+                textDirection = TextDirection.ContentOrRtl,
+                textAlign = TextAlign.Center
+            ),
+            singleLine = true,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
+            ),
+            placeholder = {
+                Text(
+                    text = viewModel.decideFertilizationVolume(viewModel.fertilizationType.value, typeList),
+                    style = MaterialTheme.typography.subtitle1, modifier = Modifier.padding(start = 10.dp),
+                    color = Purple200
+                )
+            }
+        )
     }
 }
 

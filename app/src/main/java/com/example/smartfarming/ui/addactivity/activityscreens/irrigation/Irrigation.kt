@@ -1,32 +1,22 @@
 package com.example.smartfarming.ui.addactivity.activityscreens.irrigation
 
 import android.app.Activity
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Shower
-import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material.icons.outlined.WaterDrop
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -34,22 +24,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
-import com.example.smartfarming.ui.addactivities.Screens.DatePicker
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigation
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationDark
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationLight
-import com.example.smartfarming.ui.addactivities.ui.theme.LightBlue
+import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.WorkerNumber
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModelFactory
-import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 
@@ -65,15 +51,18 @@ fun Irrigation(gardenName : String = "محمد", navHostController: NavHostContr
 
     Scaffold(
         Modifier
-            .background(LightBlue)
+            .background(Blue50)
             .fillMaxSize()
     ) {
         Column(
             Modifier
                 .fillMaxSize()
-                .background(LightBlue)) {
+                .background(Blue50),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             ActivityTitle(gardenName = gardenName, activityName = "آبیاری", icon =Icons.Default.WaterDrop, BlueIrrigationDark)
-            ActivitiesStepBars(viewmodel.step.value, BlueIrrigationDark, BlueIrrigationLight)
+            ActivitiesStepBars(viewmodel.step.value, BlueIrrigationDark, Blue100)
             IrrigationBody(viewmodel, navHostController)
         }
     }
@@ -95,7 +84,22 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            val (bottomRow, body) = createRefs()
+            val (bottomRow, body, backgroundPic) = createRefs()
+
+            Icon(
+                Icons.Outlined.WaterDrop,
+                contentDescription = null,
+                tint = Blue100.copy(.1f),
+                modifier = Modifier
+                    .padding(bottom = 1.dp)
+                    .size(300.dp)
+                    .constrainAs(backgroundPic){
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .zIndex(.5f)
+            )
 
             Column(
                 Modifier
@@ -105,6 +109,10 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                         end.linkTo(parent.end)
                         bottom.linkTo(bottomRow.top)
                     }
+                    .zIndex(1f),
+
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 IrrigationBody1(viewModel = viewModel)
             }
@@ -129,7 +137,7 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                         }
                         viewModel.decreaseStep() },
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = BlueIrrigation,
+                        backgroundColor = Blue500,
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(20.dp),
@@ -144,7 +152,7 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                 Button(
                     onClick = {viewModel.increaseStep()},
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = BlueIrrigation,
+                        backgroundColor = Blue500,
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(20.dp),
@@ -182,7 +190,7 @@ fun IrrigationBody1(viewModel: IrrigationViewModel){
                         "آبیاری",
                         date = viewModel.irrigationDate.value,
                         BlueIrrigationDark,
-                        LightBlue){
+                        Blue50){
                         viewModel.irrigationDate.value = it
                     }
                     IrrigationVolume(viewModel)
@@ -201,7 +209,7 @@ fun IrrigationBody1(viewModel: IrrigationViewModel){
                     WorkerNumber(
                         viewModel.step.value,
                         BlueIrrigationDark,
-                        LightBlue
+                        Blue50
                     ){
                         viewModel.irrigationWorkers.value = it
                     }
@@ -239,15 +247,15 @@ fun IrrigationVolume(viewModel: IrrigationViewModel){
                 .fillMaxWidth()
                 .height(60.dp)
                 .padding(horizontal = 0.dp)
-                .background(LightBlue, RoundedCornerShape(20.dp)),
+                .background(Blue50, RoundedCornerShape(20.dp)),
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                backgroundColor = Color.Green,
                textColor = BlueIrrigationDark,
-               focusedBorderColor = LightBlue,
+               focusedBorderColor = Blue50,
                trailingIconColor = BlueIrrigationDark,
                leadingIconColor = BlueIrrigationDark,
-                unfocusedBorderColor = LightBlue,
+                unfocusedBorderColor = Blue50,
 
 
            ),
@@ -311,16 +319,16 @@ fun IrrigationTime(viewModel: IrrigationViewModel){
                 .fillMaxWidth()
                 .height(60.dp)
                 .padding(horizontal = 0.dp)
-                .background(LightBlue, RoundedCornerShape(20.dp))
+                .background(Blue50, RoundedCornerShape(20.dp))
             ,
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = LightBlue,
+                backgroundColor = Blue50,
                 textColor = BlueIrrigationDark,
-                focusedBorderColor = LightBlue,
+                focusedBorderColor = Blue50,
                 trailingIconColor = BlueIrrigationDark,
                 leadingIconColor = BlueIrrigationDark,
-                unfocusedBorderColor = LightBlue,
+                unfocusedBorderColor = Blue50,
                 ),
             leadingIcon = {
                 Icon(
@@ -384,10 +392,10 @@ fun IrrigationType(viewModel: IrrigationViewModel){
             onClick = { clicked = !clicked},
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                backgroundColor = LightBlue,
+                backgroundColor = Blue50,
                 contentColor = BlueIrrigationDark
             ),
-            border = BorderStroke(1.dp, LightBlue)
+            border = BorderStroke(1.dp, Blue50)
         ) {
             Row(
                 Modifier

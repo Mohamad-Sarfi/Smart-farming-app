@@ -19,10 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigation
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationDark
-import com.example.smartfarming.ui.addactivities.ui.theme.LightBlue
-import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 
 @Composable

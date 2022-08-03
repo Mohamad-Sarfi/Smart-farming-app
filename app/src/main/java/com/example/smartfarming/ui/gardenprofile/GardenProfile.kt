@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.outlined.Inventory
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Reviews
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +37,6 @@ import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.gardenprofile.GardenProfileViewModel
 import com.example.smartfarming.ui.gardenprofile.composables.ReportDiagram
 import com.example.smartfarming.ui.gardenprofile.composables.ToDos
-import com.example.smartfarming.ui.gardens.GardensViewModel
 import com.example.smartfarming.ui.home.composables.MyFAB
 import com.example.smartfarming.utils.getTaskList
 
@@ -138,7 +136,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ){
-                MainIcons(Icons.Default.Thermostat, "آب و هوا", waterBlueDark){
+                MainIcons(Icons.Default.Thermostat, "آب و هوا", Blue700){
                     navController.navigate(route = "${AppScreensEnum.GardenWeatherScreen.name}/${garden.value!!.name}")
                 }
                 MainIcons(Icons.Outlined.Inventory, "محصولات", YellowPesticide){

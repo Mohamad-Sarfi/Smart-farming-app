@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.ui.AppScreensEnum
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigation
+import com.example.smartfarming.ui.addactivities.ui.theme.Blue500
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.Purple500
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
@@ -26,7 +26,7 @@ fun getTaskIcon(activityType: String) : ImageVector {
 fun getTaskColor(activityType: String) : Color {
     return when (activityType) {
         ActivityTypesEnum.FERTILIZATION.name -> Purple500
-        ActivityTypesEnum.IRRIGATION.name -> BlueIrrigation
+        ActivityTypesEnum.IRRIGATION.name -> Blue500
         ActivityTypesEnum.PESTICIDE.name -> YellowPesticide
         else -> MainGreen
     }

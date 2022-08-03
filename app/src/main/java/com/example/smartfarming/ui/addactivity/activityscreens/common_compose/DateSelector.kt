@@ -6,17 +6,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarToday
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.smartfarming.ui.addactivities.Screens.DatePicker
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigation
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigationLight
-import com.example.smartfarming.ui.addactivities.ui.theme.LightBlue
-import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.common_composables.PersianDatePicker
 
 @Composable

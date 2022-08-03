@@ -33,7 +33,7 @@ import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.Screens.DatePicker
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
-import com.example.smartfarming.ui.addactivities.ui.theme.BlueIrrigation
+import com.example.smartfarming.ui.addactivities.ui.theme.Blue500
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
@@ -96,7 +96,7 @@ fun Irrigation(
                     .fillMaxWidth()
                     .padding(top = 30.dp, bottom = 50.dp),
                 icon = painterResource(id = R.drawable.irrigation_line1),
-                color = BlueIrrigation
+                color = Blue500
             )
 
             Body(

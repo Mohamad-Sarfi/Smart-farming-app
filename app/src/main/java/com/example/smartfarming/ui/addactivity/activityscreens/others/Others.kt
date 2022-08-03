@@ -16,16 +16,13 @@ import androidx.compose.material.icons.filled.Agriculture
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.outlined.Agriculture
-import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -56,7 +53,7 @@ fun Others(gardenName : String, navHostController : NavHostController){
 
     Scaffold(
         Modifier
-            .background(LightGreen)
+            .background(MainGreen100)
             .fillMaxSize()
     ) {
         Column(
@@ -92,7 +89,21 @@ fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController)
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            val (bottomRow, body) = createRefs()
+            val (bottomRow, body, backgroundPic) = createRefs()
+
+            Icon(
+                Icons.Outlined.Agriculture,
+                contentDescription = null,
+                tint = LightGreen1.copy(.1f),
+                modifier = Modifier
+                    .padding(bottom = 1.dp)
+                    .size(300.dp)
+                    .constrainAs(backgroundPic){
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            )
             Column(
                 Modifier
                     .fillMaxSize()
@@ -117,7 +128,7 @@ fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController)
                                     title = "فعالیت",
                                     date = viewModel.date.value,
                                     color = MainGreen,
-                                    colorLight = LightGreen
+                                    colorLight = MainGreen100
                                 ) {
                                     viewModel.date.value = it
                                 }
@@ -233,7 +244,7 @@ fun ActivityName(viewModel: OthersViewModel){
             modifier = Modifier
                 .height(55.dp)
                 .fillMaxWidth()
-                .background(LightGreen, RoundedCornerShape(20.dp))
+                .background(MainGreen100, RoundedCornerShape(20.dp))
                 .clip(RoundedCornerShape(20.dp))
                 .clickable {
                     clicked = !clicked
@@ -302,14 +313,14 @@ fun ActivityNameSpecify(viewModel: OthersViewModel){
                 .fillMaxWidth()
                 .height(55.dp)
                 .padding(horizontal = 0.dp)
-                .background(PurpleLight, RoundedCornerShape(20.dp))
+                .background(Purple100, RoundedCornerShape(20.dp))
             ,
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = PurpleLight,
+                backgroundColor = Purple100,
                 textColor = Purple700,
-                focusedBorderColor = PurpleLight,
-                unfocusedBorderColor = PurpleLight),
+                focusedBorderColor = Purple100,
+                unfocusedBorderColor = Purple100),
             textStyle = TextStyle(
                 fontFamily = sina,
                 fontWeight = FontWeight.Normal,

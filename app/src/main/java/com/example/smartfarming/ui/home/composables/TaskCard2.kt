@@ -1,47 +1,31 @@
 package com.example.smartfarming.ui.home.composables
 
 import android.app.Activity
-import android.content.Intent
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.outlined.Agriculture
-import androidx.compose.material.icons.outlined.Compost
-import androidx.compose.material.icons.outlined.PestControl
-import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Task
-import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.*
-import com.example.smartfarming.ui.addactivity.AddActivityActivity
-import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
-import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
 import com.example.smartfarming.utils.getTaskColor
 import com.example.smartfarming.utils.getTaskIcon
 
 @Composable
-fun TaskCard2(task: Task, navController: NavHostController, clickHandler : () -> Unit){
+fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boolean = false, clickHandler : () -> Unit){
 
     val activity = LocalContext.current as Activity
 
@@ -63,10 +47,10 @@ fun TaskCard2(task: Task, navController: NavHostController, clickHandler : () ->
             .height(cardHeight)
             .clip(RoundedCornerShape(15.dp))
             .clickable {
-                if (!clicked){
-                    clicked = !clicked
-                } else {
+                if (clicked || oneStepClick){
                     clickHandler()
+                } else {
+                    clicked = !clicked
                 }
             }
             .padding(top = 2.dp),

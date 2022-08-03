@@ -5,13 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModel
 import com.example.smartfarming.ui.addactivity.AddActivity
-import com.example.smartfarming.ui.addactivity.activityscreens.Fertilization
-import com.example.smartfarming.ui.addactivity.activityscreens.Irrigation
 import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
+import com.example.smartfarming.ui.addactivity.activityscreens.irrigation.Irrigation
 
 @Composable
 fun SetupNavGraph(
@@ -46,20 +44,19 @@ fun SetupNavGraph(
                 )
             ){ entry ->
                 val gardenName = entry.arguments?.getString("name")
-                //Irrigation(gardenName = gardenName!!, navController = navController)
-                Irrigation(gardenName!!, navController)
+                Irrigation(gardenName!! , navHostController = navController)
             }
         composable(
-                route = "$fertilization/{id}",
+                route = "$fertilization/{name}",
                 arguments = listOf(
-                    navArgument("id") {
-                        type = NavType.IntType
+                    navArgument("name") {
+                        type = NavType.StringType
                     }
                 )
             ){ entry ->
-                val garden_id = entry.arguments?.getInt("id")
+                val gardenName = entry.arguments?.getString("name")
                 com.example.smartfarming.ui.addactivity.activityscreens.fertilization.Fertilization(
-                    gardenId = garden_id!!,
+                    gardenName = gardenName!!,
                     navController = navController
                 )
             }
