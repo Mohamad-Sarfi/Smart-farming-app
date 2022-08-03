@@ -58,7 +58,7 @@ fun Irrigation(gardenName : String = "محمد", navHostController: NavHostContr
             Modifier
                 .fillMaxSize()
                 .background(Blue50),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ActivityTitle(gardenName = gardenName, activityName = "آبیاری", icon =Icons.Default.WaterDrop, BlueIrrigationDark)
@@ -73,9 +73,8 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
     Card(
         modifier = Modifier
             .padding(horizontal =  15.dp, vertical = 15.dp)
-            .fillMaxHeight()
-            .fillMaxWidth()
-            ,
+            .fillMaxHeight(.85f)
+            .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = 3.dp
     ) {
@@ -103,15 +102,13 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
 
             Column(
                 Modifier
-                    .fillMaxSize()
                     .constrainAs(body) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                        bottom.linkTo(bottomRow.top)
+                        top.linkTo(parent.top)
                     }
                     .zIndex(1f),
-
-                verticalArrangement = Arrangement.Bottom,
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 IrrigationBody1(viewModel = viewModel)
@@ -182,8 +179,8 @@ fun IrrigationBody1(viewModel: IrrigationViewModel){
                 Column(
                 Modifier
                     .fillMaxSize()
-                    .padding(30.dp),
-                verticalArrangement = Arrangement.Center,
+                    .padding(horizontal = 30.dp, vertical = 40.dp),
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     DateSelector(

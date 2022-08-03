@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity.viewmodels
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,10 +28,9 @@ class IrrigationViewModel(val repo : GardenRepo) : ViewModel() {
 
 
 
-    private val garden = MutableLiveData<Garden>().apply {
-        value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
-            0.0, 0)
-    }
+    private val garden = mutableStateOf( Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
+        0.0, 0)
+    )
 
     // Irrigation specs
     var irrigationDate =
@@ -56,7 +56,7 @@ class IrrigationViewModel(val repo : GardenRepo) : ViewModel() {
         }
     }
 
-    fun getGarden(gardenName : String) : MutableLiveData<Garden> {
+    fun getGarden(gardenName : String) : MutableState<Garden> {
         getGardenByName(gardenName)
         return garden
     }

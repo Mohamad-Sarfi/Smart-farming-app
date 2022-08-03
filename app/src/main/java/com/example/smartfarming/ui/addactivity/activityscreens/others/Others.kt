@@ -59,7 +59,9 @@ fun Others(gardenName : String, navHostController : NavHostController){
         Column(
             Modifier
                 .fillMaxSize()
-                .background(LightGreen3)
+                .background(LightGreen3),
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ActivityTitle(
                 gardenName = gardenName,
@@ -78,7 +80,7 @@ fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController)
     Card(
         modifier = Modifier
             .padding(horizontal = 15.dp, vertical = 30.dp)
-            .fillMaxHeight()
+            .fillMaxHeight(.85f)
             .fillMaxWidth()
         ,
         shape = RoundedCornerShape(20.dp),

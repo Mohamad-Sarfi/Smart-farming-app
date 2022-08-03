@@ -127,7 +127,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            GardenTitle(gardenName = garden.value!!.name)
+            GardenTitle(gardenName = garden.value!!.name, navController)
             ReportDiagram()
             Report(navController, garden.value!!.name)
 
@@ -235,7 +235,7 @@ fun MainIcons(
 }
 
 @Composable
-fun GardenTitle(gardenName : String){
+fun GardenTitle(gardenName : String, navController: NavHostController){
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -245,7 +245,9 @@ fun GardenTitle(gardenName : String){
         horizontalArrangement = Arrangement.Center
     ) {
         Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier
-            .clickable { }
+            .clickable {
+                navController.navigate(route = AppScreensEnum.GardenEditScreen.name)
+            }
             .padding(5.dp))
         Text(text = gardenName, style = MaterialTheme.typography.h4, color = MainGreen, modifier = Modifier.padding(5.dp))
 

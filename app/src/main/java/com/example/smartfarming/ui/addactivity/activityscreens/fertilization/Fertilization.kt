@@ -69,7 +69,9 @@ fun Fertilization(gardenName : String, navController : NavHostController){
         Column(
             Modifier
                 .fillMaxSize()
-                .background(Purple100)
+                .background(Purple100),
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.CenterHorizontally
         ){
             ActivityTitle(gardenName = gardenName, activityName = "تغذیه", icon = Icons.Outlined.Compost, Purple700)
             ActivitiesStepBars(viewModel.step.value, Purple700, Purple200)
@@ -86,7 +88,7 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
     Card(
         modifier = Modifier
             .padding(horizontal = 15.dp, vertical = 30.dp)
-            .fillMaxHeight()
+            .fillMaxHeight(.85f)
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = 3.dp
@@ -124,7 +126,9 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                         end.linkTo(parent.end)
                         top.linkTo(parent.top)
                         bottom.linkTo(bottomRow.top)
-                    }
+                    },
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Crossfade(
                     targetState = viewModel.step.value,

@@ -53,7 +53,7 @@ fun Irrigation(
     val viewModel : IrrigationViewModel =
          viewModel(factory = IrrigationViewModelFactory((activity?.application as FarmApplication).repo))
 
-    val garden = viewModel.getGarden(gardenName).observeAsState()
+    val garden = viewModel.getGarden(gardenName)
     var irrigationDate = viewModel.irrigationDate
     var irrigationType = viewModel.irrigationType
     val irrigationDuration = viewModel.irrigationDuration

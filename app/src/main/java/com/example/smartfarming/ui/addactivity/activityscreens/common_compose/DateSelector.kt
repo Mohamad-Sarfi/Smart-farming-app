@@ -61,7 +61,7 @@ fun DateSelector(
             )
         ) {
             Text(
-                text =if (date["year"] == "") "تاریخ آبیاری" else "${date["year"]}/${date["month"]}/${date["day"]}",
+                text =if (date["year"] == "") "تاریخ " + title else "${date["year"]}/${date["month"]}/${date["day"]}",
                 style = MaterialTheme.typography.body1
             )
         }
