@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
+import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
@@ -46,37 +48,29 @@ fun GardenSpinner(
 
     Card(
         modifier = Modifier
-            .padding(vertical = 15.dp)
+            .padding(vertical = 10.dp)
             .fillMaxWidth(0.8f),
         elevation = 3.dp,
-        shape = MaterialTheme.shapes.large
+        shape = MaterialTheme.shapes.medium,
+        backgroundColor = LightGray
     ){
-        ConstraintLayout(modifier = Modifier
-            .width(300.dp)
-            .shadow(elevation = 3.dp)
-            .background(Color(0xFFEEEEEE))
-            .clickable {
-                expanded = !expanded
-            }
-            .padding(vertical = 5.dp, horizontal = 10.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    expanded = !expanded
+                }
+                .padding(vertical = 5.dp, horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-
-            val (icon, text) = createRefs()
 
             Icon(
                 imageVector = Icons.Filled.ArrowDropDown,
                 contentDescription = "",
                 tint = MaterialTheme.colors.primary,
                 modifier = Modifier
-                    .constrainAs(icon){
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .padding(
-                        start = 2.dp
-                    )
-                    .size(55.dp)
+                    .size(50.dp)
                     .rotate(arrowRotateDegree)
                 ,
 
@@ -85,14 +79,9 @@ fun GardenSpinner(
                 text = if (currentGarden.isNullOrEmpty()) "انتخاب باغ" else currentGarden,
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier
-                    .constrainAs(text){
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(parent.end)
-                    }
-                    .padding(end = 15.dp)
             )
 
+        }
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }) {
@@ -106,8 +95,7 @@ fun GardenSpinner(
                         Text(
                             text = garden,
                             modifier = Modifier
-                                .width(300.dp)
-                                .padding(vertical = 5.dp, horizontal = 20.dp),
+                                .width(200.dp),
                             style = MaterialTheme.typography.body2
                         )
                     }
@@ -115,6 +103,5 @@ fun GardenSpinner(
                 }
 
             }
-        }
     }
 }

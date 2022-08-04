@@ -1,12 +1,15 @@
 package com.example.smartfarming.ui.harvest
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import android.util.Log
+import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Harvest
 import com.example.smartfarming.utils.PersianCalender
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
@@ -15,18 +18,25 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
 
     var harvestDate =
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
+
     var selectedGarden = MutableLiveData<String>("")
     var harvestWeight = MutableLiveData<Float>()
     var harvestType = MutableLiveData<String>()
 
     var thisYear = PersianCalender.getShamsiDateMap()["year"].toString()
-    var harvestList = MutableLiveData<List<Harvest>>(listOf())
+
+
+    var _harvestList = mutableStateOf<List<Harvest>>(emptyList())
+    val mHarvestList = mutableStateListOf<Harvest>()
+
+
     var selectedYear = mutableStateOf(thisYear)
     var selectedType = mutableStateOf("همه")
 
     fun setDate(date : MutableMap<String, String>){
         harvestDate.value = date
     }
+
 
     fun getGardens() : LiveData<List<Garden>>{
         var list = liveData<List<Garden>> {  }
@@ -46,35 +56,35 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
     fun getHarvestByGardenName(gardeName : String){
         viewModelScope.launch {
             repo.getHarvestByGardenName(gardeName).collect{
-                harvestList.value = it
+                _harvestList.value = it
             }
         }
     }
 
     fun getHarvestByYear(gardeName: String, year: String){
         viewModelScope.launch {
-            harvestList.value = repo.getHarvestByYear(gardeName, year)
+            _harvestList.value = repo.getHarvestByYear(gardeName, year)
         }
     }
 
     fun getHarvestByYearType(gardeName: String, year: String, type : String){
         viewModelScope.launch {
-            harvestList.value = repo.getHarvestByYearType(gardeName, year, type)
+            _harvestList.value = repo.getHarvestByYearType(gardeName, year, type)
         }
     }
 
     fun getHarvestByType(gardeName: String, type : String){
         viewModelScope.launch {
-            harvestList.value = repo.getHarvestByType(gardeName, type)
+            _harvestList.value = repo.getHarvestByType(gardeName, type)
         }
     }
 
     fun getYearSum(year:String) : Double{
         var sum = 0.0
-        if (harvestList.value.isNullOrEmpty()){
+        if (_harvestList.value.isNullOrEmpty()){
             sum = 0.0
         } else {
-            for (h in harvestList.value!!){
+            for (h in _harvestList.value){
                 if (h.year == year){
                     sum += h.weight
                 }

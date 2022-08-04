@@ -2,6 +2,7 @@ package com.example.smartfarming.ui.harvest.harvest_archive
 
 import android.app.Activity
 import android.app.Application
+import android.util.Log
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -65,12 +66,20 @@ fun GardenHarvestScreen(gardenName: String){
     } else {
         viewModel.getHarvestByYearType(gardenName, selectedYear.value, selectedType.value)
     }
-    val harvestList = viewModel.harvestList.observeAsState()
+    val harvestList = remember {
+        viewModel._harvestList
+    }
 
+    val mHarvestList = viewModel.mHarvestList
 
 
     if (!harvestList.value.isNullOrEmpty()){
         yearSum = viewModel.getYearSum(selectedYear.value)
+
+        for (e in harvestList.value){
+            mHarvestList.add(e)
+        }
+
     }
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
@@ -114,7 +123,7 @@ fun GardenHarvestScreen(gardenName: String){
                         top.linkTo(parent.top)
                     }
                 ,
-                harvestList = harvestList.value,
+                harvestList = mHarvestList,
                 viewModel
             )
         }
@@ -234,7 +243,9 @@ fun HarvestListCompose(modifier: Modifier, harvestList: List<Harvest>?, viewMode
             Icon(
                 Icons.Default.Warning,
                 contentDescription = null, tint = YellowPesticide,
-                modifier = Modifier.padding(20.dp).size(55.dp))
+                modifier = Modifier
+                    .padding(20.dp)
+                    .size(55.dp))
             Text(text = "اطلاعاتی وارد نشده")
         }
 
@@ -305,6 +316,7 @@ fun HarvestListItem(harvest: Harvest, viewModel: HarvestViewModel){
                     .fillMaxWidth()
                     .clickable {
                         deleteItem(harvest, viewModel)
+
                     },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
@@ -318,5 +330,6 @@ fun HarvestListItem(harvest: Harvest, viewModel: HarvestViewModel){
 }
 
 fun deleteItem(harvest: Harvest, viewModel: HarvestViewModel){
+    viewModel.mHarvestList.remove(harvest)
     viewModel.deleteHarvestItem(harvest)
 }

@@ -13,6 +13,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Event
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -34,6 +36,7 @@ import com.example.smartfarming.data.room.entities.Harvest
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.common_composables.GardenSpinner
+import com.example.smartfarming.ui.common_composables.PersianDatePicker
 import com.example.smartfarming.ui.harvest.HarvestViewModel
 import com.example.smartfarming.ui.harvest.HarvestViewModelFactory
 
@@ -58,33 +61,23 @@ fun AddHarvestCompose(
     val selectedGarden by viewModel.selectedGarden.observeAsState()
     val harvestType by viewModel.harvestType.observeAsState()
 
-    ConstraintLayout(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(LightGray2)
+            .background(LightGray2),
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val (pic, body) = createRefs()
         Icon(
             painterResource(id = R.drawable.pistachio),
             contentDescription = null,
             tint = MainGreen,
             modifier = Modifier
-                .constrainAs(pic) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(body.top)
-                }
                 .padding(10.dp)
                 .size(100.dp)
         )
             AddHarvestBody(
                 modifier = Modifier
-                    .constrainAs(body) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                    }
                     .padding(20.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(25.dp))
@@ -139,58 +132,61 @@ fun AddHarvestBody(
             color = MainGreen
         )
 
-        GardenSpinner(gardensList = gardenList, currentGarden = currentGarden ){
-            setGarden(it)
+
+        Column(Modifier.fillMaxHeight(0.7f), verticalArrangement = Arrangement.SpaceEvenly) {
+
+            GardenSpinner(gardensList = gardenList, currentGarden = currentGarden ){
+                setGarden(it)
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(0.8f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+
+                HarvestTypeSpinner(harvestType ,setHarvestType = {setHarvestType(it)})
+
+                OutlinedTextField(
+                    value = strWeight,
+                    onValueChange = {
+                      strWeight = it
+                        setWeight(strWeight.toFloatOrNull())
+                    } ,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        backgroundColor = Color.White,
+                        focusedBorderColor = MainGreen,
+                        unfocusedBorderColor = MainGreen,
+                        focusedLabelColor = MainGreen,
+                        unfocusedLabelColor = MainGreen,
+                        trailingIconColor = MainGreen
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
+                    shape = MaterialTheme.shapes.medium,
+                    maxLines = 1,
+                    singleLine = true,
+                    modifier = Modifier
+                        .padding(start = 13.dp)
+                        .fillMaxWidth(1f)
+                        .height(60.dp),
+                    keyboardActions = KeyboardActions {
+                        focusManager.clearFocus()
+                    },
+                    textStyle = MaterialTheme.typography.body1,
+                    placeholder = {
+                        Text(text = "وزن به کیلو", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
+                    }
+                )
+
+
+
+            }
+
+            HarvestDateSelector(viewModel.harvestDate.value){viewModel.harvestDate.value = it}
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(0.8f),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-
-            HarvestTypeSpinner(harvestType ,setHarvestType = {setHarvestType(it)})
-
-            OutlinedTextField(
-                value = strWeight,
-                onValueChange = {
-                  strWeight = it
-                    setWeight(strWeight.toFloatOrNull())
-                } ,
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    backgroundColor = Color.White,
-                    focusedBorderColor = MainGreen,
-                    unfocusedBorderColor = MainGreen,
-                    focusedLabelColor = MainGreen,
-                    unfocusedLabelColor = MainGreen,
-                    trailingIconColor = MainGreen
-                ),
-                label = {
-                    Text(text = "وزن (کیلو)", style = MaterialTheme.typography.subtitle1)
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-                shape = MaterialTheme.shapes.large,
-                maxLines = 1,
-                singleLine = true,
-                modifier = Modifier
-                    .padding(2.dp)
-                    .fillMaxWidth(1f)
-                    .height(60.dp),
-                keyboardActions = KeyboardActions {
-                    focusManager.clearFocus()
-                },
-                textStyle = MaterialTheme.typography.body2
-            )
-
-
-
-        }
-
-        DateSelectHarvest(harvestDate = harvestDate){
-            viewModel.setDate(it)
-        }
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -208,7 +204,7 @@ fun AddHarvestBody(
                     .padding(end = 10.dp)
                     .clip(MaterialTheme.shapes.large)
                     .background(MainGreen)
-                    .height(61.dp)
+                    .height(52.dp)
                     .padding(3.dp)
             ) {
                 Icon(
@@ -246,7 +242,7 @@ fun AddHarvestBody(
                 ),
                 modifier = Modifier
                     .width(210.dp)
-                    .height(65.dp)
+                    .height(55.dp)
                     .padding(vertical = 2.dp)
             ) {
                 Text(text = "ثبت", style = MaterialTheme.typography.body2)
@@ -271,24 +267,30 @@ fun HarvestTypeSpinner(
     var expanded by remember {
         mutableStateOf(false)
     }
-    
-    Row(modifier = Modifier
-        .padding(end = 8.dp)
-        .fillMaxWidth(0.4f)
-        .height(53.dp)
-        .clip(MaterialTheme.shapes.large)
-        .clickable { expanded = !expanded }
-        .border(2.dp, color = MainGreen, shape = MaterialTheme.shapes.large)
-        .padding(end = 1.dp)
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(0.4f)
+            .height(55.dp)
+            .clickable { expanded = !expanded }
         ,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        shape = MaterialTheme.shapes.medium,
+        backgroundColor = LightBackground
     ) {
-        Text(
-            text = if (harvestType.isNullOrBlank()) pistachiosTypeList[0] else harvestType,
-            style = MaterialTheme.typography.body1)
+        Row(modifier = Modifier
+            .padding(end = 8.dp)
+            .padding(end = 1.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = if (harvestType.isNullOrBlank()) pistachiosTypeList[0] else harvestType,
+                style = MaterialTheme.typography.body1,
+                color = MainGreen
+            )
+        }
     }
-    
+
     DropdownMenu(
         expanded = expanded, 
         onDismissRequest = {  expanded = false }) {
@@ -308,5 +310,39 @@ fun HarvestTypeSpinner(
             }
     }
 
+}
+
+@Composable
+fun HarvestDateSelector(date : MutableMap<String, String> , setDate : (MutableMap<String, String>) -> Unit){
+
+    var clicked by remember {
+        mutableStateOf(false)
+    }
+
+    Card(
+        Modifier
+            .fillMaxWidth(0.8f)
+            .height(55.dp),
+        backgroundColor = LightBackground,
+        shape = MaterialTheme.shapes.medium
+    ) {
+        Row(
+            Modifier
+                .fillMaxSize()
+                .clickable {
+                    clicked = true
+                }
+                .padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            Text(text = if (date["day"] == "") "تاریخ برداشت" else "${date["year"]}/${date["month"]}/${date["day"]}", color = MainGreen, style = MaterialTheme.typography.body1)
+            Icon(Icons.Default.Event, contentDescription = null, Modifier.size(25.dp), tint = MainGreen)
+            if (clicked){
+                PersianDatePicker(setOpenDialog = {clicked = it}, updateDate = {setDate(it)})
+            }
+        }
+    }
 }
 
