@@ -59,6 +59,7 @@ class SplashActivity : ComponentActivity() {
         handler.postDelayed({
             userPreferences.authToken.asLiveData().observe(
                 this, Observer {
+                    startActivity(Intent(this, MainActivity::class.java))
 
                     if (it == null){
                         finish()

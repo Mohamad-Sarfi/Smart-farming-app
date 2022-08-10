@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,10 +21,12 @@ import com.example.smartfarming.ui.harvest.compose.HarvestCompose
 import com.example.smartfarming.ui.home.composables.HomeCompose
 import com.example.smartfarming.ui.home.composables.MyFAB
 import com.example.smartfarming.ui.main_screen.bottom_navigation.*
+import com.example.smartfarming.ui.profile.ProfileActivity
 import com.example.smartfarming.ui.profile.ProfileCompose
+import com.example.smartfarming.ui.profile.ProfileViewModel
 
 @Composable
-fun MainScreen(){
+fun MainScreen(viewModel : ProfileViewModel){
     val navController = rememberNavController()
 
     val context = LocalContext.current
@@ -64,7 +67,9 @@ fun MainScreen(){
                         navController = harvestNavController
                     )
                 }
-                composable(NAV_PROFILE) { ProfileCompose()}
+                composable(NAV_PROFILE) {
+                    ProfileCompose()
+                }
             }
         }
     }

@@ -17,6 +17,9 @@ interface UserDao {
     suspend fun insertAddress(addressEntity: AddressEntity)
 
     @Query("SELECT * FROM user")
-    fun getUserInfo(): Flow<UserEntity>
+    suspend fun getUserInfo(): UserEntity
+
+    @Query("SELECT * FROM user_address")
+    suspend fun getAddressInfo(): AddressEntity
 
 }

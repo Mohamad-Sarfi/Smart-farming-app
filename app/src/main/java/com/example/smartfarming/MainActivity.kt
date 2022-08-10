@@ -3,11 +3,13 @@ package com.example.smartfarming
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,7 +19,10 @@ import com.example.smartfarming.ui.addactivities.AddActivities
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.addgarden.GardenNavGraph
+import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
+import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModelFactory
 import com.example.smartfarming.ui.main_screen.MainScreen
+import com.example.smartfarming.ui.profile.ProfileViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,7 +56,16 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MainGreen
                 ) {
-                    MainScreen()
+//                    val viewModel: ProfileViewModel = viewModel(
+//                        factory = ProfileViewModel.ProfileViewModelFactory
+//                            ((applicationContext as FarmApplication).gardenRemoteRepo)
+//                    )
+                    val viewModel : ProfileViewModel by viewModels{
+                        ProfileViewModel.ProfileViewModelFactory(
+                            (application as FarmApplication).gardenRemoteRepo
+                        )
+                    }
+                    MainScreen(viewModel)
                 }
             }
         }

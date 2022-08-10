@@ -4,6 +4,22 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/compose-model-1657866776893.xml" value="0.4398148148148148" />
+        <entry key="../../../../layout/compose-model-1658153765969.xml" value="0.31165540540540543" />
+        <entry key="../../../../layout/compose-model-1658248328551.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1658939163974.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659109709820.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659197360276.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659463078779.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659550271365.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659622931788.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659686366470.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659698890611.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659710138105.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659714392098.xml" value="0.4398148148148148" />
+        <entry key="../../../../layout/compose-model-1659714710080.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659719746646.xml" value="0.4398148148148148" />
+        <entry key="../../../../layout/compose-model-1659971487147.xml" value="0.2989864864864865" />
+        <entry key="../../../../layout/compose-model-1659978064184.xml" value="2.0" />
         <entry key="..\:/Users/Mohamad/AndroidStudioProjects/Smartfarming/app/src/main/res/drawable/animated_logo.xml" value="0.1" />
         <entry key="..\:/Users/Mohamad/AndroidStudioProjects/Smartfarming/app/src/main/res/drawable/card_back.xml" value="0.18229166666666666" />
         <entry key="..\:/Users/Mohamad/AndroidStudioProjects/Smartfarming/app/src/main/res/drawable/et_back.xml" value="0.1125" />
@@ -27,6 +43,7 @@
         <entry key="..\:/Users/Mohamad/AndroidStudioProjects/Smartfarming/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Mohamad/AndroidStudioProjects/Smartfarming/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Users/Mohamad/AppData/Local/Android/Sdk/platforms/android-30/data/res/layout/simple_spinner_item.xml" value="0.1644021739130435" />
+        <entry key="app/src/main/res/drawable/ic_avatar.xml" value="0.2375" />
       </map>
     </option>
   </component>

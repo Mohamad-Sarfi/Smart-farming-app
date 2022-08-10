@@ -31,3 +31,25 @@ fun signUpReq2JSON(
     )
     )
 }
+fun editReq2JSON(
+    fullName : String,
+    password : String,
+    phoneNumber : String,
+    state : String,
+    city : String,
+    bio: String
+) : String{
+    val gson = Gson()
+    return gson.toJson(UserRequest(
+        user = User(
+            password = password,
+            phoneNumber = phoneNumber,
+            fullName = fullName,
+            language = Language(title = "FARSI"),
+            shipmentAddress = ShipmentAddress(country = "Iran", plainAddress = "NaN", state = state, city = city),
+            address = Address(city = city, state = state, country = "Iran", plainAddress = "Nan"),
+            bio = bio
+        )
+    )
+    )
+}

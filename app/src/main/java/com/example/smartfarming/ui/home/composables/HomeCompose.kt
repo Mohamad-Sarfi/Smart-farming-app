@@ -3,6 +3,7 @@ package com.example.smartfarming.ui.home.composables
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
@@ -48,6 +49,7 @@ fun HomeCompose(){
     val gardensList by viewModel.getGardens().observeAsState()
     var tasks = listOf<Task>()
     if (!gardensList.isNullOrEmpty()){
+
         tasks = listOf<Task>(
             Task(0,
                 "ولک پاشی",
@@ -90,7 +92,7 @@ fun HomeCompose(){
                 description = "با توجه به ماده عالی خاک نیاز به تامین کود دامی",
                 start_date = "",
                 finish_date = "",
-                garden_name = gardensList?.get(1)?.name!!,
+                garden_name = gardensList?.get(0)?.name!!,
                 recommendations = "کود گاو",
                 user_id = 5,
                 seen = false
