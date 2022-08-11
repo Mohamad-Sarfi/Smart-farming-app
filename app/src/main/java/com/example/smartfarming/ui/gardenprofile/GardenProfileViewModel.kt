@@ -16,7 +16,7 @@ class GardenProfileViewModel(val repo : GardenRepo) : ViewModel() {
 
     private val garden = MutableLiveData<Garden>().apply {
         value = Garden(0, "sample", 0, "", "", "", "", "", 0.0, 0.0,
-            0.0, 0)
+            0,0.0, 0)
     }
 
     fun getGardenByName(gardenName : String) {

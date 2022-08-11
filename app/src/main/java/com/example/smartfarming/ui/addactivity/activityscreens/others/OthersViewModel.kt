@@ -31,7 +31,7 @@ class OthersViewModel(val repo : GardenRepo) : ViewModel() {
 
     private val garden = MutableLiveData<Garden>().apply {
         value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
-            0.0, 0)
+            0, 0.0, 0)
     }
 
     private fun getGardenByName(gardenName : String) {

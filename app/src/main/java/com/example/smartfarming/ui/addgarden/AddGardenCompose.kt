@@ -189,6 +189,7 @@ fun AddGardenCompose(
                                 "classic",
                                 irrigationDuration!!.toDouble(),
                                 irrigationVolume!!.toDouble(),
+                                viewModel.irrigationCycle.value.toInt(),
                                 gardenArea!!.toDouble(),
                                 0
                             )

@@ -45,11 +45,13 @@ fun EditScreen(gardenName : String){
 
     Scaffold(
         Modifier.fillMaxSize(),
-        backgroundColor = MainGreen100,
+        backgroundColor = LightBackground,
         topBar = { CommonTopBar(title = "ویرایش باغ", icon = Icons.Default.Eco)}
     ) {
         Column(
-            Modifier.fillMaxSize().padding(10.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(10.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -57,6 +59,10 @@ fun EditScreen(gardenName : String){
                 EditTextField(text = "نام باغ", value = viewModel.newName.value, changeValue = {viewModel.newName.value = it})
                 EditTextField(text = "سن باغ", value =if (viewModel.newAge.value == 0) "" else viewModel.newAge.value.toString(), changeValue = {viewModel.updateNewAge(it, activity)})
                 Varieties(viewModel.plantVarieties, viewModel)
+                EditTextField(
+                    text = "ساعات آبیاری",
+                    value = viewModel.setIrrigationTextFieldValue(),
+                    changeValue = {viewModel.updateNewIrrigationDuration(it, activity)})
             }
         }
     }
@@ -70,8 +76,8 @@ fun EditTextField(text : String, value : String, changeValue : (String) -> Unit)
 
     Row(
         modifier = Modifier
-            .padding(5.dp)
-            .fillMaxWidth(0.8f),
+            .padding(vertical = 8.dp, horizontal = 25.dp)
+            .fillMaxWidth(0.9f),
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -82,21 +88,54 @@ fun EditTextField(text : String, value : String, changeValue : (String) -> Unit)
             singleLine = true,
             maxLines = 1,
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MainGreen100,
+                backgroundColor = LightBackground,
                 unfocusedIndicatorColor = MainGreen,
                 focusedIndicatorColor = MainGreen
             ),
-            modifier = Modifier.fillMaxWidth(0.7f),
+            modifier = Modifier.fillMaxWidth(0.55f),
             keyboardActions = KeyboardActions(
                 onDone = {focus.clearFocus()}
             )
         )
-        Text(text = text, style = MaterialTheme.typography.body1, color = MainGreen, modifier = Modifier.padding(start = 20.dp))
+        Text(text = text, style = MaterialTheme.typography.body1, color = MainGreen, modifier = Modifier.padding(start = 1.dp))
     }
 }
 
 @Composable
+fun IrrigationCycleSelector(viewModel: EditGardenViewModel){
+    var clicked by remember {
+        mutableStateOf(false)
+    }
+
+    val itemList = stringArrayResource(id = R.array.irrigation_cycle)
+    Card(
+        Modifier
+            .padding(horizontal = 5.dp, vertical = 10.dp)
+            .fillMaxWidth(0.8f)
+            .padding(vertical = 15.dp)
+        ,
+        backgroundColor = Color.White,
+        shape = MaterialTheme.shapes.medium,
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .clickable { clicked = !clicked }
+                .padding(horizontal = 15.dp, vertical = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Icon(Icons.Default.ArrowDropDown, contentDescription = null, tint = MainGreen, modifier = Modifier.size(45.dp))
+            Text(text = viewModel.irrigationCycle.value.toString() + " روز", style = MaterialTheme.typography.body1, color = MainGreen)
+        }
+    }
+
+
+}
+
+@Composable
 fun Varieties(varieties : List<String>, viewModel: EditGardenViewModel){
+
 
 
 

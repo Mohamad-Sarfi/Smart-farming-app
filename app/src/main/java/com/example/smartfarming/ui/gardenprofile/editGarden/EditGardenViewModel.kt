@@ -32,6 +32,7 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
     var irrigationType = mutableStateOf("")
     var irrigationDuration = mutableStateOf(0.0)
     var irrigationVolume = mutableStateOf(0.0)
+    var irrigationCycle = mutableStateOf(0)
     var area = mutableStateOf(0.0)
 
     fun initializeValues(){
@@ -44,6 +45,7 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
         irrigationType.value = garden.value!!.irrigation_type
         irrigationDuration.value = garden.value!!.irrigation_duration
         irrigationVolume.value = garden.value!!.irrigation_volume
+        irrigationCycle.value = garden.value!!.irrigation_cycle
         area.value = garden.value!!.area
 
     }
@@ -67,6 +69,38 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
         } catch (e : Exception){
             Toast.makeText(activity, "عدد وارد کنید", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun updateNewIrrigationDuration(value : String, activity : Activity){
+        try {
+            if (value == "") {
+                irrigationDuration.value = 0.0
+            } else if (value.last() == '.'){
+                irrigationDuration.value = value.slice(0..value.lastIndex).toDouble()
+                decimal = true
+            }
+            else {
+                irrigationDuration.value = value.toDouble()
+            }
+        } catch (e : Exception){
+            Toast.makeText(activity, "عدد وارد کنید", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private var decimal = false
+
+    fun setIrrigationTextFieldValue() : String{
+
+        if (irrigationDuration.value == 0.0) {
+            return ""
+        }
+        if (irrigationDuration.value.toString().last() == '.'){
+            decimal = true
+        }
+        if (irrigationDuration.value - irrigationDuration.value.toInt() == 0.0 && !decimal){
+            return irrigationDuration.value.toInt().toString()
+        }
+        return irrigationDuration.value.toString()
     }
 
 

@@ -28,6 +28,8 @@ data class Garden(
     @ColumnInfo
         (name = "irrigation_volume") val irrigation_volume : Double,
     @ColumnInfo
+        (name = "irrigation_cycle") val irrigation_cycle : Int,
+    @ColumnInfo
         (name = "area") val area : Double,
     @ColumnInfo
         (name = "user_id") val user_id: Int

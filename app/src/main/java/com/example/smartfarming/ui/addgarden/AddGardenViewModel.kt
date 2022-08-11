@@ -28,7 +28,7 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
 
     var irrigationDuration = mutableStateOf("")
 
-    var irrigationCycle = mutableStateOf("")
+    var irrigationCycle = mutableStateOf(0)
     var irrigationVolume = mutableStateOf("")
 
     var step = mutableStateOf(1)
@@ -81,6 +81,19 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
         location.value = mutableMapOf("lat" to locations[0].latitude.toString().substring(0,6), "long" to locations[0].longitude.toString().substring(0,6))
     }
 
+    fun setIrrigationCycle(index : Int){
+        irrigationCycle.value =
+            when (index){
+                0 -> 7
+                1 -> 10
+                2 -> 20
+                3 -> 30
+                4 -> 40
+                5 -> 50
+                6 -> 60
+                else -> 7
+        }
+    }
 
     // Button click handler
 
@@ -89,7 +102,7 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
     }
 
     fun checkSecondStep() : Boolean {
-        return irrigationDuration.value != "" && irrigationCycle.value != "" && irrigationVolume.value != ""
+        return irrigationDuration.value != "" && irrigationCycle.value != 0 && irrigationVolume.value != ""
     }
 
     fun checkThirdStep() : Boolean {

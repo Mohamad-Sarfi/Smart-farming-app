@@ -20,7 +20,7 @@ import kotlinx.coroutines.CoroutineScope
         PesticideEntity::class,
         Harvest::class
                ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class GardenDb : RoomDatabase() {

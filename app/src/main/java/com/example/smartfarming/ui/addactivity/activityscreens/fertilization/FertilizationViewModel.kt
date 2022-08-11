@@ -25,7 +25,7 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
 
     private val garden = MutableLiveData<Garden>().apply {
         value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
-            0.0, 0)
+            0, 0.0, 0)
     }
     val fertilizationType = mutableStateOf(value = "")
 

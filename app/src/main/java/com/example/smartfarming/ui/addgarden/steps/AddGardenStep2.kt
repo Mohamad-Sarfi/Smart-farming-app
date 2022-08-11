@@ -86,7 +86,7 @@ fun AddGardenStep2(
                 .size(width = 260.dp, height = 75.dp)
         )
 
-        IrrigationCycleSpinner({ final_note_show = it }){viewModel.irrigationCycle.value = it}
+        IrrigationCycleSpinner({ final_note_show = it }){ viewModel.setIrrigationCycle(it)}
 
         OutlinedTextField(
             value = viewModel.irrigationVolume.value,
@@ -135,7 +135,7 @@ fun AddGardenStep2(
 @Composable
 fun IrrigationCycleSpinner(
     setShowToggle: (Boolean) -> Unit,
-    setCycle : (String) -> Unit
+    setCycle : (Int) -> Unit
 ){
     var expanded by remember { mutableStateOf(false) }
     val arrayString = stringArrayResource(id = R.array.irrigation_cycle)
@@ -178,7 +178,7 @@ fun IrrigationCycleSpinner(
                     onClick = {
                         expanded = false
                         setShowToggle(false)
-                        setCycle(it)
+                        setCycle(arrayString.indexOf(it))
                         cycle.value = it
                     })
                 {
