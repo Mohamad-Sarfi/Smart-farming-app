@@ -152,8 +152,16 @@ fun NavGraphGardenProfile(
             TaskScreen(viewModel, navController)
         }
 
-        composable(route = AppScreensEnum.GardenEditScreen.name){
-            EditScreen()
+        composable(
+            route = "${AppScreensEnum.GardenEditScreen.name}/{gardenName}",
+            arguments = listOf(
+                navArgument("gardenName"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+                val gardenName = entry.arguments?.getString("gardenName")
+                EditScreen(gardenName!!)
         }
         
 

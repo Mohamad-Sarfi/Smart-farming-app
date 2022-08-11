@@ -2,6 +2,7 @@ package com.example.smartfarming.ui.addactivities.viewModel
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,7 +29,8 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
     }
     val fertilizationType = mutableStateOf(value = "")
 
-    val fertilizerName = mutableStateOf(mutableListOf<String>())
+    val fertilizerName = mutableStateListOf<String>()
+
     val currentFertilizerName = mutableStateOf("")
 
     val fertilizationDate =
@@ -43,11 +45,13 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
     }
 
     fun addFertilizer(name : String){
-        fertilizerName.value.add(name)
+        if (name != ""){
+            fertilizerName.add(name)
+        }
     }
 
     fun removeFertilizer(name : String){
-        fertilizerName.value.remove(name)
+        fertilizerName.remove(name)
     }
 
     fun setFertilizationVolume(volume : Float){
@@ -116,7 +120,7 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
 
     ///////////////////////////////////////////////// Button click handler
     fun increaseStep(context : Context){
-        if (fertilizationDate.value["day"] == "" || fertilizationType.value == "" || fertilizerName.value.isEmpty()){
+        if (fertilizationDate.value["day"] == "" || fertilizationType.value == "" || fertilizerName.isEmpty()){
             Toast.makeText(context, "تمام فیلدها را پر کنید", Toast.LENGTH_SHORT).show()
         } else {
             step.value++
@@ -135,7 +139,7 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
             if (fertilizationVolume.value == 0f){
                 Toast.makeText(context, "تمام فیلد ها را پر کنید", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, fertilizationListToString(fertilizerName.value), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, fertilizationListToString(fertilizerName), Toast.LENGTH_SHORT).show()
                 submitToDb(gardenName)
                 navHostController.popBackStack()
             }
@@ -147,7 +151,7 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
             repo.insertFertilization(
                 FertilizationEntity(
                     id = 0,
-                    name = fertilizationListToString(fertilizerName.value),
+                    name = fertilizationListToString(fertilizerName),
                     fertilization_type = fertilizationType.value,
                     date = "${fertilizationDate.value["year"]}/${fertilizationDate.value["month"]}/${fertilizationDate.value["day"]}",
                     volume = fertilizationVolume.value,

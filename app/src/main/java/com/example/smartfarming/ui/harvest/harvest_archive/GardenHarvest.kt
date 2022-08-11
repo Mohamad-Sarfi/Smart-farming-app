@@ -76,6 +76,8 @@ fun GardenHarvestScreen(gardenName: String){
     if (!harvestList.value.isNullOrEmpty()){
         yearSum = viewModel.getYearSum(selectedYear.value)
 
+        viewModel.mHarvestList.clear()
+
         for (e in harvestList.value){
             mHarvestList.add(e)
         }

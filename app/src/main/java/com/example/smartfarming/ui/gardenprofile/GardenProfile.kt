@@ -246,7 +246,7 @@ fun GardenTitle(gardenName : String, navController: NavHostController){
     ) {
         Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier
             .clickable {
-                navController.navigate(route = AppScreensEnum.GardenEditScreen.name)
+                navController.navigate(route = "${AppScreensEnum.GardenEditScreen.name}/$gardenName")
             }
             .padding(5.dp))
         Text(text = gardenName, style = MaterialTheme.typography.h4, color = MainGreen, modifier = Modifier.padding(5.dp))

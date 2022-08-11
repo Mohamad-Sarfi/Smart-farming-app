@@ -15,6 +15,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.outlined.LineWeight
+import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -176,7 +178,10 @@ fun AddHarvestBody(
                     },
                     textStyle = MaterialTheme.typography.body1,
                     placeholder = {
-                        Text(text = "وزن به کیلو", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
+                        Text(text = "وزن", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Outlined.MonitorWeight, contentDescription = null, tint = MainGreen)
                     }
                 )
 
@@ -270,7 +275,7 @@ fun HarvestTypeSpinner(
 
     Card(
         modifier = Modifier
-            .fillMaxWidth(0.4f)
+            .fillMaxWidth(0.3f)
             .height(55.dp)
             .clickable { expanded = !expanded }
         ,

@@ -88,7 +88,7 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
     Card(
         modifier = Modifier
             .padding(horizontal = 15.dp, vertical = 30.dp)
-            .fillMaxHeight(.85f)
+            .fillMaxHeight(.9f)
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = 3.dp
@@ -379,30 +379,27 @@ fun FertilizerName(viewModel: FertilizationViewModel){
             )
         )
         
-        if (!viewModel.fertilizerName.value.isNullOrEmpty()){
+        if (!viewModel.fertilizerName.isNullOrEmpty()){
             Row(
                 Modifier
                     .fillMaxWidth()
                     .padding(5.dp)) {
                 LazyRow{
-                    items(viewModel.fertilizerName.value.size){ index ->
-                        var deleted by remember {
-                            mutableStateOf(false)
-                        }
+                    items(viewModel.fertilizerName.size){ index ->
                         Row(
                             modifier = Modifier
                                 .padding(4.dp)
                                 .clip(RoundedCornerShape(15.dp))
-                                .background(if (deleted) RedFertilizer else Purple500)
+                                .background(Purple500)
                                 .clickable {
-                                    deleted = true
-                                    viewModel.removeFertilizer(viewModel.fertilizerName.value[index])
+                                    viewModel.removeFertilizer(viewModel.fertilizerName[index])
+
                                 }
                                 .padding(vertical = 4.dp, horizontal = 9.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Text(text =if (deleted) "حذف شد" else viewModel.fertilizerName.value[index], color = Color.White, style = MaterialTheme.typography.subtitle1)
+                            Text(text = viewModel.fertilizerName[index], color = Color.White, style = MaterialTheme.typography.subtitle1)
                         }
                     }
                 }
@@ -416,7 +413,6 @@ fun FertilizerName(viewModel: FertilizationViewModel){
                     .padding(10.dp)
                     .clickable {
                         viewModel.addFertilizer(viewModel.currentFertilizerName.value)
-
                         viewModel.currentFertilizerName.value = ""
                     },
                 verticalAlignment = Alignment.CenterVertically,
