@@ -71,36 +71,19 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
         }
     }
 
-    fun updateNewIrrigationDuration(value : String, activity : Activity){
-        try {
-            if (value == "") {
-                irrigationDuration.value = 0.0
-            } else if (value.last() == '.'){
-                irrigationDuration.value = value.slice(0..value.lastIndex).toDouble()
-                decimal = true
+
+    fun setIrrigationCycle(index : Int){
+        irrigationCycle.value =
+            when (index) {
+                0 -> 7
+                1 -> 10
+                2 -> 20
+                3 -> 30
+                4 -> 40
+                5 -> 50
+                6 -> 60
+                else -> 10
             }
-            else {
-                irrigationDuration.value = value.toDouble()
-            }
-        } catch (e : Exception){
-            Toast.makeText(activity, "عدد وارد کنید", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private var decimal = false
-
-    fun setIrrigationTextFieldValue() : String{
-
-        if (irrigationDuration.value == 0.0) {
-            return ""
-        }
-        if (irrigationDuration.value.toString().last() == '.'){
-            decimal = true
-        }
-        if (irrigationDuration.value - irrigationDuration.value.toInt() == 0.0 && !decimal){
-            return irrigationDuration.value.toInt().toString()
-        }
-        return irrigationDuration.value.toString()
     }
 
 
