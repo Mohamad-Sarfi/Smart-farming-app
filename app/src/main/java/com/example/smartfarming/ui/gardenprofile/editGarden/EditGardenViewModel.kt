@@ -87,6 +87,8 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
     }
 
 
+
+
     private fun fetchGarden(gardenName : String) {
         viewModelScope.launch {
             garden.value =  repo.getGardenByName(gardenName)
@@ -97,6 +99,28 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
     fun getGarden(gardenName: String) : MutableState<Garden?> {
         fetchGarden(gardenName)
         return garden
+    }
+
+    fun updateGarden() {
+        viewModelScope.launch {
+            repo.updateGarden(
+                Garden(
+                    id = garden.value!!.id,
+                    name = newName.value,
+                    age = newAge.value,
+                    lat_long = latLong.value,
+                    plant_type = plantType.value,
+                    soil_type = soilType.value,
+                    irrigation_cycle = irrigationCycle.value,
+                    irrigation_duration = irrigationDuration.value,
+                    irrigation_type = irrigationType.value,
+                    irrigation_volume = irrigationVolume.value,
+                    area = area.value,
+                    user_id = 0,
+                    plant_varieties = plantVarieties.joinToString(",")
+                )
+            )
+        }
     }
 
 

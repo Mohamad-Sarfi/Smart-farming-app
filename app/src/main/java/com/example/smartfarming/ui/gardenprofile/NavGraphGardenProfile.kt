@@ -161,7 +161,7 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
                 val gardenName = entry.arguments?.getString("gardenName")
-                EditScreen(gardenName!!)
+                EditScreen(gardenName!!, navController)
         }
         
 

@@ -14,6 +14,9 @@ interface GardenDao {
     @Delete
     suspend fun deleteGarden(garden: Garden)
 
+    @Update
+    suspend fun updateGarden(garden: Garden)
+
     @Query("SELECT * FROM garden_table ORDER BY name ASC")
     fun getAllGardens() : Flow<List<Garden>>
 
