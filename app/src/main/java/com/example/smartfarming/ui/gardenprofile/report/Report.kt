@@ -153,7 +153,7 @@ fun GraphsRow(){
                     strokeWidth = 10.dp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(10.dp),
                 )
                 Text(text = "نیاز سمپاشی", modifier = Modifier.padding(top = 40.dp), color = Color.Black, style = MaterialTheme.typography.subtitle1)
             }

@@ -16,6 +16,7 @@ import com.example.smartfarming.ui.addactivity.activityscreens.Others
 import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
 import com.example.smartfarming.ui.gardenprofile.composables.Weather
 import com.example.smartfarming.ui.gardenprofile.editGarden.EditScreen
+import com.example.smartfarming.ui.gardenprofile.map.GardenMap
 import com.example.smartfarming.ui.gardenprofile.report.Report
 import com.example.smartfarming.ui.gardenprofile.taskScreen.TaskScreen
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
@@ -162,6 +163,18 @@ fun NavGraphGardenProfile(
         ){ entry ->
                 val gardenName = entry.arguments?.getString("gardenName")
                 EditScreen(gardenName!!, navController)
+        }
+
+        composable(
+            route = "${AppScreensEnum.GardenMapScreen.name}/{gardenName}",
+            arguments = listOf(
+                navArgument("gardenName"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val gardenName = entry.arguments?.getString("gardenName")
+            GardenMap(gardenName!!)
         }
         
 

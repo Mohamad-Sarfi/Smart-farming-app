@@ -191,6 +191,7 @@ fun AddGardenCompose(
                                 irrigationVolume!!.toDouble(),
                                 viewModel.irrigationCycle.value.toInt(),
                                 gardenArea!!.toDouble(),
+                                viewModel.polygonPath,
                                 0
                             )
                             viewModel.addGardenToDb(garden)

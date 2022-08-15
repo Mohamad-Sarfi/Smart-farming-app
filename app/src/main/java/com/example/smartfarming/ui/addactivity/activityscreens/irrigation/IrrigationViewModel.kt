@@ -29,7 +29,7 @@ class IrrigationViewModel(val repo : GardenRepo) : ViewModel() {
 
 
     private val garden = mutableStateOf( Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
-        0, 0.0, 0)
+        0, 0.0, listOf(),0)
     )
 
     // Irrigation specs

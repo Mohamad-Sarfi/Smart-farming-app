@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
+import com.google.android.libraries.maps.model.LatLng
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -34,6 +35,7 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
     var irrigationVolume = mutableStateOf(0.0)
     var irrigationCycle = mutableStateOf(0)
     var area = mutableStateOf(0.0)
+    var polygonList : List<LatLng>? = mutableListOf<LatLng>()
 
     fun initializeValues(){
         newName.value = garden.value!!.name
@@ -47,6 +49,7 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
         irrigationVolume.value = garden.value!!.irrigation_volume
         irrigationCycle.value = garden.value!!.irrigation_cycle
         area.value = garden.value!!.area
+        polygonList = garden.value!!.polygon_list
 
     }
 
@@ -117,7 +120,8 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
                     irrigation_volume = irrigationVolume.value,
                     area = area.value,
                     user_id = 0,
-                    plant_varieties = plantVarieties.joinToString(",")
+                    plant_varieties = plantVarieties.joinToString(","),
+                    polygon_list = polygonList
                 )
             )
         }

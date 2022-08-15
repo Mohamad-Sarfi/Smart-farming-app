@@ -3,9 +3,7 @@ package com.example.smartfarming.data.room
 import android.content.Context
 import android.util.Log
 import androidx.constraintlayout.compose.override
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.smartfarming.data.room.daos.*
 import com.example.smartfarming.data.room.entities.*
@@ -20,9 +18,10 @@ import kotlinx.coroutines.CoroutineScope
         PesticideEntity::class,
         Harvest::class
                ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
+@TypeConverters(LatLongListConverter::class)
 abstract class GardenDb : RoomDatabase() {
 
     abstract fun gardenDao() : GardenDao

@@ -143,7 +143,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                     navController.navigate("${AppScreensEnum.GardenHarvestScreen.name}/${garden.value!!.name}")
                 }
                 MainIcons(Icons.Outlined.LocationOn, "مکان نما", RedFertilizer){
-
+                    navController.navigate("${AppScreensEnum.GardenMapScreen.name}/${garden.value!!.name}")
                 }
 
             }

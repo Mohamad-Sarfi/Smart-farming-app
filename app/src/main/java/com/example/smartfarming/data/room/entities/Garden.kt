@@ -4,6 +4,8 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import com.google.android.libraries.maps.model.LatLng
 
 @Entity(tableName = "garden_table")
 data class Garden(
@@ -31,6 +33,8 @@ data class Garden(
         (name = "irrigation_cycle") val irrigation_cycle : Int,
     @ColumnInfo
         (name = "area") val area : Double,
+    @ColumnInfo
+        (name = "polygon_list") val polygon_list : List<LatLng>?,
     @ColumnInfo
         (name = "user_id") val user_id: Int
 )

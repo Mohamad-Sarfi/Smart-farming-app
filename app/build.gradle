@@ -76,7 +76,7 @@ dependencies {
     implementation 'com.google.android.libraries.maps:maps:3.1.0-beta'
     implementation 'com.google.maps.android:maps-v3-ktx:2.2.0'
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
-
+    implementation 'com.google.maps.android:maps-compose:2.5.3'
 
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
