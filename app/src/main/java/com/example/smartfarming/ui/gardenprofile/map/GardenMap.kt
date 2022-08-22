@@ -97,6 +97,7 @@ fun GardenMap(gardenName : String){
                         }
                         Text(text = "موقعیت باغ " + gardenName, color = Color.White, style = MaterialTheme.typography.body1)
                     }
+
                     Row(
                         Modifier.fillMaxWidth().padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically,
