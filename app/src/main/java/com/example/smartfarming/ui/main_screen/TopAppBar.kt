@@ -83,17 +83,14 @@ fun TopAppBar(){
             val intent = Intent(activity, TasksNotificationActivity::class.java)
             activity.startActivity(intent)
         }) {
-            BadgeBox(badgeContent = { Text(text = "5")}) {
-                Icon(
-                    Icons.Outlined.Notifications,
-                    contentDescription = null,
-                    tint = MainGreen,
-                    modifier = Modifier.size(30.dp)
-                )
-            }
+//            BadgeBox(badgeContent = { Text(text = "5")}) {
+//                Icon(
+//                    Icons.Outlined.Notifications,
+//                    contentDescription = null,
+//                    tint = MainGreen,
+//                    modifier = Modifier.size(30.dp)
+//                )
+//            }
         }
-
-
-
     }
 }

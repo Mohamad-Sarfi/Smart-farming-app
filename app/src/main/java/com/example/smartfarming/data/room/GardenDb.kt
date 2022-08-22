@@ -2,7 +2,6 @@ package com.example.smartfarming.data.room
 
 import android.content.Context
 import android.util.Log
-import androidx.constraintlayout.compose.override
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.smartfarming.data.room.daos.*
