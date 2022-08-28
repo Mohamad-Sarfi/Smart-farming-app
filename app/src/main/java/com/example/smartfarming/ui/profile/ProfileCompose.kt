@@ -3,48 +3,67 @@ package com.example.smartfarming.ui.profile
 import android.app.Activity
 import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Yellow
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.data.network.resources.user.LoginResponse
 import com.example.smartfarming.data.room.entities.AddressEntity
 import com.example.smartfarming.data.room.entities.UserEntity
+import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.authentication.ui.theme.MainGreen
+import com.example.smartfarming.ui.main_screen.bottom_navigation.NAV_HOME
+import com.example.smartfarming.ui.main_screen.bottom_navigation.NAV_PROFILE
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ProfileCompose(
+    navController: NavController
 ) {
     var context = LocalContext.current as Activity
     val viewModel: ProfileViewModel = viewModel(
@@ -61,117 +80,145 @@ fun ProfileCompose(
     val response = viewModel.editProfileResponse.observeAsState()
     val userEntity: UserEntity
 
-    when(response.value){
-        is Resource.Success -> {
-            Toast.makeText(LocalContext.current, "your information updated!" , Toast.LENGTH_SHORT).show()
-        }
-        is Resource.Failure ->{
-            Toast.makeText(LocalContext.current, "error happened. message : ${(response.value as Resource.Failure).errorMessage}" , Toast.LENGTH_SHORT).show()
-        }
-        else -> {
-            Toast.makeText(LocalContext.current, "unknown error. message : ${(response.value as Resource.Failure).errorMessage}" , Toast.LENGTH_SHORT).show()
-        }
-    }
 
     viewModel.getUserInformation()
     if (user != null) {
-        header()
-        body(
-            userEntity = user!!,
-            viewModel = viewModel,
-            userAddress = address!!,
-            response = response
-        )
-
-
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .fillMaxWidth()
-    ) {
-
-    }
-
-
-}
-
-@Composable
-fun CollapsingEffectScreen(
-//    userEntity: UserEntity
-) {
-    val items = (1..100).map { "Item $it" }
-    val lazyListState = rememberLazyListState()
-    var scrolledY = 0f
-    var previousOffset = 0
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth(),
-        lazyListState,
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
 
         ) {
-        item {
+            header(user?.fullName!! , navController)
             Column(
                 modifier = Modifier
-                    .graphicsLayer {
-                        scrolledY += lazyListState.firstVisibleItemScrollOffset - previousOffset
-                        translationY = scrolledY * 0.5f
-                        previousOffset = lazyListState.firstVisibleItemScrollOffset
-                    }
-//                    .background(colorResource(id = R.color.main_green))
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp, vertical = 35.dp)
+                    .padding(vertical = 20.dp, horizontal = 20.dp)
+                    .fillMaxWidth(5f)
+                    .fillMaxHeight(5f)
+                    .border(2.dp, colorResource(id = R.color.main_green), RoundedCornerShape(16.dp))
+
             ) {
-                Card(
-                    Modifier.align(Alignment.CenterHorizontally),
-                    shape = CircleShape,
-                    elevation = 12.dp
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_avatar),
-                        contentDescription = "User icon",
-                        contentScale = ContentScale.Crop,
 
-                        modifier = Modifier
-                            .clip(shape = CircleShape)
-                            .align(Alignment.CenterHorizontally)
-                            .size(120.dp)
-                    )
-                }
-                Text(
-                    text = "userEntity.fullName",
-                    color = Color.Green,
-                    style = MaterialTheme.typography.h5,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(10.dp)
-
+                ExpandableCard(
+                    title = "نام و نام خانوادگی",
+                    description = user?.fullName!!,
+                    icon = Icons.Default.Person
+                )
+                Divider(color = colorResource(id = R.color.main_green), thickness = 1.dp)
+                ExpandableCard(
+                    title = "شماره تلفن",
+                    description = user?.phoneNumber!!,
+                    icon = Icons.Default.Phone
+                )
+                Divider(color = colorResource(id = R.color.main_green), thickness = 1.dp)
+                ExpandableCard(
+                    title = "استان محل سکونت",
+                    description = address?.state!!,
+                    icon = Icons.Default.LocationCity
+                )
+                Divider(color = colorResource(id = R.color.main_green), thickness = 1.dp)
+                ExpandableCard(
+                    title = "شهر محل سکونت",
+                    description = address?.city!!,
+                    icon = Icons.Default.LocationCity
+                )
+                Divider(color = colorResource(id = R.color.main_green), thickness = 1.dp)
+                ExpandableCard(
+                    title = "بیوگرافی",
+                    description = user?.bio!!,
+                    icon = Icons.Default.Info
                 )
             }
-
-        }
-        items(1) {
-//            Text(
-//                text = items.get(it),
-//                Modifier
-//                    .background(Color.White)
-//                    .fillMaxWidth()
-//                    .padding(8.dp)
-//            )
-//            body()
         }
 
+
+    }
+
+
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun ExpandableCard(
+    title: String,
+    titleFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
+    titleFontWeight: FontWeight = FontWeight.Bold,
+    description: String,
+    descriptionFontSize: TextUnit = MaterialTheme.typography.subtitle1.fontSize,
+    descriptionFontWeight: FontWeight = FontWeight.Normal,
+    descriptionMaxLines: Int = 4,
+    padding: Dp = 12.dp,
+    icon: ImageVector
+) {
+    var expandedState by remember { mutableStateOf(false) }
+    val rotationState by animateFloatAsState(
+        targetValue = if (expandedState) 180f else 0f
+    )
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = LinearOutSlowInEasing
+                )
+            ),
+        onClick = {
+            expandedState = !expandedState
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(padding)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier
+                        .weight(6f),
+                    text = title,
+                    fontSize = titleFontSize,
+                    fontWeight = titleFontWeight,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                IconButton(
+                    modifier = Modifier
+                        .weight(1f)
+                        .alpha(ContentAlpha.medium),
+                    onClick = {
+                    }) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "Drop-Down Arrow"
+                    )
+                }
+            }
+            if (expandedState) {
+                Text(
+                    text = description,
+                    fontSize = descriptionFontSize,
+                    fontWeight = descriptionFontWeight,
+                    maxLines = descriptionMaxLines,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
     }
 }
 
+
 @Composable
-fun header() {
+private fun header(
+    name: String,
+    navController: NavController
+) {
 
     Column(
         modifier = Modifier
-            .background(colorResource(id = R.color.main_green))
+//            .background(colorResource(id = R.color.main_green))
             .fillMaxWidth()
-            .padding(horizontal = 35.dp, vertical = 45.dp),
     ) {
         Card(
             Modifier.align(Alignment.CenterHorizontally),
@@ -189,267 +236,38 @@ fun header() {
                     .size(120.dp)
             )
         }
-        Text(
-            text = "نیما عابدینی",
-            color = Color.White,
-            style = MaterialTheme.typography.h5,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(10.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            FloatingActionButton(
+                modifier = Modifier.size(40.dp),
+                onClick = {
 
-        )
-
-    }
-}
-
-@Composable
-fun body(
-    userEntity: UserEntity,
-    viewModel: ProfileViewModel,
-    userAddress: AddressEntity,
-    response: State<Resource<LoginResponse>?>
-) {
-    val focus = LocalFocusManager.current
-
-    Column(
-        modifier = Modifier
-            .padding(vertical = 20.dp, horizontal = 20.dp)
-            .fillMaxWidth(5f)
-            .fillMaxHeight(5f)
-//                .height(128.dp)
-            .verticalScroll(rememberScrollState())
-//                shape = RoundedCornerShape(5)
-
-    ) {
-
-//            Card(
-//                Modifier.align(Alignment.CenterHorizontally),
-//                shape = RoundedCornerShape(5),
-//                elevation = 12.dp
-//            ) {
+                    navController.navigate(route = AppScreensEnum.EditProfileScreen.name)
+                }) {
+                Icon(imageVector = Icons.Filled.Edit, contentDescription = null)
 
 
-
-        OutlinedTextField(
-            value = userEntity.fullName,
-
-            onValueChange = {
-                viewModel.fullName.value = it.trim()
-            },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .background(Color.White)
-                .width(300.dp)
-
-                .padding(vertical = 10.dp),
-            label = {
-                Text(text = "نام و نام خانوادگی")
-            },
-            singleLine = true,
-            maxLines = 1,
-
-            textStyle = MaterialTheme.typography.body1,
-
-            shape = MaterialTheme.shapes.medium,
-            trailingIcon = {
-                Icon(
-                    Icons.Filled.Person,
-                    contentDescription = "icon",
-                )
-
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { focus.moveFocus(FocusDirection.Down) }
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedLabelColor = MainGreen,
-                unfocusedLabelColor = MainGreen,
-            )
-        )
-        OutlinedTextField(
-            value = userEntity.phoneNumber,
-
-            onValueChange = {
-                viewModel.phoneNumber.value = it.trim()
-            },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .background(Color.White)
-                .width(300.dp)
-
-                .padding(vertical = 10.dp),
-            label = {
-                Text(text = "شماره تلفن")
-            },
-            singleLine = true,
-            maxLines = 1,
-
-            textStyle = MaterialTheme.typography.body1,
-
-            shape = MaterialTheme.shapes.medium,
-            trailingIcon = {
-                Icon(
-                    Icons.Filled.Phone,
-                    contentDescription = "icon",
-//                        tint = if (isUsernameEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
-                )
-
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { focus.moveFocus(FocusDirection.Down) }
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedLabelColor = MainGreen,
-                unfocusedLabelColor = MainGreen,
-            )
-        )
-        OutlinedTextField(
-            value = userAddress.state,
-
-            onValueChange = {
-                viewModel.stateName.value = it.trim()
-            },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .background(Color.White)
-                .width(300.dp)
-
-                .padding(vertical = 10.dp),
-            label = {
-                Text(text = "استان محل سکونت")
-            },
-            singleLine = true,
-            maxLines = 1,
-
-            textStyle = MaterialTheme.typography.body1,
-
-            shape = MaterialTheme.shapes.medium,
-            trailingIcon = {
-                Icon(
-                    Icons.Filled.LocationCity,
-                    contentDescription = "icon",
-                )
-
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { focus.moveFocus(FocusDirection.Down) }
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedLabelColor = MainGreen,
-                unfocusedLabelColor = MainGreen,
-            )
-        )
-
-        OutlinedTextField(
-            value = userAddress.city,
-
-            onValueChange = {
-                viewModel.cityName.value = it.trim()
-            },
-//                    textStyle = TextStyle(color = Color.Black, textDirection = TextDirection.Content),
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .background(Color.White)
-                .width(300.dp)
-
-                .padding(vertical = 10.dp),
-            label = {
-                Text(text = "شهر محل سکونت")
-            },
-            singleLine = true,
-            maxLines = 1,
-
-            textStyle = MaterialTheme.typography.body1,
-
-            shape = MaterialTheme.shapes.medium,
-            trailingIcon = {
-                Icon(
-                    Icons.Filled.LocationCity,
-                    contentDescription = "icon",
-                )
-
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { focus.moveFocus(FocusDirection.Down) }
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedLabelColor = MainGreen,
-                unfocusedLabelColor = MainGreen,
-            )
-        )
-        OutlinedTextField(
-            value = userEntity.bio,
-            onValueChange = {
-                viewModel.bio.value = it.trim()
-            },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .background(Color.White)
-                .width(300.dp)
-
-                .padding(vertical = 10.dp),
-            label = {
-                Text(text = "بیوگرافی")
-            },
-            singleLine = true,
-            maxLines = 1,
-
-            textStyle = MaterialTheme.typography.body1,
-
-            shape = MaterialTheme.shapes.medium,
-            trailingIcon = {
-                Icon(
-                    Icons.Filled.Info,
-                    contentDescription = "icon",
-                )
-
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { focus.moveFocus(FocusDirection.Down) }
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedLabelColor = MainGreen,
-                unfocusedLabelColor = MainGreen,
-            )
-        )
-        Button(
-            onClick = {
-                viewModel.editProfile()
-
-            },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .width(300.dp)
-                .padding(vertical = 10.dp),
-            shape = MaterialTheme.shapes.medium,
-
-            ) {
+            }
             Text(
-                text = "ثبت",
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier.padding(vertical = 2.dp)
-            )
-        }
-//            }
+                text = name,
+                color = colorResource(id = R.color.main_green),
+                style = MaterialTheme.typography.h5,
+                modifier = Modifier
+                    .padding(10.dp)
 
+            )
+
+
+
+        }
 
     }
 }
+
+
 
 
 //@Preview

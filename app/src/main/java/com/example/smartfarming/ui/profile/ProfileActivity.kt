@@ -8,12 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.FarmApplication
+import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.authentication.AuthNavGraph
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
+import com.example.smartfarming.ui.main_screen.bottom_navigation.NAV_PROFILE
 
 class ProfileActivity: ComponentActivity() {
     val viewModel : ProfileViewModel by viewModels{
@@ -31,6 +35,7 @@ class ProfileActivity: ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+
 //                    ProfileCompose(viewModel = viewModel)
                 }
             }

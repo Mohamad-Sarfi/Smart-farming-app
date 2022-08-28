@@ -2,6 +2,7 @@ package com.example.smartfarming.data.repositories.garden
 
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.asLiveData
 import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.data.network.api.GardenApi
@@ -85,9 +86,9 @@ class GardenRemoteRepo(
         city: String,
         bio: String
     ) = safeApiCall {
-        userPreferences.authToken.collect{ token = it!!}
+//        userPreferences.authToken.collect{ token = it!!}
         val editProfile = api.editProfile(
-                token,
+            userPreferences.authToken.first()!!,
                 editReq2JSON(
                     fullName = fullName,
                     password = "don't save password",

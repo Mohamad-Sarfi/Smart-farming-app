@@ -12,7 +12,6 @@ import com.example.smartfarming.data.repositories.garden.GardenRemoteRepo
 import com.example.smartfarming.data.room.entities.AddressEntity
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.UserEntity
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.launchIn
@@ -20,7 +19,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.Dispatcher
 
-@HiltViewModel
+
 class ProfileViewModel(
     private val repository: GardenRemoteRepo
 ) : ViewModel() {
@@ -70,8 +69,8 @@ class ProfileViewModel(
             editProfileResponse.value = repository.editProfile(
                 fullName = fullName.value!!,
                 phoneNumber = phoneNumber.value!!,
-                state = state,
-                city = city,
+                state = stateName.value!!,
+                city = cityName.value!!,
                 bio = bio.value!!
             )
         }
@@ -80,11 +79,16 @@ class ProfileViewModel(
         viewModelScope.launch{
             user.apply {
                  repository.getUserInfo().onEach {
+                     fullName.value = it.fullName
+                     phoneNumber.value = it.phoneNumber
+                     bio.value = it.bio
                     value = it
                 }.launchIn(viewModelScope)
             }
             address.apply {
                  repository.getAddress().onEach {
+                     cityName.value = it.city
+                     stateName.value = it.state
                      value = it
                  }.launchIn(viewModelScope)
             }

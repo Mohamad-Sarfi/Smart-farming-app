@@ -23,6 +23,7 @@ class UserPreferences(
             preferences[KEY_AUTH]
         }
 
+
     suspend fun saveAuthToken(authToken : String){
         dataStore.edit { preferences ->
             preferences[KEY_AUTH] = authToken

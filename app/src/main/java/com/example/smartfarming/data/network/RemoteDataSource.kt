@@ -11,7 +11,8 @@ class RemoteDataSource {
 //        private const val BASE_URL = "http://45.148.145.26:8090"
 //        private const val BASE_URL = "http://10.0.2.2:9000"
 //        private const val BASE_URL = "http://127.0.0.1:8000"
-        private const val BASE_URL = "http://192.168.1.58:8080"
+//        private const val BASE_URL = "http://192.168.1.58:8080"
+        private const val BASE_URL = "http://192.168.1.51:8080"
     }
 
     fun<Api> buildApi(

@@ -15,18 +15,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.smartfarming.ui.AppScreensEnum
+import com.example.smartfarming.ui.addactivities.ScreensEnumActivities
 import com.example.smartfarming.ui.gardens.composables.GardenCompose
 import com.example.smartfarming.ui.harvest.HarvestNavGraph
 import com.example.smartfarming.ui.harvest.compose.HarvestCompose
 import com.example.smartfarming.ui.home.composables.HomeCompose
 import com.example.smartfarming.ui.home.composables.MyFAB
 import com.example.smartfarming.ui.main_screen.bottom_navigation.*
+import com.example.smartfarming.ui.profile.EditProfileCompose
 import com.example.smartfarming.ui.profile.ProfileActivity
 import com.example.smartfarming.ui.profile.ProfileCompose
 import com.example.smartfarming.ui.profile.ProfileViewModel
 
 @Composable
-fun MainScreen(viewModel : ProfileViewModel){
+fun MainScreen(viewModel: ProfileViewModel) {
     val navController = rememberNavController()
 
     val context = LocalContext.current
@@ -45,20 +48,20 @@ fun MainScreen(viewModel : ProfileViewModel){
             TopAppBar()
         },
         bottomBar = {
-            AppBottomNavigation(navController = navController){
+            AppBottomNavigation(navController = navController) {
                 currentPage = it
             }
-                    },
+        },
         floatingActionButton = {
-            if (currentPage != null && currentPage == NAV_HOME){
+            if (currentPage != null && currentPage == NAV_HOME) {
                 MyFAB(context = context, fabExtended = fabExtended) {
-                    fabExtended =! fabExtended
+                    fabExtended = !fabExtended
                 }
             }
         }
     ) {
         Column(modifier = Modifier.padding(bottom = 90.dp)) {
-            NavHost(navController = navController, startDestination = NAV_HOME ){
+            NavHost(navController = navController, startDestination = NAV_HOME) {
                 composable(NAV_HOME) { HomeCompose() }
                 composable(NAV_GARDENS) { GardenCompose() }
                 composable(NAV_HARVEST) {
@@ -68,9 +71,18 @@ fun MainScreen(viewModel : ProfileViewModel){
                     )
                 }
                 composable(NAV_PROFILE) {
-                    ProfileCompose()
+                    ProfileCompose(navController)
+
+
                 }
+                composable(AppScreensEnum.EditProfileScreen.name) {
+                    EditProfileCompose()
+
+
+                }
+
             }
+
         }
     }
 
