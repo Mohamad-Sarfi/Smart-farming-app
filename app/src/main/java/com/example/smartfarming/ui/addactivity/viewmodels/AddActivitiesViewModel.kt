@@ -27,7 +27,7 @@ class AddActivitiesViewModel(val repo : GardenRepo) : ViewModel() {
 }
 
 class AddActivitiesViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddActivitiesViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return AddActivitiesViewModel(repo) as T

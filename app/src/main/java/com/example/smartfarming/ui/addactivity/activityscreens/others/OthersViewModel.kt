@@ -48,7 +48,7 @@ class OthersViewModel(val repo : GardenRepo) : ViewModel() {
 
 class OthersViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory{
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(OthersViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return OthersViewModel(repo) as T

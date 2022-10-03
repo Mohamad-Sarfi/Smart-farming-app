@@ -10,7 +10,7 @@ class ArticleViewModel(val repo : GardenRepo) : ViewModel() {
 }
 
 class ArticleViewModelFactory(private val repo: GardenRepo) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ArticleViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ArticleViewModel(repo) as T

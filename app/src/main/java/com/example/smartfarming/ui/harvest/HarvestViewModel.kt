@@ -103,7 +103,7 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
 }
 
 class HarvestViewModelFactory(val repo : GardenRepo) : ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HarvestViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return HarvestViewModel(repo) as T

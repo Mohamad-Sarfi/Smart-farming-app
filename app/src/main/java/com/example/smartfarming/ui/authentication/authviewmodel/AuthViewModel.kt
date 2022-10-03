@@ -94,7 +94,7 @@ class AuthViewModelFactory(
     val repo : GardenRepo,
     val authRepo: AuthRepo
     ) : ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return AuthViewModel(repo, authRepo) as T

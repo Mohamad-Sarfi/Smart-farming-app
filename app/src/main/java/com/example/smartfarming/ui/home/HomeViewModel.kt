@@ -56,7 +56,7 @@ class HomeViewModel(val repo : GardenRepo) : ViewModel() {
 }
 
 class HomeViewModelFactory(val repo : GardenRepo) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return HomeViewModel(repo) as T

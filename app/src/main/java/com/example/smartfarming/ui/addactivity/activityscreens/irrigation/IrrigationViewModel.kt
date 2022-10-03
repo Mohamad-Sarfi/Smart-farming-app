@@ -78,7 +78,7 @@ class IrrigationViewModel(val repo : GardenRepo) : ViewModel() {
 }
 
 class IrrigationViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(IrrigationViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return IrrigationViewModel(repo) as T

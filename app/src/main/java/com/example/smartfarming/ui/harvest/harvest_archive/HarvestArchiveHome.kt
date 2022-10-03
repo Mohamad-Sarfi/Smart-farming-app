@@ -1,10 +1,11 @@
 package com.example.smartfarming.ui.harvest.compose.harvest_archive
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -23,6 +24,7 @@ import com.example.smartfarming.ui.common_composables.CommonTopBar
 import com.example.smartfarming.ui.harvest.HarvestViewModel
 import com.example.smartfarming.ui.harvest.harvest_archive.GridItem
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HarvestArchiveHome(viewModel: HarvestViewModel, navController : NavHostController){
@@ -51,16 +53,14 @@ fun HarvestArchiveHome(viewModel: HarvestViewModel, navController : NavHostContr
 
             if (!gardenList.value.isNullOrEmpty()){
                 LazyVerticalGrid(
-                    cells = GridCells.Fixed(2),
+                    columns = GridCells.Fixed(2),
                     contentPadding =  PaddingValues(10.dp),
                    ){
                     items(gardenList.value!!.size){ index ->
                         GridItem(garden = gardenList.value!![index], navController)
                     }
                 }
-
             }
-
         }
     }
 }

@@ -1,10 +1,12 @@
 package com.example.smartfarming.ui.gardenprofile.taskScreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -29,6 +31,7 @@ import com.example.smartfarming.ui.home.composables.TaskCard2
 import com.example.smartfarming.utils.getActivityScreen
 import com.example.smartfarming.utils.getTaskList
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostController){
@@ -88,7 +91,7 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
         ) {
 
             LazyVerticalGrid(
-                cells = GridCells.Fixed(2),
+                columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(5.dp)
             ){
                 items(tasks){

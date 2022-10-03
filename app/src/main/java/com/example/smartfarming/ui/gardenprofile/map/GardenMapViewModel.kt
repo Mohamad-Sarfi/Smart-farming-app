@@ -26,7 +26,7 @@ class GardenMapViewModel(val repo : GardenRepo) : ViewModel() {
 }
 
 class GardenMapViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(GardenMapViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return GardenMapViewModel(repo) as T

@@ -125,7 +125,7 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
 }
 
 class PesticideViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PesticideViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return PesticideViewModel(repo) as T

@@ -40,7 +40,7 @@ class GardenProfileViewModel(val repo : GardenRepo) : ViewModel() {
 }
 
 class GardenProfileViewModelFactory(val repo: GardenRepo) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(GardenProfileViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return GardenProfileViewModel(repo) as T
