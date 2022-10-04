@@ -5,6 +5,8 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.*
+import com.example.smartfarming.data.network.resources.garden_resource.request.BorderItem
+import com.example.smartfarming.data.repositories.garden.GardenRemoteRepo
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.google.android.libraries.maps.model.LatLng
@@ -12,35 +14,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
-class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
+class AddGardenViewModel(val repo : GardenRepo, val remoteRepo: GardenRemoteRepo) : ViewModel() {
     val MAX_STEPS = 4
-
     val typeArray = mutableStateOf(listOf<String>())
     var gardenName = mutableStateOf("")
-
     var gardenAge = mutableStateOf<Int>(0)
-
     var location = MutableLiveData<Map<String, String>>().apply {
         value = mutableMapOf("lat" to "0", "long" to "0")
     }
-
     var polygonPath = mutableListOf<LatLng>()
-
     var irrigationDuration = mutableStateOf("")
-
     var irrigationCycle = mutableStateOf(0)
     var irrigationVolume = mutableStateOf("")
-
     var step = mutableStateOf(1)
-
     var isLocationSet = mutableStateOf(false)
-
     private var locationList = MutableLiveData<List<LatLng>>().apply {
         value = listOf()
     }
-
     val gardenArea = mutableStateOf(0.0)
-
     var soilType = MutableLiveData<String>().apply {
         value = ""
     }
@@ -117,6 +108,40 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
         }
     }
 
+    //Update server
+    fun addGardenToServer(auth : String){
+        viewModelScope.launch {
+            remoteRepo.addGarden(
+                auth = auth,
+                city = "تهران",
+                latitudes = location.value?.get("lat")!!.toDouble(),
+                longitudes = location.value?.get("long")!!.toDouble(),
+                age = gardenAge.value,
+                area = gardenArea.value.toInt(),
+                border = getBorderItems(locationList.value),
+                density = 2,
+                irrigationCycle = irrigationCycle.value,
+                irrigationVolume = irrigationVolume.value.toFloat(),
+                soilType = "",
+                specieSet = null,
+                title = gardenName.value,
+                irrigationDuration = irrigationDuration.value.toInt()
+            )
+        }
+    }
+
+    private fun getBorderItems(items : List<LatLng>?) : List<BorderItem>? {
+        val borderList = mutableListOf<BorderItem>()
+
+        if (items != null){
+            for (item in items) {
+                borderList.add(BorderItem(latitude = item.latitude.toInt(), longitude = item.longitude.toInt() ))
+            }
+            return borderList
+        }
+        return null
+    }
+
     fun getGardens() : LiveData<List<Garden>>{
         var list = liveData<List<Garden>> {  }
         viewModelScope.launch(Dispatchers.IO) {
@@ -134,14 +159,13 @@ class AddGardenViewModel(val repo : GardenRepo) : ViewModel() {
             else -> Icons.Default.Eco
         }
     }
-
 }
 
-class AddGardenViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory {
+class AddGardenViewModelFactory(private val repo : GardenRepo, private val remoteRepo: GardenRemoteRepo) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddGardenViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AddGardenViewModel(repo) as T
+            return AddGardenViewModel(repo, remoteRepo) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
 

@@ -11,7 +11,7 @@ data class GardenRequest(val area: Int = 0,
                          val irrigationCycleUnit: String = "day",
                          val irrigationCycle: Int = 0,
                          val irrigationVolumeUnit: String = "liter",
-                         val irrigationVolume: Int = 0,
+                         val irrigationVolume: Float = 0f,
                          val title: String = "",
                          val irrigationDurationUnit: String = "hours",
                          val specieSet: List<SpecieSetItem>?,
@@ -25,32 +25,34 @@ data class GardenRequest(val area: Int = 0,
 
 fun gardenReq2Json(
     city : String,
-    latitudes : Int,
-    longitudes : Int,
+    latitudes : Double,
+    longitudes : Double,
     age: Int,
     area: Int,
     border: List<BorderItem>?,
     density: Int,
     irrigationCycle: Int,
     irrigationDuration: Int,
-    irrigationVolume: Int,
+    irrigationVolume: Float,
     soilType: String,
     specieSet: List<SpecieSetItem>?,
     title: String
 ) : String {
     val gson = Gson()
+
     return gson.toJson(GardenRequest(
-        area = area,
-        border = border,
-        address = Address(city = city),
-        density = density,
-        irrigationCycle = irrigationCycle,
-        irrigationVolume = irrigationVolume,
-        title = title,
-        specieSet = specieSet,
-        irrigationDuration = irrigationDuration,
-        soilType = soilType,
-        location = Location(latitude = latitudes, longitude = longitudes),
-        age = age
-    ))
+                area = area,
+                border = border,
+                address = Address(city = city),
+                density = density,
+                irrigationCycle = irrigationCycle,
+                irrigationVolume = irrigationVolume,
+                title = title,
+                specieSet = specieSet,
+                irrigationDuration = irrigationDuration,
+                soilType = soilType,
+                location = Location(latitude = latitudes, longitude = longitudes),
+                age = age
+        )
+    )
 }

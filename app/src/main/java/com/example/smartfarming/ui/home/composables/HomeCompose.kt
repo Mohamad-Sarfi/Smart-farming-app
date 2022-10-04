@@ -50,7 +50,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit){
 
@@ -76,9 +76,9 @@ fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit
                      Modifier
                          .fillMaxWidth()
                          .clickable {
-                            composableScope.launch {
-                                backDropState.reveal()
-                            }
+                             composableScope.launch {
+                                 backDropState.reveal()
+                             }
                          }
                      ,
                      verticalAlignment = Alignment.CenterVertically,
@@ -147,41 +147,74 @@ fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit
 
 @Composable
 fun BackdropBackLayer(activity: Activity){
-    Column(
+
+    androidx.compose.foundation.layout.Box(
         modifier = Modifier
             .padding(0.dp)
             .fillMaxWidth()
-            .padding(top = 60.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ){
-        //TasksColumn(tasks, gardensList)
-        Card(
-            Modifier
-                .padding(bottom = 30.dp)
-                .width(230.dp),
-            backgroundColor = MainOrange,
-            shape = RoundedCornerShape(30.dp)
+            .height(230.dp)
+    ) {
+
+        Image(
+            painter = painterResource(id = R.drawable.background_pic),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        Box(
+            modifier = Modifier.matchParentSize().background(MaterialTheme.colors.primary.copy(.65f)),
+        )
+
+        Column(
+            modifier = Modifier
+                .padding(0.dp)
+                .fillMaxWidth()
+                .padding(top = 60.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Row(
+
+            Card(
                 Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        val intent = Intent(activity, AddGarden::class.java)
-                        activity.startActivity(intent)
-                    }
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                    .padding(bottom = 30.dp)
+                    .width(230.dp),
+                backgroundColor = MainOrange,
+                shape = RoundedCornerShape(30.dp)
             ) {
-                Icon(Icons.Default.Add, contentDescription = null, tint = Color.White, modifier = Modifier.size(30.dp))
-                Text(text = "افزودن باغ جدید", color = Color.White, style = MaterialTheme.typography.body1)
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            val intent = Intent(activity, AddGarden::class.java)
+                            activity.startActivity(intent)
+                        }
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(30.dp)
+                    )
+                    Text(
+                        text = "افزودن باغ جدید",
+                        color = Color.White,
+                        style = MaterialTheme.typography.body1
+                    )
+                }
             }
+//            Image(
+//                painter = painterResource(id = R.drawable.sprout_white),
+//                contentDescription = null,
+//                modifier = Modifier
+//                    .size(135.dp)
+//                    .padding(15.dp)
+//            )
         }
-        Image(painter = painterResource(id = R.drawable.sprout_white), contentDescription = null, modifier = Modifier
-            .size(135.dp)
-            .padding(15.dp))
     }
+
 }
 
 @Composable

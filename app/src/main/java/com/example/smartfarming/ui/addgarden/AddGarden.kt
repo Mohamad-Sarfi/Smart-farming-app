@@ -41,7 +41,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
 class AddGarden : ComponentActivity() {
 
     private val viewModel : AddGardenViewModel by viewModels{
-        AddGardenViewModelFactory((application as FarmApplication).repo)
+        AddGardenViewModelFactory((application as FarmApplication).repo, (application as FarmApplication).gardenRemoteRepo)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

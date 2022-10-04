@@ -47,7 +47,7 @@ fun AuthNavGraph(
                         activity.finish()
                     }
                     is Resource.Failure -> {
-                        Toast.makeText(context, "1ورود ناموفق", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "ورود ناموفق، دوباره تلاش کنید", Toast.LENGTH_SHORT).show()
                         Log.i("login11", "${response}")
                     }
                     else -> {
@@ -61,7 +61,7 @@ fun AuthNavGraph(
         composable(
             route = AppScreensEnum.RegisterScreen.name
         ){
-            Register(authviewModel)
+            Register()
         }
     }
 }

@@ -5,10 +5,13 @@ import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class GardensViewModel(val repo : GardenRepo) : ViewModel() {
+@HiltViewModel
+class GardensViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
 
     var gardenTasks = liveData<List<Task>>{}
 
@@ -23,8 +26,6 @@ class GardensViewModel(val repo : GardenRepo) : ViewModel() {
        viewModelScope.launch {
            gardensList = repo.getGardens().asLiveData()
        }
-
-        Log.i("DBG", "${gardensList.value}")
 
         return gardensList
     }

@@ -5,8 +5,9 @@ import com.example.smartfarming.data.room.daos.*
 import com.example.smartfarming.data.room.entities.*
 import kotlinx.coroutines.flow.Flow
 import java.time.Year
+import javax.inject.Inject
 
-class GardenRepo(
+class GardenRepo @Inject constructor(
     private val gardenDao : GardenDao,
     private val taskDao : TaskDao,
     private val irrigationDao : IrrigationDao,

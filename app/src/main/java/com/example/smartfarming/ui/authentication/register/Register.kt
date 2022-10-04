@@ -16,19 +16,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.data.network.resources.userSignupResponse.SignupResponse
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.register.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun Register(
-    viewModel: AuthViewModel
-){
+    viewModel : AuthViewModel = hiltViewModel()
+    ){
+
 
     val context = LocalContext.current
-
     val step = viewModel.step
     val firstName by viewModel.firstName.observeAsState()
     val lastName by viewModel.lastName.observeAsState()
@@ -40,6 +43,8 @@ fun Register(
     }
 
     val response by viewModel.signupResponse.observeAsState()
+
+
 
     Scaffold(
         modifier = Modifier

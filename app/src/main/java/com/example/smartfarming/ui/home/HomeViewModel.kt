@@ -10,10 +10,12 @@ import com.example.smartfarming.ui.addactivities.ui.theme.Blue500
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.Purple500
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class HomeViewModel(val repo : GardenRepo) : ViewModel() {
+class HomeViewModel constructor(val repo : GardenRepo) : ViewModel() {
 
     val selectedActivityGroup = mutableStateOf("all")
 
@@ -24,7 +26,6 @@ class HomeViewModel(val repo : GardenRepo) : ViewModel() {
             selectedActivityGroup.value = newValue
         }
     }
-
 
     fun getGardens() : LiveData<List<Garden>> {
         var gardensList = liveData<List<Garden>>(){}

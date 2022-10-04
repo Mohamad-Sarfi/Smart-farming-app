@@ -61,11 +61,11 @@ class SplashActivity : ComponentActivity() {
                 this, Observer {
 
                     if (it == null){
-                        finish()
                         startActivity(Intent(this, AddUserActivity::class.java))
-                    } else {
                         finish()
+                    } else {
                         startActivity(Intent(this, MainActivity::class.java))
+                        finish()
                     }
                 }
             )
@@ -109,7 +109,7 @@ fun Splash(){
                     )
                     Text(
                         text = "اپلیکیشن هوشمند مدیریت مزرعه",
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.h5,
                         modifier = Modifier.padding(8.dp)
                     )
                 }

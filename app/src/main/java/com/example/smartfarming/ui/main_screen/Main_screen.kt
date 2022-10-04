@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.main_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import com.example.smartfarming.ui.home.composables.HomeCompose
 import com.example.smartfarming.ui.home.composables.MyFAB
 import com.example.smartfarming.ui.main_screen.bottom_navigation.*
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(){
     val navController = rememberNavController()

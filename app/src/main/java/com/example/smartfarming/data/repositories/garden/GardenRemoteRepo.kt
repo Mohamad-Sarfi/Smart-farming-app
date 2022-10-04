@@ -1,5 +1,6 @@
 package com.example.smartfarming.data.repositories.garden
 
+import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.network.api.GardenApi
 import com.example.smartfarming.data.network.resources.garden_resource.request.BorderItem
 import com.example.smartfarming.data.network.resources.garden_resource.request.GardenRequest
@@ -14,21 +15,24 @@ class GardenRemoteRepo(
 ) : BaseRepo(){
 
     suspend fun addGarden(
+        auth : String,
         city : String,
-        latitudes : Int,
-        longitudes : Int,
+        latitudes : Double,
+        longitudes : Double,
         age: Int,
         area: Int,
         border: List<BorderItem>?,
         density: Int,
         irrigationCycle: Int,
         irrigationDuration: Int,
-        irrigationVolume: Int,
+        irrigationVolume: Float,
         soilType: String,
         specieSet: List<SpecieSetItem>?,
         title: String
     ) = safeApiCall {
-        api.addGarden(gardenReq2Json(
+        api.addGarden(
+            authHeader = auth ,
+            gardenReq2Json(
             city = city,
             latitudes = latitudes,
             longitudes = longitudes,

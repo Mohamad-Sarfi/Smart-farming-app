@@ -7,16 +7,15 @@ import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.data.network.resources.userSignupResponse.SignupResponse
 import com.example.smartfarming.data.repositories.authentication.AuthRepo
 import com.example.smartfarming.data.repositories.garden.GardenRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class AuthViewModel(
-    repo : GardenRepo,
-    private val authRepo: AuthRepo
-) : ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor(private val authRepo: AuthRepo) : ViewModel() {
     val MAX_STEP = 3
     var step = mutableStateOf(0)
-
     val firstName = MutableLiveData<String>().apply {
         value = ""
     }
@@ -32,19 +31,15 @@ class AuthViewModel(
     private val _password = MutableLiveData<String>().apply {
         value = ""
     }
-
     private val fullName : String = "${firstName.value} ${lastName.value}"
     private var age = 0
     private var state = ""
     private var city = ""
-
-
     val password : LiveData<String> = _password
 
     fun setPassword(pass : String){
         _password.value = pass
     }
-
 
     fun setFirstName(name : String){
         firstName.value = name
@@ -97,7 +92,7 @@ class AuthViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AuthViewModel(repo, authRepo) as T
+            return AuthViewModel(authRepo) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

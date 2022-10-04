@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addgarden
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -28,10 +29,13 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.example.smartfarming.MainActivity
 import com.example.smartfarming.R
+import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import kotlinx.coroutines.flow.first
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AddGardenCompose(
     viewModel: AddGardenViewModel,
@@ -39,20 +43,18 @@ fun AddGardenCompose(
 ){
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
-
     var step = viewModel.step
     val isLocationSet by viewModel.isLocationSet
     val latLong by viewModel.location.observeAsState()
     val gardenArea by viewModel.gardenArea
-
     val gardenAge by viewModel.gardenAge
-
     val varietiesList = viewModel.typeArray
-
     val irrigationDuration by viewModel.irrigationDuration
     val irrigationVolume by viewModel.irrigationVolume
     val soilType by viewModel.soilType.observeAsState()
+    val userPreferences = UserPreferences.getInstance(context)
 
+    val auth = userPreferences.authToken.collectAsState("")
 
 
     // Animation transitions
@@ -195,7 +197,10 @@ fun AddGardenCompose(
                                 0
                             )
                             viewModel.addGardenToDb(garden)
-                            activity.finish()
+                            if (auth.value != ""){
+                                viewModel.addGardenToServer(auth.value!!)
+                                activity.finish()
+                            }
                         }
                     },
                     shape = MaterialTheme.shapes.large,

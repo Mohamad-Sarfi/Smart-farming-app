@@ -18,7 +18,9 @@ import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.addgarden.GardenNavGraph
 import com.example.smartfarming.ui.main_screen.MainScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
 

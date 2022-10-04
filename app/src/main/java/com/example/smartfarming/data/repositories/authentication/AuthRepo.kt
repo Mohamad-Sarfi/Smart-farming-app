@@ -6,8 +6,11 @@ import com.example.smartfarming.data.network.resources.userSignupRequest.signUpR
 import com.example.smartfarming.data.repositories.BaseRepo
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthRepo(
+@Singleton
+class AuthRepo @Inject constructor(
     private val api : AuthApi
 ) : BaseRepo() {
 

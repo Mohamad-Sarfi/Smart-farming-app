@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.gardens.composables
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
@@ -33,14 +35,17 @@ import com.example.smartfarming.ui.gardens.GardensViewModelFactory
 import com.example.smartfarming.ui.home.composables.MyFAB
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GardenCompose(){
 
 
     val activity = LocalContext.current as Activity
-    val viewModel : GardensViewModel = viewModel(
-        factory = GardensViewModelFactory((activity.application as FarmApplication).repo)
-    )
+//    val viewModel : GardensViewModel = viewModel(
+//        factory = GardensViewModelFactory((activity.application as FarmApplication).repo)
+//    )
+
+    val viewModel : GardensViewModel = hiltViewModel()
 
     val gardenList by viewModel.getGardens().observeAsState()
     val context = LocalContext.current

@@ -23,8 +23,9 @@ import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModelFac
 import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModel
 import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AddUserActivity : ComponentActivity() {
 
     protected lateinit var userPreferences : UserPreferences
