@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.MainActivity
@@ -37,17 +38,23 @@ import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddGarden : ComponentActivity() {
 
-    private val viewModel : AddGardenViewModel by viewModels{
-        AddGardenViewModelFactory((application as FarmApplication).repo, (application as FarmApplication).gardenRemoteRepo)
-    }
+//    private val viewModel : AddGardenViewModel by viewModels{
+//        AddGardenViewModelFactory((application as FarmApplication).repo, (application as FarmApplication).gardenRemoteRepo)
+//    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContent {
+            val viewModel : AddGardenViewModel = hiltViewModel()
+
             SmartFarmingTheme() {
                 // A surface container using the 'background' color from the theme
                 Surface(
