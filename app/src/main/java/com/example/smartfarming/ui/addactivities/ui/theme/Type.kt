@@ -14,7 +14,7 @@ val Typography = Typography(
     subtitle1 = TextStyle(
         fontFamily = sina,
         fontWeight = FontWeight.Normal,
-        fontSize = 15.sp,
+        fontSize = 16.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
     subtitle2 = TextStyle(
@@ -26,38 +26,53 @@ val Typography = Typography(
     body1 = TextStyle(
         fontFamily = sina,
         fontWeight = FontWeight.Normal,
-        fontSize = 18.sp,
+        fontSize = 16.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
     body2 = TextStyle(
         fontFamily = sina,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
+        fontSize = 14.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
     h1 = TextStyle(
         fontFamily = sina,
-        fontSize = 60.sp,
+        fontSize = 96.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
     h2 = TextStyle(
         fontFamily = sina,
-        fontSize = 34.sp,
+        fontSize = 60.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
     h3 = TextStyle(
         fontFamily = sina,
-        fontSize = 28.sp,
+        fontSize = 48.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
     h4 = TextStyle(
         fontFamily = sina,
-        fontSize = 25.sp,
+        fontSize = 34.sp,
         textDirection = TextDirection.ContentOrRtl
     ),
     h5 = TextStyle(
         fontFamily = sina,
-        fontSize = 23.sp,
+        fontSize = 24.sp,
         textDirection = TextDirection.ContentOrRtl
-    )
+    ),
+    h6 = TextStyle(
+        fontFamily = sina,
+        fontSize = 20.sp,
+        textDirection = TextDirection.ContentOrRtl
+    ),
+    caption = TextStyle(
+        fontFamily = sina,
+        fontSize = 12.sp,
+        textDirection = TextDirection.ContentOrRtl
+    ),
+    overline = TextStyle(
+        fontFamily = sina,
+        fontSize = 10.sp,
+        textDirection = TextDirection.ContentOrRtl
+    ),
 )

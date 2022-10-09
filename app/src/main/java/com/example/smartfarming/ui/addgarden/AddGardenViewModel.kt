@@ -10,11 +10,18 @@ import com.example.smartfarming.data.repositories.garden.GardenRemoteRepo
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.google.android.libraries.maps.model.LatLng
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class AddGardenViewModel(val repo : GardenRepo, val remoteRepo: GardenRemoteRepo) : ViewModel() {
+@HiltViewModel
+class AddGardenViewModel @Inject constructor(
+    val repo : GardenRepo,
+    val remoteRepo: GardenRemoteRepo
+    ) : ViewModel() {
+
     val MAX_STEPS = 4
     val typeArray = mutableStateOf(listOf<String>())
     var gardenName = mutableStateOf("")
