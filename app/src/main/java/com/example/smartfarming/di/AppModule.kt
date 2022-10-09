@@ -22,7 +22,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideRetrofit() : Retrofit{
-        val BASE_URL = "http://kesht-afzar.ir:8080/"
+        val BASE_URL = "http://kesht-afzar.ir/"
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -48,6 +48,11 @@ class AppModule {
     fun provideAuthRepo(
         authApi: AuthApi
     ) : AuthRepo = AuthRepo(authApi)
+
+    @Provides
+    fun provideGardenService(
+        retrofit: Retrofit
+    ) = retrofit.create(GardenApi::class.java)
 
     @Provides
     fun provideGardenRemoteRepo(
