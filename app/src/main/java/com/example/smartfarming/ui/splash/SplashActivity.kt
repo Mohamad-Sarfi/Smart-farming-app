@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.MainActivity
 import com.example.smartfarming.R
@@ -29,6 +30,7 @@ import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.authentication.AddUserActivity
 import com.example.smartfarming.ui.authentication.AuthNavGraph
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import java.util.*
@@ -43,6 +45,7 @@ class SplashActivity : ComponentActivity() {
 
         userPreferences = UserPreferences.getInstance(this)
 
+
         setContent {
             SmartFarmingTheme() {
                 // A surface container using the 'background' color from the theme
@@ -55,24 +58,23 @@ class SplashActivity : ComponentActivity() {
             }
         }
 
-        val handler = Handler()
-        handler.postDelayed({
+        val context = this
+
+        lifecycleScope.launchWhenCreated {
+            delay(3000)
             userPreferences.authToken.asLiveData().observe(
-                this, Observer {
+                context, Observer {
 
                     if (it == null){
-                        startActivity(Intent(this, AddUserActivity::class.java))
+                        startActivity(Intent(context, AddUserActivity::class.java))
                         finish()
                     } else {
-                        startActivity(Intent(this, MainActivity::class.java))
+                        startActivity(Intent(context, MainActivity::class.java))
                         finish()
                     }
                 }
             )
-        }, 2000)
-
-
-
+        }
     }
 }
 
@@ -104,13 +106,13 @@ fun Splash(){
                 ) {
                     Text(
                         text = "کشت افزار",
-                        style = MaterialTheme.typography.h2,
-                        modifier = Modifier.padding(10.dp)
+                        style = MaterialTheme.typography.h3,
+                        modifier = Modifier.padding(7.dp)
                     )
                     Text(
                         text = "اپلیکیشن هوشمند مدیریت مزرعه",
-                        style = MaterialTheme.typography.h5,
-                        modifier = Modifier.padding(8.dp)
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(7.dp)
                     )
                 }
             }

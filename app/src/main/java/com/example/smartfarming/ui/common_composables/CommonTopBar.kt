@@ -26,7 +26,7 @@ fun CommonTopBar(title : String, icon : ImageVector){
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.h5,
             color = Color.White
         )
 

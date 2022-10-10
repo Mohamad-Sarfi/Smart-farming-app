@@ -15,6 +15,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.smartfarming.MainActivity
 import com.example.smartfarming.R
@@ -44,10 +46,9 @@ import retrofit2.Response
 @Composable
 fun Login(
     navController: NavHostController,
-    viewModel : LoginViewModel,
+    viewModel: LoginViewModel,
     signIn : () -> Unit
 ){
-
     // Username TextField
     val usernameText by viewModel.phoneNumber.observeAsState()
     val passwordText by viewModel.password.observeAsState()
@@ -68,7 +69,6 @@ fun Login(
             .fillMaxSize()
             .fillMaxWidth()
     ) {
-
         Title()
 
         Column(
@@ -241,8 +241,6 @@ fun Login(
 
                         }
                     }
-
-
         }
 
 }
@@ -254,15 +252,14 @@ fun Title(){
         modifier = Modifier
             .background(MaterialTheme.colors.primary)
             .fillMaxWidth()
-            .padding(horizontal = 35.dp, vertical = 45.dp)
-        ,
+            .padding(horizontal = 35.dp, vertical = 45.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.user),
+            painterResource(id = R.drawable.sprout_white),
             contentDescription = "User icon",
             modifier = Modifier
-                .clip(shape = CircleShape)
-                .align(Alignment.CenterHorizontally)
                 .size(120.dp)
         )
         Text(

@@ -53,8 +53,8 @@ fun MainScreen(){
             }
                     },
         floatingActionButton = {
-            if (currentPage != null && currentPage == NAV_HOME && showFAB){
-                MyFAB(context = context, fabExtended = fabExtended) {
+            if (currentPage != null && (currentPage == NAV_HOME || currentPage == NAV_GARDENS) && showFAB){
+                MyFAB(context = context, fabExtended = fabExtended, type = if (currentPage == NAV_HOME) "add activity" else "add garden") {
                     fabExtended =! fabExtended
                 }
             }

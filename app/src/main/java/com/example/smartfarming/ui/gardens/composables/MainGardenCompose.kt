@@ -30,6 +30,7 @@ import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.common_composables.CommonTopBar
+import com.example.smartfarming.ui.common_composables.NoGardenAdded
 import com.example.smartfarming.ui.gardens.GardensViewModel
 import com.example.smartfarming.ui.gardens.GardensViewModelFactory
 import com.example.smartfarming.ui.home.composables.MyFAB
@@ -57,11 +58,6 @@ fun GardenCompose(){
 
     Scaffold(
         topBar = { CommonTopBar(title = "باغ های شما", icon = Icons.Outlined.Eco)},
-        floatingActionButton = {
-            MyFAB(context = context, fabExtended = fabExtended) {
-                fabExtended =! fabExtended
-            }
-        }
     ) {
         Column(
             Modifier
@@ -80,27 +76,7 @@ fun GardenCompose(){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (gardenList.isNullOrEmpty()){
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-
-                        Icon(
-                            Icons.Default.Warning,
-                            contentDescription = "",
-                            tint = YellowPesticide,
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .size(50.dp)
-                        )
-
-                        Text(
-                            text = "هنوز باغی وارد نشده!",
-                            style = MaterialTheme.typography.body2,
-                            color = BorderGray
-                        )
-
-                    }
+                    NoGardenAdded()
                 } else {
                     LazyColumn{
                         items(gardenList!!){

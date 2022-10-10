@@ -21,17 +21,19 @@ import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.AddActivities
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivity.AddActivityActivity
+import com.example.smartfarming.ui.addgarden.AddGarden
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MyFAB(
     context : Context,
     fabExtended : Boolean,
+    type : String = "add activity",
     switchFab : () -> Unit
 ){
 
     val fabWidthAnimate by animateDpAsState(
-        if(fabExtended) 150.dp else 65.dp
+        if(fabExtended) 150.dp else 60.dp
     )
 
     FloatingActionButton(
@@ -40,13 +42,18 @@ fun MyFAB(
                 switchFab()
             }
             else{
-                val intent = Intent(context, AddActivityActivity::class.java)
-                context.startActivity(intent)
+                if (type == "add activity"){
+                    val intent = Intent(context, AddActivityActivity::class.java)
+                    context.startActivity(intent)
+                } else {
+                    val intent = Intent(context, AddGarden::class.java)
+                    context.startActivity(intent)
+                }
                 switchFab()
             }
         },
         shape = RoundedCornerShape(15.dp),
-        modifier = Modifier.size(width = fabWidthAnimate, height = 65.dp),
+        modifier = Modifier.size(width = fabWidthAnimate, height = 60.dp),
         backgroundColor = MainGreen
     ) {
 
@@ -68,7 +75,7 @@ fun MyFAB(
                 exit = slideOutHorizontally() + shrinkHorizontally() + fadeOut()
             ) {
                 Text(
-                    text = "ثبت فعالیت",
+                    text = if (type == "add activity") "ثبت فعالیت" else "افزودن باغ",
                     style = MaterialTheme.typography.subtitle1,
                     modifier = Modifier.padding(end = 10.dp),
                     color = Color.White
@@ -76,7 +83,7 @@ fun MyFAB(
             }
 
             Icon(
-                painterResource(id = R.drawable.shovel),
+                if (type == "add activity") painterResource(id = R.drawable.shovel) else painterResource(id = R.drawable.sprout_white),
                 contentDescription = "",
                 modifier = Modifier
                     .padding(4.dp)

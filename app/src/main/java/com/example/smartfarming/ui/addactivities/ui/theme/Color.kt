@@ -17,6 +17,8 @@ val MainGreen700 = Color(0xFF009624)
 val MainGreen500 = Color(0xFF00c652)
 val MainGreen200 = Color(0xFF5efa81)
 val MainGreen100 = Color(0x99b9f6ca)
+val MainGreen50 = Color(0xeeb9f6ca)
+val GreenVariant = Color(0xFF4CAF50)
 
 val MainOrange = Color(0xFFE2882E)
 
