@@ -41,7 +41,7 @@ import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 
 
 @Composable
-fun Irrigation(gardenName : String = "محمد", navHostController: NavHostController){
+fun Irrigation(gardenName : String, navHostController: NavHostController){
 
     val activity = LocalContext.current as Activity
 

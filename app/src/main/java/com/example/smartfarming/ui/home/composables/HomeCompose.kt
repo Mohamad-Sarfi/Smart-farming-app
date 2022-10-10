@@ -29,6 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
@@ -90,7 +94,7 @@ fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit
         },
         backLayerContent = { BackdropBackLayer(activity) },
         scaffoldState = backDropState,
-        frontLayerContent = {TasksRow(tasks, viewModel, backDropState, navController){setShowFAB(it)} },
+        frontLayerContent = {TasksRow(tasks, viewModel, backDropState, navController, gardensList = gardensList){setShowFAB(it)} },
         frontLayerElevation = 4.dp,
         persistentAppBar = false,
         frontLayerScrimColor = Color.Unspecified
@@ -162,13 +166,15 @@ fun BackdropBackLayer(activity: Activity){
         )
 
         Box(
-            modifier = Modifier.matchParentSize().background(MaterialTheme.colors.primary.copy(.65f)),
+            modifier = Modifier
+                .matchParentSize()
+                .background(MaterialTheme.colors.primary.copy(.65f)),
         )
 
         Column(
             modifier = Modifier
                 .padding(0.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(top = 60.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -332,12 +338,13 @@ fun TasksRow(
     viewModel: HomeViewModel,
     backdropState : BackdropScaffoldState,
     navController: NavHostController,
+    gardensList: List<Garden>?,
     setShowFAB: (Boolean) -> Unit
 ){
 
     Card(
         modifier = Modifier.fillMaxHeight(1f),
-        backgroundColor = LightBackground,
+        backgroundColor = MaterialTheme.colors.surface,
         elevation = 2.dp
     ) {
         Column(
@@ -372,7 +379,7 @@ fun TasksRow(
                 animationSpec = tween(500)
             ) {
                 when(it){
-                    BackdropValue.Revealed -> RevealedFrontLayer(tasks, viewModel, navController){setShowFAB(it)}
+                    BackdropValue.Revealed -> RevealedFrontLayer(tasks, viewModel, navController, gardensList = gardensList){setShowFAB(it)}
                     BackdropValue.Concealed -> ConcealedFrontLayer(tasks, viewModel, navController){setShowFAB(it)}
                 }
             }
@@ -384,11 +391,14 @@ fun TasksRow(
 
 
 @Composable
-fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navController : NavHostController, setShowFAB: (Boolean) -> Unit) {
+fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navController : NavHostController,gardensList : List<Garden>?, setShowFAB: (Boolean) -> Unit) {
 
     val activity = LocalContext.current as Activity
 
-    Column() {
+    Column(
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Row(
             Modifier
                 .fillMaxWidth()
@@ -422,6 +432,19 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
             { viewModel.setSelectedActivityGroup(it) }
         }
 
+        if (gardensList.isNullOrEmpty()){
+            Column(
+                Modifier
+                    .size(230.dp)
+                    .padding(top = 20.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally) {
+
+                Text(text = "هیچ باغی اضافه نشده!", style = MaterialTheme.typography.body1)
+                val tractor_animation by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.tractor_animation))
+                LottieAnimation(composition = tractor_animation, iterations = LottieConstants.IterateForever)
+            }
+        }
         LazyRow() {
             items(tasks) { item ->
                 if (viewModel.selectedActivityGroup.value == "all") {

@@ -110,7 +110,9 @@ fun MapCompose(
         Button(
             onClick = {
                 viewModel.isLocationSet.value = true
-                viewModel.polygonPath.add(viewModel.polygonPath.first())
+                if (viewModel.polygonPath.isNotEmpty()){
+                    viewModel.polygonPath.add(viewModel.polygonPath.first())
+                }
                 viewModel.gardenArea.value = PolygonUtils.computeArea(viewModel.polygonPath).roundToInt().toDouble()
                 navController.navigate(ScreensEnumActivities.AddGardenScreen.name){
                     popUpTo(0)

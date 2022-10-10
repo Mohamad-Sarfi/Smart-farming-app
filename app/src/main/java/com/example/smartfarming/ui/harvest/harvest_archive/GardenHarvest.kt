@@ -52,8 +52,6 @@ fun GardenHarvestScreen(gardenName: String){
         viewModel(factory = HarvestViewModelFactory((activity.application as FarmApplication).repo))
 
 
-
-
     var selectedYear = viewModel.selectedYear
     var selectedType = viewModel.selectedType
 
