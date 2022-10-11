@@ -76,7 +76,13 @@ fun GardenCompose(){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (gardenList.isNullOrEmpty()){
-                    NoGardenAdded()
+                    Column(
+                        Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        NoGardenAdded()
+                    }
                 } else {
                     LazyColumn{
                         items(gardenList!!){

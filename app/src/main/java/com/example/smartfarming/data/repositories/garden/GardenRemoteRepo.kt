@@ -48,4 +48,14 @@ class GardenRemoteRepo(
             title = title
         ).toRequestBody("application/json".toMediaTypeOrNull()))
     }
+
+    suspend fun getGardens(
+        pageNumber : Int,
+        pageSize : Int
+    ) = safeApiCall {
+        api.getGardens(
+            pageNumber,
+            pageSize
+        )
+    }
 }

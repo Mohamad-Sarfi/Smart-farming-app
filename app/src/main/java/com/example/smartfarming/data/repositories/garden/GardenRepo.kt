@@ -51,7 +51,7 @@ class GardenRepo @Inject constructor(
     }
 
     @WorkerThread
-    suspend fun getTasksForGarden(gardenName: String) : Flow<List<Task>>{
+    fun getTasksForGarden(gardenName: String) : Flow<List<Task>>{
         return taskDao.getTasksForGarden(gardenName)
     }
 

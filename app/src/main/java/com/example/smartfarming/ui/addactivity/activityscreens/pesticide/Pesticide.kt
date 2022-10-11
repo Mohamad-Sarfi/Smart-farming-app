@@ -1,6 +1,8 @@
 package com.example.smartfarming.ui.addactivity.activityscreens.pesticide
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -48,17 +50,24 @@ import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModelFact
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
+import kotlinx.coroutines.delay
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Pesticide(gardenName : String, navController : NavHostController){
     val activity = LocalContext.current as Activity
-
     val viewModel : PesticideViewModel =
         viewModel(factory = PesticideViewModelFactory((activity.application as FarmApplication).repo))
-
-
     val garden = viewModel.getGarden(gardenName).observeAsState()
     var gardenName = garden.value?.name ?: ""
+    var startup by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = null) {
+        delay(100)
+        startup = true
+    }
 
     Scaffold(
         Modifier
@@ -72,7 +81,9 @@ fun Pesticide(gardenName : String, navController : NavHostController){
         ){
             ActivityTitle(gardenName = gardenName, activityName = "سمپاشی", icon = Icons.Outlined.PestControl, Yellow700)
             ActivitiesStepBars(viewModel.step.value, Yellow700, Yellow200)
-            PesticideBody(viewModel, navController, gardenName)
+            AnimatedVisibility(visible = startup) {
+                PesticideBody(viewModel, navController, gardenName)
+            }
         }
     }
 }

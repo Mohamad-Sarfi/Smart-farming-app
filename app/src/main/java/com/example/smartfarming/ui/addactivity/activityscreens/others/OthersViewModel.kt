@@ -1,4 +1,4 @@
-package com.example.smartfarming.ui.addactivity.viewmodels
+package com.example.smartfarming.ui.addactivity.activityscreens.others
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class OthersViewModel(val repo : GardenRepo) : ViewModel() {
+@HiltViewModel
+class OthersViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
 
     val activityName = mutableStateOf("")
     val activityNameSpecify = mutableStateOf("")
@@ -25,9 +28,6 @@ class OthersViewModel(val repo : GardenRepo) : ViewModel() {
     fun decreaseStep(){
         if (step.value == 1) step.value--
     }
-
-
-
 
     private val garden = MutableLiveData<Garden>().apply {
         value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
@@ -43,16 +43,5 @@ class OthersViewModel(val repo : GardenRepo) : ViewModel() {
     fun getGarden(gardenName : String) : MutableLiveData<Garden> {
         getGardenByName(gardenName)
         return garden
-    }
-}
-
-class OthersViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory{
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(OthersViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return OthersViewModel(repo) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

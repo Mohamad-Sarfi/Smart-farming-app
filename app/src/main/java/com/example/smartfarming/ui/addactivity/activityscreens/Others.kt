@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity.activityscreens
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
@@ -23,18 +24,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.LightGreen1
-import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.addactivity.viewmodels.OthersViewModel
-import com.example.smartfarming.ui.addactivity.viewmodels.OthersViewModelFactory
+import com.example.smartfarming.ui.addactivity.activityscreens.others.OthersViewModel
 import com.example.smartfarming.ui.common_composables.ProgressDots
 import com.example.smartfarming.ui.common_composables.TitleIcon
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Others(
     gardenName: String,
@@ -42,10 +43,7 @@ fun Others(
     navController: NavHostController
 ){
     val activity = LocalContext.current as Activity
-    val viewModel : OthersViewModel = viewModel(
-        factory = OthersViewModelFactory((activity.application as FarmApplication).repo)
-    )
-
+    val viewModel : OthersViewModel = hiltViewModel()
     var step by remember {
         mutableStateOf(0)
     }
@@ -55,7 +53,6 @@ fun Others(
         modifier = Modifier
             .fillMaxSize()
     ) {
-
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()

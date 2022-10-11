@@ -30,7 +30,7 @@ fun ActivityTitle(
         horizontalArrangement = Arrangement.End
     ) {
         Text(text = "باغ " +  gardenName, style = MaterialTheme.typography.h5, color = color, modifier = Modifier.padding(end = 10.dp))
-        Text(text = activityName, style = MaterialTheme.typography.h3, color = color)
-        Icon(icon, contentDescription = null, modifier = Modifier.padding(start = 15.dp).size(40.dp), tint = color)
+        Text(text = activityName, style = MaterialTheme.typography.h4, color = color)
+        Icon(icon, contentDescription = null, modifier = Modifier.padding(start = 15.dp).size(65.dp), tint = color)
     }
 }

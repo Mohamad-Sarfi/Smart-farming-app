@@ -1,6 +1,9 @@
 package com.example.smartfarming.ui.addactivity.activityscreens.irrigation
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -26,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
@@ -38,16 +42,24 @@ import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
+import kotlinx.coroutines.delay
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Irrigation(gardenName : String, navHostController: NavHostController){
 
     val activity = LocalContext.current as Activity
-
-    val viewmodel : IrrigationViewModel = viewModel(factory = IrrigationViewModelFactory((activity.application as FarmApplication).repo))
-
+    val viewmodel : IrrigationViewModel = hiltViewModel()
     var step = viewmodel.step
+    var startup by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = null) {
+        delay(100)
+        startup = true
+    }
 
     Scaffold(
         Modifier
@@ -63,7 +75,9 @@ fun Irrigation(gardenName : String, navHostController: NavHostController){
         ) {
             ActivityTitle(gardenName = gardenName, activityName = "آبیاری", icon =Icons.Default.WaterDrop, BlueIrrigationDark)
             ActivitiesStepBars(viewmodel.step.value, BlueIrrigationDark, Blue100)
-            IrrigationBody(viewmodel, navHostController)
+            AnimatedVisibility(visible = startup) {
+                IrrigationBody(viewmodel, navHostController)
+            }
         }
     }
 }
@@ -72,7 +86,7 @@ fun Irrigation(gardenName : String, navHostController: NavHostController){
 fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostController){
     Card(
         modifier = Modifier
-            .padding(horizontal =  15.dp, vertical = 15.dp)
+            .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxHeight(.85f)
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -92,7 +106,7 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                 modifier = Modifier
                     .padding(bottom = 1.dp)
                     .size(300.dp)
-                    .constrainAs(backgroundPic){
+                    .constrainAs(backgroundPic) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
@@ -147,7 +161,14 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                 }
 
                 Button(
-                    onClick = {viewModel.increaseStep()},
+                    onClick = {
+                        if (viewModel.step.value == 0){
+                            viewModel.increaseStep()
+                        } else {
+                            viewModel.submitClickHandler()
+                            navHostController.popBackStack()
+                        }
+                              },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Blue500,
                         contentColor = Color.White
@@ -160,13 +181,12 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                 ) {
                     Text(text = if (viewModel.step.value == 0 ) "بعدی" else "ثبت اطلاعات", style = MaterialTheme.typography.body2)
                 }
-
-
-
             }
         }
     }
 }
+
+
 
 @Composable
 fun IrrigationBody1(viewModel: IrrigationViewModel){
@@ -177,9 +197,9 @@ fun IrrigationBody1(viewModel: IrrigationViewModel){
         when (stepPage){
             0 ->
                 Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 30.dp, vertical = 40.dp),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 30.dp, vertical = 40.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -227,7 +247,9 @@ fun IrrigationVolume(viewModel: IrrigationViewModel){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
         Row(
-            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -247,14 +269,12 @@ fun IrrigationVolume(viewModel: IrrigationViewModel){
                 .background(Blue50, RoundedCornerShape(20.dp)),
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-               backgroundColor = Color.Green,
+               backgroundColor = Blue50,
                textColor = BlueIrrigationDark,
                focusedBorderColor = Blue50,
                trailingIconColor = BlueIrrigationDark,
                leadingIconColor = BlueIrrigationDark,
                 unfocusedBorderColor = Blue50,
-
-
            ),
             leadingIcon = {
                 Icon(
@@ -295,7 +315,9 @@ fun IrrigationTime(viewModel: IrrigationViewModel){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End) {
         Row(
-            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -373,7 +395,9 @@ fun IrrigationType(viewModel: IrrigationViewModel){
         horizontalAlignment = Alignment.End) {
 
         Row(
-            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ){

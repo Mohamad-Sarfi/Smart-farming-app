@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity.activityscreens.others
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
@@ -39,17 +41,25 @@ import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
-import com.example.smartfarming.ui.addactivity.viewmodels.OthersViewModel
-import com.example.smartfarming.ui.addactivity.viewmodels.OthersViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
+import kotlinx.coroutines.delay
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Others(gardenName : String, navHostController : NavHostController){
 
     val activity = LocalContext.current as Activity
-    val viewModel : OthersViewModel =
-        viewModel(factory = OthersViewModelFactory((activity.application as FarmApplication).repo))
+    //val viewModel : OthersViewModel = viewModel(factory = OthersViewModelFactory((activity.application as FarmApplication).repo))
+    val viewModel : OthersViewModel = hiltViewModel()
+    var startup by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = null) {
+        delay(100)
+        startup = true
+    }
 
     Scaffold(
         Modifier
@@ -70,7 +80,9 @@ fun Others(gardenName : String, navHostController : NavHostController){
                 color = MainGreen
             )
             ActivitiesStepBars(step = viewModel.step.value, colorDark = MainGreen, colorLight = LightGreen1)
-            OthersBody(viewModel, navHostController)
+            AnimatedVisibility(visible = startup) {
+                OthersBody(viewModel, navHostController)
+            }
         }
     }
 }
@@ -100,7 +112,7 @@ fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController)
                 modifier = Modifier
                     .padding(bottom = 1.dp)
                     .size(300.dp)
-                    .constrainAs(backgroundPic){
+                    .constrainAs(backgroundPic) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)

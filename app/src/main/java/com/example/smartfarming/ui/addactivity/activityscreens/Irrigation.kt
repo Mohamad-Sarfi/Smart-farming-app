@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity.activityscreens
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
@@ -41,6 +42,7 @@ import com.example.smartfarming.ui.common_composables.ProgressDots
 import com.example.smartfarming.ui.common_composables.TitleIcon
 import com.example.smartfarming.ui.gardenprofile.ScreensEnumGardenProfile
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Irrigation(
     gardenName: String,

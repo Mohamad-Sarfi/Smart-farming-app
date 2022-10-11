@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -487,18 +488,21 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
                 viewModel,
                 navController
             ) { setShowFAB(it) }
+
             RevealedRow(
                 tasks,
                 ActivityTypesEnum.IRRIGATION.name,
                 viewModel,
                 navController
             ) { setShowFAB(it) }
+
             RevealedRow(
                 tasks,
                 ActivityTypesEnum.PESTICIDE.name,
                 viewModel,
                 navController
             ) { setShowFAB(it) }
+
             RevealedRow(tasks, ActivityTypesEnum.Other.name, viewModel, navController) {
                 setShowFAB(
                     it
@@ -513,8 +517,15 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
         selectedActivity: String,
         setSelectedActivity: (String) -> Unit
     ) {
+
+        val groupSelectorWidth by animateDpAsState(
+            if (selectedActivity == activityName) 135.dp else 60.dp
+        )
+        
         Box(
             modifier = Modifier
+                .width(groupSelectorWidth)
+                .height(60.dp)
                 .padding(5.dp)
                 .clip(CircleShape)
                 .background(
@@ -525,14 +536,24 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
                 }
                 .padding(8.dp)
         ) {
-            Icon(
-                getTaskIcon(activityName),
-                contentDescription = null,
-                modifier = Modifier.size(35.dp),
-                tint = if (activityName == selectedActivity) Color.White else getTaskColor(
-                    activityName
-                ).copy(alpha = 0.7f)
-            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 3.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                Icon(
+                    getTaskIcon(activityName),
+                    contentDescription = null,
+                    modifier = Modifier.size(35.dp),
+                    tint = if (activityName == selectedActivity) Color.White else getTaskColor(
+                        activityName
+                    ).copy(alpha = 0.7f)
+                )
+
+                if (selectedActivity == activityName) {
+                    Text(text = "سم پاشی", color = Color.White, style = MaterialTheme.typography.body2)
+                }
+            }
         }
     }
 

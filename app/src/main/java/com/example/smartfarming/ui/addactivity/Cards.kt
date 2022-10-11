@@ -67,7 +67,7 @@ fun Cards(
     ) {
         Text(
             text = "افزودن فعالیت جدید",
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.h5,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(35.dp)

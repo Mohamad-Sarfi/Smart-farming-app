@@ -11,7 +11,10 @@ import com.example.smartfarming.ui.addactivities.SetupNavGraph
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModel
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModelFactory
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddActivityActivity : ComponentActivity() {
     private val viewModel : AddActivitiesViewModel by viewModels{
         AddActivitiesViewModelFactory((application as FarmApplication).repo)

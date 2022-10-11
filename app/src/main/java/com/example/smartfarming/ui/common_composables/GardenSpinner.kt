@@ -77,7 +77,7 @@ fun GardenSpinner(
                 )
             Text(
                 text = if (currentGarden.isNullOrEmpty()) "انتخاب باغ" else currentGarden,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.body1,
                 modifier = Modifier
             )
 
@@ -96,7 +96,7 @@ fun GardenSpinner(
                             text = garden,
                             modifier = Modifier
                                 .width(200.dp),
-                            style = MaterialTheme.typography.body2
+                            style = MaterialTheme.typography.body1
                         )
                     }
 

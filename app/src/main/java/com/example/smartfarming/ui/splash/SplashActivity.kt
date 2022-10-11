@@ -42,9 +42,7 @@ class SplashActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         userPreferences = UserPreferences.getInstance(this)
-
 
         setContent {
             SmartFarmingTheme() {
@@ -64,7 +62,6 @@ class SplashActivity : ComponentActivity() {
             delay(3000)
             userPreferences.authToken.asLiveData().observe(
                 context, Observer {
-
                     if (it == null){
                         startActivity(Intent(context, AddUserActivity::class.java))
                         finish()
@@ -77,8 +74,6 @@ class SplashActivity : ComponentActivity() {
         }
     }
 }
-
-
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

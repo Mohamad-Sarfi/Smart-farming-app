@@ -9,14 +9,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.IrrigationEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class IrrigationViewModel(val repo : GardenRepo) : ViewModel() {
+@HiltViewModel
+class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
 
     // Step management *********************************************************
     var step = mutableStateOf(0)
+    var finished = mutableStateOf(false)
 
     fun increaseStep(){
         if (step.value == 0) step.value++
@@ -60,6 +64,12 @@ class IrrigationViewModel(val repo : GardenRepo) : ViewModel() {
         getGardenByName(gardenName)
         return garden
     }
+
+    fun submitClickHandler(){
+        insertIrrigationDB()
+    }
+
+
 
     fun insertIrrigationDB(){
         viewModelScope.launch {
