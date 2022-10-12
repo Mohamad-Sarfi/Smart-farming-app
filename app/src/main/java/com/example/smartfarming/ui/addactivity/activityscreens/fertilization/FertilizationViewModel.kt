@@ -118,7 +118,6 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
         }
     }
 
-    ///////////////////////////////////////////////// Button click handler
     fun increaseStep(context : Context){
         if (fertilizationDate.value["day"] == "" || fertilizationType.value == "" || fertilizerName.isEmpty()){
             Toast.makeText(context, "تمام فیلدها را پر کنید", Toast.LENGTH_SHORT).show()
@@ -132,21 +131,18 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
     }
 
 
-    fun submitBtnHandler(context : Context, gardenName: String, navHostController: NavHostController){
-        if (step.value == 0){
-            increaseStep(context)
-        } else {
-            if (fertilizationVolume.value == 0f){
-                Toast.makeText(context, "تمام فیلد ها را پر کنید", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(context, fertilizationListToString(fertilizerName), Toast.LENGTH_SHORT).show()
-                submitToDb(gardenName)
-                navHostController.popBackStack()
-            }
+    fun submitClickHandler(context : Context){
+        if (step.value == 1){
+            insertFertilizationt2Db()
         }
+        increaseStep(context)
     }
 
-    fun submitToDb(gardenName: String){
+    fun areValuesSet() : Boolean {
+        return true
+    }
+
+    fun insertFertilizationt2Db(){
         viewModelScope.launch {
             repo.insertFertilization(
                 FertilizationEntity(
@@ -155,7 +151,7 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
                     fertilization_type = fertilizationType.value,
                     date = "${fertilizationDate.value["year"]}/${fertilizationDate.value["month"]}/${fertilizationDate.value["day"]}",
                     volume = fertilizationVolume.value,
-                    garden_name = gardenName
+                    garden_name = garden.value!!.name
                 )
             )
         }

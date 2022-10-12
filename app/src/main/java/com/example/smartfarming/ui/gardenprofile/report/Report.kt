@@ -73,8 +73,8 @@ fun Report(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "گزارش فعالیت های", color = MainGreen, style = MaterialTheme.typography.h3)
-            Text(text = "باغ محمد", color = MainGreen, style = MaterialTheme.typography.h4)
+            Text(text = "گزارش فعالیت های", color = MainGreen, style = MaterialTheme.typography.h5)
+            Text(text = "باغ محمد", color = MainGreen, style = MaterialTheme.typography.body1)
             GraphsRow()
             ColdExposureTime()
             WorkerReport()
@@ -111,7 +111,7 @@ fun WorkerReport(){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "کارگران استفاده شده", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
-                Text(text = "16" + " نفر", style = MaterialTheme.typography.h3, color = Color.Black, )
+                Text(text = "16" + " نفر", style = MaterialTheme.typography.h5, color = Color.Black, )
             }
             Icon(Icons.Outlined.Person, contentDescription = null, tint = BorderGray, modifier = Modifier
                 .padding(start = 15.dp)
@@ -270,7 +270,7 @@ fun IrrigationReport(){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "تعداد آبیاری", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
-                Text(text = "4", style = MaterialTheme.typography.h3, color = Color.Black, )
+                Text(text = "4", style = MaterialTheme.typography.h5, color = Color.Black, )
             }
             Icon(Icons.Outlined.WaterDrop, contentDescription = null, tint = Blue500, modifier = Modifier
                 .padding(start = 15.dp)
@@ -304,7 +304,7 @@ fun PesticideReport(){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "تعداد سمپاشی", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
-                Text(text = "10", style = MaterialTheme.typography.h3, color = Color.Black, )
+                Text(text = "10", style = MaterialTheme.typography.h5, color = Color.Black, )
             }
             Icon(Icons.Outlined.PestControl, contentDescription = null, tint = YellowPesticide, modifier = Modifier
                 .padding(start = 15.dp)
@@ -337,7 +337,7 @@ fun FertilizationReport() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "تعداد تغذیه", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
-                Text(text = "16", style = MaterialTheme.typography.h3, color = Color.Black, )
+                Text(text = "16", style = MaterialTheme.typography.h5, color = Color.Black, )
             }
             Icon(Icons.Outlined.Compost, contentDescription = null, tint = Purple500, modifier = Modifier
                 .padding(start = 15.dp)
@@ -370,7 +370,7 @@ fun OthersReport(){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "دیگر فعالیتها", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
-                Text(text = "8", style = MaterialTheme.typography.h3, color = Color.Black, )
+                Text(text = "8", style = MaterialTheme.typography.h5, color = Color.Black, )
             }
             Icon(Icons.Outlined.Agriculture, contentDescription = null, tint = MainGreen, modifier = Modifier
                 .padding(start = 15.dp)
@@ -416,7 +416,7 @@ fun ColdExposureTime(){
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(text = "نیاز سرمایی باغ", style = MaterialTheme.typography.subtitle1, color = Color.Gray)
-                    Text(text = "70%", style = MaterialTheme.typography.h3, color = Color.Black, )
+                    Text(text = "70%", style = MaterialTheme.typography.h5, color = Color.Black, )
                 }
                 Icon(Icons.Outlined.AcUnit, contentDescription = null, tint = BlueIrrigationDark, modifier = Modifier
                     .padding(start = 15.dp)

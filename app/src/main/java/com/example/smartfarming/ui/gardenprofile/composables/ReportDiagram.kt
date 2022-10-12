@@ -31,7 +31,9 @@ fun ReportDiagram(){
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(1.dp)
+            .padding(horizontal = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Card(
             Modifier
@@ -84,7 +86,7 @@ fun SideInfo(
     Column(
         Modifier
             .height(200.dp)
-            .padding(5.dp),
+            .padding(10.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End
     ) {

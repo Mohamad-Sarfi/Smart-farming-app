@@ -69,9 +69,10 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         return garden
     }
 
+    fun submitClickHandler(){
+        step.value++
+    }
 
-
-    //////////////////////////////////// date
     private var pesticideDate =
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
 
@@ -85,9 +86,6 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         return pesticideDate
     }
 
-
-
-    // pesticide name
     private val pesticideName =
         mutableStateOf("")
 
@@ -111,12 +109,6 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         pesticidesList.value.remove(pesticide)
     }
 
-
-
-
-
-
-    ///////////////////////
     fun decreaseStep(){
         if (step.value == 1) step.value--
     }

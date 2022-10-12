@@ -3,6 +3,7 @@ package com.example.smartfarming.ui.addactivity.activityscreens.irrigation
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -37,12 +38,14 @@ import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
+import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.SuccessCompose
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.WorkerNumber
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.IrrigationViewModelFactory
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -55,6 +58,7 @@ fun Irrigation(gardenName : String, navHostController: NavHostController){
     var startup by remember {
         mutableStateOf(false)
     }
+    val garden = viewmodel.getGarden(gardenName)
 
     LaunchedEffect(key1 = null) {
         delay(100)
@@ -125,7 +129,7 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                IrrigationBody1(viewModel = viewModel)
+                IrrigationBody1(viewModel = viewModel, navHostController)
             }
 
             Row(
@@ -166,7 +170,6 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                             viewModel.increaseStep()
                         } else {
                             viewModel.submitClickHandler()
-                            navHostController.popBackStack()
                         }
                               },
                     colors = ButtonDefaults.buttonColors(
@@ -186,10 +189,11 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
     }
 }
 
-
-
 @Composable
-fun IrrigationBody1(viewModel: IrrigationViewModel){
+fun IrrigationBody1(viewModel: IrrigationViewModel, navHostController: NavHostController){
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     Crossfade(
         viewModel.step.value,
         animationSpec = tween(1000)
@@ -203,12 +207,15 @@ fun IrrigationBody1(viewModel: IrrigationViewModel){
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    if (viewModel.dateNotSet.value){
+                        Toast.makeText(context, "تاریخ را تعیین کنید", Toast.LENGTH_SHORT).show()
+                    }
                     DateSelector(
                         "آبیاری",
                         date = viewModel.irrigationDate.value,
                         BlueIrrigationDark,
                         Blue50){
-                        viewModel.irrigationDate.value = it
+                        viewModel.setIrrigationDate(it)
                     }
                     IrrigationVolume(viewModel)
                     IrrigationTime(viewModel)
@@ -231,14 +238,10 @@ fun IrrigationBody1(viewModel: IrrigationViewModel){
                         viewModel.irrigationWorkers.value = it
                     }
                 }
+            2 -> SuccessCompose(navHostController)
         }
-
     }
-
-
 }
-
-
 
 @Composable
 fun IrrigationVolume(viewModel: IrrigationViewModel){
@@ -307,7 +310,6 @@ fun IrrigationVolume(viewModel: IrrigationViewModel){
     }
 }
 
-
 @Composable
 fun IrrigationTime(viewModel: IrrigationViewModel){
     Column(
@@ -338,8 +340,7 @@ fun IrrigationTime(viewModel: IrrigationViewModel){
                 .fillMaxWidth()
                 .height(60.dp)
                 .padding(horizontal = 0.dp)
-                .background(Blue50, RoundedCornerShape(20.dp))
-            ,
+                .background(Blue50, RoundedCornerShape(20.dp)),
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = Blue50,
@@ -459,7 +460,6 @@ fun IrrigationType(viewModel: IrrigationViewModel){
         }
 
     }
-
 
 }
 

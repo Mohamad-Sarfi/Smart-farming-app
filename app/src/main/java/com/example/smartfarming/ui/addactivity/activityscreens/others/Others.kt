@@ -41,6 +41,7 @@ import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
+import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.SuccessCompose
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 import kotlinx.coroutines.delay
@@ -162,6 +163,7 @@ fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController)
                             ) {
 
                             }
+                        2 -> SuccessCompose(navHostController)
                     }
                 }
             }
@@ -198,7 +200,7 @@ fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController)
                 }
 
                 Button(
-                    onClick = { viewModel.increaseStep() },
+                    onClick = { viewModel.submitClickHandler() },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MainGreen,
                         contentColor = Color.White

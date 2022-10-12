@@ -44,4 +44,8 @@ class OthersViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
         getGardenByName(gardenName)
         return garden
     }
+
+    fun submitClickHandler(){
+        step.value++
+    }
 }

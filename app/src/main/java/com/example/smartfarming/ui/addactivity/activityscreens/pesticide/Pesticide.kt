@@ -44,6 +44,7 @@ import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
+import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.SuccessCompose
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.WorkerNumber
 import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModel
 import com.example.smartfarming.ui.addactivity.viewmodels.PesticideViewModelFactory
@@ -173,6 +174,7 @@ fun PesticideBody(viewModel: PesticideViewModel, navController: NavHostControlle
                                 }
                                 PesticideVolume(viewModel)
                             }
+                        2 -> SuccessCompose(navController)
                     }
                 }
 
@@ -214,6 +216,7 @@ fun PesticideBody(viewModel: PesticideViewModel, navController: NavHostControlle
                 Button(
                     onClick = {
                               //viewModel.submitBtnHandler(context, gardenName, navController)
+                              viewModel.submitClickHandler()
                          },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Yellow700,

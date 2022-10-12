@@ -47,8 +47,8 @@ import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewMode
 import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModelFactory
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
+import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.SuccessCompose
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.WorkerNumber
-import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 import com.example.smartfarming.ui.common_composables.ActivitiesStepBars
 import kotlinx.coroutines.delay
@@ -181,6 +181,7 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                                 }
                                 FertilizationVolume(viewModel)
                             }
+                        2 -> SuccessCompose(navHostController = navController)
                     }
                 }
 
@@ -220,7 +221,7 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                 }
 
                 Button(
-                    onClick = { viewModel.submitBtnHandler(context, gardenName, navController) },
+                    onClick = { viewModel.submitClickHandler(context) },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Purple700,
                         contentColor = Color.White
@@ -240,7 +241,6 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
         }
     }
 }
-
 
 @Composable
 fun FertilizationType(viewModel: FertilizationViewModel){

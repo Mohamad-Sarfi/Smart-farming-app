@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.gardens.composables
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -40,6 +41,7 @@ import com.example.smartfarming.ui.gardenprofile.composables.ToDos
 import com.example.smartfarming.ui.home.composables.MyFAB
 import com.example.smartfarming.utils.getTaskList
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GardenProfile(garden : State<Garden?>, navController: NavHostController, viewModel: GardenProfileViewModel){
     val context = LocalContext.current
@@ -126,7 +128,6 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             GardenTitle(gardenName = garden.value!!.name, navController)
             ReportDiagram()
             Report(navController, garden.value!!.name)
@@ -168,38 +169,36 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
 
 @Composable
 fun Report(navController: NavHostController, gardenName: String){
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 20.dp, vertical = 8.dp)
-        .graphicsLayer {
-            shadowElevation = 4.dp.toPx()
-            shape = RoundedCornerShape(20.dp)
-            clip = true
-        }
-        .background(LightGray)
-        .clip(MaterialTheme.shapes.large)
-        .clickable {
-            navController.navigate(route = "${AppScreensEnum.GardenReportScreen.name}/${gardenName}")
-        }
-        .padding(20.dp)
-        ,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Card(
+        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+        elevation = 4.dp,
+        shape = RoundedCornerShape(20.dp),
+        backgroundColor = LightGray
     ) {
-        Icon(
-            painterResource(id = R.drawable.bar_chart),
-            contentDescription = "",
-            tint = MainGreen,
-            modifier = Modifier
-                .padding(8.dp)
-                .size(55.dp)
-        )
-        Text(
-            text = "گزارش فعالیت ها",
-            style = MaterialTheme.typography.body2,
-            color = MainGreen
-        )
-
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.large)
+            .clickable {
+                navController.navigate(route = "${AppScreensEnum.GardenReportScreen.name}/${gardenName}")
+            }
+            .padding(20.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                painterResource(id = R.drawable.bar_chart),
+                contentDescription = "",
+                tint = MainGreen,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(55.dp)
+            )
+            Text(
+                text = "گزارش فعالیت ها",
+                style = MaterialTheme.typography.body1,
+                color = MainGreen
+            )
+        }
     }
 }
 
