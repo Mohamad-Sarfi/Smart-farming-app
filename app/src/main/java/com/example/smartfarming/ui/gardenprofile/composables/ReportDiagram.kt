@@ -96,7 +96,6 @@ fun SideInfo(
     }
 }
 
-
 @Composable
 fun info(
     name : String,

@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModel
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModelFactory
+import com.example.smartfarming.ui.addactivity.components.PicturedActivityCards
 
 @Composable
 fun AddActivity(
@@ -29,7 +30,12 @@ fun AddActivity(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { innerPadding ->
-        Cards(
+//        Cards(
+//            navController,
+//            viewModel = viewModel,
+//            gardensNameList
+//        )
+        PicturedActivityCards(
             navController,
             viewModel = viewModel,
             gardensNameList

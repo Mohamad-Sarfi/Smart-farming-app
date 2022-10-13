@@ -50,9 +50,6 @@ fun Cards(
         mutableStateOf(0)
     }
 
-
-
-
     var clicked = remember {
         mutableStateOf(false)
     }
@@ -63,14 +60,14 @@ fun Cards(
             .fillMaxWidth()
             .fillMaxHeight()
             .background(LightBackground)
-            .padding(top = 50.dp)
+            .padding(top = 10.dp)
     ) {
         Text(
             text = "افزودن فعالیت جدید",
             style = MaterialTheme.typography.h5,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(35.dp)
+                .padding(10.dp)
             ,
             color = MaterialTheme.colors.primary
         )
