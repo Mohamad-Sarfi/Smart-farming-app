@@ -78,16 +78,16 @@ fun PicturedActivityCards(navController: NavHostController, viewModel: AddActivi
                     top.linkTo(title.bottom)
                 }) {
             PicturedCard("آبیاری", R.drawable.irrigation_pic, BlueIrrigationDark){
-                navController.navigate(AppScreensEnum.IrrigationScreen.name)
+                navController.navigate("${AppScreensEnum.IrrigationScreen.name}/$currentGarden")
             }
             PicturedCard("سمپاشی", R.drawable.irrigation_pic, YellowPesticide){
-                navController.navigate(AppScreensEnum.IrrigationScreen.name)
+                navController.navigate("${AppScreensEnum.PesticideScreen.name}/$currentGarden")
             }
             PicturedCard("تغذیه", R.drawable.irrigation_pic, Purple700){
-                navController.navigate(AppScreensEnum.IrrigationScreen.name)
+                navController.navigate("${AppScreensEnum.FertilizationScreen.name}/$currentGarden")
             }
             PicturedCard("سایر", R.drawable.irrigation_pic, MainGreen){
-                navController.navigate(AppScreensEnum.IrrigationScreen.name)
+                navController.navigate("${AppScreensEnum.OtherActivitiesScreen.name}/$currentGarden")
             }
 
         }

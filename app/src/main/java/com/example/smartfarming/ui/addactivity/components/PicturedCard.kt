@@ -29,8 +29,8 @@ fun PicturedCard(
     Card(modifier = Modifier
         .fillMaxWidth()
         .height(150.dp)
-        .clickable { goTo() }
-        .padding(10.dp),
+        .padding(10.dp)
+        .clickable { goTo() },
         shape = RoundedCornerShape(10.dp),
         elevation = 3.dp
     ) {
@@ -48,7 +48,7 @@ fun PicturedCard(
         Row(
             Modifier
                 .fillMaxSize()
-                .padding(15.dp),
+                .padding(35.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
         ) {
