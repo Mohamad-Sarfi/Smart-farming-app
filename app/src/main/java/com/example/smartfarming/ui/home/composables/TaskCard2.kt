@@ -27,8 +27,6 @@ import com.example.smartfarming.utils.getTaskIcon
 @Composable
 fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boolean = false, clickHandler : () -> Unit){
 
-    val activity = LocalContext.current as Activity
-
     var clicked by remember {
         mutableStateOf(false)
     }
@@ -45,7 +43,6 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
             .padding(8.dp)
             .width(160.dp)
             .height(cardHeight)
-            .clip(RoundedCornerShape(15.dp))
             .clickable {
                 if (clicked || oneStepClick){
                     clickHandler()
@@ -54,7 +51,7 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
                 }
             }
             .padding(top = 2.dp),
-        elevation = 2.dp,
+        elevation = 4.dp,
         shape = RoundedCornerShape(15.dp),
         backgroundColor = Color.White,
         border = if (clicked) BorderStroke(2.dp, getTaskColor(task.activity_type)) else BorderStroke(0.dp, Color.White)

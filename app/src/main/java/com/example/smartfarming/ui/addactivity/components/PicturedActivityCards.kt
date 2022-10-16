@@ -2,8 +2,15 @@ package com.example.smartfarming.ui.addactivity.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Agriculture
+import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Compost
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -25,18 +32,16 @@ import com.example.smartfarming.ui.common_composables.GardenSpinner
 @Composable
 fun PicturedActivityCards(navController: NavHostController, viewModel: AddActivitiesViewModel, gardenList : List<String>) {
 
-    val context = LocalContext.current
-    val gardenListState = viewModel.getGardens().observeAsState()
     var currentGarden by remember {
-        if (!gardenListState.value.isNullOrEmpty()){
-            mutableStateOf(gardenList[0])
-        }
-        else {
-            mutableStateOf("انتخاب باغ")
-        }
+        mutableStateOf("انتخاب باغ")
     }
+
     var gardenId by remember {
         mutableStateOf(0)
+    }
+
+    if (!viewModel.gardenListState.value.isNullOrEmpty()){
+        currentGarden = viewModel.gardenListState.value!![0].name
     }
 
     ConstraintLayout(
@@ -50,7 +55,7 @@ fun PicturedActivityCards(navController: NavHostController, viewModel: AddActivi
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
+                .padding(0.dp)
                 .constrainAs(title) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -62,42 +67,18 @@ fun PicturedActivityCards(navController: NavHostController, viewModel: AddActivi
                 text = "افزودن فعالیت جدید",
                 style = MaterialTheme.typography.h5,
                 modifier = Modifier
-                    .padding(35.dp)
+                    .padding(6.dp)
                 ,
                 color = MaterialTheme.colors.primary
             )
         }
 
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp)
-                .constrainAs(cardColumn) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(title.bottom)
-                }) {
-            PicturedCard("آبیاری", R.drawable.irrigation_pic, BlueIrrigationDark){
-                navController.navigate("${AppScreensEnum.IrrigationScreen.name}/$currentGarden")
-            }
-            PicturedCard("سمپاشی", R.drawable.irrigation_pic, YellowPesticide){
-                navController.navigate("${AppScreensEnum.PesticideScreen.name}/$currentGarden")
-            }
-            PicturedCard("تغذیه", R.drawable.irrigation_pic, Purple700){
-                navController.navigate("${AppScreensEnum.FertilizationScreen.name}/$currentGarden")
-            }
-            PicturedCard("سایر", R.drawable.irrigation_pic, MainGreen){
-                navController.navigate("${AppScreensEnum.OtherActivitiesScreen.name}/$currentGarden")
-            }
-
-        }
-
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(15.dp)
+                .padding(10.dp)
                 .constrainAs(gardenSelector) {
-                    bottom.linkTo(parent.bottom)
+                    top.linkTo(title.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
@@ -106,11 +87,35 @@ fun PicturedActivityCards(navController: NavHostController, viewModel: AddActivi
         ) {
             GardenSpinner(gardenList, currentGarden){
                 currentGarden = it
-                gardenListState.value?.forEach { g ->
+                viewModel.gardenListState.value?.forEach { g ->
                     if (g.name == it){
                         gardenId = g.id
                     }
                 }
+            }
+        }
+
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
+                .verticalScroll(rememberScrollState())
+                .constrainAs(cardColumn) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(gardenSelector.bottom)
+                }) {
+            PicturedCard("آبیاری", R.drawable.irrigation_pic, BlueIrrigationDark, Icons.Default.WaterDrop){
+                navController.navigate("${AppScreensEnum.IrrigationScreen.name}/$currentGarden")
+            }
+            PicturedCard("سمپاشی", R.drawable.fertilizaiton_pic, YellowPesticide, Icons.Default.BugReport){
+                navController.navigate("${AppScreensEnum.PesticideScreen.name}/$currentGarden")
+            }
+            PicturedCard("تغذیه", R.drawable.fertilizaiton_pic, Purple700, Icons.Default.Compost){
+                navController.navigate("${AppScreensEnum.FertilizationScreen.name}/$currentGarden")
+            }
+            PicturedCard("سایر", R.drawable.activities_pic, MainGreen, Icons.Default.Agriculture){
+                navController.navigate("${AppScreensEnum.OtherActivitiesScreen.name}/$currentGarden")
             }
         }
     }

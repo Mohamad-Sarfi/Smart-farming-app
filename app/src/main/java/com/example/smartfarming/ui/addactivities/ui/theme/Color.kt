@@ -45,9 +45,10 @@ val lightBrownOtherActivities = Color(0xFFFFEAE1)
 
 
 val LightGray = Color(0xFFF6F6F6)
-val LightGray2 = Color(0xFFF3F3F3)
+val LightGray2 = Color(0xFFF9F9F9)
 val LightBackground = Color(0xFFF9FAF7)
 
 
 val LightGreen1 = Color(0xff00e676)
 val LightGreen3 = Color(0xFFC9DCBD)
+val LightGreen4 = Color(0xFFf1f8e9)

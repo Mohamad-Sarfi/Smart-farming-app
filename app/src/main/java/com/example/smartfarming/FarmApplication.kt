@@ -19,7 +19,7 @@ class FarmApplication : Application() {
     private val database : GardenDb by lazy { GardenDb.getDatabase(this) }
 
     val repo by lazy {
-        GardenRepo(database.gardenDao(), database.taskDao(), database.irrigationDao(), database.harvestDao(), database.fertilizationDao())
+        GardenRepo(database.gardenDao(), database.taskDao(), database.irrigationDao(), database.harvestDao(), database.fertilizationDao(), database.pesticideDao())
     }
 
     protected val remoteDataSource = RemoteDataSource()

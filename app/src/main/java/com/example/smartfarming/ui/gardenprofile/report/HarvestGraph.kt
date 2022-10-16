@@ -33,20 +33,21 @@ fun HarvestGraph(
     
     Card(
         modifier = Modifier
-            .padding(horizontal = 5.dp, vertical = 2.dp)
+            .padding(horizontal = 5.dp, vertical = 0.dp)
             .fillMaxWidth()
             .height(260.dp)
             .clickable {
                 navController.navigate(route = "${AppScreensEnum.GardenHarvestScreen.name}/${gardenName}")
             }
-            .padding(5.dp),
+            .padding(10.dp),
         shape = RoundedCornerShape(10.dp),
-        elevation = 3.dp
+        elevation = 1.dp,
+        backgroundColor = Color.White
     ) {
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(top = 15.dp),
+                .padding(top = 15.dp, bottom = 15.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -55,7 +56,7 @@ fun HarvestGraph(
             Row(
                 Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 10.dp)
+                    .padding(horizontal = 15.dp)
                     ,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center

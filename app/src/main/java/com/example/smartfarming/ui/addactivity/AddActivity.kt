@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
@@ -14,12 +15,13 @@ import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewMode
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModelFactory
 import com.example.smartfarming.ui.addactivity.components.PicturedActivityCards
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AddActivity(
     navController : NavHostController,
     viewModel: AddActivitiesViewModel
 ){
-    val gardensList = viewModel.getGardens().observeAsState()
+    val gardensList = viewModel.gardenListState
     val gardensNameList = arrayListOf<String>()
 
     if (gardensList.value != null){
@@ -27,9 +29,10 @@ fun AddActivity(
             gardensNameList.add(garden.name)
         }
     }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-    ) { innerPadding ->
+    ) {  innerPadding ->
 //        Cards(
 //            navController,
 //            viewModel = viewModel,

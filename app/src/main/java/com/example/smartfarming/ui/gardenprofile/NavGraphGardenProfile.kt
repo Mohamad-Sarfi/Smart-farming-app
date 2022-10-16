@@ -17,7 +17,9 @@ import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
 import com.example.smartfarming.ui.gardenprofile.composables.Weather
 import com.example.smartfarming.ui.gardenprofile.editGarden.EditScreen
 import com.example.smartfarming.ui.gardenprofile.map.GardenMap
+import com.example.smartfarming.ui.gardenprofile.report.IrrigationReport
 import com.example.smartfarming.ui.gardenprofile.report.Report
+import com.example.smartfarming.ui.gardenprofile.report.reportscreens.IrrigationReportScreen
 import com.example.smartfarming.ui.gardenprofile.taskScreen.TaskScreen
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
 import com.example.smartfarming.ui.harvest.harvest_archive.GardenHarvestScreen
@@ -39,6 +41,10 @@ fun NavGraphGardenProfile(
     val harvest = AppScreensEnum.GardenHarvestScreen.name
     val report = AppScreensEnum.GardenReportScreen.name
     val home = AppScreensEnum.GardenProfileHome.name
+    val irrigationReport = AppScreensEnum.IrrigationReportScreen.name
+    val fertilizationReport = AppScreensEnum.FertilizationReportScreen.name
+    val pesticideReport = AppScreensEnum.PesticideReportScreen.name
+    val othersReport = AppScreensEnum.OthersReportScreen.name
 
     NavHost(navController = navController,
         startDestination = if (!taskScreen) home else AppScreensEnum.GardenTasksScreen.name
@@ -175,6 +181,19 @@ fun NavGraphGardenProfile(
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
             GardenMap(gardenName!!)
+        }
+
+        //Report Screens
+        composable(
+            route = "$irrigationReport/{gardenName}",
+            arguments = listOf(
+                navArgument("gardenName"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val gardenName = entry.arguments?.getString("gardenName")
+            IrrigationReportScreen(gardenName!!)
         }
         
 

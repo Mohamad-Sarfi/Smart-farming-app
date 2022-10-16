@@ -35,7 +35,7 @@ fun Cards(
 ){
     val context = LocalContext.current
 
-    val gardenListState = viewModel.getGardens().observeAsState()
+    val gardenListState = viewModel.gardenListState
 
     var currentGarden by remember {
         if (!gardenListState.value.isNullOrEmpty()){
@@ -76,16 +76,16 @@ fun Cards(
                 .padding(0.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Card("آبیاری",  Icons.Default.WaterDrop, BlueWatering) {
 
+            Card("آبیاری",  Icons.Default.WaterDrop, BlueWatering) {
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()
                 } else {
                     navController.navigate("${AppScreensEnum.IrrigationScreen.name}/$currentGarden")
                 }
             }
-            Card("تغذیه", Icons.Default.Compost, PurpleFertilizer) {
 
+            Card("تغذیه", Icons.Default.Compost, PurpleFertilizer) {
                 if (currentGarden == "انتخاب باغ"){
                     Toast.makeText(context, "ابتدا باغ را انتخاب کنید", Toast.LENGTH_SHORT).show()
                 } else {
@@ -94,6 +94,7 @@ fun Cards(
                 }
             }
         }
+
         Row(
             modifier = Modifier
                 .padding(2.dp)
@@ -116,6 +117,7 @@ fun Cards(
                 }
             }
         }
+
         Row(
             modifier = Modifier
                 .padding(20.dp)

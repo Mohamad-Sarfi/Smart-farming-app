@@ -15,23 +15,27 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class GardenProfileActivity : ComponentActivity() {
 
     // Get gardenName from intent
 
 
-    val viewModel : GardenProfileViewModel by viewModels {
-        GardenProfileViewModelFactory((application as FarmApplication).repo)
-    }
+//    val viewModel : GardenProfileViewModel by viewModels {
+//        GardenProfileViewModelFactory((application as FarmApplication).repo)
+//    }
+    val viewModel : GardenProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

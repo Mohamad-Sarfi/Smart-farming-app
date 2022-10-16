@@ -62,18 +62,15 @@ fun SetupNavGraph(
             }
 
         composable(
-            route = "$activityScreen/{gardenName}/{act}",
+            route = "$activityScreen/{gardenName}",
             arguments = listOf(
                 navArgument("gardenName"){
-                    type = NavType.StringType
-                },
-                navArgument("act"){
                     type = NavType.StringType
                 }
             )
         ){entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            val act = entry.arguments?.getString("act")
+            //val act = entry.arguments?.getString("act")
             com.example.smartfarming.ui.addactivity.activityscreens.others.Others(gardenName = gardenName!!, navController)
         }
 

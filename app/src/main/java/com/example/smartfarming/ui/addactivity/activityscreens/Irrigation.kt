@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
@@ -52,8 +53,9 @@ fun Irrigation(
     val Max_STEPS = 1
     val activity = LocalContext.current as Activity
 
-    val viewModel : IrrigationViewModel =
-         viewModel(factory = IrrigationViewModelFactory((activity?.application as FarmApplication).repo))
+//    val viewModel : IrrigationViewModel =
+//         viewModel(factory = IrrigationViewModelFactory((activity?.application as FarmApplication).repo))
+    val viewModel : IrrigationViewModel = hiltViewModel()
 
     val garden = viewModel.getGarden(gardenName)
     var irrigationDate = viewModel.irrigationDate

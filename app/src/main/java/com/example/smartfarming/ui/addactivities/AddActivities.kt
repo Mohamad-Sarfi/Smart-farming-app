@@ -59,26 +59,26 @@ fun HostComposable(viewModel : AddActivitiesViewModel){
 
 }
 
-@Composable
-fun AddActivitiesMain(navController : NavHostController, viewModel : AddActivitiesViewModel){
-
-    val gardensList = viewModel.getGardens().observeAsState()
-    val gardensNameList = arrayListOf<String>()
-
-    if (gardensList.value != null){
-        for (garden in gardensList.value!!){
-            gardensNameList.add(garden.name)
-        }
-    }
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-    ) { innerPadding ->
-        Cards(
-            navController,
-            gardensNameList
-        )
-    }
-}
+//@Composable
+//fun AddActivitiesMain(navController : NavHostController, viewModel : AddActivitiesViewModel){
+//
+//    val gardensList = viewModel.getGardens().observeAsState()
+//    val gardensNameList = arrayListOf<String>()
+//
+//    if (gardensList.value != null){
+//        for (garden in gardensList.value!!){
+//            gardensNameList.add(garden.name)
+//        }
+//    }
+//    Scaffold(
+//        modifier = Modifier.fillMaxSize(),
+//    ) { innerPadding ->
+//        Cards(
+//            navController,
+//            gardensNameList
+//        )
+//    }
+//}
 
 
 

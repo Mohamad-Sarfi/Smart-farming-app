@@ -1,5 +1,7 @@
 package com.example.smartfarming.ui.addactivities.viewModel
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
@@ -10,20 +12,19 @@ import java.lang.IllegalArgumentException
 
 class AddActivitiesViewModel(val repo : GardenRepo) : ViewModel() {
 
+    var gardenListState = mutableStateOf<List<Garden>?>(null)
 
-
-
-    fun getGardens() : LiveData<List<Garden>>{
-        var list = liveData<List<Garden>> {  }
-
-        viewModelScope.launch() {
-            list = repo.getGardens().asLiveData()
-        }
-
-        return list
+    init {
+        getGardens()
     }
 
-
+    fun getGardens(){
+        viewModelScope.launch() {
+            repo.getGardens().collect{
+                gardenListState.value = it
+            }
+        }
+    }
 }
 
 class AddActivitiesViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory{

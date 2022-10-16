@@ -19,5 +19,5 @@ interface PesticideDao {
     fun getAllPesticides() : Flow<List<PesticideEntity>>
 
     @Query("SELECT * FROM pesticide_table WHERE garden_name = :gardenName")
-    suspend fun getPesticideByGardenName(gardenName : String) : List<PesticideEntity>
+    fun getPesticideByGardenName(gardenName : String) : Flow<List<PesticideEntity>>
 }

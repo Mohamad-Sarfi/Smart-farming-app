@@ -59,20 +59,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit){
 
-    val context = LocalContext.current
-
     val activity = LocalContext.current as Activity
-
     val viewModel : HomeViewModel = viewModel(factory = HomeViewModelFactory((activity.application as FarmApplication).repo))
-
     val gardensList by viewModel.getGardens().observeAsState()
     var tasks = listOf<Task>()
     if (!gardensList.isNullOrEmpty()){
         tasks = getTaskList(gardensList!!)
     }
-
     val backDropState = rememberBackdropScaffoldState( BackdropValue.Revealed)
-
     val composableScope = rememberCoroutineScope()
 
     BackdropScaffold(
@@ -403,30 +397,33 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(vertical = 5.dp, horizontal = 10.dp),
+                .padding(vertical = 15.dp, horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
             ActivityGroupSelector(
+                "آبیاری",
                 ActivityTypesEnum.IRRIGATION.name,
                 viewModel.selectedActivityGroup.value
             )
             { viewModel.setSelectedActivityGroup(it) }
 
-
             ActivityGroupSelector(
+                "تغذیه",
                 ActivityTypesEnum.FERTILIZATION.name,
                 viewModel.selectedActivityGroup.value
             )
             { viewModel.setSelectedActivityGroup(it) }
 
             ActivityGroupSelector(
+                "سمپاشی",
                 ActivityTypesEnum.PESTICIDE.name,
                 viewModel.selectedActivityGroup.value
             )
             { viewModel.setSelectedActivityGroup(it) }
 
             ActivityGroupSelector(
+                "سایر",
                 ActivityTypesEnum.Other.name,
                 viewModel.selectedActivityGroup.value
             )
@@ -513,13 +510,14 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
 
     @Composable
     fun ActivityGroupSelector(
+        title: String,
         activityName: String,
         selectedActivity: String,
         setSelectedActivity: (String) -> Unit
     ) {
 
         val groupSelectorWidth by animateDpAsState(
-            if (selectedActivity == activityName) 135.dp else 60.dp
+            if (selectedActivity == activityName) 125.dp else 60.dp
         )
         
         Box(
@@ -540,7 +538,7 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 3.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween) {
+                horizontalArrangement = Arrangement.SpaceEvenly) {
                 Icon(
                     getTaskIcon(activityName),
                     contentDescription = null,
@@ -551,7 +549,7 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
                 )
 
                 if (selectedActivity == activityName) {
-                    Text(text = "سم پاشی", color = Color.White, style = MaterialTheme.typography.body2)
+                    Text(text = title, color = Color.White, style = MaterialTheme.typography.body2)
                 }
             }
         }

@@ -15,6 +15,10 @@ enum class AppScreensEnum {
     GardenProfileHome,
     GardenEditScreen,
     GardenMapScreen,
+    IrrigationReportScreen,
+    PesticideReportScreen,
+    FertilizationReportScreen,
+    OthersReportScreen,
 
     /* Harvest screens */
     HarvestHomeScreen,

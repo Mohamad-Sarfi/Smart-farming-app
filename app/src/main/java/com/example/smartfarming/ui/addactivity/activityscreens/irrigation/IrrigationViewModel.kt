@@ -33,15 +33,14 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
 
     var irrigationType =
-        mutableStateOf(garden.value!!.irrigation_type)
+        mutableStateOf(garden.value.irrigation_type)
         set(value) { field = value }
 
     val irrigationDuration =
-        mutableStateOf(garden.value!!.irrigation_duration)
+        mutableStateOf(garden.value.irrigation_duration)
 
     var waterVolume =
-        mutableStateOf(garden.value!!.irrigation_volume)
-
+        mutableStateOf(garden.value.irrigation_volume)
 
     var irrigationWorkers =
         mutableStateOf(1)
@@ -49,7 +48,7 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
     private fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
             garden.value  = repo.getGardenByName(gardenName)
-            waterVolume.value = garden.value.irrigation_volume
+            waterVolume.value = garden.value.irrigation_volume ?: 2.0
             irrigationDuration.value = garden.value.irrigation_duration
             irrigationType.value = garden.value.irrigation_type
         }

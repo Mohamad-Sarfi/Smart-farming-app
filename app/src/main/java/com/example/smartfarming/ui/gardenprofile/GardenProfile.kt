@@ -235,20 +235,29 @@ fun MainIcons(
 
 @Composable
 fun GardenTitle(gardenName : String, navController: NavHostController){
-    Row(
-        modifier = Modifier
+    Box(
+        Modifier
+            .padding(bottom = 45.dp)
             .fillMaxWidth()
-            .padding(15.dp)
-        ,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier
-            .clickable {
-                navController.navigate(route = "${AppScreensEnum.GardenEditScreen.name}/$gardenName")
+            .background(MainGreen)
+            .padding(15.dp)) {
+        Card( modifier = Modifier
+            .offset(y = 35.dp)
+            .fillMaxWidth(),
+            shape = RoundedCornerShape(15.dp),
+            elevation = 4.dp
+        ) {
+
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(horizontal = 30.dp, vertical = 10.dp)) {
+                Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier
+                    .clickable {
+                        navController.navigate(route = "${AppScreensEnum.GardenEditScreen.name}/$gardenName")
+                    }
+                    .padding(5.dp))
+                Text(text = gardenName, style = MaterialTheme.typography.h5, color = MainGreen, modifier = Modifier.padding(5.dp))
+
             }
-            .padding(5.dp))
-        Text(text = gardenName, style = MaterialTheme.typography.h4, color = MainGreen, modifier = Modifier.padding(5.dp))
+        }
 
     }
 }

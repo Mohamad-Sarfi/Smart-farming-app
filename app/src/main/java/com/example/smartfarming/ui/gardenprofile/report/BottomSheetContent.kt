@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheetContent(viewModel: ReportViewModel) {
 
