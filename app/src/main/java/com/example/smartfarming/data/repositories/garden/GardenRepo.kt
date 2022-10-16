@@ -13,7 +13,8 @@ class GardenRepo @Inject constructor(
     private val irrigationDao : IrrigationDao,
     private val harvestDao: HarvestDao,
     private val fertilizationDao: FertilizationDao,
-    private val pesticideDao: PesticideDao
+    private val pesticideDao: PesticideDao,
+    private val otherActivitiesDao: OtherActivitiesDao
 ) {
 
     // Garden repo
@@ -103,7 +104,6 @@ class GardenRepo @Inject constructor(
         return harvestDao.getHarvestByGarden(gardenName)
     }
 
-
     //Fertilization
     @WorkerThread
     suspend fun insertFertilization(fertilizationEntity: FertilizationEntity) {
@@ -126,4 +126,27 @@ class GardenRepo @Inject constructor(
         return pesticideDao.getPesticideByGardenName(gardenName)
     }
 
+    @WorkerThread
+    suspend fun insertPesticide(pesticideEntity: PesticideEntity){
+        pesticideDao.insert(pesticideEntity)
+    }
+
+    @WorkerThread
+    suspend fun deletePesticide(pesticideEntity: PesticideEntity){
+        pesticideDao.delete(pesticideEntity)
+    }
+
+    //Other Activities
+    @WorkerThread
+    suspend fun insertOtherActivity(otherActivityEntity: OtherActivityEntity){
+        otherActivitiesDao.insert(otherActivityEntity)
+    }
+
+    @WorkerThread
+    fun getOtherActivitiesByGardenName(gardenName: String) : Flow<List<OtherActivityEntity>> = otherActivitiesDao.getOtherActivitiesByGardenName(gardenName)
+
+    @WorkerThread
+    suspend fun deleteOtherActivity(otherActivityEntity: OtherActivityEntity){
+        otherActivitiesDao.delete(otherActivityEntity)
+    }
 }

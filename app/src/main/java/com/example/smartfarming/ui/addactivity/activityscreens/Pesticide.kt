@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity.activityscreens
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
@@ -35,6 +36,7 @@ import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.common_composables.ProgressDots
 import com.example.smartfarming.ui.common_composables.TitleIcon
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Pesticides(
     gardenName: String,

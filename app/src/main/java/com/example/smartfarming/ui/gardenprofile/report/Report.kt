@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.gardenprofile.report
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -64,18 +65,18 @@ fun Report(
                 .fillMaxSize()
                 .background(LightGray2)
                 .verticalScroll(rememberScrollState())
-                .padding(vertical = 30.dp, horizontal = 20.dp),
+                .padding(vertical = 30.dp, horizontal = 16.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "گزارش فعالیت های", color = MainGreen, style = MaterialTheme.typography.h5)
-            Text(text = "باغ محمد", color = MainGreen, style = MaterialTheme.typography.body1, modifier = Modifier.padding(bottom = 10.dp))
+            Text(text = "باغ " + gardenName, color = MainGreen, style = MaterialTheme.typography.body1, modifier = Modifier.padding(bottom = 10.dp))
             GraphsRow()
             ColdExposureTime()
             WorkerReport()
             IrrigationReport(viewModel, navHostController, gardenName)
             HarvestGraph(navHostController, gardenName )
-            PesticideReport(viewModel)
+            PesticideReport(viewModel, gardenName)
             FertilizationReport(viewModel)
             OthersReport()
         }
@@ -130,8 +131,7 @@ fun GraphsRow(){
                 .padding(5.dp)
                 .width(100.dp)
                 .height(140.dp)
-                .background(Color.White, RoundedCornerShape(10.dp))
-            ,
+                .background(Color.White, RoundedCornerShape(10.dp)),
             shape = RoundedCornerShape(10.dp),
             elevation = 1.dp
         ) {
@@ -249,7 +249,6 @@ fun IrrigationReport(viewModel: ReportViewModel, navHostController: NavHostContr
             .fillMaxWidth()
             .height(135.dp)
             .clip(RoundedCornerShape(10.dp))
-            .clickable { navHostController.navigate("${AppScreensEnum.IrrigationReportScreen}/$gardenName") }
             .padding(10.dp),
         shape = RoundedCornerShape(10.dp),
         elevation = 1.dp,
@@ -258,6 +257,7 @@ fun IrrigationReport(viewModel: ReportViewModel, navHostController: NavHostContr
         Row(
             Modifier
                 .fillMaxSize()
+                .clickable { navHostController.navigate("${AppScreensEnum.IrrigationReportScreen}/$gardenName") }
                 .padding(horizontal = 40.dp)
             ,
             verticalAlignment = Alignment.CenterVertically,
@@ -279,7 +279,7 @@ fun IrrigationReport(viewModel: ReportViewModel, navHostController: NavHostContr
 }
 
 @Composable
-fun PesticideReport(viewModel: ReportViewModel){
+fun PesticideReport(viewModel: ReportViewModel, gardenName: String){
     Card(
         modifier = Modifier
             .padding(horizontal = 5.dp, vertical = 0.dp)
@@ -293,6 +293,10 @@ fun PesticideReport(viewModel: ReportViewModel){
         Row(
             Modifier
                 .fillMaxSize()
+                .clickable {
+                    viewModel.getAllPesticides(gardenName)
+                    Log.i("TAG_pests", "${viewModel.allPests.value}")
+                }
                 .padding(horizontal = 40.dp)
             ,
             verticalAlignment = Alignment.CenterVertically,
@@ -383,7 +387,6 @@ fun OthersReport(){
 
 @Composable
 fun ColdExposureTime(){
-
     var clicked by remember {
         mutableStateOf(false)
     }
@@ -394,14 +397,13 @@ fun ColdExposureTime(){
             .fillMaxWidth()
             .height(135.dp)
             .clip(RoundedCornerShape(10.dp))
-            .padding(10.dp)
-            .clickable { clicked = !clicked },
+            .padding(10.dp),
         shape = RoundedCornerShape(10.dp),
         elevation = 1.dp,
         backgroundColor = Color.White
     ) {
         Column(
-            Modifier.fillMaxSize(),
+            Modifier.fillMaxSize().clickable { clicked = !clicked },
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

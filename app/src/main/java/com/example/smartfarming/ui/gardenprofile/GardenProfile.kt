@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.gardens.composables
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -170,7 +171,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
 @Composable
 fun Report(navController: NavHostController, gardenName: String){
     Card(
-        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+        modifier = Modifier.padding(horizontal = 30.dp, vertical = 8.dp),
         elevation = 4.dp,
         shape = RoundedCornerShape(20.dp),
         backgroundColor = LightGray
@@ -201,10 +202,6 @@ fun Report(navController: NavHostController, gardenName: String){
         }
     }
 }
-
-
-
-
 
 @Composable
 fun MainIcons(
@@ -237,17 +234,16 @@ fun MainIcons(
 fun GardenTitle(gardenName : String, navController: NavHostController){
     Box(
         Modifier
-            .padding(bottom = 45.dp)
+            .padding(bottom = 45.dp, start = 0.dp, end = 0.dp)
             .fillMaxWidth()
             .background(MainGreen)
-            .padding(15.dp)) {
+            .padding(10.dp)) {
         Card( modifier = Modifier
-            .offset(y = 35.dp)
+            .offset(y = 40.dp)
             .fillMaxWidth(),
-            shape = RoundedCornerShape(15.dp),
-            elevation = 4.dp
+            shape = RoundedCornerShape(bottomEnd = 40.dp, bottomStart = 40.dp, topEnd = 40.dp, topStart = 40.dp),
+            elevation = 3.dp
         ) {
-
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(horizontal = 30.dp, vertical = 10.dp)) {
                 Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier
                     .clickable {
@@ -260,10 +256,5 @@ fun GardenTitle(gardenName : String, navController: NavHostController){
         }
 
     }
-}
-
-@Composable
-fun Indicators(){
-
 }
 

@@ -153,16 +153,7 @@ fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController)
                                     ActivityNameSpecify(viewModel = viewModel)
                                 }
                             }
-                        1 ->
-                            Column(
-                                Modifier
-                                    .fillMaxSize()
-                                    .padding(30.dp),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-
-                            }
+                        1 -> OtherActivityPage2(viewModel)
                         2 -> SuccessCompose(navHostController)
                     }
                 }
@@ -217,11 +208,9 @@ fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController)
                     )
                 }
             }
-
         }
     }
 }
-
 
 @Composable
 fun ActivityName(viewModel: OthersViewModel){
@@ -309,7 +298,7 @@ fun ActivityNameSpecify(viewModel: OthersViewModel){
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "نوع فعالیت",
+                text = "نام فعالیت فعالیت",
                 style = MaterialTheme.typography.subtitle1,
                 color = MainGreen
             )
@@ -333,10 +322,10 @@ fun ActivityNameSpecify(viewModel: OthersViewModel){
             ,
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Purple100,
-                textColor = Purple700,
-                focusedBorderColor = Purple100,
-                unfocusedBorderColor = Purple100),
+                backgroundColor = MainGreen100,
+                textColor = MainGreen,
+                focusedBorderColor = MainGreen100,
+                unfocusedBorderColor = MainGreen100),
             textStyle = TextStyle(
                 fontFamily = sina,
                 fontWeight = FontWeight.Normal,
@@ -356,3 +345,159 @@ fun ActivityNameSpecify(viewModel: OthersViewModel){
 
     }
 }
+
+@Composable
+fun OtherActivityPage2(viewModel: OthersViewModel) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(30.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Cause(viewModel)
+        ActivityDescriptor(viewModel)
+    }
+}
+
+@Composable
+fun Cause(viewModel: OthersViewModel) {
+
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = Modifier.padding(20.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.End) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "علت فعالیت",
+                style = MaterialTheme.typography.subtitle1,
+                color = MainGreen
+            )
+            Icon(
+                Icons.Outlined.Agriculture,
+                contentDescription = null,
+                tint = MainGreen,
+                modifier = Modifier.padding(start = 10.dp)
+            )
+        }
+
+        OutlinedTextField(
+            value = viewModel.activityCause.value,
+            onValueChange = {
+                viewModel.setActivityCause(it)},
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp)
+                .padding(horizontal = 0.dp)
+                .background(Purple100, RoundedCornerShape(20.dp))
+            ,
+            shape = RoundedCornerShape(20.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = MainGreen100,
+                textColor = MainGreen,
+                focusedBorderColor = MainGreen100,
+                unfocusedBorderColor = MainGreen100),
+            textStyle = TextStyle(
+                fontFamily = sina,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp,
+                textDirection = TextDirection.ContentOrRtl,
+                textAlign = TextAlign.Center
+            ),
+            singleLine = true,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
+            )
+        )
+    }
+}
+
+@Composable
+fun ActivityDescriptor(viewModel: OthersViewModel) {
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = Modifier.padding(20.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.End) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "توضیحات",
+                style = MaterialTheme.typography.subtitle1,
+                color = MainGreen
+            )
+            Icon(
+                Icons.Outlined.Agriculture,
+                contentDescription = null,
+                tint = MainGreen,
+                modifier = Modifier.padding(start = 10.dp)
+            )
+        }
+
+        OutlinedTextField(
+            value = viewModel.activityDescription.value,
+            onValueChange = {
+                viewModel.setActivityDesription(it)},
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp)
+                .padding(horizontal = 0.dp)
+                .background(Purple100, RoundedCornerShape(20.dp))
+            ,
+            shape = RoundedCornerShape(20.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = MainGreen100,
+                textColor = MainGreen,
+                focusedBorderColor = MainGreen100,
+                unfocusedBorderColor = MainGreen100),
+            textStyle = TextStyle(
+                fontFamily = sina,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp,
+                textDirection = TextDirection.ContentOrRtl,
+                textAlign = TextAlign.Center
+            ),
+            singleLine = true,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
+            )
+        )
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

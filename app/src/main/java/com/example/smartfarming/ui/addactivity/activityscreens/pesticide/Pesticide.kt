@@ -215,7 +215,6 @@ fun PesticideBody(viewModel: PesticideViewModel, navController: NavHostControlle
 
                 Button(
                     onClick = {
-                              //viewModel.submitBtnHandler(context, gardenName, navController)
                               viewModel.submitClickHandler()
                          },
                     colors = ButtonDefaults.buttonColors(

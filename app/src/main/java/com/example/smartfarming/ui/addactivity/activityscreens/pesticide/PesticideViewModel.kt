@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
+import com.example.smartfarming.data.room.entities.FertilizationEntity
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.PesticideEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -16,13 +19,18 @@ import java.lang.IllegalArgumentException
 class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
 
     var step = mutableStateOf(0)
-
     val pesticideWorker = mutableStateOf(1)
-
     val pesticideVolume = mutableStateOf(0f)
+    private var pesticideDate =
+        mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
+    private val pesticideName =
+        mutableStateOf("")
+
+    private val garden = MutableLiveData<Garden>().apply {
+        value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
+            0, 0.0, listOf(),0) }
 
     fun updateVolumeValueText(value : String) : String{
-
         if (value == ""){
             return ""
         }
@@ -38,7 +46,6 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         } catch (e : Exception){
             return ""
         }
-
     }
 
     fun setVolumeValue(value : String){
@@ -53,11 +60,6 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         }
     }
 
-    private val garden = MutableLiveData<Garden>().apply {
-        value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
-            0, 0.0, listOf(),0)
-    }
-
     private fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
             garden.value  = repo.getGardenByName(gardenName)
@@ -69,13 +71,6 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         return garden
     }
 
-    fun submitClickHandler(){
-        step.value++
-    }
-
-    private var pesticideDate =
-        mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
-
     fun setPesticideDate(
         date : MutableMap<String, String>
     ){
@@ -86,8 +81,6 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         return pesticideDate
     }
 
-    private val pesticideName =
-        mutableStateOf("")
 
     fun setPesticideName(name : String){
         pesticideName.value = name
@@ -113,7 +106,28 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         if (step.value == 1) step.value--
     }
 
+    fun submitClickHandler(){
+        if (step.value == 1){
+            insertPesticide2Db()
+            Log.i("TAG_clicked", "clicked pest")
+        }
+        step.value++
+    }
 
+    private fun insertPesticide2Db(){
+        viewModelScope.launch {
+            repo.insertPesticide(
+                PesticideEntity(
+                    0,
+                    pesticidesList.value.joinToString(","),
+                    garden.value!!.name,
+                    pest = "",
+                    date = pesticideDate.value["year"] + pesticideDate.value["month"] + pesticideDate.value["day"],
+                    pesticideVolume.value
+                )
+            )
+        }
+    }
 }
 
 class PesticideViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory{

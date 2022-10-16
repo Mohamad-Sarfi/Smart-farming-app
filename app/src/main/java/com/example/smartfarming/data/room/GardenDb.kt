@@ -15,9 +15,10 @@ import kotlinx.coroutines.CoroutineScope
         FertilizationEntity::class,
         IrrigationEntity::class,
         PesticideEntity::class,
+        OtherActivityEntity::class,
         Harvest::class
                ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(LatLongListConverter::class)
@@ -29,6 +30,7 @@ abstract class GardenDb : RoomDatabase() {
     abstract fun irrigationDao() : IrrigationDao
     abstract fun pesticideDao() : PesticideDao
     abstract fun harvestDao() : HarvestDao
+    abstract fun otherActivitiesDao() : OtherActivitiesDao
 
     companion object {
         @Volatile

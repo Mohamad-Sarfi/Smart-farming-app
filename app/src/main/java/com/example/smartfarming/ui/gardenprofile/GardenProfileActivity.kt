@@ -28,10 +28,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GardenProfileActivity : ComponentActivity() {
-
     // Get gardenName from intent
-
-
 //    val viewModel : GardenProfileViewModel by viewModels {
 //        GardenProfileViewModelFactory((application as FarmApplication).repo)
 //    }
@@ -42,6 +39,7 @@ class GardenProfileActivity : ComponentActivity() {
         val inputIntent = intent
         val gardenName = inputIntent.getStringExtra("gardenName")
         val taskScreenShow = inputIntent.getBooleanExtra("taskScreenShow", false)
+
         setContent {
             SmartFarmingTheme() {
                 Surface(

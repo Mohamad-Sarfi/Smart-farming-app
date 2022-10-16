@@ -48,4 +48,7 @@ class DatabaseModule {
     @Provides
     fun provideTaskDao(gardenDb: GardenDb) : TaskDao = gardenDb.taskDao()
 
+    @Provides
+    fun provideOtherActivitiesDao(gardenDb: GardenDb) : OtherActivitiesDao = gardenDb.otherActivitiesDao()
+
 }
