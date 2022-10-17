@@ -33,7 +33,7 @@ fun MyFAB(
 ){
 
     val fabWidthAnimate by animateDpAsState(
-        if(fabExtended) 150.dp else 60.dp
+        if(fabExtended) 150.dp else 55.dp
     )
 
     FloatingActionButton(
@@ -53,7 +53,7 @@ fun MyFAB(
             }
         },
         shape = RoundedCornerShape(15.dp),
-        modifier = Modifier.size(width = fabWidthAnimate, height = 60.dp),
+        modifier = Modifier.size(width = fabWidthAnimate, height = 55.dp),
         backgroundColor = MainGreen
     ) {
 

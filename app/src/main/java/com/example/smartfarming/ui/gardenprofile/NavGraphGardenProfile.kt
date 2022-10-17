@@ -14,12 +14,16 @@ import com.example.smartfarming.ui.addactivity.activityscreens.Fertilization
 import com.example.smartfarming.ui.addactivity.activityscreens.Irrigation
 import com.example.smartfarming.ui.addactivity.activityscreens.Others
 import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
+import com.example.smartfarming.ui.addactivity.activityscreens.pesticide.Pesticide
 import com.example.smartfarming.ui.gardenprofile.composables.Weather
 import com.example.smartfarming.ui.gardenprofile.editGarden.EditScreen
 import com.example.smartfarming.ui.gardenprofile.map.GardenMap
 import com.example.smartfarming.ui.gardenprofile.report.IrrigationReport
 import com.example.smartfarming.ui.gardenprofile.report.Report
 import com.example.smartfarming.ui.gardenprofile.report.reportscreens.IrrigationReportScreen
+import com.example.smartfarming.ui.gardenprofile.report.reportscreens.fertilizationreport.FertilizationReportScreen
+import com.example.smartfarming.ui.gardenprofile.report.reportscreens.otheractivitiesreport.OtherActivitiesReportScreen
+import com.example.smartfarming.ui.gardenprofile.report.reportscreens.pesticidereport.PesticideReportScreen
 import com.example.smartfarming.ui.gardenprofile.taskScreen.TaskScreen
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
 import com.example.smartfarming.ui.harvest.harvest_archive.GardenHarvestScreen
@@ -193,9 +197,55 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            IrrigationReportScreen(gardenName!!)
+            IrrigationReportScreen(gardenName!!, navController)
         }
         
+        composable(
+            route = "$fertilizationReport/{gardenName}",
+            arguments = listOf(
+                navArgument("gardenName"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val gardenName = entry.arguments?.getString("gardenName")
+            FertilizationReportScreen(gardenName = gardenName!!, navController)
+        }
 
+        composable(
+            route = "$pesticideReport/{gardenName}",
+            arguments = listOf(
+                navArgument("gardenName"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val gardenName = entry.arguments?.getString("gardenName")
+            PesticideReportScreen(gardenName!!, navController)
+        }
+
+        composable(
+            route = "$pesticide/{gardenName}",
+            arguments = listOf(
+                navArgument("gardenName"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val gardenName = entry.arguments?.getString("gardenName")
+            Pesticide(gardenName!!, navController)
+        }
+
+        composable(
+            route = "$othersReport/{gardenName}",
+            arguments = listOf(
+                navArgument("gardenName"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val gardenName = entry.arguments?.getString("gardenName")
+            OtherActivitiesReportScreen(gardenName!!, navController)
+        }
     }
 }

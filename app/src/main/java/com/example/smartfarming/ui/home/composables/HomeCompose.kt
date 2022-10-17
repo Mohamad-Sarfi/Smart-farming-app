@@ -48,6 +48,7 @@ import com.example.smartfarming.ui.addgarden.AddGarden
 import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
 import com.example.smartfarming.ui.home.HomeViewModel
 import com.example.smartfarming.ui.home.HomeViewModelFactory
+import com.example.smartfarming.ui.tasks_notification.TasksNotificationActivity
 import com.example.smartfarming.utils.getTaskColor
 import com.example.smartfarming.utils.getTaskIcon
 import com.example.smartfarming.utils.getTaskList
@@ -337,6 +338,8 @@ fun TasksRow(
     setShowFAB: (Boolean) -> Unit
 ){
 
+    val activity = LocalContext.current as Activity
+
     Card(
         modifier = Modifier.fillMaxHeight(1f),
         backgroundColor = MaterialTheme.colors.surface,
@@ -350,23 +353,33 @@ fun TasksRow(
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(end = 10.dp),
+                    .padding(horizontal = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "باغداری شما",
-                    style = MaterialTheme.typography.h5,
-                    modifier = Modifier
-                        .padding(vertical = 15.dp, horizontal = 10.dp),
-                    color = MainGreen
-                )
-                Icon(
-                    if (backdropState.isRevealed) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
-                    contentDescription = "",
-                    tint = MainGreen
-                )
-
+                Surface(shape = CircleShape,
+                    modifier = Modifier.padding(15.dp)
+                        .clickable {
+                            val intent = Intent(activity, TasksNotificationActivity::class.java)
+                            activity.startActivity(intent)
+                        },
+                    color = MainGreen) {
+                    Icon(Icons.Default.Add, contentDescription = null, tint = Color.White, modifier = Modifier.padding(5.dp))
+                }
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
+                    Text(
+                        text = "باغداری شما",
+                        style = MaterialTheme.typography.h5,
+                        modifier = Modifier
+                            .padding(vertical = 15.dp, horizontal = 10.dp),
+                        color = MainGreen
+                    )
+                    Icon(
+                        if (backdropState.isRevealed) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
+                        contentDescription = "",
+                        tint = MainGreen
+                    )
+                }
             }
 
             Crossfade(
@@ -394,40 +407,42 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(vertical = 15.dp, horizontal = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            ActivityGroupSelector(
-                "آبیاری",
-                ActivityTypesEnum.IRRIGATION.name,
-                viewModel.selectedActivityGroup.value
-            )
-            { viewModel.setSelectedActivityGroup(it) }
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 15.dp, horizontal = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                ActivityGroupSelector(
+                    "آبیاری",
+                    ActivityTypesEnum.IRRIGATION.name,
+                    viewModel.selectedActivityGroup.value
+                )
+                { viewModel.setSelectedActivityGroup(it) }
 
-            ActivityGroupSelector(
-                "تغذیه",
-                ActivityTypesEnum.FERTILIZATION.name,
-                viewModel.selectedActivityGroup.value
-            )
-            { viewModel.setSelectedActivityGroup(it) }
+                ActivityGroupSelector(
+                    "تغذیه",
+                    ActivityTypesEnum.FERTILIZATION.name,
+                    viewModel.selectedActivityGroup.value
+                )
+                { viewModel.setSelectedActivityGroup(it) }
 
-            ActivityGroupSelector(
-                "سمپاشی",
-                ActivityTypesEnum.PESTICIDE.name,
-                viewModel.selectedActivityGroup.value
-            )
-            { viewModel.setSelectedActivityGroup(it) }
+                ActivityGroupSelector(
+                    "سمپاشی",
+                    ActivityTypesEnum.PESTICIDE.name,
+                    viewModel.selectedActivityGroup.value
+                )
+                { viewModel.setSelectedActivityGroup(it) }
 
-            ActivityGroupSelector(
-                "سایر",
-                ActivityTypesEnum.Other.name,
-                viewModel.selectedActivityGroup.value
-            )
-            { viewModel.setSelectedActivityGroup(it) }
+                ActivityGroupSelector(
+                    "سایر",
+                    ActivityTypesEnum.Other.name,
+                    viewModel.selectedActivityGroup.value
+                )
+                { viewModel.setSelectedActivityGroup(it) }
+            }
         }
 
         if (gardensList.isNullOrEmpty()){
@@ -536,7 +551,9 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
         ) {
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 3.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 3.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly) {
                 Icon(

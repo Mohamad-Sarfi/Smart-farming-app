@@ -93,7 +93,7 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
             repo.insertIrrigation(
                 IrrigationEntity(
                     0,
-                    date = irrigationDate.value["year"]!! + irrigationDate.value["month"]!! + irrigationDate.value["day"]!!,
+                    date = irrigationDate.value["year"]!! + "/" + irrigationDate.value["month"]!! + "/" + irrigationDate.value["day"]!!,
                     irrigation_duration = irrigationDuration.value,
                     irrigation_type = irrigationType.value,
                     irrigation_volume = waterVolume.value,

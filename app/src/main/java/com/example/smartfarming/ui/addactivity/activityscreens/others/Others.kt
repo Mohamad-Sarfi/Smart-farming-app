@@ -34,9 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
@@ -82,14 +80,14 @@ fun Others(gardenName : String, navHostController : NavHostController){
             )
             ActivitiesStepBars(step = viewModel.step.value, colorDark = MainGreen, colorLight = LightGreen1)
             AnimatedVisibility(visible = startup) {
-                OthersBody(viewModel, navHostController)
+                OthersBody(viewModel, navHostController, gardenName)
             }
         }
     }
 }
 
 @Composable
-fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController){
+fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController, gardenName: String){
     Card(
         modifier = Modifier
             .padding(horizontal = 15.dp, vertical = 30.dp)
@@ -191,7 +189,7 @@ fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController)
                 }
 
                 Button(
-                    onClick = { viewModel.submitClickHandler() },
+                    onClick = { viewModel.submitClickHandler(gardenName) },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MainGreen,
                         contentColor = Color.White
@@ -455,7 +453,7 @@ fun ActivityDescriptor(viewModel: OthersViewModel) {
         OutlinedTextField(
             value = viewModel.activityDescription.value,
             onValueChange = {
-                viewModel.setActivityDesription(it)},
+                viewModel.setActivityDescription(it)},
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp)

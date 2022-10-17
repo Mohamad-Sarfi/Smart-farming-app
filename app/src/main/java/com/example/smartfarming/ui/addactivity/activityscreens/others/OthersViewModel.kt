@@ -1,9 +1,9 @@
 package com.example.smartfarming.ui.addactivity.activityscreens.others
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
@@ -11,7 +11,6 @@ import com.example.smartfarming.data.room.entities.OtherActivityEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,9 +47,9 @@ class OthersViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
         return garden
     }
 
-    fun submitClickHandler(){
+    fun submitClickHandler(gardenName : String){
         if (step.value == 1){
-            insertOtherActivity2Db()
+            insertOtherActivity2Db(gardenName)
         }
         step.value++
     }
@@ -59,22 +58,24 @@ class OthersViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
         activityCause.value = cause
     }
 
-    fun setActivityDesription(description : String){
+    fun setActivityDescription(description : String){
         activityDescription.value = description
     }
 
-    private fun insertOtherActivity2Db(){
+    private fun insertOtherActivity2Db(gardenName: String){
         viewModelScope.launch {
             repo.insertOtherActivity(
                 OtherActivityEntity(
                     0,
                     name = activityName.value,
-                    date = date.value["year"] + date.value["month"] + date.value["day"],
+                    date = date.value["year"] +"/" + date.value["month"] + "/" + date.value["day"],
                     description = activityDescription.value,
                     cause = activityCause.value,
-                    garden_name = garden.value!!.name
+                    garden_name = gardenName
                 )
             )
+            val x = repo.getOtherActivitiesByGardenName(garden.value!!.name)
+            Log.i("TAG_zz", "$x")
         }
     }
 }

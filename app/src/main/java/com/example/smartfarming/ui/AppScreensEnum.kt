@@ -26,6 +26,9 @@ enum class AppScreensEnum {
     ArchiveHarvestScreen,
     GardenHarvestScreen,
 
-    HomeScreen
+    HomeScreen,
 
+    /* Tasks */
+    AddTaskScreen,
+    TasksHome,
 }

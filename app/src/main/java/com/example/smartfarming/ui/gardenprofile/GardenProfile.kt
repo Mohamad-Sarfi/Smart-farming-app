@@ -1,15 +1,12 @@
 package com.example.smartfarming.ui.gardens.composables
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -24,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -125,41 +123,48 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
             modifier = Modifier
                 .fillMaxWidth()
                 .scrollable(rememberScrollState(), Orientation.Vertical)
-                .background(LightBackground),
+                .background(LightGray2),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             GardenTitle(gardenName = garden.value!!.name, navController)
-            ReportDiagram()
-            Report(navController, garden.value!!.name)
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())) {
+                ReportDiagram()
+                Report(navController, garden.value!!.name)
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ){
-                MainIcons(Icons.Default.Thermostat, "آب و هوا", Blue700){
-                    navController.navigate(route = "${AppScreensEnum.GardenWeatherScreen.name}/${garden.value!!.name}")
-                }
-                MainIcons(Icons.Outlined.Inventory, "محصولات", YellowPesticide){
-                    navController.navigate("${AppScreensEnum.GardenHarvestScreen.name}/${garden.value!!.name}")
-                }
-                MainIcons(Icons.Outlined.LocationOn, "مکان نما", RedFertilizer){
-                    navController.navigate("${AppScreensEnum.GardenMapScreen.name}/${garden.value!!.name}")
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    MainIcons(Icons.Default.Thermostat, "آب و هوا", Blue700){
+                        navController.navigate(route = "${AppScreensEnum.GardenWeatherScreen.name}/${garden.value!!.name}")
+                    }
+                    MainIcons(Icons.Outlined.Inventory, "محصولات", YellowPesticide){
+                        navController.navigate("${AppScreensEnum.GardenHarvestScreen.name}/${garden.value!!.name}")
+                    }
+                    MainIcons(Icons.Outlined.LocationOn, "مکان نما", RedFertilizer){
+                        navController.navigate("${AppScreensEnum.GardenMapScreen.name}/${garden.value!!.name}")
+                    }
+
                 }
 
-            }
-
-            val thisGardenTask = ArrayList<Task>()
-            for (task in tasks){
-                if (task.garden_name == garden.value!!.name){
-                    thisGardenTask.add(task)
+                val thisGardenTask = ArrayList<Task>()
+                for (task in tasks){
+                    if (task.garden_name == garden.value!!.name){
+                        thisGardenTask.add(task)
+                    }
                 }
-            }
 
-            LazyColumn{
-                items(thisGardenTask){ task ->
-                    ToDos(task = task, navController = navController)
+                LazyColumn(
+                    modifier = Modifier.height(400.dp)
+                ){
+                    items(thisGardenTask){ task ->
+                        ToDos(task = task, navController = navController)
+                    }
                 }
             }
         }
@@ -236,13 +241,19 @@ fun GardenTitle(gardenName : String, navController: NavHostController){
         Modifier
             .padding(bottom = 45.dp, start = 0.dp, end = 0.dp)
             .fillMaxWidth()
+            .height(120.dp)
             .background(MainGreen)
-            .padding(10.dp)) {
+            .padding(0.dp)) {
+        Image(painterResource(id = R.drawable.background_pic), contentDescription = null, modifier = Modifier.fillMaxWidth(), contentScale = ContentScale.FillWidth)
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(MainGreen.copy(.4f)))
         Card( modifier = Modifier
-            .offset(y = 40.dp)
+            .offset(y = 70.dp)
+            .padding(horizontal = 15.dp)
             .fillMaxWidth(),
             shape = RoundedCornerShape(bottomEnd = 40.dp, bottomStart = 40.dp, topEnd = 40.dp, topStart = 40.dp),
-            elevation = 3.dp
+            elevation = 4.dp
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(horizontal = 30.dp, vertical = 10.dp)) {
                 Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier

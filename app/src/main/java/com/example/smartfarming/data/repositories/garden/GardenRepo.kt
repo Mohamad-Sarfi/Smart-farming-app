@@ -73,6 +73,11 @@ class GardenRepo @Inject constructor(
         return irrigationDao.getIrrigationByGardenName(gardenName)
     }
 
+    @WorkerThread
+    suspend fun deleteIrrigation(irrigationEntity: IrrigationEntity){
+        irrigationDao.delete(irrigationEntity)
+    }
+
     // Harvest
     @WorkerThread
     suspend fun getHarvestByYear(gardenName: String, year: String) : List<Harvest> {
@@ -143,10 +148,17 @@ class GardenRepo @Inject constructor(
     }
 
     @WorkerThread
-    fun getOtherActivitiesByGardenName(gardenName: String) : Flow<List<OtherActivityEntity>> = otherActivitiesDao.getOtherActivitiesByGardenName(gardenName)
+    suspend fun getOtherActivitiesByGardenName(gardenName: String) : List<OtherActivityEntity> {
+        return otherActivitiesDao.getOtherActivitiesByGardenName(gardenName)
+    }
 
     @WorkerThread
     suspend fun deleteOtherActivity(otherActivityEntity: OtherActivityEntity){
         otherActivitiesDao.delete(otherActivityEntity)
+    }
+
+    @WorkerThread
+    suspend fun getAllOtherActivities() : List<OtherActivityEntity> {
+        return otherActivitiesDao.getAllOtherActivities()
     }
 }

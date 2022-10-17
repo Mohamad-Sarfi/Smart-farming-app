@@ -2,10 +2,11 @@ package com.example.smartfarming.ui.gardenprofile.composables
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,7 +24,9 @@ fun ReportDiagram(){
         targetValue = 0.6f,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
     )
-
+    var selected by remember {
+        mutableStateOf("")
+    }
     val irrigationProgress = 0.9f
     val fertilizationProgress = 0.6f
     val pesticideProgress = 0.3f
@@ -46,32 +49,35 @@ fun ReportDiagram(){
             CircularProgressIndicator(
                 progress = irrigationProgress,
                 color = BlueWatering,
-                modifier = Modifier.padding(60.dp),
-                strokeWidth = 16.dp
-
+                modifier = Modifier
+                    .padding(60.dp)
+                    .clickable { selected = "irrigation" },
+                strokeWidth = if (selected == "irrigation") 21.dp else 16.dp
             )
 
             CircularProgressIndicator(
                 progress = pesticideProgress,
                 color = YellowPesticide,
-                modifier = Modifier.padding(30.dp),
-                strokeWidth = 17.dp
-
+                modifier = Modifier
+                    .padding(30.dp)
+                    .clickable { selected = "pesticide" },
+                strokeWidth = if (selected == "pesticide") 22.dp else 17.dp
             )
 
             CircularProgressIndicator(
                 progress = fertilizationProgress,
                 color = PurpleFertilizer,
-                modifier = Modifier.size(40.dp),
-                strokeWidth = 19.dp
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable { selected = "fertilization" },
+                strokeWidth = if (selected == "fertilization") 23.dp else 19.dp
             )
         }
 
-        SideInfo(
-            irrigationProgress,
+        SideInfo(irrigationProgress,
             fertilizationProgress,
-            pesticideProgress
-            )
+            pesticideProgress,
+            selected){selected = it}
 
     }
 }
@@ -82,6 +88,8 @@ fun SideInfo(
     irrigationProgress : Float,
     fertillizationProgress : Float,
     pesticideProgress : Float,
+    selected : String,
+    setSelected : (String) -> Unit
 ){
     Column(
         Modifier
@@ -90,31 +98,49 @@ fun SideInfo(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End
     ) {
-        info("نیاز آبی", BlueWatering, irrigationProgress)
-        info("نیاز تغذیه", PurpleFertilizer, fertillizationProgress)
-        info("سم پاشی", YellowPesticide, pesticideProgress)
+        info("نیاز آبی", BlueWatering, irrigationProgress, selected){setSelected(it)}
+        info("نیاز تغذیه", PurpleFertilizer, fertillizationProgress, selected){setSelected(it)}
+        info("سم پاشی", YellowPesticide, pesticideProgress,selected){setSelected(it)}
     }
 }
 
 @Composable
-fun info(
+private fun info(
     name : String,
     color: Color,
-    progress : Float
+    progress : Float,
+    selected: String,
+    setSelected: (String) -> Unit
 ){
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier
-            .padding(vertical = 10.dp)
+    Card(
+        elevation = if (selected == getTag(name)) 1.dp else 0.dp,
+        backgroundColor = if (selected == getTag(name)) color else Color.Transparent,
+        shape = RoundedCornerShape(8.dp)
     ) {
-        Text(text = name, style = MaterialTheme.typography.body1)
-        Text(
-            text = "${(progress * 100).toInt()}%",
-            color = color,
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(start = 11.dp)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier
+                .clickable { setSelected(getTag(name)) }
+                .padding(vertical = 10.dp, horizontal = 10.dp)
+        ) {
+            Text(text = name, style = MaterialTheme.typography.body1, color = if (selected == getTag(name)) Color.White else MaterialTheme.colors.onBackground)
+            Text(
+                text = "${(progress * 100).toInt()}%",
+                color = if (selected == getTag(name)) Color.White else color,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(start = 11.dp)
+            )
+        }
+    }
+}
+
+private fun getTag(name : String) : String{
+    return when(name){
+        "نیاز آبی" -> "irrigation"
+        "نیاز تغذیه" -> "fertilization"
+        "سم پاشی" -> "pesticide"
+        else -> ""
     }
 }
 

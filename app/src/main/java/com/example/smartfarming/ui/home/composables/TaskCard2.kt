@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartfarming.data.room.entities.Task
@@ -31,7 +32,7 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
         mutableStateOf(false)
     }
     val cardHeight by animateDpAsState(
-        targetValue = if (clicked) 250.dp else 210.dp,
+        targetValue = if (clicked) 260.dp else 210.dp,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
@@ -44,7 +45,7 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
             .width(160.dp)
             .height(cardHeight)
             .clickable {
-                if (clicked || oneStepClick){
+                if (clicked || oneStepClick) {
                     clickHandler()
                 } else {
                     clicked = !clicked
@@ -70,10 +71,10 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
                 tint = getTaskColor(task.activity_type)
             )
             Text(text = task.name, color = Color.Black, style = MaterialTheme.typography.body1)
-            Text(text = task.garden_name, color = BorderGray, style = MaterialTheme.typography.subtitle1)
+            Text(text = task.garden_name, color = BorderGray, style = MaterialTheme.typography.overline, textAlign = TextAlign.Justify)
             RemainingDays(task)
             if (clicked){
-                ButtonRow(task.activity_type)
+                ButtonRow(task)
             }
         }
     }
@@ -110,16 +111,18 @@ fun RemainingDays(task: Task){
 
 
 @Composable
-fun ButtonRow(activityName : String){
+fun ButtonRow(task: Task){
 
     var openDialog by remember {
         mutableStateOf(false)
     }
 
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Icon(
             Icons.Default.Close,
@@ -127,6 +130,7 @@ fun ButtonRow(activityName : String){
             modifier = Modifier
                 .clickable { openDialog = !openDialog }
         )
+        Text(text = task.description, style = MaterialTheme.typography.subtitle1)
     }
 
     if (openDialog){

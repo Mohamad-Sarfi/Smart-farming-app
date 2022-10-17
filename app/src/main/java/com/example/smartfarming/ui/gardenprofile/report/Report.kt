@@ -39,6 +39,7 @@ fun Report(
     val coroutineScope = rememberCoroutineScope()
 
     viewModel.getAllActivitiesCount(gardenName)
+    viewModel.getOtherActivitiesNumber(gardenName)
 
     BottomSheetScaffold(
         modifier = Modifier
@@ -76,9 +77,9 @@ fun Report(
             WorkerReport()
             IrrigationReport(viewModel, navHostController, gardenName)
             HarvestGraph(navHostController, gardenName )
-            PesticideReport(viewModel, gardenName)
-            FertilizationReport(viewModel)
-            OthersReport()
+            PesticideReport(viewModel, gardenName, navHostController)
+            FertilizationReport(viewModel, gardenName, navHostController)
+            OthersReport(viewModel, gardenName, navHostController)
         }
     }
 }
@@ -236,8 +237,6 @@ fun GraphsRow(){
                 Text(text = "90%", modifier = Modifier.padding(top = 35.dp), color = Color.Black, style = MaterialTheme.typography.body1)
             }
         }
-
-
     }
 }
 
@@ -279,7 +278,7 @@ fun IrrigationReport(viewModel: ReportViewModel, navHostController: NavHostContr
 }
 
 @Composable
-fun PesticideReport(viewModel: ReportViewModel, gardenName: String){
+fun PesticideReport(viewModel: ReportViewModel, gardenName: String, navHostController: NavHostController){
     Card(
         modifier = Modifier
             .padding(horizontal = 5.dp, vertical = 0.dp)
@@ -294,11 +293,9 @@ fun PesticideReport(viewModel: ReportViewModel, gardenName: String){
             Modifier
                 .fillMaxSize()
                 .clickable {
-                    viewModel.getAllPesticides(gardenName)
-                    Log.i("TAG_pests", "${viewModel.allPests.value}")
+                    navHostController.navigate("${AppScreensEnum.PesticideReportScreen.name}/$gardenName")
                 }
-                .padding(horizontal = 40.dp)
-            ,
+                .padding(horizontal = 40.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -318,7 +315,7 @@ fun PesticideReport(viewModel: ReportViewModel, gardenName: String){
 }
 
 @Composable
-fun FertilizationReport(viewModel: ReportViewModel) {
+fun FertilizationReport(viewModel: ReportViewModel, gardenName: String, navHostController: NavHostController) {
     Card(
         modifier = Modifier
             .padding(horizontal = 5.dp, vertical = 0.dp)
@@ -332,6 +329,7 @@ fun FertilizationReport(viewModel: ReportViewModel) {
         Row(
             Modifier
                 .fillMaxSize()
+                .clickable { navHostController.navigate("${AppScreensEnum.FertilizationReportScreen.name}/$gardenName") }
                 .padding(horizontal = 40.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -352,7 +350,7 @@ fun FertilizationReport(viewModel: ReportViewModel) {
 }
 
 @Composable
-fun OthersReport(){
+fun OthersReport(viewModel: ReportViewModel, gardenName: String,navHostController: NavHostController){
     Card(
         modifier = Modifier
             .padding(horizontal = 5.dp, vertical = 0.dp)
@@ -366,6 +364,7 @@ fun OthersReport(){
         Row(
             Modifier
                 .fillMaxSize()
+                .clickable { navHostController.navigate("${AppScreensEnum.OthersReportScreen.name}/$gardenName") }
                 .padding(horizontal = 40.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -376,7 +375,7 @@ fun OthersReport(){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = "دیگر فعالیتها", style = MaterialTheme.typography.subtitle2, color = Color.Gray)
-                Text(text = "8", style = MaterialTheme.typography.h5, color = Color.Black, )
+                Text(text = viewModel.otherActivitiesNumber.value.toString(), style = MaterialTheme.typography.h5, color = Color.Black, )
             }
             Icon(Icons.Outlined.Agriculture, contentDescription = null, tint = MainGreen, modifier = Modifier
                 .padding(start = 15.dp)
@@ -403,7 +402,9 @@ fun ColdExposureTime(){
         backgroundColor = Color.White
     ) {
         Column(
-            Modifier.fillMaxSize().clickable { clicked = !clicked },
+            Modifier
+                .fillMaxSize()
+                .clickable { clicked = !clicked },
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

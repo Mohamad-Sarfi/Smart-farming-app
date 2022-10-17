@@ -122,7 +122,7 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
                     pesticidesList.value.joinToString(","),
                     garden.value!!.name,
                     pest = "",
-                    date = pesticideDate.value["year"] + pesticideDate.value["month"] + pesticideDate.value["day"],
+                    date = pesticideDate.value["year"] + "/" + pesticideDate.value["month"] + "/" + pesticideDate.value["day"],
                     pesticideVolume.value
                 )
             )

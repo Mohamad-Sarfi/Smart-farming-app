@@ -56,13 +56,10 @@ class GardenProfileActivity : ComponentActivity() {
                         viewModel,
                         taskScreen = taskScreenShow
                     )
-
                 }
             }
         }
     }
-
-
 }
 
 

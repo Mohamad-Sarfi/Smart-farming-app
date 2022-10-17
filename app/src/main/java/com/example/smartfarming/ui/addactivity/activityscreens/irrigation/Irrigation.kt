@@ -8,6 +8,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,8 +20,11 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -64,7 +68,6 @@ fun Irrigation(gardenName : String, navHostController: NavHostController){
         delay(100)
         startup = true
     }
-
     Scaffold(
         Modifier
             .background(Blue50)
@@ -90,7 +93,7 @@ fun Irrigation(gardenName : String, navHostController: NavHostController){
 fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostController){
     Card(
         modifier = Modifier
-            .padding(horizontal = 15.dp, vertical = 15.dp)
+            .padding(horizontal = 20.dp, vertical = 15.dp)
             .fillMaxHeight(.85f)
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),

@@ -25,11 +25,14 @@ class ReportViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
     val pesticidesNumber = mutableStateOf(0)
     val selectedYear = mutableStateOf(thisYear)
     val allPests = mutableStateOf<List<PesticideEntity>?>(value = null)
+    val otherActivitiesNumber = mutableStateOf(0)
+    val workersNumber = mutableStateOf(0)
 
     fun getAllActivitiesCount(gardenName: String){
         Log.i("TAG_all", "clicked")
         viewModelScope.launch {
             getPesticidesNumber(gardenName)
+            getOtherActivitiesNumber(gardenName)
             getIrrigationsNumber(gardenName)
             getFertilizationsNumber(gardenName)
         }
@@ -47,8 +50,14 @@ class ReportViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
     }
 
     private suspend fun getPesticidesNumber(gardenName: String){
-        Log.i("TAG_pestNUM", "clicked")
         pesticidesNumber.value = repo.getPesticidesByGardenName(gardenName).firstOrNull()?.size ?: 0
+    }
+
+    fun getOtherActivitiesNumber(gardenName: String){
+        viewModelScope.launch {
+            val r = repo.getOtherActivitiesByGardenName(gardenName)
+            otherActivitiesNumber.value = r.size
+        }
     }
 
     fun getAllPesticides(gardenName: String){
@@ -58,6 +67,7 @@ class ReportViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
             }
         }
     }
+
 }
 
 class ReportViewModelFactory(val repo: GardenRepo) : ViewModelProvider.Factory {

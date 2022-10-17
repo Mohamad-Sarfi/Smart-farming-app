@@ -16,8 +16,7 @@ import kotlinx.coroutines.CoroutineScope
         IrrigationEntity::class,
         PesticideEntity::class,
         OtherActivityEntity::class,
-        Harvest::class
-               ],
+        Harvest::class],
     version = 6,
     exportSchema = false
 )

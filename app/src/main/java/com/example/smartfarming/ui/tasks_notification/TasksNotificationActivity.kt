@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
 
 class TasksNotificationActivity  : ComponentActivity() {
@@ -12,8 +13,10 @@ class TasksNotificationActivity  : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val navHostController = rememberNavController()
+
             SmartFarmingTheme() {
-                TasksNotificationCompose()
+                TaskNavGraph(navHostController = navHostController)
             }
         }
 
