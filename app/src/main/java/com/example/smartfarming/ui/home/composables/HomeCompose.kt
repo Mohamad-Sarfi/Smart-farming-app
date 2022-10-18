@@ -40,10 +40,7 @@ import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Article
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
-import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
-import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.addactivities.ui.theme.MainOrange
-import com.example.smartfarming.ui.addactivities.ui.theme.Purple500
+import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addgarden.AddGarden
 import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
 import com.example.smartfarming.ui.home.HomeViewModel
@@ -363,9 +360,12 @@ fun TasksRow(
                             val intent = Intent(activity, TasksNotificationActivity::class.java)
                             activity.startActivity(intent)
                         },
-                    color = MainGreen) {
-                    Icon(Icons.Default.Add, contentDescription = null, tint = Color.White, modifier = Modifier.padding(5.dp))
+                    color = LightGray2,
+                    border = BorderStroke(2.dp, MainGreen)
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = null, tint = MainGreen, modifier = Modifier.padding(5.dp))
                 }
+
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
                     Text(
                         text = "باغداری شما",
@@ -392,11 +392,8 @@ fun TasksRow(
                 }
             }
         }
-        
     }
-
 }
-
 
 @Composable
 fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navController : NavHostController,gardensList : List<Garden>?, setShowFAB: (Boolean) -> Unit) {

@@ -40,6 +40,11 @@ fun AuthNavGraph(
             Login(navController = navController, loginViewModel){
                 // login process
                 loginViewModel.login()
+
+                if (response.value != null){
+                    loginViewModel.inProgress.value = false
+                }
+
                 when(response.value){
                     is Resource.Success -> {
                         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
@@ -48,11 +53,12 @@ fun AuthNavGraph(
                     }
                     is Resource.Failure -> {
                         Toast.makeText(context, "ورود ناموفق، دوباره تلاش کنید", Toast.LENGTH_SHORT).show()
-                        Log.i("login11", "${response}")
+                        Log.i("login11", "${response.value}")
                     }
                     else -> {
-                        Toast.makeText(context, "ورود ناموفق2", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(context, "ورود ناموفق2", Toast.LENGTH_SHORT).show()
                         Log.i("login22", "${response.value}")
+                        loginViewModel.login()
                     }
                 }
             }

@@ -1,8 +1,10 @@
 package com.example.smartfarming.ui.authentication
 
+import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -56,11 +58,9 @@ fun Login(
     var isUsernameEmpty by remember {
         mutableStateOf(false)
     }
-
     var isPassEmpty by remember {
         mutableStateOf(false)
     }
-
     var context = LocalContext.current
     val focus = LocalFocusManager.current
 
@@ -118,7 +118,6 @@ fun Login(
             )
 
             // Password textField
-
             OutlinedTextField(
                 value = passwordText!!,
                 onValueChange = {
@@ -156,7 +155,7 @@ fun Login(
 
                         Text(
                             text = "فراموشی رمز",
-                            style = MaterialTheme.typography.body1,
+                            style = MaterialTheme.typography.subtitle1,
                             color = MaterialTheme.colors.primary,
                             modifier = Modifier
                                 .clickable {
@@ -166,27 +165,30 @@ fun Login(
                                 .padding(6.dp)
                         )
 
+                        val loginBtnWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value == true) 1f else .6f )
+
                         Row(
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         ){
-
-                            OutlinedButton(
-                                onClick = {
-                                    navController.navigate(route = AppScreensEnum.RegisterScreen.name)
-                                },
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .width(150.dp)
-                                    .padding(top = 80.dp, bottom = 20.dp)
-                                    .align(Alignment.CenterVertically)
-                                ,
-                                border = BorderStroke(2.dp, MaterialTheme.colors.primary),
-                                shape = MaterialTheme.shapes.medium
-                            ) {
-                                Text(
-                                    text = "ثبت نام", style = MaterialTheme.typography.body2,
-                                    modifier = Modifier.padding(vertical = 2.dp)
-                                )
+                            if (!viewModel.inProgress.value){
+                                OutlinedButton(
+                                    onClick = {
+                                        navController.navigate(route = AppScreensEnum.RegisterScreen.name)
+                                    },
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                        .fillMaxWidth(.4f)
+                                        .padding(top = 80.dp, bottom = 20.dp)
+                                        .align(Alignment.CenterVertically)
+                                    ,
+                                    border = BorderStroke(2.dp, MaterialTheme.colors.primary),
+                                    shape = MaterialTheme.shapes.medium
+                                ) {
+                                    Text(
+                                        text = "ثبت نام", style = MaterialTheme.typography.subtitle1,
+                                        modifier = Modifier.padding(vertical = 2.dp)
+                                    )
+                                }
                             }
 
                             // ******************************************************** Submit button
@@ -196,14 +198,14 @@ fun Login(
                                     isPassEmpty = passwordText!!.length < 6
 
                                     if (isUsernameEmpty || isPassEmpty){
-                                        Toast.makeText(context, "نام کاربری و رمز عبور را صحیح وارد کنید", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "نام کاربری و رمز عبور را بطور صحیح وارد کنید", Toast.LENGTH_SHORT).show()
                                     } else{
                                         signIn()
                                     }
                                 },
                                 modifier = Modifier
                                     .padding(5.dp)
-                                    .width(150.dp)
+                                    .fillMaxWidth(loginBtnWidth)
                                     .padding(top = 80.dp, bottom = 20.dp)
                                 ,
                                 shape = MaterialTheme.shapes.medium,
@@ -211,35 +213,35 @@ fun Login(
                                 ) {
                                 Text(
                                     text = "ورود",
-                                    style = MaterialTheme.typography.body2,
+                                    style = MaterialTheme.typography.subtitle1,
                                     modifier = Modifier.padding(vertical = 2.dp)
                                 )
                             }
                         }
 
-                        Row(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .clickable {
-
-                                }
-                        ) {
-                            Text(
-                                text = "با حساب گوگل وارد شوید",
-                                style = MaterialTheme.typography.body1,
-                                modifier = Modifier.align(Alignment.CenterVertically)
-                            )
-
-                            Image(
-                                painter = painterResource(id = R.drawable.search),
-                                contentDescription = "Google",
-                                modifier = Modifier
-                                    .size(35.dp)
-                                    .align(Alignment.CenterVertically)
-                                    .padding(horizontal = 5.dp)
-                            )
-
-                        }
+//                        Row(
+//                            modifier = Modifier
+//                                .align(Alignment.CenterHorizontally)
+//                                .clickable {
+//
+//                                }
+//                        ) {
+//                            Text(
+//                                text = "با حساب گوگل وارد شوید",
+//                                style = MaterialTheme.typography.body1,
+//                                modifier = Modifier.align(Alignment.CenterVertically)
+//                            )
+//
+//                            Image(
+//                                painter = painterResource(id = R.drawable.search),
+//                                contentDescription = "Google",
+//                                modifier = Modifier
+//                                    .size(35.dp)
+//                                    .align(Alignment.CenterVertically)
+//                                    .padding(horizontal = 5.dp)
+//                            )
+//
+//                        }
                     }
         }
 

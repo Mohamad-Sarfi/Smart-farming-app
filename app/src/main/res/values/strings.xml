@@ -13,6 +13,14 @@
     <string name="orchard">باغ ها</string>
     <string name="next">بعدی</string>
     <string name="submit">ثبت</string>
+    <string name="introStep0">ثبت فعالیت های کشاورزی</string>
+    <string name="introStep01">آبیاری، سمپاشی، تغذیه، و …</string>
+    <string name="introStep1">ثبت اطلاعات محصولات</string>
+    <string name="introStep11">مدیریت اطلاعات فروش محصولات</string>
+    <string name="introStep2">باغداری هوشمند</string>
+    <string name="introStep22">ارائه راهکارهای باغداری با هوش مصنوعی</string>
+    <string name="introStep3">مدیریت کارگران</string>
+    <string name="introStep33">مدیریت کارگران</string>
 
     <string-array name="pistachio_types">
         <item>اکبری</item>

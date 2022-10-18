@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TasksNotificationActivity  : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

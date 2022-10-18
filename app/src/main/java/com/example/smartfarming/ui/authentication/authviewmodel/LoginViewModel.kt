@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.authentication.authviewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.network.Resource
@@ -15,16 +16,16 @@ class LoginViewModel(
     val phoneNumber = MutableLiveData<String>().apply {
         value = ""
     }
-
     val password = MutableLiveData<String>().apply {
         value = ""
     }
-
+    var inProgress = mutableStateOf(false)
 
     // LOGIN FUNCTION
     val loginResponse : MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
 
     fun login(){
+        inProgress.value = true
         viewModelScope.launch {
             loginResponse.value =authRepo.login(password = password.value!!, email = phoneNumber.value!!)
             if (loginResponse.value is Resource.Success){

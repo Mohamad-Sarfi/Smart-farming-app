@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 
 @Composable
@@ -24,7 +25,7 @@ fun HorizontalStepCircle(
     color: Color
 ){
     val circle1Animation by animateDpAsState(
-        targetValue = if (step == numberTag) 50.dp else 16.dp
+        targetValue = if (step == numberTag) 55.dp else 13.dp
     )
 
     Column(modifier = Modifier
@@ -36,11 +37,10 @@ fun HorizontalStepCircle(
         Box(
             modifier = Modifier
                 .padding(6.dp)
-                .size(width = circle1Animation, height = 16.dp)
+                .size(width = circle1Animation, height = 13.dp)
                 .clip(RoundedCornerShape(30.dp))
-                .border(2.dp, color, CircleShape)
-                .background(Color.White)
-                .padding(14.dp)
+                .background(if (step == numberTag) MainGreen else MainGreen.copy(.3f))
+                .padding(8.dp)
         )
     }
 }

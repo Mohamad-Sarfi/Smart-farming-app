@@ -30,6 +30,7 @@ import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.authentication.AddUserActivity
 import com.example.smartfarming.ui.authentication.AuthNavGraph
+import com.example.smartfarming.ui.introslider.IntroSliderActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
@@ -59,18 +60,27 @@ class SplashActivity : ComponentActivity() {
         val context = this
 
         lifecycleScope.launchWhenCreated {
-            delay(3000)
-            userPreferences.authToken.asLiveData().observe(
-                context, Observer {
-                    if (it == null){
-                        startActivity(Intent(context, AddUserActivity::class.java))
-                        finish()
-                    } else {
-                        startActivity(Intent(context, MainActivity::class.java))
-                        finish()
-                    }
+            delay(2500)
+            userPreferences.firstTime.asLiveData().observe(
+                context
+            ) { firstTime ->
+                if (firstTime == null) {
+                    startActivity(Intent(context, IntroSliderActivity::class.java))
+                    finish()
+                } else {
+                    userPreferences.authToken.asLiveData().observe(
+                        context, Observer {
+                            if (it == null){
+                                startActivity(Intent(context, AddUserActivity::class.java))
+                                finish()
+                            } else {
+                                startActivity(Intent(context, MainActivity::class.java))
+                                finish()
+                            }
+                        }
+                    )
                 }
-            )
+            }
         }
     }
 }

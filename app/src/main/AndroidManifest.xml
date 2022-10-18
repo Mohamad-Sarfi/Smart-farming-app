@@ -39,6 +39,12 @@
             android:exported="false"
             android:label="@string/title_activity_add_garden"
             android:theme="@style/Theme.SmartFarming" />
+
+        <activity android:name=".ui.introslider.IntroSliderActivity"
+            android:exported="false"
+            android:label="IntroSlider"
+            android:theme="@style/Theme.SmartFarming" />
+
         <activity
             android:name=".ui.addactivities.AddActivities"
             android:exported="false"
