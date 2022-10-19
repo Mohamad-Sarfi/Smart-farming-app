@@ -336,7 +336,6 @@ fun TasksRow(
     gardensList: List<Garden>?,
     setShowFAB: (Boolean) -> Unit
 ){
-
     val activity = LocalContext.current as Activity
     val tasks = getTaskList(gardensList ?: listOf())
 
