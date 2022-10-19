@@ -15,6 +15,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.Purple500
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 
 fun getTaskIcon(activityType: String) : ImageVector {
+
     return when (activityType) {
         ActivityTypesEnum.FERTILIZATION.name -> Icons.Outlined.Compost
         ActivityTypesEnum.IRRIGATION.name -> Icons.Outlined.WaterDrop

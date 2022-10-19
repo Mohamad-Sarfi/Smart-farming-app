@@ -4,7 +4,6 @@ import androidx.annotation.WorkerThread
 import com.example.smartfarming.data.room.daos.*
 import com.example.smartfarming.data.room.entities.*
 import kotlinx.coroutines.flow.Flow
-import java.time.Year
 import javax.inject.Inject
 
 class GardenRepo @Inject constructor(
@@ -58,7 +57,7 @@ class GardenRepo @Inject constructor(
     }
 
     @WorkerThread
-    suspend fun getAllTasksForGarden() :  Flow<List<Task>>{
+    suspend fun getAllTasks() :  Flow<List<Task>>{
         return taskDao.getAllTasks()
     }
 

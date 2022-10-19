@@ -22,7 +22,7 @@ fun TaskNavGraph(navHostController: NavHostController) {
         composable(
             route = addTask
         ){
-            AddTask()
+            AddTask(navHostController)
         }
     }
 }

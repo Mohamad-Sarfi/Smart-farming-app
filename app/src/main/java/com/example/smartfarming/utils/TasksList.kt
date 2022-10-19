@@ -6,7 +6,7 @@ import com.example.smartfarming.data.room.entities.Task
 
 fun getTaskList(gardensList : List<Garden>) : List<Task>{
 
-return listOf<Task>(
+return if (gardensList.isNullOrEmpty()) listOf<Task>() else listOf<Task>(
         Task(0,
                 "ولک پاشی",
                 activity_type = ActivityTypesEnum.FERTILIZATION.name,

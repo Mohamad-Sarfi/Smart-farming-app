@@ -1,5 +1,7 @@
 package com.example.smartfarming.utils;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -286,5 +288,39 @@ public class PersianCalender {
         return month;
     }
 
+    public static Map<String, Integer> getCurrentDatePlusDays(int days){
+        /**
+         * This function get number of days as an int and adds to current date
+         */
+        Map<String, Integer> currentDate = getShamsiDateMap();
+
+        int newDay = currentDate.get("day") + days;
+        int newMonth = currentDate.get("month");
+        int newYear = currentDate.get("year");
+
+        if (currentDate.get("month") < 7){
+            if (newDay > 31){
+                newMonth = newMonth + (newDay / 31);
+                newDay = newDay % 31;
+            }
+        } else {
+            if (newDay > 30){
+                newMonth = newMonth + (newDay / 30);
+                newDay = newDay % 30;
+            }
+        }
+
+        if (newMonth > 12) {
+            newMonth = newMonth % 12;
+            newYear = newMonth / 12;
+        }
+
+        Map<String, Integer> result = new HashMap<String, Integer>();
+        result.put("day", newDay);
+        result.put("month", newMonth);
+        result.put("year", newYear);
+
+        return result;
+    }
 
 }

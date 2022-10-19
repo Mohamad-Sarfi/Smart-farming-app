@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
@@ -46,6 +47,7 @@ import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
 import com.example.smartfarming.ui.home.HomeViewModel
 import com.example.smartfarming.ui.home.HomeViewModelFactory
 import com.example.smartfarming.ui.tasks_notification.TasksNotificationActivity
+import com.example.smartfarming.utils.ACTIVITY_LIST
 import com.example.smartfarming.utils.getTaskColor
 import com.example.smartfarming.utils.getTaskIcon
 import com.example.smartfarming.utils.getTaskList
@@ -58,8 +60,9 @@ import kotlinx.coroutines.launch
 fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit){
 
     val activity = LocalContext.current as Activity
-    val viewModel : HomeViewModel = viewModel(factory = HomeViewModelFactory((activity.application as FarmApplication).repo))
-    val gardensList by viewModel.getGardens().observeAsState()
+    //val viewModel : HomeViewModel = viewModel(factory = HomeViewModelFactory((activity.application as FarmApplication).repo))
+    val viewModel : HomeViewModel = hiltViewModel()
+    val gardensList by viewModel.gardensList.observeAsState()
     var tasks = listOf<Task>()
     if (!gardensList.isNullOrEmpty()){
         tasks = getTaskList(gardensList!!)
@@ -87,7 +90,7 @@ fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit
         },
         backLayerContent = { BackdropBackLayer(activity) },
         scaffoldState = backDropState,
-        frontLayerContent = {TasksRow(tasks, viewModel, backDropState, navController, gardensList = gardensList){setShowFAB(it)} },
+        frontLayerContent = {TasksRow( viewModel, backDropState, navController, gardensList = gardensList){setShowFAB(it)} },
         frontLayerElevation = 4.dp,
         persistentAppBar = false,
         frontLayerScrimColor = Color.Unspecified
@@ -327,7 +330,6 @@ fun FarmingArticlesPreview(articlesList : List<Article>?){
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TasksRow(
-    tasks: List<Task>,
     viewModel: HomeViewModel,
     backdropState : BackdropScaffoldState,
     navController: NavHostController,
@@ -336,6 +338,7 @@ fun TasksRow(
 ){
 
     val activity = LocalContext.current as Activity
+    val tasks = getTaskList(gardensList ?: listOf())
 
     Card(
         modifier = Modifier.fillMaxHeight(1f),
@@ -355,7 +358,8 @@ fun TasksRow(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Surface(shape = CircleShape,
-                    modifier = Modifier.padding(15.dp)
+                    modifier = Modifier
+                        .padding(15.dp)
                         .clickable {
                             val intent = Intent(activity, TasksNotificationActivity::class.java)
                             activity.startActivity(intent)
@@ -413,28 +417,28 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
                 horizontalArrangement = Arrangement.Start
             ) {
                 ActivityGroupSelector(
-                    "آبیاری",
+                    ACTIVITY_LIST[0],
                     ActivityTypesEnum.IRRIGATION.name,
                     viewModel.selectedActivityGroup.value
                 )
                 { viewModel.setSelectedActivityGroup(it) }
 
                 ActivityGroupSelector(
-                    "تغذیه",
+                    ACTIVITY_LIST[2],
                     ActivityTypesEnum.FERTILIZATION.name,
                     viewModel.selectedActivityGroup.value
                 )
                 { viewModel.setSelectedActivityGroup(it) }
 
                 ActivityGroupSelector(
-                    "سمپاشی",
+                    ACTIVITY_LIST[1],
                     ActivityTypesEnum.PESTICIDE.name,
                     viewModel.selectedActivityGroup.value
                 )
                 { viewModel.setSelectedActivityGroup(it) }
 
                 ActivityGroupSelector(
-                    "سایر",
+                    ACTIVITY_LIST[3],
                     ActivityTypesEnum.Other.name,
                     viewModel.selectedActivityGroup.value
                 )

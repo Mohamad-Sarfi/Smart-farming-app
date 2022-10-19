@@ -20,7 +20,10 @@ import com.example.smartfarming.R
 import kotlinx.coroutines.delay
 
 @Composable
-fun SuccessCompose(navHostController : NavHostController){
+fun SuccessCompose(navHostController : NavHostController,
+                   handleNavigation : (NavHostController) -> Unit = {
+                        navHostController.popBackStack()
+                   }){
     Column(
         Modifier
             .fillMaxSize()
@@ -32,7 +35,7 @@ fun SuccessCompose(navHostController : NavHostController){
         LottieAnimation(composition = successAnimation, iterations = 1)
         LaunchedEffect(key1 = null){
             delay(1700)
-            navHostController.popBackStack()
+            handleNavigation(navHostController)
         }
     }
 }
