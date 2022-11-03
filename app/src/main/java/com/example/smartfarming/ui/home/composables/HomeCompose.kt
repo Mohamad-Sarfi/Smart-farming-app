@@ -339,7 +339,6 @@ fun TasksRow(
     val activity = LocalContext.current as Activity
     val tasks = getTaskList(gardensList ?: listOf())
 
-
     Card(
         modifier = Modifier.fillMaxHeight(1f),
         backgroundColor = MaterialTheme.colors.surface,

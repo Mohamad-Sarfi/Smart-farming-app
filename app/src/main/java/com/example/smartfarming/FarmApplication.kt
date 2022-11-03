@@ -15,7 +15,6 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class FarmApplication : Application() {
-
     private val database : GardenDb by lazy { GardenDb.getDatabase(this) }
 
     val repo by lazy {
@@ -29,5 +28,4 @@ class FarmApplication : Application() {
 
     protected val weatherDataSource = WeatherDataSource()
     val weatherRepo = WeatherRepo(weatherDataSource.buildApi(WeatherApi::class.java))
-
 }

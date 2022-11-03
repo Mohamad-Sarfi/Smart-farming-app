@@ -52,10 +52,10 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
                 }
             }
             .padding(top = 2.dp),
-        elevation = 4.dp,
+        elevation = 3.dp,
         shape = RoundedCornerShape(15.dp),
         backgroundColor = Color.White,
-        border = if (clicked) BorderStroke(2.dp, getTaskColor(task.activity_type)) else BorderStroke(0.dp, Color.White)
+        border = if (clicked) BorderStroke(2.dp, getTaskColor(task.activity_type)) else BorderStroke(0.dp, Color.White),
     ) {
         Column(
             Modifier

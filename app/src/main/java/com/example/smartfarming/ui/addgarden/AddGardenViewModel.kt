@@ -9,6 +9,8 @@ import com.example.smartfarming.data.network.resources.garden_resource.request.B
 import com.example.smartfarming.data.repositories.garden.GardenRemoteRepo
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.garden.CoordinateDto
+import com.example.smartfarming.data.room.entities.garden.SpecieDto
 import com.google.android.libraries.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +45,6 @@ class AddGardenViewModel @Inject constructor(
         value = ""
     }
 
-
     fun incrementStep(){
         if (step.value!! < MAX_STEPS){
             step.value = step.value!! + 1
@@ -73,7 +74,6 @@ class AddGardenViewModel @Inject constructor(
         typeArray.value = tempArray
     }
 
-
     fun setLocationList(locations : List<LatLng>){
         locationList.value = locations
         location.value = mutableMapOf("lat" to locations[0].latitude.toString().substring(0,6), "long" to locations[0].longitude.toString().substring(0,6))
@@ -94,7 +94,6 @@ class AddGardenViewModel @Inject constructor(
     }
 
     // Button click handler
-
     fun checkFirstStep() : Boolean{
         return gardenName.value != "" && gardenAge.value != 0 && !typeArray.value.isNullOrEmpty()
     }
@@ -106,7 +105,6 @@ class AddGardenViewModel @Inject constructor(
     fun checkThirdStep() : Boolean {
         return isLocationSet.value && gardenArea.value != 0.0
     }
-
 
     // Database
     fun addGardenToDb(garden : Garden){
@@ -166,15 +164,29 @@ class AddGardenViewModel @Inject constructor(
             else -> Icons.Default.Eco
         }
     }
-}
 
-class AddGardenViewModelFactory(private val repo : GardenRepo, private val remoteRepo: GardenRemoteRepo) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddGardenViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return AddGardenViewModel(repo, remoteRepo) as T
+    fun getGardenBorder() : List<CoordinateDto>{
+        val returnList = mutableListOf<CoordinateDto>()
+
+        for (location in locationList.value!!){
+            returnList.add(
+                CoordinateDto(
+                    0,
+                    latitude = location.latitude,
+                    longitude = location.longitude
+                )
+            )
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+        return returnList
+    }
 
+    fun getSpecieList() : List<SpecieDto> {
+        val returnList = mutableListOf<SpecieDto>()
+
+        for (specie in typeArray.value){
+
+        }
+
+        return returnList
     }
 }

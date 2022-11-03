@@ -5,36 +5,55 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
-import com.google.android.libraries.maps.model.LatLng
+import com.example.smartfarming.data.room.entities.enums.BudgetCurrencyEnum
+import com.example.smartfarming.data.room.entities.enums.GardenAreaUnitEnum
+import com.example.smartfarming.data.room.entities.garden.CoordinateDto
+import com.example.smartfarming.data.room.entities.garden.GardenAddress
+import com.example.smartfarming.data.room.entities.garden.SpecieDto
 
 @Entity(tableName = "garden_table")
 data class Garden(
     @PrimaryKey(autoGenerate = true) @ColumnInfo
-        (name = "rowid") val id : Int,
+        (name = "id") val id : Int,
+    @ColumnInfo(name = "address")
+        val address: GardenAddress,
+    @ColumnInfo(name = "age")
+        val age: Int,
+    @ColumnInfo(name = "area")
+        val area : Int,
+    @ColumnInfo(name = "areaUnit")
+        val areaUnit : String,
+    @ColumnInfo(name = "border")
+        val border : List<CoordinateDto>?,
+    @ColumnInfo(name = "budget")
+        val budget : Int,
+    @ColumnInfo(name = "budgetCurrency")
+        val budgetCurrency : String = BudgetCurrencyEnum.IRR.name,
+    @ColumnInfo(name = "density")
+        val density : Int,
+    @ColumnInfo(name = "irrigationCycle")
+        val irrigationCycle : Int,
+    @ColumnInfo(name = "irrigationCycleUnit")
+        val irrigationCycleUnit : String = GardenAreaUnitEnum.DAY.name,
+    @ColumnInfo(name = "irrigationDuration")
+        val irrigationDuration : Int,
+    @ColumnInfo(name = "irrigationDurationUnit")
+        val irrigationDurationUnit : String = GardenAreaUnitEnum.HOUR.name,
+    @ColumnInfo(name = "irrigationVolume")
+        val irrigationVolume : Double,
+    @ColumnInfo(name = "irrigationVolumeUnit")
+        val irrigationVolumeUnit : String = GardenAreaUnitEnum.LITER.name,
+    @ColumnInfo(name = "location")
+        val location : CoordinateDto,
+    @ColumnInfo(name = "soilType")
+        val soilType : String,
+    @ColumnInfo(name = "specieSet")
+        val specieSet : List<SpecieDto>,
     @NonNull @ColumnInfo
-        (name = "name") val name: String,
-    @ColumnInfo
-        (name = "age") val age: Int,
-    @ColumnInfo
-        (name = "lat_long") val lat_long: String,
-    @ColumnInfo
-        (name = "plant_type") val plant_type: String,
-    @ColumnInfo
-        (name = "plant_varieties") val plant_varieties: String,
-    @ColumnInfo
-        (name = "soil_type") val soil_type : String,
-    @ColumnInfo
-        (name = "irrigation_type") val irrigation_type : String,
-    @ColumnInfo
-        (name = "irrigation_duration") val irrigation_duration : Double,
-    @ColumnInfo
-        (name = "irrigation_volume") val irrigation_volume : Double,
-    @ColumnInfo
-        (name = "irrigation_cycle") val irrigation_cycle : Int,
-    @ColumnInfo
-        (name = "area") val area : Double,
-    @ColumnInfo
-        (name = "polygon_list") val polygon_list : List<LatLng>?,
-    @ColumnInfo
-        (name = "user_id") val user_id: Int
+        (name = "title") val title: String,
+//    @ColumnInfo (name = "irrigation_type")
+//        val irrigation_type : String = "",
+//    @ColumnInfo(name = "user_id")
+//        val user_id: Int
 )
+

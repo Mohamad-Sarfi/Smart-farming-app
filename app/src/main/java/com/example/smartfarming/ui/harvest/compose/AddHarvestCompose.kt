@@ -54,7 +54,7 @@ fun AddHarvestCompose(
 
     if (gardenList.value != null){
         for (g in gardenList.value!!){
-            gardenNameList.add(g.name)
+            gardenNameList.add(g.title)
         }
     }
 
@@ -152,7 +152,7 @@ fun AddHarvestBody(
                 OutlinedTextField(
                     value = strWeight,
                     onValueChange = {
-                      strWeight = it
+                        strWeight = it
                         setWeight(strWeight.toFloatOrNull())
                     } ,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -184,9 +184,6 @@ fun AddHarvestBody(
                         Icon(Icons.Outlined.MonitorWeight, contentDescription = null, tint = MainGreen)
                     }
                 )
-
-
-
             }
 
             HarvestDateSelector(viewModel.harvestDate.value){viewModel.harvestDate.value = it}

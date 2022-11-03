@@ -31,6 +31,10 @@ import com.example.smartfarming.MainActivity
 import com.example.smartfarming.R
 import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.enums.GardenAreaUnitEnum
+import com.example.smartfarming.data.room.entities.enums.SoilTypeEnum
+import com.example.smartfarming.data.room.entities.garden.CoordinateDto
+import com.example.smartfarming.data.room.entities.garden.GardenAddress
 import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import kotlinx.coroutines.flow.first
@@ -182,19 +186,27 @@ fun AddGardenCompose(
                         } else {
                             val garden = Garden(
                                 0,
-                                viewModel.gardenName.value,
-                                gardenAge!!.toInt(),
-                                "${latLong!!["lat"]} - ${latLong!!["long"]}",
-                                "پسته",
-                                varietiesList.value.joinToString(","),
-                                "متوسط",
-                                "classic",
-                                irrigationDuration!!.toDouble(),
-                                irrigationVolume!!.toDouble(),
-                                viewModel.irrigationCycle.value.toInt(),
-                                gardenArea!!.toDouble(),
-                                viewModel.polygonPath,
-                                0
+                                address = GardenAddress(
+                                    city = "",
+                                    country = "",
+                                    id = 0,
+                                    latitude = 0.0,
+                                    longitude = 0.0,
+                                    plainAddress = "",
+                                    state = ""),
+                                age = gardenAge,
+                                area = gardenArea.toInt(),
+                                areaUnit = GardenAreaUnitEnum.HECTARE.name,
+                                border = viewModel.getGardenBorder(),
+                                budget = 0,
+                                density =0,
+                                irrigationCycle = viewModel.irrigationCycle.value,
+                                irrigationDuration = irrigationDuration.toInt(),
+                                irrigationVolume = irrigationVolume.toDouble(),
+                                location = CoordinateDto(0, latLong!!["lat"]!!.toDouble(), latLong!!["long"]!!.toDouble()),
+                                title = viewModel.gardenName.value,
+                                soilType = SoilTypeEnum.MIDDLE.name,
+                                specieSet = viewModel.getSpecieList(),
                             )
                             viewModel.addGardenToDb(garden)
                             if (auth.value != ""){

@@ -50,26 +50,22 @@ fun GardenHarvestScreen(gardenName: String){
     val activity = LocalContext.current as Activity
     val viewModel : HarvestViewModel =
         viewModel(factory = HarvestViewModelFactory((activity.application as FarmApplication).repo))
-
-
     var selectedYear = viewModel.selectedYear
     var selectedType = viewModel.selectedType
-
     var yearSum by remember {
         mutableStateOf(0.0)
     }
+    val harvestList = remember {
+        viewModel._harvestList
+    }
+    val mHarvestList = viewModel.mHarvestList
+    val coroutineScope = rememberCoroutineScope()
 
     if (selectedType.value == "همه"){
         viewModel.getHarvestByYear(gardenName, selectedYear.value)
     } else {
         viewModel.getHarvestByYearType(gardenName, selectedYear.value, selectedType.value)
     }
-    val harvestList = remember {
-        viewModel._harvestList
-    }
-
-    val mHarvestList = viewModel.mHarvestList
-
 
     if (!harvestList.value.isNullOrEmpty()){
         yearSum = viewModel.getYearSum(selectedYear.value)
@@ -79,14 +75,9 @@ fun GardenHarvestScreen(gardenName: String){
         for (e in harvestList.value){
             mHarvestList.add(e)
         }
-
     }
 
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-
-    )
-
-    val coroutineScope = rememberCoroutineScope()
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
 
     BottomSheetScaffold(
         topBar = { HarvestTitle(gardenName) },
@@ -111,7 +102,6 @@ fun GardenHarvestScreen(gardenName: String){
             modifier = Modifier.fillMaxSize()
         ) {
             val (detailColumn) = createRefs()
-
 
             HarvestListCompose(
                 Modifier
