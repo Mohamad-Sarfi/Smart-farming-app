@@ -17,12 +17,12 @@ interface GardenDao {
     @Update
     suspend fun updateGarden(garden: Garden)
 
-    @Query("SELECT * FROM garden_table ORDER BY name ASC")
+    @Query("SELECT * FROM garden_table ORDER BY title ASC")
     fun getAllGardens() : Flow<List<Garden>>
 
-    @Query("SELECT * FROM garden_table WHERE name = :name")
+    @Query("SELECT * FROM garden_table WHERE title = :name")
     suspend fun getGardenByName(name : String) : Garden
 
-    @Query("SELECT * FROM garden_table WHERE rowid = :id")
+    @Query("SELECT * FROM garden_table WHERE id = :id")
     suspend fun getGardenById(id : Int) : Garden
 }

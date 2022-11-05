@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.Log
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.smartfarming.data.room.converters.GardenConverters
 import com.example.smartfarming.data.room.daos.*
 import com.example.smartfarming.data.room.entities.*
-import kotlinx.coroutines.CoroutineScope
 
 @Database(
     entities = [
@@ -17,10 +17,10 @@ import kotlinx.coroutines.CoroutineScope
         PesticideEntity::class,
         OtherActivityEntity::class,
         Harvest::class],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
-@TypeConverters(LatLongListConverter::class)
+@TypeConverters(GardenDbConverter::class)
 abstract class GardenDb : RoomDatabase() {
 
     abstract fun gardenDao() : GardenDao

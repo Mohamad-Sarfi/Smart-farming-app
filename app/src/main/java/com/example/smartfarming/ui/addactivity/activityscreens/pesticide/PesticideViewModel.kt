@@ -11,6 +11,7 @@ import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.FertilizationEntity
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.PesticideEntity
+import com.example.smartfarming.utils.initialGarden
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -27,8 +28,7 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
         mutableStateOf("")
 
     private val garden = MutableLiveData<Garden>().apply {
-        value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
-            0, 0.0, listOf(),0) }
+        value = initialGarden }
 
     fun updateVolumeValueText(value : String) : String{
         if (value == ""){
@@ -120,7 +120,7 @@ class PesticideViewModel(val repo : GardenRepo) : ViewModel() {
                 PesticideEntity(
                     0,
                     pesticidesList.value.joinToString(","),
-                    garden.value!!.name,
+                    garden.value!!.title,
                     pest = "",
                     date = pesticideDate.value["year"] + "/" + pesticideDate.value["month"] + "/" + pesticideDate.value["day"],
                     pesticideVolume.value

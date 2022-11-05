@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.OtherActivityEntity
+import com.example.smartfarming.utils.initialGarden
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,8 +33,7 @@ class OthersViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
     }
 
     private val garden = MutableLiveData<Garden>().apply {
-        value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
-            0, 0.0, listOf(),0)
+        value = initialGarden
     }
 
     private fun getGardenByName(gardenName : String) {
@@ -74,7 +74,7 @@ class OthersViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
                     garden_name = gardenName
                 )
             )
-            val x = repo.getOtherActivitiesByGardenName(garden.value!!.name)
+            val x = repo.getOtherActivitiesByGardenName(garden.value!!.title)
             Log.i("TAG_zz", "$x")
         }
     }

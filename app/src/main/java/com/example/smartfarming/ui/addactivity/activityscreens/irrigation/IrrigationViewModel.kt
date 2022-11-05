@@ -9,6 +9,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.IrrigationEntity
+import com.example.smartfarming.data.room.entities.enums.BudgetCurrencyEnum
+import com.example.smartfarming.data.room.entities.enums.GardenAreaUnitEnum
+import com.example.smartfarming.data.room.entities.enums.SoilTypeEnum
+import com.example.smartfarming.data.room.entities.garden.CoordinateDto
+import com.example.smartfarming.data.room.entities.garden.GardenAddress
+import com.example.smartfarming.utils.initialGarden
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,9 +28,7 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
     var step = mutableStateOf(0)
     var finished = mutableStateOf(false)
 
-    private val garden = mutableStateOf( Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
-        0, 0.0, listOf(),0)
-    )
+    private val garden = mutableStateOf(initialGarden)
 
     var dateNotSet = mutableStateOf(false)
 
@@ -33,14 +37,14 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
         mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
 
     var irrigationType =
-        mutableStateOf(garden.value.irrigation_type)
+        mutableStateOf("")
         set(value) { field = value }
 
     val irrigationDuration =
-        mutableStateOf(garden.value.irrigation_duration)
+        mutableStateOf(garden.value.irrigationDuration)
 
     var waterVolume =
-        mutableStateOf(garden.value.irrigation_volume)
+        mutableStateOf(garden.value.irrigationVolume)
 
     var irrigationWorkers =
         mutableStateOf(1)
@@ -48,9 +52,9 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
     private fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
             garden.value  = repo.getGardenByName(gardenName)
-            waterVolume.value = garden.value.irrigation_volume ?: 2.0
-            irrigationDuration.value = garden.value.irrigation_duration
-            irrigationType.value = garden.value.irrigation_type
+            waterVolume.value = garden.value.irrigationVolume ?: 2.0
+            irrigationDuration.value = garden.value.irrigationDuration
+            irrigationType.value = ""
         }
     }
 
@@ -97,7 +101,7 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
                     irrigation_duration = irrigationDuration.value,
                     irrigation_type = irrigationType.value,
                     irrigation_volume = waterVolume.value,
-                    garden_name = garden.value!!.name
+                    garden_name = garden.value!!.title
                 )
             )
         }

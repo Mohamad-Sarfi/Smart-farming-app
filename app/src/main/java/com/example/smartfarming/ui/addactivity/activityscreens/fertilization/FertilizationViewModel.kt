@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.FertilizationEntity
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.utils.initialGarden
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -21,8 +22,7 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
 
     var step = mutableStateOf(0)
     private val garden = MutableLiveData<Garden>().apply {
-        value = Garden(0, "", 0, "", "", "", "", "", 0.0, 0.0,
-            0, 0.0, listOf(),0)
+        value = initialGarden
     }
     val fertilizationType = mutableStateOf(value = "")
 
@@ -148,7 +148,7 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
                     fertilization_type = fertilizationType.value,
                     date = "${fertilizationDate.value["year"]}/${fertilizationDate.value["month"]}/${fertilizationDate.value["day"]}",
                     volume = fertilizationVolume.value,
-                    garden_name = garden.value!!.name
+                    garden_name = garden.value!!.title
                 )
             )
         }

@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.authentication.authviewmodel
 
+import android.net.NetworkInfo
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.UserPreferences
@@ -33,6 +34,7 @@ class LoginViewModel(
             }
         }
     }
+
 }
 
 class LoginViewModelFactory(

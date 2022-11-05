@@ -36,7 +36,7 @@ import com.example.smartfarming.ui.gardens.GardensViewModel
 fun GardenCard(garden : Garden, viewModel : GardensViewModel){
 
     val context = LocalContext.current
-    viewModel.getTasks(garden.name)
+    viewModel.getTasks(garden.title)
 
     val tasks = viewModel.gardenTasks.observeAsState()
 
@@ -50,7 +50,7 @@ fun GardenCard(garden : Garden, viewModel : GardensViewModel){
             .clip(MaterialTheme.shapes.large)
             .clickable {
                 val intent = Intent(context, GardenProfileActivity::class.java)
-                intent.putExtra("gardenName", garden.name)
+                intent.putExtra("gardenName", garden.title)
                 context.startActivity(intent)
             },
         shape = MaterialTheme.shapes.large,
@@ -84,18 +84,18 @@ fun GardenCard(garden : Garden, viewModel : GardensViewModel){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = garden.name,
+                    text = garden.title,
                     style = MaterialTheme.typography.h5,
                     color = MainGreen,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Row() {
-                    if (garden.name == "محمد"){
+                    if (garden.title == "محمد"){
                         ActivityBadge(Blue500, Icons.Outlined.WaterDrop)
                         ActivityBadge(Purple500, Icons.Outlined.Compost)
                         ActivityBadge(MainGreen, Icons.Outlined.Agriculture)
                         ActivityBadge(YellowPesticide, Icons.Outlined.PestControl)
-                    } else if (garden.name == "سعید"){
+                    } else if (garden.title == "سعید"){
                         ActivityBadge(Purple500, Icons.Outlined.Compost)
                         ActivityBadge(Blue500, Icons.Outlined.WaterDrop)
                     } else {

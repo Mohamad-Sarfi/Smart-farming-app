@@ -161,7 +161,7 @@ fun PesticideBody(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "ثبت سم پاشی " + garden.name,
+            text = "ثبت سم پاشی " + garden.title,
             style = MaterialTheme.typography.h4,
             color = YellowPesticide,
             modifier = Modifier

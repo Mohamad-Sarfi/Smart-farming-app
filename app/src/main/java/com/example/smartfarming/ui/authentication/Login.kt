@@ -102,7 +102,6 @@ fun Login(
                         contentDescription = "icon",
                         tint = if (isUsernameEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
                     )
-
                 },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next

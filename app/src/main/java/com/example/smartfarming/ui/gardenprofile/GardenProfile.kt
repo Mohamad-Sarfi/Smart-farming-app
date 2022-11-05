@@ -127,13 +127,13 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GardenTitle(gardenName = garden.value!!.name, navController)
+            GardenTitle(gardenName = garden.value!!.title, navController)
             Column(
                 Modifier
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())) {
                 ReportDiagram()
-                Report(navController, garden.value!!.name)
+                Report(navController, garden.value!!.title)
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -141,20 +141,20 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                     horizontalArrangement = Arrangement.Center
                 ){
                     MainIcons(Icons.Default.Thermostat, "آب و هوا", Blue700){
-                        navController.navigate(route = "${AppScreensEnum.GardenWeatherScreen.name}/${garden.value!!.name}")
+                        navController.navigate(route = "${AppScreensEnum.GardenWeatherScreen.name}/${garden.value!!.title}")
                     }
                     MainIcons(Icons.Outlined.Inventory, "محصولات", YellowPesticide){
-                        navController.navigate("${AppScreensEnum.GardenHarvestScreen.name}/${garden.value!!.name}")
+                        navController.navigate("${AppScreensEnum.GardenHarvestScreen.name}/${garden.value!!.title}")
                     }
                     MainIcons(Icons.Outlined.LocationOn, "مکان نما", RedFertilizer){
-                        navController.navigate("${AppScreensEnum.GardenMapScreen.name}/${garden.value!!.name}")
+                        navController.navigate("${AppScreensEnum.GardenMapScreen.name}/${garden.value!!.title}")
                     }
 
                 }
 
                 val thisGardenTask = ArrayList<Task>()
                 for (task in tasks){
-                    if (task.garden_name == garden.value!!.name){
+                    if (task.garden_name == garden.value!!.title){
                         thisGardenTask.add(task)
                     }
                 }

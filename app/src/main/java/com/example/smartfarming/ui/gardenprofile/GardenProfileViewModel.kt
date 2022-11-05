@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.utils.initialGarden
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -18,8 +19,7 @@ import javax.inject.Inject
 class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
 
     private val garden = MutableLiveData<Garden>().apply {
-        value = Garden(0, "sample", 0, "", "", "", "", "", 0.0, 0.0,
-            0,0.0, listOf(),0)
+        value = initialGarden
     }
 
     fun getGardenByName(gardenName : String) {

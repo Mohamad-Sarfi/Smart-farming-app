@@ -188,7 +188,7 @@ fun Body(
     garden: Garden,
     irrigationDate: MutableState<MutableMap<String,String>>,
     irrigationType: MutableState<String>,
-    irrigationDuration : MutableState<Double>,
+    irrigationDuration : MutableState<Int>,
     setWaterVolume: (Double) -> Unit,
     step : Int
 ){
@@ -198,7 +198,7 @@ fun Body(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "ثبت آبیاری باغ " + garden.name,
+            text = "ثبت آبیاری باغ " + garden.title,
             style = MaterialTheme.typography.h3,
             color = BlueWatering, modifier = Modifier.padding(bottom = 30.dp))
 
@@ -212,7 +212,7 @@ fun Body(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    WaterVolume(garden.irrigation_volume){setWaterVolume(it)}
+                    WaterVolume(garden.irrigationVolume){setWaterVolume(it)}
                     IrrigationDuration(irrigationDuration)
                 }
             }
@@ -340,7 +340,7 @@ fun WaterVolume(
 }
 
 @Composable
-fun IrrigationDuration(irrigationDuration: MutableState<Double>){
+fun IrrigationDuration(irrigationDuration: MutableState<Int>){
 
     Column(
         Modifier
@@ -365,10 +365,10 @@ fun IrrigationDuration(irrigationDuration: MutableState<Double>){
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .clickable {
-                        if (irrigationDuration.value > 2.0) {
-                            irrigationDuration.value = irrigationDuration.value - 0.5
+                        if (irrigationDuration.value > 2) {
+                            irrigationDuration.value = irrigationDuration.value - 1
                         } else {
-                            irrigationDuration.value = 0.5
+                            irrigationDuration.value = 1
                         }
                     }
                     .size(35.dp)
@@ -391,7 +391,7 @@ fun IrrigationDuration(irrigationDuration: MutableState<Double>){
 
             Icon(Icons.Filled.Add, contentDescription = "", modifier = Modifier
                 .padding(horizontal = 20.dp)
-                .clickable { irrigationDuration.value = irrigationDuration.value + 0.5 }
+                .clickable { irrigationDuration.value = irrigationDuration.value + 1 }
                 .size(35.dp)
                 .clip(MaterialTheme.shapes.medium)
                 .background(BlueWatering)

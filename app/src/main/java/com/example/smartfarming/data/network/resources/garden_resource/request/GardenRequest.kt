@@ -1,5 +1,6 @@
 package com.example.smartfarming.data.network.resources.garden_resource.request
 
+import com.example.smartfarming.data.room.entities.Garden
 import com.google.gson.Gson
 
 data class GardenRequest(val area: Int = 0,
@@ -23,36 +24,41 @@ data class GardenRequest(val area: Int = 0,
                          val budget: Int = 0
 )
 
-fun gardenReq2Json(
-    city : String,
-    latitudes : Double,
-    longitudes : Double,
-    age: Int,
-    area: Int,
-    border: List<BorderItem>?,
-    density: Int,
-    irrigationCycle: Int,
-    irrigationDuration: Int,
-    irrigationVolume: Float,
-    soilType: String,
-    specieSet: List<SpecieSetItem>?,
-    title: String
-) : String {
-    val gson = Gson()
+//fun gardenReq2Json(
+//    city : String,
+//    latitudes : Double,
+//    longitudes : Double,
+//    age: Int,
+//    area: Int,
+//    border: List<BorderItem>?,
+//    density: Int,
+//    irrigationCycle: Int,
+//    irrigationDuration: Int,
+//    irrigationVolume: Float,
+//    soilType: String,
+//    specieSet: List<SpecieSetItem>?,
+//    title: String
+//) : String {
+//    val gson = Gson()
+//
+//    return gson.toJson(GardenRequest(
+//                area = area,
+//                border = border,
+//                address = Address(city = city),
+//                density = density,
+//                irrigationCycle = irrigationCycle,
+//                irrigationVolume = irrigationVolume,
+//                title = title,
+//                specieSet = specieSet,
+//                irrigationDuration = irrigationDuration,
+//                soilType = soilType,
+//                location = Location(latitude = latitudes, longitude = longitudes),
+//                age = age
+//        )
+//    )
+//}
 
-    return gson.toJson(GardenRequest(
-                area = area,
-                border = border,
-                address = Address(city = city),
-                density = density,
-                irrigationCycle = irrigationCycle,
-                irrigationVolume = irrigationVolume,
-                title = title,
-                specieSet = specieSet,
-                irrigationDuration = irrigationDuration,
-                soilType = soilType,
-                location = Location(latitude = latitudes, longitude = longitudes),
-                age = age
-        )
-    )
+fun garden2Json(garden : Garden) : String {
+    val gson = Gson()
+    return gson.toJson(garden)
 }

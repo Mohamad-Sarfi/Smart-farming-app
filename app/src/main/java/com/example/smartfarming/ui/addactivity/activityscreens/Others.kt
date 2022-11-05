@@ -177,7 +177,7 @@ fun Step1( garden: Garden){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "ثبت فعالیت برای " + garden.name,
+            text = "ثبت فعالیت برای " + garden.title,
             style = MaterialTheme.typography.h3,
             color = LightGreen1,
             modifier = Modifier
@@ -205,7 +205,7 @@ fun Step2(garden: Garden){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "ثبت فعالیت برای " + garden.name,
+            text = "ثبت فعالیت برای " + garden.title,
             style = MaterialTheme.typography.h3,
             color = LightGreen1,
             modifier = Modifier

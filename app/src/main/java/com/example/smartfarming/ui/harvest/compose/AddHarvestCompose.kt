@@ -262,10 +262,7 @@ fun HarvestTypeSpinner(
     harvestType: String?,
     setHarvestType : (String) -> Unit
 ){
-
     val pistachiosTypeList = stringArrayResource(id = R.array.pistachios_type)
-
-
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -311,7 +308,6 @@ fun HarvestTypeSpinner(
                 }
             }
     }
-
 }
 
 @Composable

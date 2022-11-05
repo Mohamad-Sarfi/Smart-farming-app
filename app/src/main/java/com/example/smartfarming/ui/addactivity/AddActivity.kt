@@ -26,7 +26,7 @@ fun AddActivity(
 
     if (gardensList.value != null){
         for (garden in gardensList.value!!){
-            gardensNameList.add(garden.name)
+            gardensNameList.add(garden.title)
         }
     }
 

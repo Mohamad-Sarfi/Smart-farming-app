@@ -179,7 +179,7 @@ fun FertilizationBody(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "ثبت تغذیه باغ " + garden.name,
+            text = "ثبت تغذیه باغ " + garden.title,
             style = MaterialTheme.typography.h3,
             color = PurpleFertilizer,
             modifier = Modifier

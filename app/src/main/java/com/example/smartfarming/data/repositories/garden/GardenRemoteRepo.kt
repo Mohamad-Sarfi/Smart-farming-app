@@ -1,12 +1,11 @@
 package com.example.smartfarming.data.repositories.garden
 
+import android.util.Log
 import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.network.api.GardenApi
-import com.example.smartfarming.data.network.resources.garden_resource.request.BorderItem
-import com.example.smartfarming.data.network.resources.garden_resource.request.GardenRequest
-import com.example.smartfarming.data.network.resources.garden_resource.request.SpecieSetItem
-import com.example.smartfarming.data.network.resources.garden_resource.request.gardenReq2Json
+import com.example.smartfarming.data.network.resources.garden_resource.request.*
 import com.example.smartfarming.data.repositories.BaseRepo
+import com.example.smartfarming.data.room.entities.Garden
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -16,44 +15,21 @@ class GardenRemoteRepo(
 
     suspend fun addGarden(
         auth : String,
-        city : String,
-        latitudes : Double,
-        longitudes : Double,
-        age: Int,
-        area: Int,
-        border: List<BorderItem>?,
-        density: Int,
-        irrigationCycle: Int,
-        irrigationDuration: Int,
-        irrigationVolume: Float,
-        soilType: String,
-        specieSet: List<SpecieSetItem>?,
-        title: String
+        garden: Garden
     ) = safeApiCall {
         api.addGarden(
-            authHeader = auth ,
-            gardenReq2Json(
-            city = city,
-            latitudes = latitudes,
-            longitudes = longitudes,
-            age = age,
-            area = area,
-            border = border,
-            density = density,
-            irrigationDuration = irrigationDuration,
-            irrigationVolume = irrigationVolume,
-            irrigationCycle = irrigationCycle,
-            soilType = soilType,
-            specieSet = specieSet,
-            title = title
-        ).toRequestBody("application/json".toMediaTypeOrNull()))
+            authHeader = "Bearer $auth",
+            request = garden2Json(garden).toRequestBody("application/json".toMediaTypeOrNull())
+        )
     }
 
     suspend fun getGardens(
+        auth: String,
         pageNumber : Int,
         pageSize : Int
     ) = safeApiCall {
         api.getGardens(
+            authHeader = "Bearer $auth",
             pageNumber,
             pageSize
         )

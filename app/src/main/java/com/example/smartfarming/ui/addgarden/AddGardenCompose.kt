@@ -212,6 +212,8 @@ fun AddGardenCompose(
                             if (auth.value != ""){
                                 viewModel.addGardenToServer(auth.value!!)
                                 activity.finish()
+                            } else {
+                                Log.i("garden request NETWORK", "not sent")
                             }
                         }
                     },

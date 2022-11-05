@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.gardenprofile.composables
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
@@ -31,6 +32,7 @@ import com.example.smartfarming.ui.gardenprofile.weather.WeatherCard
 import com.example.smartfarming.ui.gardenprofile.weather.WeatherViewModel
 import com.example.smartfarming.ui.gardenprofile.weather.WeatherViewModelFactory
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Weather(gardenName: String = "شماره 1"){
 
@@ -47,13 +49,16 @@ fun Weather(gardenName: String = "شماره 1"){
     weatherViewModel.getGarden(gardenName)
 
     val garden = weatherViewModel.garden.observeAsState()
-    var latLong : List<String>? = listOf<String>()
-    var weatherResponse : State<WeatherResponse?> = mutableStateOf(null)
+    var latLong : MutableList<String> = mutableListOf<String>()
+    var weatherResponse : State<WeatherResponse?> = remember {
+        mutableStateOf(null)
+    }
 
 
 
     if (garden.value != null ) {
-        latLong = garden.value?.lat_long?.split("-")
+            latLong.add(garden.value?.location?.latitude.toString())
+            latLong.add(garden.value?.location?.longitude.toString())
     }
 
     if (!latLong.isNullOrEmpty()){

@@ -134,7 +134,7 @@ fun Cards(
                 GardenSpinner(gardenList, currentGarden){
                     currentGarden = it
                     gardenListState.value?.forEach { g ->
-                        if (g.name == it){
+                        if (g.title == it){
                             gardenId = g.id
                         }
                     }

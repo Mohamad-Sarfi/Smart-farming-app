@@ -9,6 +9,6 @@ data class IrrigationEntity(
     val date : String,
     val garden_name : String,
     val irrigation_volume : Double,
-    val irrigation_duration : Double,
+    val irrigation_duration : Int,
     val irrigation_type : String
 )

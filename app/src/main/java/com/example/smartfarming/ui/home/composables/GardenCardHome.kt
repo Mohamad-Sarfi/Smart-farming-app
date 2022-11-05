@@ -50,14 +50,14 @@ fun GardenCardHome(
             }
             .clickable {
                 val intent = Intent(context, GardenProfileActivity::class.java)
-                intent.putExtra("gardenName", garden.name)
+                intent.putExtra("gardenName", garden.title)
                 context.startActivity(intent)
             }
             .background(MainGreen100),
         verticalAlignment = Alignment.CenterVertically
     ){
         GardenIcon()
-        GardenSection(garden.name, tasks)
+        GardenSection(garden.title, tasks)
     }
 }
 

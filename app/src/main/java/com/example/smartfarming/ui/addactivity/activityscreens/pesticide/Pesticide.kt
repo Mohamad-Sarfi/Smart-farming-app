@@ -60,7 +60,7 @@ fun Pesticide(gardenName : String, navController : NavHostController){
     val viewModel : PesticideViewModel =
         viewModel(factory = PesticideViewModelFactory((activity.application as FarmApplication).repo))
     val garden = viewModel.getGarden(gardenName).observeAsState()
-    var gardenName = garden.value?.name ?: ""
+    var gardenName = garden.value?.title ?: ""
     var startup by remember {
         mutableStateOf(false)
     }

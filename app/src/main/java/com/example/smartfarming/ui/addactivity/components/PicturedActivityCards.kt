@@ -41,7 +41,7 @@ fun PicturedActivityCards(navController: NavHostController, viewModel: AddActivi
     }
 
     if (!viewModel.gardenListState.value.isNullOrEmpty()){
-        currentGarden = viewModel.gardenListState.value!![0].name
+        currentGarden = viewModel.gardenListState.value!![0].title
     }
 
     ConstraintLayout(
@@ -88,7 +88,7 @@ fun PicturedActivityCards(navController: NavHostController, viewModel: AddActivi
             GardenSpinner(gardenList, currentGarden){
                 currentGarden = it
                 viewModel.gardenListState.value?.forEach { g ->
-                    if (g.name == it){
+                    if (g.title == it){
                         gardenId = g.id
                     }
                 }

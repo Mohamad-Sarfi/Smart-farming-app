@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.gardenprofile.map
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.*
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GardenMap(gardenName : String){
 
@@ -48,12 +50,12 @@ fun GardenMap(gardenName : String){
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                val p0 : LatLng = LatLng(garden.value!!.polygon_list!![0].latitude,garden.value!!.polygon_list!![0].longitude)
-                val p1 : LatLng = LatLng(garden.value!!.polygon_list!!.last().latitude,garden.value!!.polygon_list!!.last().longitude)
+                val p0 : LatLng = LatLng(garden.value!!.border!![0].latitude,garden.value!!.border!![0].longitude)
+                val p1 : LatLng = LatLng(garden.value!!.border!!.last().latitude,garden.value!!.border!!.last().longitude)
 
                 val polygon = mutableListOf<LatLng>()
 
-                for (p in garden.value!!.polygon_list!!){
+                for (p in garden.value!!.border!!){
                     polygon.add(LatLng(p.latitude, p.longitude))
                 }
 

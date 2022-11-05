@@ -1,20 +1,30 @@
 package com.example.smartfarming.ui.addgarden
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.*
+import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.data.network.resources.garden_resource.request.BorderItem
+import com.example.smartfarming.data.network.resources.garden_resource.request.garden2Json
 import com.example.smartfarming.data.repositories.garden.GardenRemoteRepo
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.enums.BudgetCurrencyEnum
+import com.example.smartfarming.data.room.entities.enums.GardenAreaUnitEnum
+import com.example.smartfarming.data.room.entities.enums.SoilTypeEnum
 import com.example.smartfarming.data.room.entities.garden.CoordinateDto
+import com.example.smartfarming.data.room.entities.garden.GardenAddress
+import com.example.smartfarming.data.room.entities.garden.PlantType
 import com.example.smartfarming.data.room.entities.garden.SpecieDto
+import com.example.smartfarming.utils.PlantTypesEnum
 import com.google.android.libraries.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
@@ -116,22 +126,64 @@ class AddGardenViewModel @Inject constructor(
     //Update server
     fun addGardenToServer(auth : String){
         viewModelScope.launch {
-            remoteRepo.addGarden(
+            Log.i("NETWORK garden request body",
+                garden2Json(Garden(
+                    0,
+                    address = GardenAddress(
+                        city = "",
+                        country = "",
+                        id = 0,
+                        latitude = 50.0,
+                        longitude = 34.0,
+                        plainAddress = "",
+                        state = ""),
+                    age = gardenAge.value,
+                    area = gardenArea.value.toInt(),
+                    areaUnit = GardenAreaUnitEnum.HECTARE.name,
+                    border = getGardenBorder(),
+                    budget = 0,
+                    density =0,
+                    irrigationCycle = irrigationCycle.value,
+                    irrigationDuration = irrigationDuration.value.toInt(),
+                    irrigationVolume = irrigationVolume.value.toDouble(),
+                    location = CoordinateDto(0, location.value?.get("lat")!!.toDouble(), location.value?.get("long")!!.toDouble()),
+                    title = gardenName.value,
+                    soilType = SoilTypeEnum.MIDDLE.name,
+                    specieSet = getSpecieList()
+                )
+            ))
+
+            val x = remoteRepo.addGarden(
                 auth = auth,
-                city = "تهران",
-                latitudes = location.value?.get("lat")!!.toDouble(),
-                longitudes = location.value?.get("long")!!.toDouble(),
-                age = gardenAge.value,
-                area = gardenArea.value.toInt(),
-                border = getBorderItems(locationList.value),
-                density = 2,
-                irrigationCycle = irrigationCycle.value,
-                irrigationVolume = irrigationVolume.value.toFloat(),
-                soilType = "",
-                specieSet = null,
-                title = gardenName.value,
-                irrigationDuration = irrigationDuration.value.toInt()
+                Garden(
+                    0,
+                    address = GardenAddress(
+                        city = "",
+                        country = "",
+                        id = 0,
+                        latitude = 50.0,
+                        longitude = 34.0,
+                        plainAddress = "",
+                        state = ""),
+                    age = gardenAge.value,
+                    area = gardenArea.value.toInt(),
+                    areaUnit = GardenAreaUnitEnum.HECTARE.name,
+                    border = getGardenBorder(),
+                    budget = 0,
+                    density =0,
+                    irrigationCycle = irrigationCycle.value,
+                    irrigationDuration = irrigationDuration.value.toInt(),
+                    irrigationVolume = irrigationVolume.value.toDouble(),
+                    location = CoordinateDto(0, location.value?.get("lat")!!.toDouble(), location.value?.get("long")!!.toDouble()),
+                    title = gardenName.value,
+                    soilType = SoilTypeEnum.MIDDLE.name,
+                    specieSet = getSpecieList()
+                    )
             )
+
+            //val x = remoteRepo.getGardens(auth, 1, 1)
+            Log.i("Garden response is: ", "$x")
+            Log.i("Garden response is: ", "garden add request sent")
         }
     }
 
@@ -177,6 +229,7 @@ class AddGardenViewModel @Inject constructor(
                 )
             )
         }
+
         return returnList
     }
 
@@ -184,7 +237,17 @@ class AddGardenViewModel @Inject constructor(
         val returnList = mutableListOf<SpecieDto>()
 
         for (specie in typeArray.value){
-
+            returnList.add(
+                SpecieDto(
+                    title = specie,
+                    description = "",
+                    plantType = PlantType(
+                        description = "",
+                        title = PlantTypesEnum.Pistachios.name,
+                    ),
+                    id = 0
+                )
+            )
         }
 
         return returnList

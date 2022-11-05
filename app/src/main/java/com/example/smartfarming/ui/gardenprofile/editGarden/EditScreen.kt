@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.gardenprofile.editGarden
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,6 +36,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.common_composables.CommonTopBar
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun EditScreen(gardenName : String, navHostController: NavHostController){
 
@@ -71,8 +73,6 @@ fun EditScreen(gardenName : String, navHostController: NavHostController){
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-
-
                 IconButton(
                     onClick = { navHostController.popBackStack() },
                 ) {
@@ -131,7 +131,7 @@ fun EditScreen(gardenName : String, navHostController: NavHostController){
                     enabled = true,
                     changeValue = {
                         irrigationDuration = it
-                        viewModel.irrigationDuration.value = it.toDoubleOrNull() ?: 0.0
+                        viewModel.irrigationDuration.value = it.toIntOrNull() ?: 0
                     })
                 IrrigationCycleSelector("مدار آبیاری" ,viewModel)
                 EditTextField(
@@ -151,7 +151,7 @@ fun EditScreen(gardenName : String, navHostController: NavHostController){
                     enabled = true,
                     changeValue = {
                         areaText = it
-                        viewModel.area.value = it.toDoubleOrNull() ?: 0.0
+                        viewModel.area.value = it.toIntOrNull() ?: 0
                     }
                 )
                 SoilSelector(viewModel)

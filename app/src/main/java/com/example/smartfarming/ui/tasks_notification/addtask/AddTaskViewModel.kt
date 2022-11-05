@@ -47,8 +47,8 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
 
     private fun populateGardensName(){
         for (g in gardensList.value){
-            Log.i("xxGarden", "${g.name}")
-            gardenNameList.add(g.name)
+            Log.i("xxGarden", "${g.title}")
+            gardenNameList.add(g.title)
         }
     }
 

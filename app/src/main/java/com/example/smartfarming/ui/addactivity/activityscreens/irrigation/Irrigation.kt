@@ -359,7 +359,7 @@ fun IrrigationTime(viewModel: IrrigationViewModel){
                     contentDescription = null,
                     modifier = Modifier
                         .size(35.dp)
-                        .clickable { viewModel.irrigationDuration.value -= 0.5 }
+                        .clickable { viewModel.irrigationDuration.value -= 1 }
                 )
             },
             trailingIcon = {
@@ -368,7 +368,7 @@ fun IrrigationTime(viewModel: IrrigationViewModel){
                     contentDescription = null,
                     modifier = Modifier
                         .size(35.dp)
-                        .clickable { viewModel.irrigationDuration.value += 0.5 }
+                        .clickable { viewModel.irrigationDuration.value += 1 }
                 )
             },
             readOnly = true,

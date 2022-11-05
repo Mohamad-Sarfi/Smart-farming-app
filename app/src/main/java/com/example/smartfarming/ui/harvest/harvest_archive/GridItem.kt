@@ -41,7 +41,7 @@ fun GridItem(
                 .size(130.dp)
                 .clickable {
                     navController.navigate(
-                        "${AppScreensEnum.GardenHarvestScreen.name}/${garden.name}"
+                        "${AppScreensEnum.GardenHarvestScreen.name}/${garden.title}"
                     )
 
                 }
@@ -51,7 +51,7 @@ fun GridItem(
             val (icon, name) = createRefs()
 
             Text(
-                text = garden.name,
+                text = garden.title,
                 style = MaterialTheme.typography.h5,
                 color = MainGreen,
                 modifier = Modifier
