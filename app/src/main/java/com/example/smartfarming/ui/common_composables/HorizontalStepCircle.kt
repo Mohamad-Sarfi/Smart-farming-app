@@ -25,11 +25,10 @@ fun HorizontalStepCircle(
     color: Color
 ){
     val circle1Animation by animateDpAsState(
-        targetValue = if (step == numberTag) 55.dp else 13.dp
+        targetValue = if (step == numberTag) 55.dp else 10.dp
     )
 
     Column(modifier = Modifier
-        .wrapContentSize(Alignment.Center)
         .padding(vertical = 18.dp, horizontal = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -37,7 +36,7 @@ fun HorizontalStepCircle(
         Box(
             modifier = Modifier
                 .padding(6.dp)
-                .size(width = circle1Animation, height = 13.dp)
+                .size(width = circle1Animation, height = 10.dp)
                 .clip(RoundedCornerShape(30.dp))
                 .background(if (step == numberTag) MainGreen else MainGreen.copy(.3f))
                 .padding(8.dp)

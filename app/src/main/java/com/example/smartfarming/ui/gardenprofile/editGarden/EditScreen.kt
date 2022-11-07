@@ -28,10 +28,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
+import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.common_composables.CommonTopBar
@@ -41,9 +43,11 @@ import com.example.smartfarming.ui.common_composables.CommonTopBar
 fun EditScreen(gardenName : String, navHostController: NavHostController){
 
     val activity = LocalContext.current as Activity
-    val viewModel : EditGardenViewModel = viewModel(factory = EditGardenViewModelFactory((activity.application as FarmApplication).repo))
+    //val viewModel : EditGardenViewModel = viewModel(factory = EditGardenViewModelFactory((activity.application as FarmApplication).repo))
+    val viewModel : EditGardenViewModel = hiltViewModel()
+    val garden = viewModel.garden
 
-    val garden = viewModel.getGarden(gardenName)
+    viewModel.getGarden(gardenName)
 
     if (garden.value != null){
         viewModel.initializeValues()
@@ -144,7 +148,7 @@ fun EditScreen(gardenName : String, navHostController: NavHostController){
                         viewModel.irrigationVolume.value = it.toDoubleOrNull() ?: 0.0
                     }
                 )
-                LocationSelector(viewModel)
+                LocationSelector(gardenName, navHostController)
                 EditTextField(text = "مساحت",
                     value = areaText ,
                     icon = Icons.Outlined.AreaChart,
@@ -155,7 +159,9 @@ fun EditScreen(gardenName : String, navHostController: NavHostController){
                     }
                 )
                 SoilSelector(viewModel)
-                Spacer(modifier = Modifier.fillMaxWidth().height(50.dp))
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp))
             }
         }
     }
@@ -380,11 +386,13 @@ fun VarietiesItem(text: String, onClickHandler : () -> Unit){
 
 
 @Composable
-fun LocationSelector(viewModel: EditGardenViewModel){
+private fun LocationSelector(gardenName: String, navHostController: NavHostController){
     Row(
         modifier = Modifier
             .padding(30.dp)
-            .clickable { },
+            .clickable {
+                       navHostController.navigate(route = "${AppScreensEnum.GardenMapEditScreen.name}/$gardenName")
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly) {
 
@@ -396,7 +404,7 @@ fun LocationSelector(viewModel: EditGardenViewModel){
 }
 
 @Composable
-fun SoilSelector(viewModel: EditGardenViewModel){
+private fun SoilSelector(viewModel: EditGardenViewModel){
     var clicked by remember {
         mutableStateOf(false)
     }

@@ -6,6 +6,7 @@ import com.example.smartfarming.data.room.entities.garden.GardenResponse
 import kotlinx.coroutines.flow.Flow
 import okhttp3.RequestBody
 import okhttp3.Response
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -15,16 +16,16 @@ import retrofit2.http.Path
 
 interface GardenApi {
 
-    @POST("/privileged/garden/")
+    @POST("farmer/privileged/garden/")
     suspend fun addGarden(
         @Header("Authorization") authHeader : String,
         @Body request : RequestBody
-    ) : Response
+    ) : Garden
 
-    @GET("/privileged/garden/{pageNumber}/{pageSize}/")
-    fun getGardens(
+    @GET("privileged/garden/{pageNumber}/{pageSize}/")
+    suspend fun getGardens(
         @Header("Authorization") authHeader: String,
         @Path(value = "pageNumber") pageNumber: Int,
         @Path(value = "pageSize") pageSize : Int
-    ) : Flow<List<Garden>>
+    ) : List<Garden>
 }

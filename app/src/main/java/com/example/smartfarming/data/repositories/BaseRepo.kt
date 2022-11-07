@@ -12,12 +12,15 @@ abstract class BaseRepo {
         apiCall : suspend () -> T
     ) : Resource<T>{
         return withContext(Dispatchers.IO){
+
             try {
                 Resource.Success(apiCall.invoke())
             } catch (throwable : Throwable){
                 when(throwable){
                     is HttpException -> {
+
                         Resource.Failure(false, throwable.code(), throwable.response()?.errorBody())
+
                     }
                     else -> {
                         Log.i("Weather problem", "${throwable}")

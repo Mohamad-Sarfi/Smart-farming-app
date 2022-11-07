@@ -185,21 +185,21 @@ fun AddGardenCompose(
                             handleIncrementButton(viewModel, context)
                         } else {
                             val garden = Garden(
-                                0,
                                 address = GardenAddress(
-                                    city = "",
-                                    country = "",
+                                    city = "Tehran",
+                                    country = "Iran",
                                     id = 0,
-                                    latitude = 0.0,
-                                    longitude = 0.0,
-                                    plainAddress = "",
-                                    state = ""),
+                                    latitude = 100.5,
+                                    longitude = 200.5,
+                                    plainAddress = "asfasf",
+                                    state = "Tehran"),
                                 age = gardenAge,
                                 area = gardenArea.toInt(),
+                                id = 0,
                                 areaUnit = GardenAreaUnitEnum.HECTARE.name,
                                 border = viewModel.getGardenBorder(),
-                                budget = 0,
-                                density =0,
+                                budget = 1000,
+                                density =5,
                                 irrigationCycle = viewModel.irrigationCycle.value,
                                 irrigationDuration = irrigationDuration.toInt(),
                                 irrigationVolume = irrigationVolume.toDouble(),
@@ -211,6 +211,7 @@ fun AddGardenCompose(
                             viewModel.addGardenToDb(garden)
                             if (auth.value != ""){
                                 viewModel.addGardenToServer(auth.value!!)
+                                //viewModel.getGardensFromServer(auth.value!!)
                                 activity.finish()
                             } else {
                                 Log.i("garden request NETWORK", "not sent")
@@ -364,6 +365,5 @@ fun handleIncrementButton(viewModel: AddGardenViewModel, context: Context){
             } else {
                 Toast.makeText(context, "تمام فیلدها را کامل کنید", Toast.LENGTH_SHORT).show()
             }
-
     }
 }

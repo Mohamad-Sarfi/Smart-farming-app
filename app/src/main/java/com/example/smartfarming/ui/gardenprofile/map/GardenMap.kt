@@ -17,7 +17,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
+import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.home.composables.backgroundColor
 import com.google.android.gms.maps.model.CameraPosition
@@ -28,7 +30,7 @@ import com.google.maps.android.compose.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun GardenMap(gardenName : String){
+fun GardenMap(gardenName : String, navHostController: NavHostController){
 
     val activity = LocalContext.current as Activity
     val viewModel : GardenMapViewModel = viewModel(
@@ -85,7 +87,9 @@ fun GardenMap(gardenName : String){
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                      navHostController.navigate(route = "${AppScreensEnum.GardenMapEditScreen.name}/{gardenName}")
+                                      },
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color.White,
@@ -101,7 +105,9 @@ fun GardenMap(gardenName : String){
                     }
 
                     Row(
-                        Modifier.fillMaxWidth().padding(5.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(5.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center) {
                         Text(text = "متر مربع", style = MaterialTheme.typography.body1, color = MainGreen, modifier = Modifier.padding(3.dp))

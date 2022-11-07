@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -38,7 +39,7 @@ fun PicturedCard(
         shape = RoundedCornerShape(10.dp),
         elevation = 3.dp
     ) {
-        Box(modifier = Modifier.fillMaxSize()){
+        Box(modifier = Modifier.fillMaxSize().blur(2.dp)){
             Image(painter = painterResource(id = picId), contentDescription = null, modifier = Modifier.matchParentSize(), contentScale = ContentScale.FillWidth)
         }
         

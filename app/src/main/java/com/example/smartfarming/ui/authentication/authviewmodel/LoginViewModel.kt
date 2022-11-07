@@ -23,7 +23,7 @@ class LoginViewModel(
     var inProgress = mutableStateOf(false)
 
     // LOGIN FUNCTION
-    val loginResponse : MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
+    val loginResponse = mutableStateOf<Resource<LoginResponse>?>(null)
 
     fun login(){
         inProgress.value = true

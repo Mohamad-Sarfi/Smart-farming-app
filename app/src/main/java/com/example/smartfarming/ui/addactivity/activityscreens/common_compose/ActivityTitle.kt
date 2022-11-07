@@ -25,7 +25,7 @@ fun ActivityTitle(
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(top = 30.dp, bottom = 5.dp, end = 40.dp),
+            .padding(top = 30.dp, bottom = 30.dp, end = 40.dp),
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.End
     ) {

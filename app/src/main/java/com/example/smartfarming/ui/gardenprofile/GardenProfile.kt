@@ -239,9 +239,9 @@ fun MainIcons(
 fun GardenTitle(gardenName : String, navController: NavHostController){
     Box(
         Modifier
-            .padding(bottom = 45.dp, start = 0.dp, end = 0.dp)
+            .padding(bottom = 55.dp, start = 0.dp, end = 0.dp)
             .fillMaxWidth()
-            .height(120.dp)
+            .height(140.dp)
             .background(MainGreen)
             .padding(0.dp)) {
         Image(painterResource(id = R.drawable.background_pic), contentDescription = null, modifier = Modifier.fillMaxWidth(), contentScale = ContentScale.FillWidth)
@@ -249,13 +249,13 @@ fun GardenTitle(gardenName : String, navController: NavHostController){
             .fillMaxSize()
             .background(MainGreen.copy(.4f)))
         Card( modifier = Modifier
-            .offset(y = 70.dp)
+            .offset(y = 105.dp)
             .padding(horizontal = 15.dp)
             .fillMaxWidth(),
             shape = RoundedCornerShape(bottomEnd = 40.dp, bottomStart = 40.dp, topEnd = 40.dp, topStart = 40.dp),
             elevation = 4.dp
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(horizontal = 30.dp, vertical = 10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(horizontal = 30.dp, vertical = 5.dp)) {
                 Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier
                     .clickable {
                         navController.navigate(route = "${AppScreensEnum.GardenEditScreen.name}/$gardenName")

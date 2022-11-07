@@ -210,11 +210,15 @@ fun Login(
                                 shape = MaterialTheme.shapes.medium,
 
                                 ) {
-                                Text(
-                                    text = "ورود",
-                                    style = MaterialTheme.typography.subtitle1,
-                                    modifier = Modifier.padding(vertical = 2.dp)
-                                )
+                                if (viewModel.loginResponse.value == null){
+                                    Text(
+                                        text = "ورود",
+                                        style = MaterialTheme.typography.subtitle1,
+                                        modifier = Modifier.padding(vertical = 2.dp)
+                                    )
+                                } else {
+                                    CircularProgressIndicator()
+                                }
                             }
                         }
 

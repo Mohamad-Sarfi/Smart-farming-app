@@ -1,27 +1,23 @@
 package com.example.smartfarming.ui.gardenprofile.editGarden
 
 import android.app.Activity
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.google.android.libraries.maps.model.LatLng
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
-
-
-
-    private val garden = mutableStateOf<Garden?>(
+@HiltViewModel
+class EditGardenViewModel @Inject constructor(val repo: GardenRepo) : ViewModel() {
+    val garden = mutableStateOf<Garden?>(
         null
     )
 
@@ -36,22 +32,21 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
     var irrigationVolume = mutableStateOf(0.0)
     var irrigationCycle = mutableStateOf(0)
     var area = mutableStateOf(0)
-    var polygonList : List<LatLng>? = mutableListOf<LatLng>()
+    var border : List<LatLng>? = mutableListOf<LatLng>()
 
     fun initializeValues(){
         newName.value = garden.value!!.title
         newAge.value = garden.value!!.age
         latLong.value = garden.value!!.location.latitude.toString() + "-" +  garden.value!!.location.longitude.toString()
         plantType.value = ""
-        plantVarieties = listOf<String>() as SnapshotStateList<String>
+        //plantVarieties = listOf<String>("") as SnapshotStateList<String>
         soilType.value = garden.value!!.soilType
         irrigationType.value = ""
         irrigationDuration.value = garden.value!!.irrigationDuration
         irrigationVolume.value = garden.value!!.irrigationVolume
         irrigationCycle.value = garden.value!!.irrigationCycle
         area.value = garden.value!!.area
-        polygonList = listOf()
-
+        border = listOf()
     }
 
     fun addVariety(variety : String) {
@@ -59,6 +54,7 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
             plantVarieties.add(variety)
         }
     }
+
     fun removeVariety(variety: String){
         plantVarieties.remove(variety)
     }
@@ -75,7 +71,6 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
         }
     }
 
-
     fun setIrrigationCycle(index : Int){
         irrigationCycle.value =
             when (index) {
@@ -90,19 +85,10 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
             }
     }
 
-
-
-
-    private fun fetchGarden(gardenName : String) {
+    fun getGarden(gardenName : String) {
         viewModelScope.launch {
             garden.value =  repo.getGardenByName(gardenName)
-
         }
-    }
-
-    fun getGarden(gardenName: String) : MutableState<Garden?> {
-        fetchGarden(gardenName)
-        return garden
     }
 
     fun updateGarden() {
@@ -127,9 +113,6 @@ class EditGardenViewModel(val repo: GardenRepo) : ViewModel() {
 //            )
         }
     }
-
-
-
 }
 
 class EditGardenViewModelFactory(val repo: GardenRepo) : ViewModelProvider.Factory {

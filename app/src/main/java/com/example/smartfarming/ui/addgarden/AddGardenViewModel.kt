@@ -67,7 +67,6 @@ class AddGardenViewModel @Inject constructor(
         }
     }
 
-
     fun addType(newType : String){
         var array : List<String>? = typeArray.value
         if (newType !in array!! && array.size < 5){
@@ -105,7 +104,7 @@ class AddGardenViewModel @Inject constructor(
 
     // Button click handler
     fun checkFirstStep() : Boolean{
-        return gardenName.value != "" && gardenAge.value != 0 && !typeArray.value.isNullOrEmpty()
+        return gardenName.value != "" && gardenAge.value != 0 && typeArray.value.isNotEmpty()
     }
 
     fun checkSecondStep() : Boolean {
@@ -150,39 +149,39 @@ class AddGardenViewModel @Inject constructor(
                     title = gardenName.value,
                     soilType = SoilTypeEnum.MIDDLE.name,
                     specieSet = getSpecieList()
-                )
-            ))
+                ))
+            )
 
             val x = remoteRepo.addGarden(
                 auth = auth,
                 Garden(
-                    0,
                     address = GardenAddress(
-                        city = "",
-                        country = "",
+                        city = "Tehran",
+                        country = "Iran",
                         id = 0,
-                        latitude = 50.0,
-                        longitude = 34.0,
-                        plainAddress = "",
-                        state = ""),
+                        latitude = 100.5,
+                        longitude = 200.5,
+                        plainAddress = "asfasf",
+                        state = "Tehran"),
                     age = gardenAge.value,
                     area = gardenArea.value.toInt(),
+                    id = 0,
                     areaUnit = GardenAreaUnitEnum.HECTARE.name,
                     border = getGardenBorder(),
-                    budget = 0,
-                    density =0,
+                    budget = 1000,
+                    density =5,
                     irrigationCycle = irrigationCycle.value,
                     irrigationDuration = irrigationDuration.value.toInt(),
                     irrigationVolume = irrigationVolume.value.toDouble(),
                     location = CoordinateDto(0, location.value?.get("lat")!!.toDouble(), location.value?.get("long")!!.toDouble()),
                     title = gardenName.value,
                     soilType = SoilTypeEnum.MIDDLE.name,
-                    specieSet = getSpecieList()
-                    )
-            )
+                    specieSet = getSpecieList(),
+                ) )
 
             //val x = remoteRepo.getGardens(auth, 1, 1)
             Log.i("Garden response is: ", "$x")
+            Log.i("Garden response is: ", "garden add request sent")
             Log.i("Garden response is: ", "garden add request sent")
         }
     }
@@ -231,6 +230,18 @@ class AddGardenViewModel @Inject constructor(
         }
 
         return returnList
+    }
+
+    fun getGardensFromServer(auth: String) {
+        viewModelScope.launch {
+            val x = remoteRepo.getGardens(
+                auth,
+                1,
+                3
+            )
+
+            Log.i("getGardens", "${x}")
+        }
     }
 
     fun getSpecieList() : List<SpecieDto> {

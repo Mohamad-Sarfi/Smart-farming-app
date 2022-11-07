@@ -27,7 +27,7 @@ fun AuthNavGraph(
 ){
     val activity = LocalContext.current as Activity
     val context = LocalContext.current
-    val response = loginViewModel.loginResponse.observeAsState()
+    val response = loginViewModel.loginResponse
     val loggedIn = false
 
     NavHost(
@@ -46,7 +46,7 @@ fun AuthNavGraph(
                 }
 
                 when(response.value){
-                    is Resource.Success -> {
+                    is Resource.Success<*> -> {
                         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                         activity.startActivity(Intent(context, MainActivity::class.java))
                         activity.finish()

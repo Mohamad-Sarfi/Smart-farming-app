@@ -40,7 +40,6 @@ fun AddActivity(
 //        )
         PicturedActivityCards(
             navController,
-            viewModel = viewModel,
             gardensNameList
         )
     }

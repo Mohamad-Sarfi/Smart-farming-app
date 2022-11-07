@@ -6,14 +6,13 @@ import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface AuthApi{
-    @POST("/public/user/login/")
+    @POST("public/user/login/")
     suspend fun login(
         @Body request: RequestBody
     ) : LoginResponse
 
-    @POST("/public/farmer/")
+    @POST("public/farmer/")
     suspend fun signup(
         @Body request: RequestBody
     ) : SignupResponse
-
 }

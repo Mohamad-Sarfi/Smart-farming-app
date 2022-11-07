@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : ViewModel(){
     var step = mutableStateOf(0)
-    val MAX_STEP = 4
+    val MAX_STEP = 5
     val gardensList = mutableStateOf<List<Garden>>(listOf())
     val gardenNameList = mutableStateListOf<String>()
     val selectedGarden = mutableStateOf("")

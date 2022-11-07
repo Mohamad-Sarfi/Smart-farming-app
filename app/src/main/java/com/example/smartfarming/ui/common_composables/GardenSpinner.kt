@@ -29,6 +29,7 @@ import com.example.smartfarming.ui.addactivities.ui.theme.LightGray
 fun GardenSpinner(
     gardensList : List<String>,
     currentGarden : String?,
+    fillWidthPercentage : Float = 0.8f,
     updateCurrentGarden : (garden : String) -> Unit
 ){
     var expanded by remember { mutableStateOf(false) }
@@ -49,7 +50,7 @@ fun GardenSpinner(
     Card(
         modifier = Modifier
             .padding(vertical = 10.dp)
-            .fillMaxWidth(0.8f),
+            .fillMaxWidth(fillWidthPercentage),
         elevation = 3.dp,
         shape = MaterialTheme.shapes.medium,
         backgroundColor = LightGray

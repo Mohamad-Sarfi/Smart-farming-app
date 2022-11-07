@@ -23,6 +23,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -148,7 +149,7 @@ fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit
 @Composable
 fun BackdropBackLayer(activity: Activity){
 
-    androidx.compose.foundation.layout.Box(
+    Box(
         modifier = Modifier
             .padding(0.dp)
             .fillMaxWidth()
@@ -158,13 +159,13 @@ fun BackdropBackLayer(activity: Activity){
         Image(
             painter = painterResource(id = R.drawable.background_pic),
             contentDescription = null,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().blur(2.dp)
         )
 
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(MaterialTheme.colors.primary.copy(.65f)),
+                .background(MaterialTheme.colors.primary.copy(.5f)),
         )
 
         Column(
@@ -179,10 +180,12 @@ fun BackdropBackLayer(activity: Activity){
             Card(
                 Modifier
                     .padding(bottom = 30.dp)
+                    .height(50.dp)
                     .width(230.dp),
-                backgroundColor = MainOrange,
                 shape = RoundedCornerShape(30.dp)
             ) {
+                Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.secondary).blur(20.dp))
+
                 Row(
                     Modifier
                         .fillMaxWidth()

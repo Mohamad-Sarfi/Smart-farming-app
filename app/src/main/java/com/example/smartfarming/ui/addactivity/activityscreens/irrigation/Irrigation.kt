@@ -70,18 +70,18 @@ fun Irrigation(gardenName : String, navHostController: NavHostController){
     }
     Scaffold(
         Modifier
-            .background(Blue50)
+            .background(Blue500)
             .fillMaxSize()
     ) {
         Column(
             Modifier
                 .fillMaxSize()
-                .background(Blue50),
-            verticalArrangement = Arrangement.SpaceAround,
+                .background(Blue500),
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ActivityTitle(gardenName = gardenName, activityName = "آبیاری", icon =Icons.Default.WaterDrop, BlueIrrigationDark)
-            ActivitiesStepBars(viewmodel.step.value, BlueIrrigationDark, Blue100)
+            ActivityTitle(gardenName = gardenName, activityName = "آبیاری", icon =Icons.Default.WaterDrop, Color.White)
+            ActivitiesStepBars(viewmodel.step.value, Color.White, Color.White.copy(.6f))
             AnimatedVisibility(visible = startup) {
                 IrrigationBody(viewmodel, navHostController)
             }
@@ -213,6 +213,7 @@ fun IrrigationBody1(viewModel: IrrigationViewModel, navHostController: NavHostCo
                     if (viewModel.dateNotSet.value){
                         Toast.makeText(context, "تاریخ را تعیین کنید", Toast.LENGTH_SHORT).show()
                     }
+
                     DateSelector(
                         "آبیاری",
                         date = viewModel.irrigationDate.value,
@@ -220,7 +221,9 @@ fun IrrigationBody1(viewModel: IrrigationViewModel, navHostController: NavHostCo
                         Blue50){
                         viewModel.setIrrigationDate(it)
                     }
+
                     IrrigationVolume(viewModel)
+
                     IrrigationTime(viewModel)
                 }
             1 ->
@@ -228,7 +231,7 @@ fun IrrigationBody1(viewModel: IrrigationViewModel, navHostController: NavHostCo
                     Modifier
                         .fillMaxSize()
                         .padding(30.dp),
-                    verticalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
                     IrrigationType(viewModel)
@@ -275,11 +278,11 @@ fun IrrigationVolume(viewModel: IrrigationViewModel){
                 .background(Blue50, RoundedCornerShape(20.dp)),
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-               backgroundColor = Blue50,
-               textColor = BlueIrrigationDark,
-               focusedBorderColor = Blue50,
-               trailingIconColor = BlueIrrigationDark,
-               leadingIconColor = BlueIrrigationDark,
+                backgroundColor = Blue50,
+                textColor = BlueIrrigationDark,
+                focusedBorderColor = Blue50,
+                trailingIconColor = BlueIrrigationDark,
+                leadingIconColor = BlueIrrigationDark,
                 unfocusedBorderColor = Blue50,
            ),
             leadingIcon = {
@@ -461,8 +464,6 @@ fun IrrigationType(viewModel: IrrigationViewModel){
                 }
             }
         }
-
     }
-
 }
 
