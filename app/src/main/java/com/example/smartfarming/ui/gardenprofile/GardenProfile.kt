@@ -6,10 +6,15 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.outlined.Inventory
@@ -38,6 +43,7 @@ import com.example.smartfarming.ui.gardenprofile.GardenProfileViewModel
 import com.example.smartfarming.ui.gardenprofile.composables.ReportDiagram
 import com.example.smartfarming.ui.gardenprofile.composables.ToDos
 import com.example.smartfarming.ui.home.composables.MyFAB
+import com.example.smartfarming.ui.home.composables.TaskCard2
 import com.example.smartfarming.utils.getTaskList
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -49,6 +55,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
     }
 
     viewModel.getAllGardens()
+
     val gardenList = viewModel.gardensList.collectAsState(initial = listOf())
 
     var tasks = listOf<Task>()
@@ -107,6 +114,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
     }
 
 
+
     Scaffold(
         modifier = Modifier
             .background(Color.LightGray)
@@ -117,55 +125,124 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
             }
         },
         backgroundColor = LightBackground
-
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .scrollable(rememberScrollState(), Orientation.Vertical)
-                .background(LightGray2),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            GardenTitle(gardenName = garden.value!!.title, navController)
+        if (viewModel.garden.value != null){
+            viewModel.getGardenTasks()
+
             Column(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())) {
-                ReportDiagram()
-                Report(navController, garden.value!!.title)
+                    .scrollable(rememberScrollState(), Orientation.Vertical)
+                    .background(LightGray2),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                GardenTitle(gardenName = garden.value!!.title, navController)
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())) {
+                    ReportDiagram()
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ){
-                    MainIcons(Icons.Default.Thermostat, "آب و هوا", Blue700){
-                        navController.navigate(route = "${AppScreensEnum.GardenWeatherScreen.name}/${garden.value!!.title}")
-                    }
-                    MainIcons(Icons.Outlined.Inventory, "محصولات", YellowPesticide){
-                        navController.navigate("${AppScreensEnum.GardenHarvestScreen.name}/${garden.value!!.title}")
-                    }
-                    MainIcons(Icons.Outlined.LocationOn, "مکان نما", RedFertilizer){
-                        navController.navigate("${AppScreensEnum.GardenMapScreen.name}/${garden.value!!.title}")
+                    Report(navController, garden.value!!.title)
+
+                    Divider(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 25.dp), thickness = 1.dp, color = Color.Gray.copy(.3f))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ){
+                        MainIcons(Icons.Default.Thermostat, "آب و هوا", Blue700){
+                            navController.navigate(route = "${AppScreensEnum.GardenWeatherScreen.name}/${garden.value!!.title}")
+                        }
+
+                        MainIcons(Icons.Outlined.Inventory, "محصولات", YellowPesticide){
+                            navController.navigate("${AppScreensEnum.GardenHarvestScreen.name}/${garden.value!!.title}")
+                        }
+
+                        MainIcons(Icons.Outlined.LocationOn, "مکان نما", RedFertilizer){
+                            navController.navigate("${AppScreensEnum.GardenMapScreen.name}/${garden.value!!.title}")
+                        }
+
                     }
 
+                    val thisGardenTask = ArrayList<Task>()
+                    for (task in tasks){
+                        if (task.garden_name == garden.value!!.title){
+                            thisGardenTask.add(task)
+                        }
+                    }
+
+                    //List of tasks
+                    Column(
+                        Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                        Divider(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 20.dp), thickness = 1.dp, color = Color.Gray.copy(.3f))
+                        
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 30.dp),
+                            verticalAlignment = Alignment.CenterVertically, 
+                            horizontalArrangement = Arrangement.SpaceBetween) {
+                            Icon(Icons.Default.Add,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.primary,
+                                modifier = Modifier
+                                    .size(35.dp)
+                                    .clickable {
+                                        navController.navigate("${AppScreensEnum.AddTaskScreen.name}/${garden.value}")
+                                    }
+                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(text = "یادآور فعالیت ها", style = MaterialTheme.typography.body1, color = Color.Black)
+                                Icon(Icons.Default.Alarm, contentDescription = null, modifier = Modifier
+                                    .size(40.dp)
+                                    .padding(5.dp), tint = Color.Black)
+                            }
+                        }
+
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            contentPadding =  PaddingValues(10.dp),
+                            modifier = Modifier
+                                .height(550.dp)
+                                .padding(horizontal = 12.dp),
+                        ){
+                            items(viewModel.tasksList.value){
+                                TaskCard2(task = it, navController = navController, deleteTask = {viewModel.deleteTask(it)}) {
+                                }
+                            }
+                        }
+
+                    }
+
+    //                LazyColumn(
+    //                    modifier = Modifier.height(400.dp)
+    //                ){
+    //                    items(thisGardenTask){ task ->
+    //                        ToDos(task = task, navController = navController)
+    //                    }
+    //                }
                 }
-
-                val thisGardenTask = ArrayList<Task>()
-                for (task in tasks){
-                    if (task.garden_name == garden.value!!.title){
-                        thisGardenTask.add(task)
-                    }
-                }
-
-                LazyColumn(
-                    modifier = Modifier.height(400.dp)
-                ){
-                    items(thisGardenTask){ task ->
-                        ToDos(task = task, navController = navController)
-                    }
-                }
+            }
+        } else {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
             }
         }
     }
@@ -218,7 +295,7 @@ fun MainIcons(
 
     Column(
         modifier = Modifier
-            .padding(18.dp)
+            .padding(horizontal = 20.dp)
             .clickable { clickHandler() }
             .padding(4.dp),
         verticalArrangement = Arrangement.Center,
@@ -262,10 +339,8 @@ fun GardenTitle(gardenName : String, navController: NavHostController){
                     }
                     .padding(5.dp))
                 Text(text = gardenName, style = MaterialTheme.typography.h5, color = MainGreen, modifier = Modifier.padding(5.dp))
-
             }
         }
-
     }
 }
 

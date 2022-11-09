@@ -74,7 +74,7 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
                     } ,
                     tint = MainGreen)
                 Text(
-                    text = "باغداری باغ " + "${viewModel.getGarden().value?.title}",
+                    text = "باغداری باغ " + "${viewModel.garden.value?.title}",
                     style = MaterialTheme.typography.h4,
                     color = MainGreen,
                     modifier = Modifier.padding(5.dp)
@@ -95,8 +95,8 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
                 contentPadding = PaddingValues(5.dp)
             ){
                 items(tasks){
-                    TaskCard2(task = it, navController = navtController, oneStepClick = true){
-                        navtController.navigate(route = "${getActivityScreen(it.activity_type)}/${viewModel.getGarden().value?.title}")
+                    TaskCard2(task = it, navController = navtController, oneStepClick = true, deleteTask = {viewModel.deleteTask(it)}){
+                        navtController.navigate(route = "${getActivityScreen(it.activity_type)}/${viewModel.garden.value?.title}")
                     }
                 }
             }

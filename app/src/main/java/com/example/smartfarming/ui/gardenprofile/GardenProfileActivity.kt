@@ -48,7 +48,7 @@ class GardenProfileActivity : ComponentActivity() {
                 ) {
                     val navController : NavHostController = rememberNavController()
                     viewModel.getGardenByName(gardenName!!)
-                    val garden = viewModel.getGarden().observeAsState()
+                    val garden = viewModel.garden
 
                     NavGraphGardenProfile(
                         navController = navController,

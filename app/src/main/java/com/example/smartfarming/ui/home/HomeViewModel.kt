@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.home
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -34,14 +35,17 @@ class HomeViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
     private fun getAllTasks(){
         viewModelScope.launch {
             repo.getAllTasks().collect{
+                Log.i("TAG tasks list", "$it")
+
                 tasksList.clear()
 
                 for (t in it){
                     tasksList.add(t)
                 }
-                for (t in getTaskList(gardensList.value ?: listOf())){
-                    tasksList.add(t)
-                }
+
+//                for (t in getTaskList(gardensList.value ?: listOf())){
+//                    tasksList.add(t)
+//                }
             }
         }
     }
@@ -80,15 +84,10 @@ class HomeViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
         }
     }
 
-}
-
-class HomeViewModelFactory(val repo : GardenRepo) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return HomeViewModel(repo) as T
+    fun deleteTask(task: Task){
+        viewModelScope.launch {
+            repo.deleteTask(task)
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
-}
 
+}

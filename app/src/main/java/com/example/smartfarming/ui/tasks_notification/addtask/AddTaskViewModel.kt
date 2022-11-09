@@ -6,8 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
+import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.utils.ACTIVITY_LIST
 import com.example.smartfarming.utils.PersianCalender
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -18,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : ViewModel(){
     var step = mutableStateOf(0)
-    val MAX_STEP = 5
+    val MAX_STEP = 4
     val gardensList = mutableStateOf<List<Garden>>(listOf())
     val gardenNameList = mutableStateListOf<String>()
     val selectedGarden = mutableStateOf("")
@@ -30,6 +32,7 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
     val day = mutableStateOf("")
     val month = mutableStateOf("")
     val year = mutableStateOf("")
+    val selectedGardens = mutableStateListOf<String>()
 
     init {
         getGardens()
@@ -66,7 +69,10 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
     }
 
     fun increaseStep(){
-        if (step.value < MAX_STEP) step.value++
+        if (step.value <= MAX_STEP) {
+            step.value++
+            Log.i("TAG task step", "${step.value}")
+        }
     }
 
     fun decreaseStep(){
@@ -103,8 +109,11 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
 
     fun submitClickHandler(){
         if (step.value == MAX_STEP - 1){
+            Log.i("TAG task insertion", "Task added to db. garden: ${selectedGarden.value}")
             insertTask2Db()
+            increaseStep()
         } else {
+            Log.i("TAG task insertion111", "Task added to db. garden: ${step.value}")
             increaseStep()
         }
     }
@@ -117,7 +126,7 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
                     getActivityName(),
                     selectedGarden.value,
                     description.value,
-                    selectedActivity.value,
+                    activity_type = getActivityType(),
                     getStartDate(),
                     getFinishDate(),
                     recommendations = "",
@@ -125,6 +134,21 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
                     false
                 )
             )
+
+            Log.i("TAG task insertion", "${
+                Task(
+                    0,
+                    getActivityName(),
+                    selectedGarden.value,
+                    description.value,
+                    activity_type = getActivityType(),
+                    getStartDate(),
+                    getFinishDate(),
+                    recommendations = "",
+                    0,
+                    false
+                )
+            }")
         }
     }
 
@@ -141,6 +165,24 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
     }
 
     private fun getFinishDate() : String {
-        return "$year/$month/$day"
+        return "${year.value}/${month.value}/${day.value}"
+    }
+
+    private fun getActivityType() : String {
+        return when(selectedActivity.value) {
+            ACTIVITY_LIST[0] -> ActivityTypesEnum.IRRIGATION.name
+            ACTIVITY_LIST[1]  -> ActivityTypesEnum.PESTICIDE.name
+            ACTIVITY_LIST[2]  -> ActivityTypesEnum.FERTILIZATION.name
+            ACTIVITY_LIST[3]  -> ActivityTypesEnum.Other.name
+            else -> ActivityTypesEnum.Other.name
+        }
+    }
+
+    fun addGarden(gardenName : String) {
+        selectedGardens.add(gardenName)
+    }
+
+    fun removeGarden(gardenName: String) {
+        selectedGardens.remove(gardenName)
     }
 }

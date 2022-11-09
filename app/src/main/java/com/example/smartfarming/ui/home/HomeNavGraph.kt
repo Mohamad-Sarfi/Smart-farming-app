@@ -7,7 +7,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.smartfarming.ui.AppScreensEnum
-import com.example.smartfarming.ui.addactivity.activityscreens.Pesticides
 import com.example.smartfarming.ui.addactivity.activityscreens.irrigation.Irrigation
 import com.example.smartfarming.ui.addactivity.activityscreens.others.Others
 import com.example.smartfarming.ui.home.composables.HomeCompose
@@ -53,14 +52,14 @@ fun HomeNavGraph(navController : NavHostController, setShowFAB : (Boolean) -> Un
             Irrigation(gardenName!!, navController)
         }
 
-        composable(route = "$pesticide/{name}",
-            arguments = listOf(navArgument("name"){
-                type = NavType.StringType
-            })
-        ) { entry ->
-            val gardenName = entry.arguments?.getString("name")
-            Pesticides(gardenName!!, navController)
-        }
+//        composable(route = "$pesticide/{name}",
+//            arguments = listOf(navArgument("name"){
+//                type = NavType.StringType
+//            })
+//        ) { entry ->
+//            val gardenName = entry.arguments?.getString("name")
+//            Pesticides(gardenName!!, navController)
+//        }
 
 
 

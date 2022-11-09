@@ -67,8 +67,6 @@ fun ActivitySpinner(selectedActivity : String, setSelectedActivity : (String) ->
                 DropdownMenuItem(onClick = {
                     expanded = false
                     setSelectedActivity(activity)
-
-
                 }) {
                     Text(
                         text = activity,

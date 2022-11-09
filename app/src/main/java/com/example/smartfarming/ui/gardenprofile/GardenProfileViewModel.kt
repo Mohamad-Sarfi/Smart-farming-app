@@ -1,11 +1,13 @@
 package com.example.smartfarming.ui.gardenprofile
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.utils.initialGarden
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,18 +20,13 @@ import javax.inject.Inject
 @HiltViewModel
 class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
 
-    private val garden = MutableLiveData<Garden>().apply {
-        value = initialGarden
-    }
+    val tasksList = mutableStateOf<List<Task>>(listOf())
+    val garden = mutableStateOf<Garden?>(null)
 
     fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
             garden.value  = repo.getGardenByName(gardenName)
         }
-    }
-
-    fun getGarden() : MutableLiveData<Garden> {
-        return garden
     }
 
     var gardensList = flow<List<Garden>> {}
@@ -40,6 +37,21 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
         }
     }
 
+    fun getGardenTasks() {
+        viewModelScope.launch {
+            repo.getTasksForGarden(gardenName = garden.value!!.title).collect{
+                tasksList.value = it
+
+                Log.i("TAG ${garden.value!!.title}'s tasks", "$it")
+            }
+        }
+    }
+
+    fun deleteTask(task: Task){
+        viewModelScope.launch {
+            repo.deleteTask(task)
+        }
+    }
 }
 
 class GardenProfileViewModelFactory(val repo: GardenRepo) : ViewModelProvider.Factory {

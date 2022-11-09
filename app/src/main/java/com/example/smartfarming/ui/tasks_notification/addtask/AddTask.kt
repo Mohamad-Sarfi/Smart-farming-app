@@ -74,6 +74,7 @@ fun AddTask(navController: NavHostController) {
                 .fillMaxSize()
                 .background(MainGreen.copy(.2f)))
         }
+
         AddTaskBody(viewModel, navController)
     }
 }
@@ -158,11 +159,31 @@ private fun Step0(viewModel: AddTaskViewModel) {
         Icon(Icons.Outlined.Eco, contentDescription = null, modifier = Modifier
             .padding(bottom = 20.dp)
             .size(60.dp), tint = MaterialTheme.colors.primary)
+
         GardenSpinner(gardensList = viewModel.gardenNameList, currentGarden = viewModel.selectedGarden.value){
             viewModel.setSelectedGarden(it)
-            viewModel.increaseStep()
+            //viewModel.increaseStep()
+            viewModel.addGarden(it)
         }
 
+        Row(Modifier.fillMaxWidth().padding(8.dp)) {
+            viewModel.selectedGardens.forEach { gardenName ->
+                GardenBadge(gardenName){
+                    viewModel.removeGarden(it)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun GardenBadge(gardenName : String, deleteItem : (String) -> Unit) {
+    Surface(
+        modifier = Modifier.padding(4.dp).clickable { deleteItem(gardenName) },
+        color = MaterialTheme.colors.primary,
+        shape = MaterialTheme.shapes.small
+    ) {
+        Text(text = gardenName, color = MaterialTheme.colors.onPrimary, modifier = Modifier.padding(horizontal = 3.dp, vertical = 2.dp))
     }
 }
 
@@ -282,7 +303,7 @@ private fun BottomRow(viewModel: AddTaskViewModel) {
                 Button(
                     modifier = Modifier.fillMaxWidth(.3f),
                     onClick = { viewModel.decreaseStep() },
-                    shape = MaterialTheme.shapes.medium,) {
+                    shape = MaterialTheme.shapes.small,) {
                     Text(text = "قبلی", style = MaterialTheme.typography.body1)
                 }
             }
@@ -292,11 +313,10 @@ private fun BottomRow(viewModel: AddTaskViewModel) {
                     .fillMaxWidth(nextBtnWidth)
                     .padding(5.dp),
                 onClick = { viewModel.submitClickHandler() },
-                shape = MaterialTheme.shapes.medium,
+                shape = MaterialTheme.shapes.small,
             ) {
-                Text(text = if (viewModel.step.value == viewModel.MAX_STEP - 2) "ثبت" else "بعدی", style = MaterialTheme.typography.body1)
+                Text(text = if (viewModel.step.value > viewModel.MAX_STEP - 2) "ثبت" else "بعدی", style = MaterialTheme.typography.body1)
             }
-
         }
     }
 }
@@ -356,11 +376,11 @@ fun TimeSeekBar(viewModel: AddTaskViewModel) {
     }
 
     if (showTimePicker) {
-        PersianDatePicker(setOpenDialog = {showTimePicker = false}){ dateMap ->
-            viewModel.day.value = dateMap["day"] ?: "00"
-            viewModel.month.value = dateMap["month"] ?: "00"
-            viewModel.year.value = dateMap["year"] ?: "00"
-
+        com.example.persian_date_picker.PersianDatePicker(
+            onDismiss = {showTimePicker = false}){ date ->
+            viewModel.day.value = date["day"]!!
+            viewModel.month.value = date["month"]!!
+            viewModel.year.value = date["year"]!!
         }
     }
 }

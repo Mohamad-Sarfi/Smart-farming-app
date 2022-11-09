@@ -61,6 +61,11 @@ class GardenRepo @Inject constructor(
         return taskDao.getAllTasks()
     }
 
+    @WorkerThread
+    suspend fun deleteTask(task: Task) {
+        taskDao.delete(task)
+    }
+
     // Irrigation repo
     @WorkerThread
     suspend fun insertIrrigation(irrigationEntity: IrrigationEntity){

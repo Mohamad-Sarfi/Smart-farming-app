@@ -34,7 +34,7 @@ fun SuccessCompose(navHostController : NavHostController,
         val successAnimation by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.success_animation))
         LottieAnimation(composition = successAnimation, iterations = 1)
         LaunchedEffect(key1 = null){
-            delay(1700)
+            delay(3000)
             handleNavigation(navHostController)
         }
     }

@@ -37,7 +37,6 @@ import com.example.smartfarming.ui.addactivities.ui.theme.LightGray2
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.AddUserActivity
 import com.example.smartfarming.ui.common_composables.HorizontalStepCircle
-import com.example.smartfarming.ui.home.composables.backgroundColor
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

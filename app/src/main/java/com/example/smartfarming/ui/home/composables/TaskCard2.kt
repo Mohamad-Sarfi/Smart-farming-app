@@ -26,7 +26,7 @@ import com.example.smartfarming.utils.getTaskColor
 import com.example.smartfarming.utils.getTaskIcon
 
 @Composable
-fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boolean = false, clickHandler : () -> Unit){
+fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boolean = false, deleteTask: (Task) -> Unit, clickHandler : () -> Unit){
 
     var clicked by remember {
         mutableStateOf(false)
@@ -74,7 +74,9 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
             Text(text = task.garden_name, color = BorderGray, style = MaterialTheme.typography.overline, textAlign = TextAlign.Justify)
             RemainingDays(task)
             if (clicked){
-                ButtonRow(task)
+                ButtonRow(task){
+                    deleteTask(it)
+                }
             }
         }
     }
@@ -111,7 +113,7 @@ fun RemainingDays(task: Task){
 
 
 @Composable
-fun ButtonRow(task: Task){
+private fun ButtonRow(task: Task, deleteTask: (Task) -> Unit){
 
     var openDialog by remember {
         mutableStateOf(false)
@@ -134,20 +136,23 @@ fun ButtonRow(task: Task){
     }
 
     if (openDialog){
-        DeleteDialog(openDialog){openDialog = it}
+        DeleteDialog(openDialog,task, deleteTask = {deleteTask(it)}){openDialog = it}
     }
 
 }
 
 @Composable
-fun DeleteDialog(openDialog : Boolean, setOpenDialog : (Boolean) -> Unit){
+fun DeleteDialog(openDialog : Boolean,task: Task ,deleteTask : (Task) -> Unit ,setOpenDialog : (Boolean) -> Unit){
     AlertDialog(
         onDismissRequest = { setOpenDialog(!openDialog) },
         title = {
             Text(text = "حذف این پیشنهاد", style = MaterialTheme.typography.body1)
         },
         confirmButton = {
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = {
+                deleteTask(task)
+                setOpenDialog(!openDialog)
+            }) {
                 Text(text = "حذف", style = MaterialTheme.typography.subtitle1)
             }
         },

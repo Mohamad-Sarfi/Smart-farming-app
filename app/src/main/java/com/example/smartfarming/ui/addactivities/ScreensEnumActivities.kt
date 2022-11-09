@@ -40,17 +40,17 @@ enum class ScreensEnumActivities(
     ),
 
     IrrigationBody(
-        icon = R.drawable.irrigation_colored
+        icon = 0
     ),
 
     FertilizationBody(
-        icon = R.drawable.fertilizer_color
+        icon =0
     ),
     PesticideBody(
-        icon = R.drawable.pesticide_colored
+        icon = 0
     ),
     OtherActivityBody(
-        icon = R.drawable.shovel_colored
+        icon = 0
     ),
     MapScreen(
         icon = 0

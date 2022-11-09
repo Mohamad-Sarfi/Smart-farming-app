@@ -74,9 +74,9 @@ fun ArticleItem(article: Article){
 fun randomIcon() : Int{
     return when(Random.nextInt(1, 5)){
         1 -> R.drawable.p1
-        2 -> R.drawable.p2
+        //2 -> R.drawable.p2
         3 -> R.drawable.p3
         4 -> R.drawable.p4
-        else -> R.drawable.p2
+        else -> R.drawable.p4
     }
 }
