@@ -17,6 +17,7 @@ class GardenRemoteRepo(
         auth : String,
         garden: Garden
     ) = safeApiCall {
+
         api.addGarden(
             authHeader = "Bearer $auth",
             request = garden2Json(garden).toRequestBody("application/json".toMediaTypeOrNull())
@@ -34,4 +35,15 @@ class GardenRemoteRepo(
             pageSize
         )
     }
+
+    suspend fun getGardenById(
+        auth: String,
+        id : Int
+    ) = safeApiCall {
+        api.getGardenById(
+            auth,
+            id
+        )
+    }
+
 }

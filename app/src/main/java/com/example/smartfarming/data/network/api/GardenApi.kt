@@ -28,4 +28,10 @@ interface GardenApi {
         @Path(value = "pageNumber") pageNumber: Int,
         @Path(value = "pageSize") pageSize : Int
     ) : List<Garden>
+
+    @GET("farmer/privileged/garden/{id}")
+    suspend fun getGardenById(
+        @Header("Authorization") authHeader: String,
+        @Path(value = "id") id : Int
+    ) : Garden
 }

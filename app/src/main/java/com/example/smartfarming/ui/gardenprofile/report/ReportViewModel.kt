@@ -69,13 +69,3 @@ class ReportViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
     }
 
 }
-
-class ReportViewModelFactory(val repo: GardenRepo) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ReportViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ReportViewModel(repo) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}

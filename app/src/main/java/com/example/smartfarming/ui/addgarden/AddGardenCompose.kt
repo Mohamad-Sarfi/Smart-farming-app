@@ -183,6 +183,7 @@ fun AddGardenCompose(
                     onClick = {
                         if (step.value != viewModel.MAX_STEPS){
                             handleIncrementButton(viewModel, context)
+                            viewModel.getGardenByIdFromServer(auth.value!!)
                         } else {
                             val garden = Garden(
                                 address = GardenAddress(

@@ -125,33 +125,6 @@ class AddGardenViewModel @Inject constructor(
     //Update server
     fun addGardenToServer(auth : String){
         viewModelScope.launch {
-            Log.i("NETWORK garden request body",
-                garden2Json(Garden(
-                    0,
-                    address = GardenAddress(
-                        city = "",
-                        country = "",
-                        id = 0,
-                        latitude = 50.0,
-                        longitude = 34.0,
-                        plainAddress = "",
-                        state = ""),
-                    age = gardenAge.value,
-                    area = gardenArea.value.toInt(),
-                    areaUnit = GardenAreaUnitEnum.HECTARE.name,
-                    border = getGardenBorder(),
-                    budget = 0,
-                    density =0,
-                    irrigationCycle = irrigationCycle.value,
-                    irrigationDuration = irrigationDuration.value.toInt(),
-                    irrigationVolume = irrigationVolume.value.toDouble(),
-                    location = CoordinateDto(0, location.value?.get("lat")!!.toDouble(), location.value?.get("long")!!.toDouble()),
-                    title = gardenName.value,
-                    soilType = SoilTypeEnum.MIDDLE.name,
-                    specieSet = getSpecieList()
-                ))
-            )
-
             val x = remoteRepo.addGarden(
                 auth = auth,
                 Garden(
@@ -180,9 +153,15 @@ class AddGardenViewModel @Inject constructor(
                 ) )
 
             //val x = remoteRepo.getGardens(auth, 1, 1)
-            Log.i("Garden response is: ", "$x")
-            Log.i("Garden response is: ", "garden add request sent")
-            Log.i("Garden response is: ", "garden add request sent")
+            Log.i("TAG Garden response is: ", "$x")
+            Log.i("TAG Garden response is: ", "garden add request sent")
+        }
+    }
+
+    fun getGardenByIdFromServer(auth : String){
+        viewModelScope.launch {
+            val x = remoteRepo.getGardenById("Bearer $auth", 159)
+            Log.i("TAG garden by id", "${x}")
         }
     }
 
