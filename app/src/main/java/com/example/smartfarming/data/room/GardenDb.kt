@@ -17,7 +17,7 @@ import com.example.smartfarming.data.room.entities.*
         PesticideEntity::class,
         OtherActivityEntity::class,
         Harvest::class],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(GardenDbConverter::class)

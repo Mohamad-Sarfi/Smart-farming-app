@@ -14,8 +14,8 @@ abstract class BaseRepo {
         return withContext(Dispatchers.IO){
 
             try {
-                Log.i("TAG Network resource", "TAG Network resource successful")
                 Resource.Success(apiCall.invoke())
+
             } catch (throwable : Throwable){
                 when(throwable){
                     is HttpException -> {
@@ -23,7 +23,7 @@ abstract class BaseRepo {
                         Resource.Failure(false, throwable.code(), throwable.response()?.errorBody())
                     }
                     else -> {
-                        Log.i("Weather problem", "${throwable}")
+                        Log.i("TAG Other network problems", "$throwable")
                         Resource.Failure(true, null, null)
                     }
                 }

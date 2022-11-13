@@ -64,4 +64,14 @@ class GardenDbConverter {
     fun fromSpecieSet(value: List<SpecieDto>) : String {
         return gson.toJson(value)
     }
+
+    @TypeConverter
+    fun fromGardenIds(value: List<Int>) : String {
+        return gson.toJson(value)
+    }
+
+    @TypeConverter
+    fun toGardenIds(value: String) : List<Int> {
+        return gson.fromJson(value, Array<Int>::class.java).toList()
+    }
 }

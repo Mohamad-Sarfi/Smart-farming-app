@@ -55,7 +55,7 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
         elevation = 3.dp,
         shape = RoundedCornerShape(15.dp),
         backgroundColor = Color.White,
-        border = if (clicked) BorderStroke(2.dp, getTaskColor(task.activity_type)) else BorderStroke(0.dp, Color.White),
+        border = if (clicked) BorderStroke(2.dp, getTaskColor(task.activityType)) else BorderStroke(0.dp, Color.White),
     ) {
         Column(
             Modifier
@@ -65,13 +65,13 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                getTaskIcon(task.activity_type),
+                getTaskIcon(task.activityType),
                 contentDescription = null,
                 modifier = Modifier.size(65.dp),
-                tint = getTaskColor(task.activity_type)
+                tint = getTaskColor(task.activityType)
             )
             Text(text = task.name, color = Color.Black, style = MaterialTheme.typography.body1)
-            Text(text = task.garden_name, color = BorderGray, style = MaterialTheme.typography.overline, textAlign = TextAlign.Justify)
+            Text(text = "باغ _", color = BorderGray, style = MaterialTheme.typography.overline, textAlign = TextAlign.Justify)
             RemainingDays(task)
             if (clicked){
                 ButtonRow(task){
@@ -94,7 +94,7 @@ fun RemainingDays(task: Task){
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
 
-        Text(text = "10 روز", color = getTaskColor(task.activity_type).copy(alpha = 0.6f), style = MaterialTheme.typography.subtitle2)
+        Text(text = "10 روز", color = getTaskColor(task.activityType).copy(alpha = 0.6f), style = MaterialTheme.typography.subtitle2)
 
         LinearProgressIndicator(
             .70f,
@@ -102,8 +102,8 @@ fun RemainingDays(task: Task){
                 .fillMaxWidth(0.8f)
                 .height(10.dp)
                 .clip(MaterialTheme.shapes.large),
-            color = getTaskColor(task.activity_type),
-            backgroundColor = getTaskColor(task.activity_type).copy(alpha = 0.3f)
+            color = getTaskColor(task.activityType),
+            backgroundColor = getTaskColor(task.activityType).copy(alpha = 0.3f)
         )
     }
 }

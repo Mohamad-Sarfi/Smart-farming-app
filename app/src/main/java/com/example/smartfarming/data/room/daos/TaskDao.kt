@@ -13,7 +13,7 @@ interface TaskDao {
     @Delete
     suspend fun delete(task: Task)
 
-    @Query("SELECT * FROM task_table WHERE garden_name = :gardenName ORDER BY id DESC")
+    @Query("SELECT * FROM task_table WHERE gardenIds LIKE :gardenName ORDER BY id DESC")
     fun getTasksForGarden(gardenName : String) : Flow<List<Task>>
 
     @Query("SELECT * FROM task_table ORDER BY id DESC")

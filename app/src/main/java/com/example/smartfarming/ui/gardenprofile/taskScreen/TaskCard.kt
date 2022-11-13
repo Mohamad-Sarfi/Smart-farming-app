@@ -26,7 +26,7 @@ fun TaskCard(task: Task) {
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(getTaskIcon(task.activity_type), contentDescription = null, tint = getTaskColor(task.activity_type))
+            Icon(getTaskIcon(task.activityType), contentDescription = null, tint = getTaskColor(task.activityType))
             Text(text = task.name, color = Color.Black, style = MaterialTheme.typography.body1)
 
         }

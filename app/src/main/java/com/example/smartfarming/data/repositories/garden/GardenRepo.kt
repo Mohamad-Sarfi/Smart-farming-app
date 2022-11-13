@@ -53,7 +53,7 @@ class GardenRepo @Inject constructor(
 
     @WorkerThread
     fun getTasksForGarden(gardenName: String) : Flow<List<Task>>{
-        return taskDao.getTasksForGarden(gardenName)
+        return taskDao.getTasksForGarden("%${gardenName}%")
     }
 
     @WorkerThread
@@ -120,8 +120,8 @@ class GardenRepo @Inject constructor(
     }
 
     @WorkerThread
-    fun getFertilizationByGardenName(gardenName: String) : Flow<List<FertilizationEntity>>{
-        return fertilizationDao.getFertilizationByGardenName(gardenName)
+    fun getFertilizationByGardenId(gardenId: Int) : Flow<List<FertilizationEntity>>{
+        return fertilizationDao.getFertilizationByGardenName(gardenId)
     }
 
     @WorkerThread

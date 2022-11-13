@@ -25,55 +25,6 @@ import com.example.smartfarming.ui.home.composables.TaskCard
 @Composable
 fun TasksNotificationCompose(){
 
-    val taskList = listOf<Task>(
-        Task(0,
-            "ولک پاشی",
-            activity_type = ActivityTypesEnum.FERTILIZATION.name,
-            description = "به دلیل عدم تامین نیاز سرمایی",
-            start_date = "",
-            finish_date = "",
-            garden_name = "محمد",
-            recommendations = "روغن ولک",
-            user_id = 5,
-            seen = false
-        ),
-        Task(0,
-            "سم پاشی",
-            activity_type = ActivityTypesEnum.PESTICIDE.name,
-            description = "مبارزه با پسیل",
-            start_date = "",
-            finish_date = "",
-            garden_name = "محمد",
-            recommendations = "روغن ولک",
-            user_id = 5,
-            seen = false
-        )
-        ,
-        Task(0,
-            "آبیاری اسفند",
-            activity_type = ActivityTypesEnum.IRRIGATION.name,
-            description = "موعد آبیاری اسفند",
-            start_date = "",
-            finish_date = "",
-            garden_name = "محمد",
-            recommendations = "",
-            user_id = 5,
-            seen = false
-        )
-        ,
-        Task(0,
-            "کود دامی",
-            activity_type = ActivityTypesEnum.FERTILIZATION.name,
-            description = "با توجه به ماده عالی خاک نیاز به تامین کود دامی",
-            start_date = "",
-            finish_date = "",
-            garden_name = "اکبری",
-            recommendations = "کود گاو",
-            user_id = 5,
-            seen = false
-        )
-    )
-
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -148,11 +99,11 @@ fun TasksNotificationCompose(){
                     )
                 }
 
-                LazyColumn() {
-                    items(taskList) { task ->
-                        TaskCard(task = task)
-                    }
-                }
+//                LazyColumn() {
+//                    items(taskList) { task ->
+//                        TaskCard(task = task)
+//                    }
+//                }
 
                 
             }

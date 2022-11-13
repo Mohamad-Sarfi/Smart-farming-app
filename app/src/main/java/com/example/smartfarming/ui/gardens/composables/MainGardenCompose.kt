@@ -39,22 +39,8 @@ import com.example.smartfarming.ui.home.composables.MyFAB
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GardenCompose(){
-
-
-    val activity = LocalContext.current as Activity
-//    val viewModel : GardensViewModel = viewModel(
-//        factory = GardensViewModelFactory((activity.application as FarmApplication).repo)
-//    )
-
     val viewModel : GardensViewModel = hiltViewModel()
-
     val gardenList by viewModel.getGardens().observeAsState()
-    val context = LocalContext.current
-
-
-    var fabExtended by remember {
-        mutableStateOf(false)
-    }
 
     Scaffold(
         topBar = { CommonTopBar(title = "باغ های شما", icon = Icons.Outlined.Eco)},

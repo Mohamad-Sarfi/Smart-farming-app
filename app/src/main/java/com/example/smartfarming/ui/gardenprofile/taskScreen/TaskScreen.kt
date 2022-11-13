@@ -96,7 +96,7 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
             ){
                 items(tasks){
                     TaskCard2(task = it, navController = navtController, oneStepClick = true, deleteTask = {viewModel.deleteTask(it)}){
-                        navtController.navigate(route = "${getActivityScreen(it.activity_type)}/${viewModel.garden.value?.title}")
+                        navtController.navigate(route = "${getActivityScreen(it.activityType)}/${viewModel.garden.value?.title}")
                     }
                 }
             }

@@ -13,8 +13,8 @@ interface FertilizationDao {
     @Query("SELECT * FROM fertilization_table ORDER BY id ASC")
     fun getAllFertilization() : Flow<List<FertilizationEntity>>
 
-    @Query("SELECT * FROM fertilization_table WHERE garden_name = :gardenName")
-    fun getFertilizationByGardenName(gardenName : String) : Flow<List<FertilizationEntity>>
+    @Query("SELECT * FROM fertilization_table WHERE gardenId = :gardenId")
+    fun getFertilizationByGardenName(gardenId : Int) : Flow<List<FertilizationEntity>>
 
     @Delete
     suspend fun deleteFertilization(fertilizationEntity: FertilizationEntity)

@@ -9,12 +9,17 @@ import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.data.room.entities.enums.TaskPriorityEnum
+import com.example.smartfarming.data.room.entities.enums.TaskStatusEnum
+import com.example.smartfarming.data.room.entities.enums.TaskTypeEnum
 import com.example.smartfarming.utils.ACTIVITY_LIST
 import com.example.smartfarming.utils.PersianCalender
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,6 +38,7 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
     val month = mutableStateOf("")
     val year = mutableStateOf("")
     val selectedGardens = mutableStateListOf<String>()
+    private val gardensId = mutableListOf<Int>()
 
     init {
         getGardens()
@@ -42,7 +48,6 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
         viewModelScope.launch {
             repo.getGardens().collect{
                 gardensList.value = it
-                Log.i("xxGarden1", "${it}")
                 populateGardensName()
             }
         }
@@ -50,7 +55,6 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
 
     private fun populateGardensName(){
         for (g in gardensList.value){
-            Log.i("xxGarden", "${g.title}")
             gardenNameList.add(g.title)
         }
     }
@@ -122,31 +126,35 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
         viewModelScope.launch {
             repo.insertTask(
                 Task(
-                    0,
-                    getActivityName(),
-                    selectedGarden.value,
-                    description.value,
-                    activity_type = getActivityType(),
-                    getStartDate(),
-                    getFinishDate(),
-                    recommendations = "",
-                    0,
-                    false
+                    activityType = getActivityType(),
+                    description = description.value,
+                    executionTime = 5,
+                    expireDuration = getFinishDate(),
+                    gardenIds = gardensId,
+                    id = 0,
+                    name = selectedActivity.value,
+                    notifyFarmer = false,
+                    priority = TaskPriorityEnum.NORMAL.name,
+                    status = TaskStatusEnum.TODO.name,
+                    taskType = TaskTypeEnum.FARMER.name,
+                    userId = 0
                 )
             )
 
             Log.i("TAG task insertion", "${
                 Task(
-                    0,
-                    getActivityName(),
-                    selectedGarden.value,
-                    description.value,
-                    activity_type = getActivityType(),
-                    getStartDate(),
-                    getFinishDate(),
-                    recommendations = "",
-                    0,
-                    false
+                    activityType = getActivityType(),
+                    description = description.value,
+                    executionTime = 5,
+                    expireDuration = getFinishDate(),
+                    gardenIds = gardensId,
+                    id = 0,
+                    name = selectedActivity.value,
+                    notifyFarmer = false,
+                    priority = TaskPriorityEnum.NORMAL.name,
+                    status = TaskStatusEnum.TODO.name,
+                    taskType = TaskTypeEnum.FARMER.name,
+                    userId = 0
                 )
             }")
         }
@@ -180,6 +188,17 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
 
     fun addGarden(gardenName : String) {
         selectedGardens.add(gardenName)
+
+        gardensId.add(getGardenIdByName(gardenName))
+    }
+
+    private fun getGardenIdByName(gardenName : String) : Int{
+        for (garden in gardensList.value){
+            if (garden.title == gardenName){
+                return garden.id
+            }
+        }
+        return 0
     }
 
     fun removeGarden(gardenName: String) {

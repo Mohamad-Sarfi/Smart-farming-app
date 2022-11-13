@@ -45,14 +45,14 @@ fun TaskCard(task : Task){
             .height(80.dp)
             .clickable {
                 val intent = Intent(activity, GardenProfileActivity::class.java)
-                intent.putExtra("gardenName", task.garden_name)
+                intent.putExtra("gardenName", "")
                 activity.startActivity(intent)
             },
         shape = RoundedCornerShape(15.dp),
         elevation = 2.dp
     ) {
         Image(
-            painter = painterResource(id = cardBackground(task.activity_type)),
+            painter = painterResource(id = cardBackground(task.activityType)),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
@@ -76,10 +76,10 @@ fun TaskCard(task : Task){
                     .padding(start = 55.dp)
             ) {
                 Text(text = task.name, color = Color.White, style = MaterialTheme.typography.h5)
-                Text(text = task.garden_name, color = Color.White, style = MaterialTheme.typography.body1)
+                Text(text = "", color = Color.White, style = MaterialTheme.typography.body1)
             }
             Icon(
-                taskIcon(task.activity_type),
+                taskIcon(task.activityType),
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
@@ -116,20 +116,3 @@ fun taskIcon(activityType: String) : ImageVector {
     }
 }
 
-
-@Preview
-@Composable
-fun TaskPreview(){
-    TaskCard(task = Task(0,
-        "ولک پاشی",
-        activity_type = ActivityTypesEnum.FERTILIZATION.name,
-        description = "به دلیل عدم تامین نیاز سرمایی",
-        start_date = "",
-        finish_date = "",
-        garden_name = "محمد",
-        recommendations = "روغن ولک",
-        user_id = 5,
-        seen = false
-    )
-    )
-}

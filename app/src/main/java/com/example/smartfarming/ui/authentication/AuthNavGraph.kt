@@ -47,13 +47,12 @@ fun AuthNavGraph(
 
                 when(response.value){
                     is Resource.Success<*> -> {
-                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                         activity.startActivity(Intent(context, MainActivity::class.java))
+
                         activity.finish()
                     }
                     is Resource.Failure -> {
                         Toast.makeText(context, "ورود ناموفق، دوباره تلاش کنید", Toast.LENGTH_SHORT).show()
-                        Log.i("login11", "${response.value}")
                     }
                     else -> {
                         //Toast.makeText(context, "ورود ناموفق2", Toast.LENGTH_SHORT).show()

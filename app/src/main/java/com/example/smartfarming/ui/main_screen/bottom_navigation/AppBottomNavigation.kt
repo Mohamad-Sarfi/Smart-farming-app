@@ -45,7 +45,7 @@ fun AppBottomNavigation(
                     label = {
                         Text(
                             text = stringResource(id = item.title),
-                            style = MaterialTheme.typography.subtitle1
+                            style = MaterialTheme.typography.subtitle2
                         )
                             },
                     selected = currentRoute == item.navRoute ,
@@ -63,11 +63,6 @@ fun AppBottomNavigation(
                         }
                     }
                 )
-
             }
-
-
-
     }
-
 }

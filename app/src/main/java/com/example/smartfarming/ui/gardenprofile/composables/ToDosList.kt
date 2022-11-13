@@ -37,7 +37,7 @@ fun ToDos(
     navController: NavHostController
 ){
 
-    val barColor = when(task.activity_type){
+    val barColor = when(task.activityType){
         ActivityTypesEnum.IRRIGATION.name -> BlueWatering
         ActivityTypesEnum.FERTILIZATION.name  -> PurpleFertilizer
         ActivityTypesEnum.PESTICIDE.name  -> YellowPesticide
@@ -98,14 +98,14 @@ fun ToDos(
                 ) {
                     Text(text = task.name, style = MaterialTheme.typography.body2, color = BorderGray)
                     Icon(
-                        getTaskIcon(task.activity_type),
+                        getTaskIcon(task.activityType),
                         contentDescription = null,
-                        tint = getTaskColor(task.activity_type),
+                        tint = getTaskColor(task.activityType),
                         modifier = Modifier.size(40.dp)
                     )
                 }
                 DetailsText(expanded, task.description)
-                Buttons(expanded, barColor, task.activity_type, gardenName = task.garden_name, navController = navController)
+                Buttons(expanded, barColor, task.activityType, gardenName = task.gardenIds.toString(), navController = navController)
             }
 
         }

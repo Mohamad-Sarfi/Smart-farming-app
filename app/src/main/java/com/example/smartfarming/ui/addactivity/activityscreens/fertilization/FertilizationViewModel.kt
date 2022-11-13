@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.addactivities.viewModel
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,33 +10,41 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.example.smartfarming.data.network.Resource
+import com.example.smartfarming.data.repositories.activities.ActivitiesRemoteRepo
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.FertilizationEntity
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.enums.FertilizationUsageType
+import com.example.smartfarming.data.room.entities.enums.GardenAreaUnitEnum
 import com.example.smartfarming.utils.initialGarden
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
+@HiltViewModel
+class FertilizationViewModel @Inject constructor(val repo : GardenRepo, val activitiesRemoteRepo: ActivitiesRemoteRepo) : ViewModel() {
 
     var step = mutableStateOf(0)
     private val garden = MutableLiveData<Garden>().apply {
         value = initialGarden
     }
     val fertilizationType = mutableStateOf(value = "")
-
     val fertilizerName = mutableStateListOf<String>()
-
     val currentFertilizerName = mutableStateOf("")
-
-    val fertilizationDate =
-        mutableStateOf(value = mutableMapOf<String, String>("day" to "", "month" to "", "year" to ""))
-
+    val fertilizationDate = mutableStateOf(value = mutableMapOf<String, String>("day" to "", "month" to "", "year" to ""))
     val fertilizationVolume = mutableStateOf<Float>(0f)
-
     val fertilizationWorker = mutableStateOf(1)
+    private var gardenId = 0
+    private var fertilizationUsageType = "" //used to store in database
+    private var volumeUnit = "" //used to store in database
+
+    private fun setGardenId(garden: Garden){
+        gardenId = garden.id
+    }
 
     fun setFertilizationType(type : String){
         fertilizationType.value = type
@@ -65,7 +74,6 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
     }
 
     fun updateVolumeValueText(value : String) : String{
-
         if (value == ""){
             return ""
         }
@@ -84,7 +92,6 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
 
     }
 
-
     fun setVolumeValue(value : String){
         if (value == ""){
             fertilizationVolume.value = 0f
@@ -97,10 +104,10 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
         }
     }
 
-
     private fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
             garden.value  = repo.getGardenByName(gardenName)
+            setGardenId(garden.value!!)
         }
     }
 
@@ -128,9 +135,10 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
     }
 
 
-    fun submitClickHandler(context : Context){
+    fun submitClickHandler(auth: String, context : Context){
         if (step.value == 1){
             insertFertilizationt2Db()
+            addFertilizationToServer(auth)
         }
         increaseStep(context)
     }
@@ -146,9 +154,11 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
                     id = 0,
                     name = fertilizationListToString(fertilizerName),
                     fertilization_type = fertilizationType.value,
-                    date = "${fertilizationDate.value["year"]}/${fertilizationDate.value["month"]}/${fertilizationDate.value["day"]}",
-                    volume = fertilizationVolume.value,
-                    garden_name = garden.value!!.title
+                    time = "${fertilizationDate.value["year"]}/${fertilizationDate.value["month"]}/${fertilizationDate.value["day"]} 00:00:00",
+                    volumePerUnit = fertilizationVolume.value.toInt(),
+                    gardenId = gardenId,
+                    usageType = fertilizationUsageType,
+                    volumeUnit = volumeUnit
                 )
             )
         }
@@ -166,16 +176,51 @@ class FertilizationViewModel(val repo : GardenRepo) : ViewModel() {
         return fertilizerString
     }
 
-}
-
-
-
-class FertilizationViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(FertilizationViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return FertilizationViewModel(repo) as T
+    private fun decideUnit(fertilizationType: String, typeList: Array<String>) {
+        volumeUnit = when(fertilizationType){
+            typeList[0] -> GardenAreaUnitEnum.KILOGRAM.name
+            typeList[1] -> GardenAreaUnitEnum.LITER.name
+            typeList[2] -> GardenAreaUnitEnum.LITER.name
+            else -> GardenAreaUnitEnum.KILOGRAM.name
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+
+    fun setFertilizationType(selectedType : String, typeList: Array<String>){
+        decideUnit(selectedType, typeList)
+
+        fertilizationUsageType = when(selectedType){
+            typeList[0] -> FertilizationUsageType.BURIABLE.name
+            typeList[1] -> FertilizationUsageType.SPRAY.name
+            typeList[2] -> FertilizationUsageType.SOLUBLE.name
+            else -> FertilizationUsageType.BURIABLE.name
+        }
+    }
+
+    fun addFertilizationToServer(auth : String){
+
+        viewModelScope.launch {
+            val response = activitiesRemoteRepo.addFertilization(
+                auth = auth,
+                fertilizationEntity = FertilizationEntity(
+                    id = 0,
+                    name = fertilizationListToString(fertilizerName),
+                    fertilization_type = fertilizationType.value,
+                    time = "${fertilizationDate.value["year"]}/${fertilizationDate.value["month"]}/${fertilizationDate.value["day"]} 00:00:00",
+                    volumePerUnit = fertilizationVolume.value.toInt(),
+                    gardenId = gardenId,
+                    usageType = fertilizationUsageType,
+                    volumeUnit = volumeUnit
+                )
+            )
+
+            checkServerResponse(response)
+        }
+    }
+
+    private fun checkServerResponse(response : Resource<FertilizationEntity>) {
+        when(response){
+            is Resource.Success<*> -> Log.i("TAG fertilization response", "${response.value}")
+            else -> Log.i("TAG fertilization response", "Wrong $response")
+        }
     }
 }

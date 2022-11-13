@@ -16,6 +16,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,7 +37,7 @@ fun FertilizationReportScreen(gardenName : String, navHostController: NavHostCon
         mutableStateOf("")
     }
 
-    viewModel.getFertilizationsForGarden(gardenName)
+    viewModel.getFertilizationForGarden(gardenName)
 
     Scaffold(
         Modifier.fillMaxSize(),
@@ -57,6 +58,7 @@ fun FertilizationReportScreen(gardenName : String, navHostController: NavHostCon
                 currentMonth = currentMonth,
                 setCurrentMonth = {currentMonth = it}
             )
+
             FertilizationReportBody(viewModel)
         }
     }
@@ -64,7 +66,9 @@ fun FertilizationReportScreen(gardenName : String, navHostController: NavHostCon
 
 @Composable
 fun FertilizationReportBody(viewModel: FertilizationReportViewModel) {
-    LazyColumn{
+    LazyColumn(
+        modifier = Modifier.padding(top = 15.dp)
+    ){
         items(viewModel.fertilizationList.size){ index ->
             FertilizationReportCard(viewModel.fertilizationList[index]){
                 viewModel.deleteFertilization(it)
@@ -83,49 +87,59 @@ fun FertilizationReportCard(fertilizationEntity: FertilizationEntity, deleteFert
         mutableStateOf(false)
     }
     val cardHeight by animateDpAsState(
-        if (clicked) 160.dp else 120.dp, tween()
+        if (clicked) 170.dp else 120.dp, tween()
     )
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(cardHeight)
-            .padding(horizontal = 25.dp, vertical = 8.dp),
+            .padding(horizontal = 25.dp, vertical = 8.dp)
+            .clickable { clicked = !clicked },
         elevation = 3.dp,
         backgroundColor = MaterialTheme.colors.background,
-        shape = RoundedCornerShape(18.dp)
+        shape = MaterialTheme.shapes.medium
     ) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .clickable { clicked = !clicked }
-                .padding(20.dp),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
-                Text(text = fertilizationEntity.name, style = MaterialTheme.typography.body1)
-            }
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(text = "15 مهر", style = MaterialTheme.typography.body2)
-                Text(text = fertilizationEntity.volume.toString(), style = MaterialTheme.typography.body2)
-                Text(text = fertilizationEntity.fertilization_type, style = MaterialTheme.typography.body2)
-            }
-
-            if (clicked){
-                Row(
-                    Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                    Icon(Icons.Outlined.Delete, contentDescription = null, tint = Color.Red, modifier = Modifier.clickable { showDeleteDialog = true })
+        Row(Modifier.fillMaxWidth()) {
+            Column(
+                Modifier
+                    .fillMaxWidth(.98f)
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                Row(Modifier.fillMaxWidth().padding(bottom = 3.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
+                    Text(text = fertilizationEntity.name, style = MaterialTheme.typography.h6)
+                }
+    
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(text = "15 مهر", style = MaterialTheme.typography.body2)
+                    Text(text = fertilizationEntity.volumePerUnit.toString(), style = MaterialTheme.typography.body2)
+                    Text(text = fertilizationEntity.fertilization_type, style = MaterialTheme.typography.body2)
+                }
+    
+                if (clicked){
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 20.dp),
+                        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                        Row(
+                            modifier = Modifier.clickable { showDeleteDialog = true }
+                        ) {
+                            Icon(Icons.Outlined.Delete, contentDescription = null, tint = Color.Red)
+                            Text(text = "حذف", style = MaterialTheme.typography.subtitle2, color = Color.Red, modifier = Modifier.padding(horizontal = 3.dp))
+                        }
+                    }
+                }
+    
+                if (showDeleteDialog){
+                    DeleteReportDialog(setShowDialog = {showDeleteDialog = it}) {
+                        deleteFertilization(fertilizationEntity)
+                    }
                 }
             }
-
-            if (showDeleteDialog){
-                DeleteReportDialog(setShowDialog = {showDeleteDialog = it}) {
-                    deleteFertilization(fertilizationEntity)
-                }
-            }
+            Box(modifier = Modifier.fillMaxHeight().fillMaxWidth(1f).background(Purple700))
         }
     }
 }

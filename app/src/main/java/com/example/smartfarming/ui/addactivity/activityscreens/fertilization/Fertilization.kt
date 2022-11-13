@@ -38,13 +38,14 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
+import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModel
-import com.example.smartfarming.ui.addactivities.viewModel.FertilizationViewModelFactory
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.ActivityTitle
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.DateSelector
 import com.example.smartfarming.ui.addactivity.activityscreens.common_compose.SuccessCompose
@@ -56,14 +57,16 @@ import kotlinx.coroutines.delay
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Fertilization(gardenName : String, navController : NavHostController){
-    val activity = LocalContext.current as Activity
-    val viewModel : FertilizationViewModel =
-        viewModel(factory = FertilizationViewModelFactory((activity.application as FarmApplication).repo))
+    val context = LocalContext.current
+    val viewModel : FertilizationViewModel = hiltViewModel()
     val garden = viewModel.getGarden(gardenName).observeAsState()
     var gardenName = garden.value?.title ?: ""
     var startup by remember {
         mutableStateOf(false)
     }
+    val userPreferences = UserPreferences.getInstance(context)
+
+    val auth = userPreferences.authToken.collectAsState("")
 
     LaunchedEffect(key1 = null) {
         delay(100)
@@ -85,14 +88,14 @@ fun Fertilization(gardenName : String, navController : NavHostController){
             ActivityTitle(gardenName = gardenName, activityName = "تغذیه", icon = Icons.Outlined.Compost, Purple700)
             ActivitiesStepBars(viewModel.step.value, Purple700, Purple200)
             AnimatedVisibility(visible = startup) {
-                FertilizationBody(viewModel, navController, gardenName)
+                FertilizationBody(viewModel, navController, auth.value!!)
             }
         }
     }
 }
 
 @Composable
-fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostController, gardenName: String) {
+fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostController, auth: String) {
 
     val context = LocalContext.current
 
@@ -221,7 +224,7 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
                 }
 
                 Button(
-                    onClick = { viewModel.submitClickHandler(context) },
+                    onClick = { viewModel.submitClickHandler(auth , context) },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Purple700,
                         contentColor = Color.White
@@ -308,6 +311,7 @@ fun FertilizationType(viewModel: FertilizationViewModel){
                     onClick = {
                         clicked = false
                         viewModel.fertilizationType.value = it
+                        viewModel.setFertilizationType(it, typeList)
                     }
                 ) {
                     Text(

@@ -1,8 +1,10 @@
 package com.example.smartfarming.di
 
 import com.example.smartfarming.BuildConfig
+import com.example.smartfarming.data.network.api.ActivitiesApi
 import com.example.smartfarming.data.network.api.AuthApi
 import com.example.smartfarming.data.network.api.GardenApi
+import com.example.smartfarming.data.repositories.activities.ActivitiesRemoteRepo
 import com.example.smartfarming.data.repositories.authentication.AuthRepo
 import com.example.smartfarming.data.repositories.garden.GardenRemoteRepo
 import dagger.Module
@@ -13,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -55,7 +58,17 @@ class AppModule {
     ) = retrofit.create(GardenApi::class.java)
 
     @Provides
+    fun provideActivitiesService(
+        retrofit: Retrofit
+    ) = retrofit.create(ActivitiesApi::class.java)
+
+    @Provides
     fun provideGardenRemoteRepo(
         gardenApi: GardenApi
     ) : GardenRemoteRepo = GardenRemoteRepo(gardenApi)
+
+    @Provides
+    fun provideActivitiesRemoteRepo(
+        activitiesApi: ActivitiesApi
+    ) : ActivitiesRemoteRepo = ActivitiesRemoteRepo(activitiesApi)
 }

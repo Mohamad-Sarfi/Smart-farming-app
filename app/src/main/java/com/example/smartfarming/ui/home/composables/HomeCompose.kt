@@ -1,14 +1,15 @@
 package com.example.smartfarming.ui.home.composables
 
+import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -30,31 +31,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Article
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
-import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addgarden.AddGarden
+import com.example.smartfarming.ui.addgarden.REQUEST_LOCATION_PERMISSION
 import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
 import com.example.smartfarming.ui.home.HomeViewModel
 import com.example.smartfarming.ui.tasks_notification.TasksNotificationActivity
-import com.example.smartfarming.utils.ACTIVITY_LIST
-import com.example.smartfarming.utils.getTaskColor
-import com.example.smartfarming.utils.getTaskIcon
-import com.example.smartfarming.utils.getTaskList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
+import com.example.smartfarming.utils.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -71,6 +66,18 @@ fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit
     }
     val backDropState = rememberBackdropScaffoldState( BackdropValue.Revealed)
     val composableScope = rememberCoroutineScope()
+
+//    if (isNetworkStatePermissionGranted(activity) || isWriteSettingPermissionGranted(activity)){
+//        val connectivityManager = activity.getSystemService(ConnectivityManager::class.java) as ConnectivityManager
+//        connectivityManager.requestNetwork(networkRequest, networkCallBack)
+//    } else {
+////        ActivityCompat.requestPermissions(
+////            activity,
+////            arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+////            REQUEST_
+////        )
+//        Toast.makeText(activity, "not granted", Toast.LENGTH_SHORT).show()
+//    }
 
     BackdropScaffold(
         appBar = { 
@@ -169,13 +176,15 @@ fun BackdropBackLayer(activity: Activity){
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(brush = Brush.verticalGradient(
-                    listOf(
-                        MaterialTheme.colors.primary,
-                        MaterialTheme.colors.primary.copy(.6f),
-                        MaterialTheme.colors.primary.copy(.3f)
+                .background(
+                    brush = Brush.verticalGradient(
+                        listOf(
+                            MaterialTheme.colors.primary,
+                            MaterialTheme.colors.primary.copy(.6f),
+                            MaterialTheme.colors.primary.copy(.3f)
+                        )
                     )
-                )),
+                ),
         )
 
         Column(
@@ -442,18 +451,17 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
                     if (viewModel.selectedActivityGroup.value == "all") {
                         TaskCard2(item, navController, deleteTask = {viewModel.deleteTask(it)}) {
                             val intent = Intent(activity, GardenProfileActivity::class.java)
-                            intent.putExtra("gardenName", item.garden_name)
+                            intent.putExtra("gardenName", "")
                             intent.putExtra("taskScreenShow", true)
                             activity.startActivity(intent)
                         }
-                    } else if (viewModel.selectedActivityGroup.value == item.activity_type) {
+                    } else if (viewModel.selectedActivityGroup.value == item.activityType) {
                         TaskCard2(item, navController, deleteTask = {viewModel.deleteTask(it)}) {
                             val intent = Intent(activity, GardenProfileActivity::class.java)
-                            intent.putExtra("gardenName", item.garden_name)
+                            intent.putExtra("gardenName", "")
                             intent.putExtra("taskScreenShow", true)
                             activity.startActivity(intent)
                         }
-
                     }
                 }
             }
@@ -614,10 +622,10 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
 
             LazyRow {
                 items(tasks) { item ->
-                    if (item.activity_type == activityName) {
+                    if (item.activityType == activityName) {
                         TaskCard2(task = item, navController, deleteTask = {viewModel.deleteTask(it)}) {
                             val intent = Intent(activity, GardenProfileActivity::class.java)
-                            intent.putExtra("gardenName", item.garden_name)
+                            intent.putExtra("gardenName", "")
                             intent.putExtra("taskScreenShow", true)
                             activity.startActivity(intent)
                         }

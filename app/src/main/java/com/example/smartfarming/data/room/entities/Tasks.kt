@@ -1,5 +1,6 @@
 package com.example.smartfarming.data.room.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -7,12 +8,16 @@ import androidx.room.PrimaryKey
 data class Task(
     @PrimaryKey(autoGenerate = true)
     val id : Int,
-    val name : String,
-    val garden_name : String,
+    val activityType : String,
     val description: String,
-    val activity_type : String,
-    val start_date : String,
-    val finish_date : String,
-    val recommendations : String,
-    val user_id : Int,
-    val seen : Boolean)
+    val executionTime : Int,
+    val expireDuration : String,
+    val gardenIds : List<Int>,
+    @ColumnInfo(name = "title") val name : String,
+    val notifyFarmer : Boolean,
+    val priority : String,
+    val status : String,
+    val taskType : String,
+    val userId: Int,
+//    val recommendations : String
+    )
