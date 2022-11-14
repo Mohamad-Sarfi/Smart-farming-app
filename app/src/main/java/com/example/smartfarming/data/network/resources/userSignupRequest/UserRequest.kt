@@ -31,3 +31,11 @@ fun signUpReq2JSON(
     )
     )
 }
+
+fun forgetPassword2Json(
+    phoneNumber : String
+) : String {
+    val gson = Gson()
+
+    return gson.toJson(phoneNumber)
+}

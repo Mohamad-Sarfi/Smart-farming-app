@@ -152,75 +152,75 @@ fun Login(
                 )
             )
 
+            Text(
+                text = "فراموشی رمز",
+                style = MaterialTheme.typography.subtitle1,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .clickable {
+                        // Go to password recovery
+                    }
+                    .align(Alignment.CenterHorizontally)
+                    .padding(6.dp)
+            )
+
+            val loginBtnWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value == true) 1f else .6f )
+
+            Row(
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ){
+                if (!viewModel.inProgress.value){
+                    OutlinedButton(
+                        onClick = {
+                            navController.navigate(route = AppScreensEnum.RegisterScreen.name)
+                        },
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .fillMaxWidth(.4f)
+                            .padding(top = 80.dp, bottom = 20.dp)
+                            .align(Alignment.CenterVertically)
+                        ,
+                        border = BorderStroke(2.dp, MaterialTheme.colors.primary),
+                        shape = MaterialTheme.shapes.medium
+                    ) {
                         Text(
-                            text = "فراموشی رمز",
-                            style = MaterialTheme.typography.subtitle1,
-                            color = MaterialTheme.colors.primary,
-                            modifier = Modifier
-                                .clickable {
-                                    // Go to password recovery
-                                }
-                                .align(Alignment.CenterHorizontally)
-                                .padding(6.dp)
+                            text = "ثبت نام", style = MaterialTheme.typography.subtitle1,
+                            modifier = Modifier.padding(vertical = 2.dp)
                         )
+                    }
+                }
 
-                        val loginBtnWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value == true) 1f else .6f )
+                // ******************************************************** Submit button
+                Button(
+                    onClick = {
+                        isUsernameEmpty = usernameText!!.length < 4
+                        isPassEmpty = passwordText!!.length < 6
 
-                        Row(
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        ){
-                            if (!viewModel.inProgress.value){
-                                OutlinedButton(
-                                    onClick = {
-                                        navController.navigate(route = AppScreensEnum.RegisterScreen.name)
-                                    },
-                                    modifier = Modifier
-                                        .padding(5.dp)
-                                        .fillMaxWidth(.4f)
-                                        .padding(top = 80.dp, bottom = 20.dp)
-                                        .align(Alignment.CenterVertically)
-                                    ,
-                                    border = BorderStroke(2.dp, MaterialTheme.colors.primary),
-                                    shape = MaterialTheme.shapes.medium
-                                ) {
-                                    Text(
-                                        text = "ثبت نام", style = MaterialTheme.typography.subtitle1,
-                                        modifier = Modifier.padding(vertical = 2.dp)
-                                    )
-                                }
-                            }
-
-                            // ******************************************************** Submit button
-                            Button(
-                                onClick = {
-                                    isUsernameEmpty = usernameText!!.length < 4
-                                    isPassEmpty = passwordText!!.length < 6
-
-                                    if (isUsernameEmpty || isPassEmpty){
-                                        Toast.makeText(context, "نام کاربری و رمز عبور را بطور صحیح وارد کنید", Toast.LENGTH_SHORT).show()
-                                    } else{
-                                        signIn()
-                                    }
-                                },
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .fillMaxWidth(loginBtnWidth)
-                                    .padding(top = 80.dp, bottom = 20.dp)
-                                ,
-                                shape = MaterialTheme.shapes.medium,
-
-                                ) {
-                                if (viewModel.loginResponse.value == null){
-                                    Text(
-                                        text = "ورود",
-                                        style = MaterialTheme.typography.subtitle1,
-                                        modifier = Modifier.padding(vertical = 2.dp)
-                                    )
-                                } else {
-                                    CircularProgressIndicator()
-                                }
-                            }
+                        if (isUsernameEmpty || isPassEmpty){
+                            Toast.makeText(context, "نام کاربری و رمز عبور را بطور صحیح وارد کنید", Toast.LENGTH_SHORT).show()
+                        } else{
+                            signIn()
                         }
+                    },
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth(loginBtnWidth)
+                        .padding(top = 80.dp, bottom = 20.dp)
+                    ,
+                    shape = MaterialTheme.shapes.medium,
+
+                    ) {
+                    if (viewModel.loginResponse.value == null){
+                        Text(
+                            text = "ورود",
+                            style = MaterialTheme.typography.subtitle1,
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        )
+                    } else {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
 
 //                        Row(
 //                            modifier = Modifier
@@ -245,7 +245,7 @@ fun Login(
 //                            )
 //
 //                        }
-                    }
+            }
         }
 
 }

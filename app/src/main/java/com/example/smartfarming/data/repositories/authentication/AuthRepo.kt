@@ -2,6 +2,7 @@ package com.example.smartfarming.data.repositories.authentication
 
 import com.example.smartfarming.data.network.api.AuthApi
 import com.example.smartfarming.data.network.resources.user.request2JSON
+import com.example.smartfarming.data.network.resources.userSignupRequest.forgetPassword2Json
 import com.example.smartfarming.data.network.resources.userSignupRequest.signUpReq2JSON
 import com.example.smartfarming.data.repositories.BaseRepo
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -38,4 +39,10 @@ class AuthRepo @Inject constructor(
             .toRequestBody("application/json".toMediaTypeOrNull())
         )
     }
+
+    suspend fun forgetPassword(
+        phoneNumber : String
+    ) = api.forgetPassword(
+        forgetPassword2Json(phoneNumber).toRequestBody("application/json".toMediaTypeOrNull())
+    )
 }
