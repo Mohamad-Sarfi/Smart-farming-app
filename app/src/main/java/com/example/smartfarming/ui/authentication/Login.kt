@@ -73,98 +73,103 @@ fun Login(
 
         Column(
             modifier = Modifier
-                .padding(vertical = 20.dp, horizontal = 20.dp)
+                .padding(vertical = 10.dp, horizontal = 20.dp)
                 .fillMaxWidth(1f)
-                .fillMaxHeight(1f)
+                .fillMaxHeight(1f),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            OutlinedTextField(
-                value = usernameText!!,
-                onValueChange = {
-                    viewModel.phoneNumber.value = it.trim()
-                },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .background(Color.White)
-                    .width(300.dp)
-                    .padding(vertical = 10.dp)
-                ,
-                label = {
-                    Text(text = "نام کاربری", style = MaterialTheme.typography.body1)
-                },
-                singleLine = true,
-                maxLines = 1,
-                textStyle = MaterialTheme.typography.body1,
-                shape = MaterialTheme.shapes.medium,
-                trailingIcon = {
-                    Icon(
-                        Icons.Filled.Person,
-                        contentDescription = "icon",
-                        tint = if (isUsernameEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
+            Column() {
+                OutlinedTextField(
+                    value = usernameText!!,
+                    onValueChange = {
+                        viewModel.phoneNumber.value = it.trim()
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .background(Color.White)
+                        .width(300.dp)
+                        .padding(vertical = 10.dp)
+                    ,
+                    label = {
+                        Text(text = "نام کاربری", style = MaterialTheme.typography.body1)
+                    },
+                    singleLine = true,
+                    maxLines = 1,
+                    textStyle = MaterialTheme.typography.body1,
+                    shape = MaterialTheme.shapes.medium,
+                    trailingIcon = {
+                        Icon(
+                            Icons.Filled.Person,
+                            contentDescription = "icon",
+                            tint = if (isUsernameEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focus.moveFocus(FocusDirection.Down)}
+                    ),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedLabelColor = MainGreen,
+                        unfocusedLabelColor = MainGreen,
+                        unfocusedBorderColor = if (isUsernameEmpty) RedFertilizer else MainGreen
                     )
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focus.moveFocus(FocusDirection.Down)}
-                ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedLabelColor = MainGreen,
-                    unfocusedLabelColor = MainGreen,
-                    unfocusedBorderColor = if (isUsernameEmpty) RedFertilizer else MainGreen
                 )
-            )
 
-            // Password textField
-            OutlinedTextField(
-                value = passwordText!!,
-                onValueChange = {
-                    viewModel.password.value = it.trim() },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .background(Color.White)
-                    .width(300.dp)
-                    .padding(vertical = 10.dp),
-                label = {
-                    Text(text = "رمز عبور", style = MaterialTheme.typography.body1)
-                        },
-                textStyle = MaterialTheme.typography.body1,
-                shape = MaterialTheme.shapes.medium,
-                trailingIcon = {
-                    Icon(
-                        Icons.Filled.Lock,
-                        contentDescription = "icon",
-                        tint = if (isPassEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
+                // Password textField
+                OutlinedTextField(
+                    value = passwordText!!,
+                    onValueChange = {
+                        viewModel.password.value = it.trim() },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .background(Color.White)
+                        .width(300.dp)
+                        .padding(vertical = 10.dp),
+                    label = {
+                        Text(text = "رمز عبور", style = MaterialTheme.typography.body1)
+                            },
+                    textStyle = MaterialTheme.typography.body1,
+                    shape = MaterialTheme.shapes.medium,
+                    trailingIcon = {
+                        Icon(
+                            Icons.Filled.Lock,
+                            contentDescription = "icon",
+                            tint = if (isPassEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Password
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {focus.clearFocus()}
+                    ),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedLabelColor = MainGreen,
+                        unfocusedLabelColor = MainGreen,
+                        unfocusedBorderColor = if (isPassEmpty) RedFertilizer else MainGreen
                     )
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Password
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {focus.clearFocus()}
-                ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedLabelColor = MainGreen,
-                    unfocusedLabelColor = MainGreen,
-                    unfocusedBorderColor = if (isPassEmpty) RedFertilizer else MainGreen
                 )
-            )
 
-            Text(
-                text = "فراموشی رمز",
-                style = MaterialTheme.typography.subtitle1,
-                color = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .clickable {
-                        // Go to password recovery
-                    }
-                    .align(Alignment.CenterHorizontally)
-                    .padding(6.dp)
-            )
+                Text(
+                    text = "فراموشی رمز",
+                    style = MaterialTheme.typography.subtitle1,
+                    color = MaterialTheme.colors.primary,
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(route = AppScreensEnum.ForgetPasswordScreen.name)
+                        }
+                        .align(Alignment.CenterHorizontally)
+                        .padding(6.dp)
+                )
 
-            val loginBtnWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value == true) 1f else .6f )
+            }
+
+            val loginBtnWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value == true) 0f else .4f )
 
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -176,7 +181,7 @@ fun Login(
                         },
                         modifier = Modifier
                             .padding(5.dp)
-                            .fillMaxWidth(.4f)
+                            .fillMaxWidth(loginBtnWidth)
                             .padding(top = 80.dp, bottom = 20.dp)
                             .align(Alignment.CenterVertically)
                         ,
@@ -204,7 +209,7 @@ fun Login(
                     },
                     modifier = Modifier
                         .padding(5.dp)
-                        .fillMaxWidth(loginBtnWidth)
+                        .fillMaxWidth(1f)
                         .padding(top = 80.dp, bottom = 20.dp)
                     ,
                     shape = MaterialTheme.shapes.medium,

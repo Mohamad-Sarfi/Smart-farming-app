@@ -29,6 +29,7 @@ fun AuthNavGraph(
     val context = LocalContext.current
     val response = loginViewModel.loginResponse
     val loggedIn = false
+    val forgotPasswordScreen = AppScreensEnum.ForgetPasswordScreen.name
 
     NavHost(
         navController = navController,
@@ -67,6 +68,12 @@ fun AuthNavGraph(
             route = AppScreensEnum.RegisterScreen.name
         ){
             Register()
+        }
+
+        composable(
+            route = forgotPasswordScreen
+        ){
+            ForgetPassWordScreen(navController)
         }
     }
 }
