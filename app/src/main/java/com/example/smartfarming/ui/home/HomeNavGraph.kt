@@ -1,5 +1,7 @@
 package com.example.smartfarming.ui.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -11,6 +13,7 @@ import com.example.smartfarming.ui.addactivity.activityscreens.irrigation.Irriga
 import com.example.smartfarming.ui.addactivity.activityscreens.others.Others
 import com.example.smartfarming.ui.home.composables.HomeCompose
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeNavGraph(navController : NavHostController, setShowFAB : (Boolean) -> Unit){
 

@@ -16,24 +16,26 @@ import androidx.compose.ui.unit.dp
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.harvest.HarvestViewModel
+import com.example.smartfarming.utils.YEARS_LIST
 
 @Composable
 fun HarvestBottomSheet(viewModel : HarvestViewModel){
-    val yList = listOf<String>("1399", "1400", "1401", "1402")
+    val yList = YEARS_LIST
 
     Column(
         Modifier
+            .padding(horizontal = 15.dp, vertical = 6.dp)
             .height(190.dp)
             .fillMaxWidth()
             .background(LightBackground)
-            .padding(top = 35.dp),
+            .padding(top = 30.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyRow {
             items(yList) {
-                YearCard(content = it, selectedYear = viewModel.selectedYear.value){
-                    viewModel.selectedYear.value = it
+                YearCard(content = it, selectedYear = viewModel.selectedYear.value){ year ->
+                    viewModel.setSelectedYear(year)
                 }
             }
         }
@@ -41,7 +43,7 @@ fun HarvestBottomSheet(viewModel : HarvestViewModel){
         Row(
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.Center
         ) {
             HarvestTypeSelect("همه", viewModel.selectedType.value){viewModel.selectedType.value = it}
             HarvestTypeSelect("خشک", viewModel.selectedType.value){viewModel.selectedType.value = it}
@@ -51,7 +53,7 @@ fun HarvestBottomSheet(viewModel : HarvestViewModel){
 }
 
 @Composable
-fun HarvestTypeSelect(content: String, selectedType : String, onClick : (String) -> Unit){
+private fun HarvestTypeSelect(content: String, selectedType : String, onClick : (String) -> Unit){
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -72,10 +74,10 @@ fun HarvestTypeSelect(content: String, selectedType : String, onClick : (String)
 }
 
 @Composable
-fun YearCard(content : String, selectedYear : String ,onClick : (String) -> Unit){
+private fun YearCard(content : String, selectedYear : String ,onClick : (String) -> Unit){
     Card(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(10.dp)
             .width(55.dp)
             .height(70.dp)
             .clickable {

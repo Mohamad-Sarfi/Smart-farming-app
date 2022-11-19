@@ -26,45 +26,28 @@ class ReportViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
     private var gardenId = 0
 
     fun getAllActivitiesCount(gardenName: String){
-        Log.i("TAG_all", "clicked")
         viewModelScope.launch {
+            gardenId = repo.getGardenByName(gardenName).id
             getPesticidesNumber(gardenName)
-            getOtherActivitiesNumber(gardenName)
+            getOtherActivitiesNumber()
             getIrrigationsNumber(gardenName)
-            getFertilizationsNumber(gardenName)
+            getFertilizationsNumber()
         }
     }
 
     private suspend fun getIrrigationsNumber(gardenName : String){
-        irrigationsNumber.value = repo.getIrrigationByGardenName(gardenName).size
+        irrigationsNumber.value = repo.getIrrigationByGardenYear(gardenName, selectedYear.value).size
     }
 
-    private suspend fun getFertilizationsNumber(gardenName: String){
-        gardenId = repo.getGardenByName(gardenName).id
-
-        repo.getFertilizationByGardenId(gardenId).collect{
-            fertilizationNumber.value = it.size
-            Log.i("TAG_pestNUM", "clicked11")
-        }
+    private suspend fun getFertilizationsNumber(){
+        fertilizationNumber.value = repo.getFertilizationByGardenYear(gardenId, selectedYear.value).size
     }
 
     private suspend fun getPesticidesNumber(gardenName: String){
-        pesticidesNumber.value = repo.getPesticidesByGardenName(gardenName).firstOrNull()?.size ?: 0
+        pesticidesNumber.value = repo.getPesticideByGardenNameYear(gardenName, selectedYear.value).size
     }
 
-    fun getOtherActivitiesNumber(gardenName: String){
-        viewModelScope.launch {
-            val r = repo.getOtherActivitiesByGardenName(gardenName)
-            otherActivitiesNumber.value = r.size
-        }
+    private suspend fun getOtherActivitiesNumber(){
+        otherActivitiesNumber.value = repo.getOtherActivityByGardenYear(gardenId, selectedYear.value).size
     }
-
-    fun getAllPesticides(gardenName: String){
-        viewModelScope.launch {
-            repo.getPesticidesByGardenName(gardenName).collect{
-                allPests.value = it
-            }
-        }
-    }
-
 }

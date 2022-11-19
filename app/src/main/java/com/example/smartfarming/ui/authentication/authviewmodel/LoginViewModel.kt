@@ -24,11 +24,14 @@ class LoginViewModel(
 
     // LOGIN FUNCTION
     val loginResponse = mutableStateOf<Resource<LoginResponse>?>(null)
+    val gotResponse = mutableStateOf(false)
 
     fun login(){
         inProgress.value = true
         viewModelScope.launch {
             loginResponse.value =authRepo.login(password = password.value!!, email = phoneNumber.value!!)
+            gotResponse.value = true
+
             if (loginResponse.value is Resource.Success){
                 userPreferences.saveAuthToken((loginResponse.value as Resource.Success<LoginResponse>).value.response.token)
             }

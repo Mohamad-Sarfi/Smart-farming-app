@@ -78,6 +78,11 @@ class GardenRepo @Inject constructor(
     }
 
     @WorkerThread
+    suspend fun getIrrigationByGardenYear(gardenName: String, year: String) : List<IrrigationEntity>{
+        return irrigationDao.getIrrigationByGardenYear(gardenName, "%$year%")
+    }
+
+    @WorkerThread
     suspend fun deleteIrrigation(irrigationEntity: IrrigationEntity){
         irrigationDao.delete(irrigationEntity)
     }
@@ -125,6 +130,11 @@ class GardenRepo @Inject constructor(
     }
 
     @WorkerThread
+    suspend fun getFertilizationByGardenYear(gardenId: Int, year: String) : List<FertilizationEntity> {
+        return fertilizationDao.getFertilizationByGardenNameYear(gardenId, "%$year%")
+    }
+
+    @WorkerThread
     suspend fun deleteFertilization(fertilizationEntity: FertilizationEntity){
         fertilizationDao.deleteFertilization(fertilizationEntity)
     }
@@ -133,6 +143,11 @@ class GardenRepo @Inject constructor(
     @WorkerThread
     fun getPesticidesByGardenName(gardenName: String) : Flow<List<PesticideEntity>>{
         return pesticideDao.getPesticideByGardenName(gardenName)
+    }
+
+    @WorkerThread
+    suspend fun getPesticideByGardenNameYear(gardenName : String, year : String) : List<PesticideEntity> {
+        return pesticideDao.getPesticideByGardenNameYear(gardenName, "%$year%")
     }
 
     @WorkerThread
@@ -152,8 +167,13 @@ class GardenRepo @Inject constructor(
     }
 
     @WorkerThread
-    suspend fun getOtherActivitiesByGardenName(gardenName: String) : List<OtherActivityEntity> {
-        return otherActivitiesDao.getOtherActivitiesByGardenName(gardenName)
+    suspend fun getOtherActivitiesByGardenId(gardenId: Int) : List<OtherActivityEntity> {
+        return otherActivitiesDao.getOtherActivitiesByGardenId(gardenId)
+    }
+
+    @WorkerThread
+    suspend fun getOtherActivityByGardenYear(gardenId: Int, year: String) : List<OtherActivityEntity>{
+        return otherActivitiesDao.getOtherActivitiesByGardenYear(gardenId, "%$year%")
     }
 
     @WorkerThread

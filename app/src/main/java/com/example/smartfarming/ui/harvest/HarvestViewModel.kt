@@ -1,27 +1,17 @@
 package com.example.smartfarming.ui.harvest
 
-import android.util.Log
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.res.stringArrayResource
 import androidx.lifecycle.*
-import com.example.smartfarming.R
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Harvest
 import com.example.smartfarming.utils.HARVEST_TYPE
 import com.example.smartfarming.utils.PersianCalender
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
-
-    var harvestDate =
-        mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
-
+    var harvestDate = mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
     var selectedGarden = MutableLiveData<String>("")
     var harvestWeight = MutableLiveData<Float>()
     var harvestType = MutableLiveData<String>().apply {
@@ -32,7 +22,6 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
     val mHarvestList = mutableStateListOf<Harvest>()
     var selectedYear = mutableStateOf(thisYear)
     var selectedType = mutableStateOf("همه")
-
     fun setDate(date : MutableMap<String, String>){
         harvestDate.value = date
     }
@@ -60,9 +49,9 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
         }
     }
 
-    fun getHarvestByYear(gardeName: String, year: String){
+    fun getHarvestByYear(gardeName: String){
         viewModelScope.launch {
-            _harvestList.value = repo.getHarvestByYear(gardeName, year)
+            _harvestList.value = repo.getHarvestByYear(gardeName, selectedYear.value)
         }
     }
 
@@ -97,6 +86,10 @@ class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
         viewModelScope.launch {
             repo.deleteHarvest(harvest)
         }
+    }
+
+    fun setSelectedYear(value : String){
+        selectedYear.value = value
     }
 
 }

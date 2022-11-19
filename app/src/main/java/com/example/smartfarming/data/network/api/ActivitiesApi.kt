@@ -33,7 +33,6 @@ interface ActivitiesApi {
         @Path("id") fertilizationId : Int
     ) : FertilizationEntity
 
-
     //Irrigation
     @POST("farmer/privileged/irrigation")
     suspend fun addIrrigation(

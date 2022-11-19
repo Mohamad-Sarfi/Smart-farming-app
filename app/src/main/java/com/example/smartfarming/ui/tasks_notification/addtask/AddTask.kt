@@ -2,7 +2,9 @@ package com.example.smartfarming.ui.tasks_notification.addtask
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.icu.text.CaseMap.Title
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
@@ -19,6 +21,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AlarmAdd
+import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.Eco
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
@@ -103,7 +106,7 @@ private fun AddTaskBody(viewModel: AddTaskViewModel, navController: NavHostContr
                 Column(
                     Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 20.dp, vertical = 10.dp),
+                        .padding(horizontal = 5.dp, vertical = 10.dp),
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -118,20 +121,36 @@ private fun AddTaskBody(viewModel: AddTaskViewModel, navController: NavHostContr
                             when(step){
                                 0 -> Step0(viewModel)
                                 1 -> Step1(viewModel)
-                                2 -> Step2(viewModel)
+                                2 -> Step2(viewModel,activity)
                                 3 -> Step3(viewModel)
                                 4 -> SuccessCompose(navController){
                                     activity.finish()
                                 }
-                                else -> Step2(viewModel)
+                                else -> Step2(viewModel, activity)
                             }
                         }
                     }
 
                     BottomRow(viewModel)
                 }
+
+                //checkSteps(viewModel, activity)
             }
         }
+    }
+}
+
+private fun checkSteps(viewModel: AddTaskViewModel, activity : Activity){
+    /**
+     * checks steps and shows toast
+     */
+    if (viewModel.activityNotSet.value){
+        Toast.makeText(activity, "موضوع فعالیت تعیین نشده است", Toast.LENGTH_SHORT).show()
+        viewModel.activityNotSet.value = false
+    }
+    if (viewModel.gardenNotSet.value){
+        Toast.makeText(activity, "حداقل یک باغ را وارد کنید", Toast.LENGTH_SHORT).show()
+        viewModel.gardenNotSet.value = false
     }
 }
 
@@ -161,12 +180,13 @@ private fun Step0(viewModel: AddTaskViewModel) {
             .size(60.dp), tint = MaterialTheme.colors.primary)
 
         GardenSpinner(gardensList = viewModel.gardenNameList, currentGarden = viewModel.selectedGarden.value){
-            viewModel.setSelectedGarden(it)
-            //viewModel.increaseStep()
             viewModel.addGarden(it)
         }
 
-        Row(Modifier.fillMaxWidth().padding(8.dp)) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp)) {
             viewModel.selectedGardens.forEach { gardenName ->
                 GardenBadge(gardenName){
                     viewModel.removeGarden(it)
@@ -179,7 +199,9 @@ private fun Step0(viewModel: AddTaskViewModel) {
 @Composable
 private fun GardenBadge(gardenName : String, deleteItem : (String) -> Unit) {
     Surface(
-        modifier = Modifier.padding(4.dp).clickable { deleteItem(gardenName) },
+        modifier = Modifier
+            .padding(4.dp)
+            .clickable { deleteItem(gardenName) },
         color = MaterialTheme.colors.primary,
         shape = MaterialTheme.shapes.small
     ) {
@@ -207,14 +229,14 @@ private fun Step1(viewModel: AddTaskViewModel) {
 }
 
 @Composable
-private fun Step2(viewModel: AddTaskViewModel) {
+private fun Step2(viewModel: AddTaskViewModel, context: Context) {
     Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(Icons.Outlined.Timer,
             contentDescription = null, modifier = Modifier
                 .padding(bottom = 20.dp)
                 .size(60.dp), tint = MaterialTheme.colors.primary)
 
-        TimeSeekBar(viewModel)
+        TimeSeekBar(viewModel, context)
     }
 }
 
@@ -294,16 +316,20 @@ private fun DescriptionET(viewModel: AddTaskViewModel) {
 
 @Composable
 private fun BottomRow(viewModel: AddTaskViewModel) {
-    val nextBtnWidth by animateFloatAsState(if (viewModel.step.value == 0) .9f else .8f)
+    val nextBtnWidth by animateFloatAsState(if (viewModel.step.value == 0) 1f else .8f)
 
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         ProgressDots(viewModel)
-        Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(Modifier.padding(2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
             AnimatedVisibility(visible = viewModel.step.value != 0) {
                 Button(
-                    modifier = Modifier.fillMaxWidth(.3f),
+                    modifier = Modifier
+                        .padding(7.dp)
+                        .fillMaxWidth(.3f)
+                        .height(50.dp)
+                        .padding(0.dp),
                     onClick = { viewModel.decreaseStep() },
-                    shape = MaterialTheme.shapes.small,) {
+                    shape = MaterialTheme.shapes.medium,) {
                     Text(text = "قبلی", style = MaterialTheme.typography.body1)
                 }
             }
@@ -311,11 +337,17 @@ private fun BottomRow(viewModel: AddTaskViewModel) {
             Button(
                 modifier = Modifier
                     .fillMaxWidth(nextBtnWidth)
-                    .padding(5.dp),
+                    .height(50.dp),
                 onClick = { viewModel.submitClickHandler() },
-                shape = MaterialTheme.shapes.small,
+                shape = MaterialTheme.shapes.medium,
             ) {
-                Text(text = if (viewModel.step.value > viewModel.MAX_STEP - 2) "ثبت" else "بعدی", style = MaterialTheme.typography.body1)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(text = if (viewModel.step.value > viewModel.MAX_STEP - 2) "ثبت" else "بعدی", style = MaterialTheme.typography.body1)
+                    Icon(Icons.Default.ArrowRight, contentDescription = null, modifier = Modifier.size(30.dp), tint = MaterialTheme.colors.onPrimary)
+                }
             }
         }
     }
@@ -335,7 +367,7 @@ private fun ProgressDots(viewModel: AddTaskViewModel) {
 }
 
 @Composable
-fun TimeSeekBar(viewModel: AddTaskViewModel) {
+fun TimeSeekBar(viewModel: AddTaskViewModel, context: Context) {
     var showTimePicker by remember {
         mutableStateOf(false)
     }
@@ -381,6 +413,27 @@ fun TimeSeekBar(viewModel: AddTaskViewModel) {
             viewModel.day.value = date["day"]!!
             viewModel.month.value = date["month"]!!
             viewModel.year.value = date["year"]!!
+
+            checkDate(context, viewModel)
         }
+    }
+}
+
+private fun checkDate(context: Context, viewModel: AddTaskViewModel){
+    if (viewModel.month.value.toInt() < viewModel.currentDate["month"]!!){
+        Toast.makeText(context, "تاریخ یادآور نباید برای گذشته باشد", Toast.LENGTH_SHORT).show()
+
+        viewModel.day.value = viewModel.currentDate["day"].toString()
+        viewModel.month.value = viewModel.currentDate["month"].toString()
+        viewModel.year.value = viewModel.currentDate["year"].toString()
+    } else if (viewModel.month.value.toInt() == viewModel.currentDate["month"]!! && viewModel.day.value.toInt() < viewModel.currentDate["day"]!!) {
+        Toast.makeText(context, "تاریخ یادآور نباید برای گذشته باشد", Toast.LENGTH_SHORT).show()
+
+        viewModel.day.value = viewModel.currentDate["day"].toString()
+        viewModel.month.value = viewModel.currentDate["month"].toString()
+        viewModel.year.value = viewModel.currentDate["year"].toString()
+    }
+    else {
+        viewModel.setRemainingDays()
     }
 }

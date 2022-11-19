@@ -1,6 +1,8 @@
 package com.example.smartfarming.ui.gardenprofile.taskScreen
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -31,6 +33,7 @@ import com.example.smartfarming.ui.home.composables.TaskCard2
 import com.example.smartfarming.utils.getActivityScreen
 import com.example.smartfarming.utils.getTaskList
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

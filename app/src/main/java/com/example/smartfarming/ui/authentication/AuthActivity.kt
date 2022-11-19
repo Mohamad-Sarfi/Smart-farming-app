@@ -57,7 +57,7 @@ class AddUserActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    AuthNavGraph(navController = navController, viewModel, loginViewModel)
+                    AuthNavGraph(navController = navController, loginViewModel)
                 }
             }
         }

@@ -52,7 +52,7 @@ fun GardenSpinner(
             .padding(vertical = 10.dp)
             .fillMaxWidth(fillWidthPercentage),
         elevation = 3.dp,
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.small,
         backgroundColor = LightGray
     ){
         Row(
@@ -61,7 +61,7 @@ fun GardenSpinner(
                 .clickable {
                     expanded = !expanded
                 }
-                .padding(vertical = 5.dp, horizontal = 20.dp),
+                .padding(vertical = 5.dp, horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -71,7 +71,7 @@ fun GardenSpinner(
                 contentDescription = "",
                 tint = MaterialTheme.colors.primary,
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(45.dp)
                     .rotate(arrowRotateDegree))
             Text(
                 text = if (currentGarden.isNullOrEmpty()) "انتخاب باغ" else currentGarden,

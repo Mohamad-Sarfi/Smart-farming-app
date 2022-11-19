@@ -20,4 +20,7 @@ interface PesticideDao {
 
     @Query("SELECT * FROM pesticide_table WHERE garden_name = :gardenName")
     fun getPesticideByGardenName(gardenName : String) : Flow<List<PesticideEntity>>
+
+    @Query("SELECT * FROM pesticide_table WHERE garden_name = :gardenName AND date LIKE :year ORDER BY date DESC")
+    suspend fun getPesticideByGardenNameYear(gardenName: String, year : String) : List<PesticideEntity>
 }

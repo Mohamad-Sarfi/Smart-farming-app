@@ -256,6 +256,9 @@ public class PersianCalender {
     }
 
     public static Map<String, Integer> getShamsiDateMap(){
+        /**
+         * months start at 1.
+         */
         Locale loc = new Locale("en_US");
         PersianCalender persianCalender = new PersianCalender();
         SolarCalendar sc = persianCalender.new SolarCalendar();
@@ -290,7 +293,7 @@ public class PersianCalender {
 
     public static Map<String, Integer> getCurrentDatePlusDays(int days){
         /**
-         * This function get number of days as an int and adds to current date
+         * This function returns number of days as an int and adds to current date
          */
         Map<String, Integer> currentDate = getShamsiDateMap();
 

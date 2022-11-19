@@ -15,7 +15,8 @@ class OtherActivitiesReportViewModel @Inject constructor(private val repo : Gard
 
     fun getOtherActivitiesForGarden(gardenName : String){
         viewModelScope.launch {
-            val otherActivitiesListStatic = repo.getOtherActivitiesByGardenName(gardenName)
+            val gardenId = repo.getGardenByName(gardenName).id
+            val otherActivitiesListStatic = repo.getOtherActivitiesByGardenId(gardenId)
             updateStateList(otherActivitiesListStatic)
         }
     }

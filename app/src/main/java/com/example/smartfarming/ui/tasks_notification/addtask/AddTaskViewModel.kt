@@ -39,9 +39,44 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
     val year = mutableStateOf("")
     val selectedGardens = mutableStateListOf<String>()
     private val gardensId = mutableListOf<Int>()
+    val currentDate: MutableMap<String, Int> = PersianCalender.getShamsiDateMap()
+    val gardenNotSet = mutableStateOf(false)
+    val activityNotSet = mutableStateOf(false)
+    val dateNotSet = mutableStateOf(false)
 
     init {
         getGardens()
+        setCurrentDate()
+    }
+
+    private fun setCurrentDate(){
+
+        day.value = currentDate["day"].toString()
+        month.value = currentDate["month"].toString()
+        year.value = currentDate["year"].toString()
+    }
+
+    fun setRemainingDays(){
+        /**
+         * Calculates the difference between the current day and the selected date
+         */
+        if (month.value.toInt() == currentDate["month"]!!){
+            remainingDays.value = day.value.toInt() - currentDate["day"]!!
+        } else if (month.value.toInt() > currentDate["month"]!!){
+            if ((month.value.toInt() - currentDate["month"]!!) > 1){
+                if (currentDate["month"]!! < 7){
+                    remainingDays.value = (month.value.toInt() - currentDate["month"]!!) * 31 + day.value.toInt()
+                } else {
+                    remainingDays.value = (month.value.toInt() - currentDate["month"]!!) * 30 + day.value.toInt()
+                }
+            } else {
+                if (currentDate["month"]!! < 7){
+                    remainingDays.value = (31 - currentDate["day"]!!) + day.value.toInt()
+                } else {
+                    remainingDays.value = (30 - currentDate["day"]!!) + day.value.toInt()
+                }
+            }
+        }
     }
 
     private fun getGardens(){
@@ -112,12 +147,26 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
     }
 
     fun submitClickHandler(){
-        if (step.value == MAX_STEP - 1){
-            Log.i("TAG task insertion", "Task added to db. garden: ${selectedGarden.value}")
-            insertTask2Db()
+        if (step.value == 0) {
+            // garden
+            if (selectedGardens.isEmpty()){
+
+            } else {
+                increaseStep()
+            }
+        } else if (step.value == 1){
+            // activity type
+            if (selectedActivity.value == ""){
+                Log.i("TAG xxx", "step1")
+            } else {
+                increaseStep()
+            }
+        } else if (step.value == 2) {
+            //date
             increaseStep()
-        } else {
-            Log.i("TAG task insertion111", "Task added to db. garden: ${step.value}")
+        }
+        else if (step.value == MAX_STEP - 1){
+            insertTask2Db()
             increaseStep()
         }
     }
@@ -128,7 +177,7 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
                 Task(
                     activityType = getActivityType(),
                     description = description.value,
-                    executionTime = 5,
+                    executionTime = remainingDays.value,
                     expireDuration = getFinishDate(),
                     gardenIds = gardensId,
                     id = 0,
@@ -140,23 +189,6 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
                     userId = 0
                 )
             )
-
-            Log.i("TAG task insertion", "${
-                Task(
-                    activityType = getActivityType(),
-                    description = description.value,
-                    executionTime = 5,
-                    expireDuration = getFinishDate(),
-                    gardenIds = gardensId,
-                    id = 0,
-                    name = selectedActivity.value,
-                    notifyFarmer = false,
-                    priority = TaskPriorityEnum.NORMAL.name,
-                    status = TaskStatusEnum.TODO.name,
-                    taskType = TaskTypeEnum.FARMER.name,
-                    userId = 0
-                )
-            }")
         }
     }
 

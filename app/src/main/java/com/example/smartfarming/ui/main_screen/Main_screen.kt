@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.main_screen
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import com.example.smartfarming.ui.home.HomeNavGraph
 import com.example.smartfarming.ui.home.composables.HomeCompose
 import com.example.smartfarming.ui.home.composables.MyFAB
 import com.example.smartfarming.ui.main_screen.bottom_navigation.*
+import com.example.smartfarming.utils.isOnline
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -41,6 +43,10 @@ fun MainScreen(){
 
     var showFAB by remember {
         mutableStateOf(true)
+    }
+
+    if (!isOnline(context)){
+        Toast.makeText(context, "اینترنت در درسترس نیست", Toast.LENGTH_SHORT).show()
     }
 
     Scaffold(

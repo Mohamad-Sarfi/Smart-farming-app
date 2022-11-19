@@ -61,7 +61,7 @@ fun Login(
     var isPassEmpty by remember {
         mutableStateOf(false)
     }
-    var context = LocalContext.current
+    val context = LocalContext.current
     val focus = LocalFocusManager.current
 
     Column(
@@ -79,7 +79,6 @@ fun Login(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Column() {
                 OutlinedTextField(
                     value = usernameText!!,
@@ -169,7 +168,7 @@ fun Login(
 
             }
 
-            val loginBtnWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value == true) 0f else .4f )
+            val loginBtnWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value) 0f else .4f )
 
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -215,46 +214,20 @@ fun Login(
                     shape = MaterialTheme.shapes.medium,
 
                     ) {
-                    if (viewModel.loginResponse.value == null){
+                    if (!viewModel.inProgress.value){
                         Text(
                             text = "ورود",
                             style = MaterialTheme.typography.subtitle1,
                             modifier = Modifier.padding(vertical = 2.dp)
                         )
                     } else {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
                     }
                 }
             }
-
-//                        Row(
-//                            modifier = Modifier
-//                                .align(Alignment.CenterHorizontally)
-//                                .clickable {
-//
-//                                }
-//                        ) {
-//                            Text(
-//                                text = "با حساب گوگل وارد شوید",
-//                                style = MaterialTheme.typography.body1,
-//                                modifier = Modifier.align(Alignment.CenterVertically)
-//                            )
-//
-//                            Image(
-//                                painter = painterResource(id = R.drawable.search),
-//                                contentDescription = "Google",
-//                                modifier = Modifier
-//                                    .size(35.dp)
-//                                    .align(Alignment.CenterVertically)
-//                                    .padding(horizontal = 5.dp)
-//                            )
-//
-//                        }
-            }
         }
-
+    }
 }
-
 
 @Composable
 fun Title(){
@@ -272,6 +245,7 @@ fun Title(){
             modifier = Modifier
                 .size(120.dp)
         )
+
         Text(
             text = "کشت افزار",
             color = Color.White,
@@ -279,8 +253,8 @@ fun Title(){
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(5.dp)
-
         )
+
         Text(
             text = "اپلیکشن مزرعه هوشمند",
             style = MaterialTheme.typography.body1,
@@ -288,7 +262,6 @@ fun Title(){
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(5.dp)
-
         )
     }
 }

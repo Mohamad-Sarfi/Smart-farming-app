@@ -1,6 +1,9 @@
 package com.example.smartfarming.ui.home.composables
 
 import android.app.Activity
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -22,9 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.ui.addactivities.ui.theme.*
+import com.example.smartfarming.utils.getDateDifferenceWithToday
 import com.example.smartfarming.utils.getTaskColor
 import com.example.smartfarming.utils.getTaskIcon
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boolean = false, deleteTask: (Task) -> Unit, clickHandler : () -> Unit){
 
@@ -53,7 +58,7 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
             }
             .padding(top = 2.dp),
         elevation = 3.dp,
-        shape = RoundedCornerShape(15.dp),
+        shape = MaterialTheme.shapes.medium,
         backgroundColor = Color.White,
         border = if (clicked) BorderStroke(2.dp, getTaskColor(task.activityType)) else BorderStroke(0.dp, Color.White),
     ) {
@@ -71,7 +76,7 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
                 tint = getTaskColor(task.activityType)
             )
             Text(text = task.name, color = Color.Black, style = MaterialTheme.typography.body1)
-            Text(text = "باغ _", color = BorderGray, style = MaterialTheme.typography.overline, textAlign = TextAlign.Justify)
+            Text(text = " باغ -", color = BorderGray, style = MaterialTheme.typography.overline, textAlign = TextAlign.Justify)
             RemainingDays(task)
             if (clicked){
                 ButtonRow(task){
@@ -80,9 +85,9 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
             }
         }
     }
-    
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RemainingDays(task: Task){
     Row(
@@ -93,28 +98,26 @@ fun RemainingDays(task: Task){
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-
-        Text(text = "10 روز", color = getTaskColor(task.activityType).copy(alpha = 0.6f), style = MaterialTheme.typography.subtitle2)
+        val date = task.expireDuration.split('/')
+        val remained = getDateDifferenceWithToday(mapOf("year" to date[0], "month" to date[1], "day" to date[2]))
+        val remainingPortion = remained/ task.executionTime.toFloat()
 
         LinearProgressIndicator(
-            .70f,
+            remainingPortion,
             modifier = Modifier
-                .fillMaxWidth(0.8f)
+                .fillMaxWidth(.6f)
                 .height(10.dp)
                 .clip(MaterialTheme.shapes.large),
             color = getTaskColor(task.activityType),
             backgroundColor = getTaskColor(task.activityType).copy(alpha = 0.3f)
         )
+
+        Text(text = "$remained روز ", color = getTaskColor(task.activityType).copy(alpha = 0.6f), style = MaterialTheme.typography.subtitle2)
     }
 }
 
-
-
-
-
 @Composable
 private fun ButtonRow(task: Task, deleteTask: (Task) -> Unit){
-
     var openDialog by remember {
         mutableStateOf(false)
     }
@@ -138,7 +141,6 @@ private fun ButtonRow(task: Task, deleteTask: (Task) -> Unit){
     if (openDialog){
         DeleteDialog(openDialog,task, deleteTask = {deleteTask(it)}){openDialog = it}
     }
-
 }
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.smartfarming.ui.authentication
+package com.example.smartfarming.ui.authentication.forgetpassword
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.*
@@ -14,22 +14,17 @@ import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.authentication.forgetpassword.ForgetPasswordViewModel
 import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -63,9 +58,15 @@ fun ForgetPassWordScreen(navController: NavHostController) {
                      Icon(
                          Icons.Outlined.ArrowBack,
                          contentDescription = null,
-                         modifier = Modifier.clickable { navController.popBackStack() }.padding(10.dp),
+                         modifier = Modifier
+                             .clickable { navController.popBackStack() }
+                             .padding(10.dp),
                          tint = MaterialTheme.colors.primary
                      )
+
+                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        Text(text = "بازیابی رمز عبور", style = MaterialTheme.typography.body1, color = MaterialTheme.colors.primary)
+                     }
                  }
         },
         floatingActionButtonPosition = FabPosition.Center

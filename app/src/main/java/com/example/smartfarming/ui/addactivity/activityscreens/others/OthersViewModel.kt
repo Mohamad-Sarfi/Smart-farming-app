@@ -64,18 +64,17 @@ class OthersViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
 
     private fun insertOtherActivity2Db(gardenName: String){
         viewModelScope.launch {
+            val gardenId = repo.getGardenByName(gardenName).id
             repo.insertOtherActivity(
                 OtherActivityEntity(
                     0,
                     name = activityName.value,
-                    date = date.value["year"] +"/" + date.value["month"] + "/" + date.value["day"],
+                    time = date.value["year"] +"/" + date.value["month"] + "/" + date.value["day"] + "00:00:00",
                     description = activityDescription.value,
                     cause = activityCause.value,
-                    garden_name = gardenName
+                    gardenId = gardenId
                 )
             )
-            val x = repo.getOtherActivitiesByGardenName(garden.value!!.title)
-            Log.i("TAG_zz", "$x")
         }
     }
 }

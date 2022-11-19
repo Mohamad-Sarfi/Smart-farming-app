@@ -62,7 +62,7 @@ fun GardenHarvestScreen(gardenName: String){
     val coroutineScope = rememberCoroutineScope()
 
     if (selectedType.value == "همه"){
-        viewModel.getHarvestByYear(gardenName, selectedYear.value)
+        viewModel.getHarvestByYear(gardenName)
     } else {
         viewModel.getHarvestByYearType(gardenName, selectedYear.value, selectedType.value)
     }

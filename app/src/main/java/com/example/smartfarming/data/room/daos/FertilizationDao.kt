@@ -3,6 +3,7 @@ package com.example.smartfarming.data.room.daos
 import androidx.room.*
 import com.example.smartfarming.data.room.entities.FertilizationEntity
 import kotlinx.coroutines.flow.Flow
+import java.time.Year
 
 @Dao
 interface FertilizationDao {
@@ -18,4 +19,7 @@ interface FertilizationDao {
 
     @Delete
     suspend fun deleteFertilization(fertilizationEntity: FertilizationEntity)
+
+    @Query("SELECT * FROM fertilization_table WHERE gardenId = :gardenId AND time LIKE :year")
+    suspend fun getFertilizationByGardenNameYear(gardenId: Int, year: String) : List<FertilizationEntity>
 }

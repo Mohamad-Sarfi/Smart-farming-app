@@ -10,6 +10,7 @@ import com.example.smartfarming.data.room.entities.garden.GardenAddress
 val MONTH_LIST = listOf("فرور", "اردی", "خرداد", "تیر","مرداد","شهر","مهر","آبان","آذر","دی","بهمن","اسفند", )
 val ACTIVITY_LIST = listOf("آبیاری","سم پاشی","تغذیه","سایر",)
 val HARVEST_TYPE = listOf("تازه", "خشک", "سایر")
+val YEARS_LIST = listOf("1400", "1401", "1402", "1403", "1404", "1405")
 
 val initialGarden = Garden(
     0, GardenAddress(city = "Tehran", country = "Iran", id = 0, latitude = 0.0, longitude = 0.0, plainAddress = "", state = "Tehran"),

@@ -39,7 +39,6 @@ fun Report(
     val coroutineScope = rememberCoroutineScope()
 
     viewModel.getAllActivitiesCount(gardenName)
-    viewModel.getOtherActivitiesNumber(gardenName)
 
     BottomSheetScaffold(
         modifier = Modifier

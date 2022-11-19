@@ -19,4 +19,7 @@ interface IrrigationDao {
     @Query("SELECT * FROM irrigation_table WHERE garden_name = :gardenName")
     suspend fun getIrrigationByGardenName(gardenName: String) : List<IrrigationEntity>
 
+    @Query("SELECT * FROM irrigation_table WHERE garden_name = :gardenName AND date LIKE :year")
+    suspend fun getIrrigationByGardenYear(gardenName: String, year : String) : List<IrrigationEntity>
+
 }

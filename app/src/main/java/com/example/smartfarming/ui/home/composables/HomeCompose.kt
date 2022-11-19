@@ -4,7 +4,10 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Build
+import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -52,6 +55,7 @@ import com.example.smartfarming.ui.tasks_notification.TasksNotificationActivity
 import com.example.smartfarming.utils.*
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit){
@@ -78,6 +82,7 @@ fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit
 ////        )
 //        Toast.makeText(activity, "not granted", Toast.LENGTH_SHORT).show()
 //    }
+
 
     BackdropScaffold(
         appBar = { 
@@ -106,52 +111,6 @@ fun HomeCompose(navController: NavHostController, setShowFAB : (Boolean) -> Unit
     ) {
         SnackbarHost(hostState = it)
     }
-    /*
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(LightGreen3),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Column(
-            modifier = Modifier
-                .padding(0.dp)
-                .fillMaxWidth()
-                .padding(top = 80.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ){
-            //TasksColumn(tasks, gardensList)
-            Card(
-                Modifier
-                    .padding(bottom = 30.dp)
-                    .width(230.dp),
-                backgroundColor = MainGreen,
-                shape = RoundedCornerShape(30.dp)
-            ) {
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            val intent = Intent(activity, AddGarden::class.java)
-                            activity.startActivity(intent)
-                        }
-                        .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = null, tint = Color.White, modifier = Modifier.size(30.dp))
-                    Text(text = "افزودن باغ جدید", color = Color.White, style = MaterialTheme.typography.body1)
-                }
-            }
-            Image(painter = painterResource(id = R.drawable.farmer2), contentDescription = null, modifier = Modifier.size(150.dp))
-        }
-        //FarmingArticlesPreview(articlesList = listOf())
-        TasksRow(tasks, viewModel)
-    }
-    */
 }
 
 @Composable
@@ -289,9 +248,7 @@ fun FarmingArticlesPreview(articlesList : List<Article>?){
                 ArticleItem(article = Article(0, "سم پاشی فروردین", "", "", "", "Mohamad Sarfi", listOf(), listOf()))
             }
         }
-
     }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -365,103 +322,81 @@ fun TasksRow(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navController : NavHostController,gardensList : List<Garden>?, setShowFAB: (Boolean) -> Unit) {
 
     val activity = LocalContext.current as Activity
+    Column(
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 15.dp, horizontal = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                ActivityGroupSelector(
+                    ACTIVITY_LIST[0],
+                    ActivityTypesEnum.IRRIGATION.name,
+                    viewModel.selectedActivityGroup.value
+                )
+                { viewModel.setSelectedActivityGroup(it) }
 
-    if (tasks.isNullOrEmpty()){
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(5.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            CircularProgressIndicator(modifier = Modifier.padding(15.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Add, contentDescription = null, tint = MaterialTheme.colors.primary, modifier = Modifier
-                    .padding(10.dp)
-                    .size(35.dp)
-                    .clickable {
-                        val intent = Intent(activity, TasksNotificationActivity::class.java)
-                        activity.startActivity(intent)
-                    })
-                Text(text = "هیچ فعالیت باغداری یافت نشد", style = MaterialTheme.typography.body2, color = Color.Black.copy(.6f))
+                ActivityGroupSelector(
+                    ACTIVITY_LIST[2],
+                    ActivityTypesEnum.FERTILIZATION.name,
+                    viewModel.selectedActivityGroup.value
+                )
+                { viewModel.setSelectedActivityGroup(it) }
+
+                ActivityGroupSelector(
+                    ACTIVITY_LIST[1],
+                    ActivityTypesEnum.PESTICIDE.name,
+                    viewModel.selectedActivityGroup.value
+                )
+                { viewModel.setSelectedActivityGroup(it) }
+
+                ActivityGroupSelector(
+                    ACTIVITY_LIST[3],
+                    ActivityTypesEnum.Other.name,
+                    viewModel.selectedActivityGroup.value
+                )
+                { viewModel.setSelectedActivityGroup(it) }
             }
         }
-    } else {
-        Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 15.dp, horizontal = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    ActivityGroupSelector(
-                        ACTIVITY_LIST[0],
-                        ActivityTypesEnum.IRRIGATION.name,
-                        viewModel.selectedActivityGroup.value
-                    )
-                    { viewModel.setSelectedActivityGroup(it) }
 
-                    ActivityGroupSelector(
-                        ACTIVITY_LIST[2],
-                        ActivityTypesEnum.FERTILIZATION.name,
-                        viewModel.selectedActivityGroup.value
-                    )
-                    { viewModel.setSelectedActivityGroup(it) }
+        if (gardensList.isNullOrEmpty()){
+            Column(
+                Modifier
+                    .size(230.dp)
+                    .padding(top = 20.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally) {
 
-                    ActivityGroupSelector(
-                        ACTIVITY_LIST[1],
-                        ActivityTypesEnum.PESTICIDE.name,
-                        viewModel.selectedActivityGroup.value
-                    )
-                    { viewModel.setSelectedActivityGroup(it) }
-
-                    ActivityGroupSelector(
-                        ACTIVITY_LIST[3],
-                        ActivityTypesEnum.Other.name,
-                        viewModel.selectedActivityGroup.value
-                    )
-                    { viewModel.setSelectedActivityGroup(it) }
-                }
+                Text(text = "هیچ باغی اضافه نشده!", style = MaterialTheme.typography.body1)
+                val tractor_animation by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.tractor_animation))
+                LottieAnimation(composition = tractor_animation, iterations = LottieConstants.IterateForever)
             }
-
-            if (gardensList.isNullOrEmpty()){
-                Column(
-                    Modifier
-                        .size(230.dp)
-                        .padding(top = 20.dp),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-
-                    Text(text = "هیچ باغی اضافه نشده!", style = MaterialTheme.typography.body1)
-                    val tractor_animation by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.tractor_animation))
-                    LottieAnimation(composition = tractor_animation, iterations = LottieConstants.IterateForever)
-                }
-            }
-            LazyRow() {
-                items(tasks) { item ->
-                    if (viewModel.selectedActivityGroup.value == "all") {
-                        TaskCard2(item, navController, deleteTask = {viewModel.deleteTask(it)}) {
-                            val intent = Intent(activity, GardenProfileActivity::class.java)
-                            intent.putExtra("gardenName", "")
-                            intent.putExtra("taskScreenShow", true)
-                            activity.startActivity(intent)
-                        }
-                    } else if (viewModel.selectedActivityGroup.value == item.activityType) {
-                        TaskCard2(item, navController, deleteTask = {viewModel.deleteTask(it)}) {
-                            val intent = Intent(activity, GardenProfileActivity::class.java)
-                            intent.putExtra("gardenName", "")
-                            intent.putExtra("taskScreenShow", true)
-                            activity.startActivity(intent)
-                        }
+        }
+        LazyRow() {
+            items(tasks) { item ->
+                if (viewModel.selectedActivityGroup.value == "all") {
+                    TaskCard2(item, navController, deleteTask = {viewModel.deleteTask(it)}) {
+                        val intent = Intent(activity, GardenProfileActivity::class.java)
+                        intent.putExtra("gardenName", "")
+                        intent.putExtra("taskScreenShow", true)
+                        activity.startActivity(intent)
+                    }
+                } else if (viewModel.selectedActivityGroup.value == item.activityType) {
+                    TaskCard2(item, navController, deleteTask = {viewModel.deleteTask(it)}) {
+                        val intent = Intent(activity, GardenProfileActivity::class.java)
+                        intent.putExtra("gardenName", "")
+                        intent.putExtra("taskScreenShow", true)
+                        activity.startActivity(intent)
                     }
                 }
             }
@@ -573,6 +508,7 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun RevealedRow(
         tasks: List<Task>,

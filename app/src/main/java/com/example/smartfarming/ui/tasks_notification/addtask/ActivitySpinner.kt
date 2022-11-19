@@ -32,7 +32,7 @@ fun ActivitySpinner(selectedActivity : String, setSelectedActivity : (String) ->
             .padding(vertical = 10.dp)
             .fillMaxWidth(0.8f),
         elevation = 3.dp,
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.small,
         backgroundColor = LightGray
     ){
         Row(
