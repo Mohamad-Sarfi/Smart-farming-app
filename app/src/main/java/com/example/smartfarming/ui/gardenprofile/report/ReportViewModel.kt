@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartfarming.data.repositories.garden.GardenRepo
+import com.example.smartfarming.data.room.entities.Harvest
 import com.example.smartfarming.data.room.entities.PesticideEntity
 import com.example.smartfarming.utils.PersianCalender
+import com.example.smartfarming.utils.YEARS_LIST
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -24,6 +26,11 @@ class ReportViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
     val otherActivitiesNumber = mutableStateOf(0)
     val workersNumber = mutableStateOf(0)
     private var gardenId = 0
+    val harvestMap = mutableMapOf<String, Float>()
+
+    init {
+        initializeHarvestMap()
+    }
 
     fun getAllActivitiesCount(gardenName: String){
         viewModelScope.launch {
@@ -49,5 +56,32 @@ class ReportViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
 
     private suspend fun getOtherActivitiesNumber(){
         otherActivitiesNumber.value = repo.getOtherActivityByGardenYear(gardenId, selectedYear.value).size
+    }
+
+    private fun initializeHarvestMap(){
+
+    }
+
+    fun getHarvests(gardenName: String){
+        viewModelScope.launch {
+            var harvestList = listOf<Harvest>()
+            var sum = 0f
+
+            for (year in YEARS_LIST){
+                harvestList = repo.getHarvestByYear(gardenName, year)
+                sum = getSumOfHarvest(harvestList)
+                harvestMap[year] = sum
+            }
+        }
+    }
+
+    private fun getSumOfHarvest(harvestList : List<Harvest>) : Float{
+        var sum = 0f
+
+        for (harvest in harvestList){
+            sum += harvest.weight
+        }
+
+        return sum
     }
 }

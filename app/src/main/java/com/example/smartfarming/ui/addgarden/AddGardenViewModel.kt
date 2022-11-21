@@ -69,7 +69,7 @@ class AddGardenViewModel @Inject constructor(
 
     fun addType(newType : String){
         var array : List<String>? = typeArray.value
-        if (newType !in array!! && array.size < 5){
+        if (newType !in array!!){
                 array = array + listOf(newType)
         }
         typeArray.value = array

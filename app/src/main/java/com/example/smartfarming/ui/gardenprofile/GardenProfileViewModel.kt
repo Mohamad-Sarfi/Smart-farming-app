@@ -3,6 +3,7 @@ package com.example.smartfarming.ui.gardenprofile
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
@@ -19,17 +20,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
-
     val tasksList = mutableStateOf<List<Task>>(listOf())
+    val gardenTasks = mutableStateListOf<Task>()
     val garden = mutableStateOf<Garden?>(null)
+    var gardensList = flow<List<Garden>> {}
 
     fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
             garden.value  = repo.getGardenByName(gardenName)
         }
     }
-
-    var gardensList = flow<List<Garden>> {}
 
     fun getAllGardens() {
         viewModelScope.launch {
@@ -39,10 +39,12 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
 
     fun getGardenTasks() {
         viewModelScope.launch {
-            repo.getTasksForGarden(gardenName = garden.value!!.title).collect{
+            repo.getTasksForGarden(gardenIds = garden.value!!.id).collect{
                 tasksList.value = it
 
-                Log.i("TAG ${garden.value!!.title}'s tasks", "$it")
+                for (task in tasksList.value){
+                    gardenTasks.add(task)
+                }
             }
         }
     }
@@ -51,15 +53,5 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
         viewModelScope.launch {
             repo.deleteTask(task)
         }
-    }
-}
-
-class GardenProfileViewModelFactory(val repo: GardenRepo) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(GardenProfileViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return GardenProfileViewModel(repo) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

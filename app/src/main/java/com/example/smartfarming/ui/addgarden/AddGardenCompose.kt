@@ -172,7 +172,7 @@ fun AddGardenCompose(
                 {
                     Text(
                         text = if (step.value == 1) "بازگشت" else "قبلی",
-                        style = MaterialTheme.typography.h5,
+                        style = MaterialTheme.typography.body1,
                         modifier = Modifier.padding(
                             vertical = 2.dp
                         )
@@ -230,7 +230,7 @@ fun AddGardenCompose(
                 ) {
                     Text(
                         text = if (step.value!! < viewModel.MAX_STEPS) "ادامه" else "ثبت",
-                        style = MaterialTheme.typography.h5,
+                        style = MaterialTheme.typography.h6,
                         color = MainGreen,
                         modifier = Modifier.padding(
                             vertical = 2.dp

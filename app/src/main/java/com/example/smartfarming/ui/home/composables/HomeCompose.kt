@@ -404,6 +404,7 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
     }
 }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun ConcealedFrontLayer(
         tasks: List<Task>,
@@ -468,7 +469,7 @@ fun RevealedFrontLayer(tasks: List<Task>, viewModel: HomeViewModel, navControlle
     ) {
 
         val groupSelectorWidth by animateDpAsState(
-            if (selectedActivity == activityName) 125.dp else 60.dp
+            if (selectedActivity == activityName) 130.dp else 60.dp
         )
         
         Box(

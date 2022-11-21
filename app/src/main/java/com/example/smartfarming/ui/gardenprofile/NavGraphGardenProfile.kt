@@ -1,8 +1,10 @@
 package com.example.smartfarming.ui.gardenprofile
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,17 +17,20 @@ import com.example.smartfarming.ui.gardenprofile.composables.Weather
 import com.example.smartfarming.ui.gardenprofile.editGarden.EditMap
 import com.example.smartfarming.ui.gardenprofile.editGarden.EditScreen
 import com.example.smartfarming.ui.gardenprofile.map.GardenMap
-import com.example.smartfarming.ui.gardenprofile.report.IrrigationReport
 import com.example.smartfarming.ui.gardenprofile.report.Report
 import com.example.smartfarming.ui.gardenprofile.report.reportscreens.IrrigationReportScreen
+import com.example.smartfarming.ui.gardenprofile.report.reportscreens.workers.WorkerUsedScreen
 import com.example.smartfarming.ui.gardenprofile.report.reportscreens.fertilizationreport.FertilizationReportScreen
 import com.example.smartfarming.ui.gardenprofile.report.reportscreens.otheractivitiesreport.OtherActivitiesReportScreen
 import com.example.smartfarming.ui.gardenprofile.report.reportscreens.pesticidereport.PesticideReportScreen
 import com.example.smartfarming.ui.gardenprofile.taskScreen.TaskScreen
 import com.example.smartfarming.ui.gardens.composables.GardenProfile
+import com.example.smartfarming.ui.harvest.HarvestViewModel
+import com.example.smartfarming.ui.harvest.compose.AddHarvestCompose
 import com.example.smartfarming.ui.harvest.harvest_archive.GardenHarvestScreen
 import com.example.smartfarming.ui.tasks_notification.addtask.AddTask
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraphGardenProfile(
     navController: NavHostController,
@@ -33,7 +38,6 @@ fun NavGraphGardenProfile(
     viewModel: GardenProfileViewModel,
     taskScreen : Boolean = false
 ){
-    val context = LocalContext.current
     val irrigation = AppScreensEnum.IrrigationScreen.name
     val fertilization = AppScreensEnum.FertilizationScreen.name
     val pesticide = AppScreensEnum.PesticideScreen.name
@@ -49,6 +53,8 @@ fun NavGraphGardenProfile(
     val othersReport = AppScreensEnum.OthersReportScreen.name
     val editMap = AppScreensEnum.GardenMapEditScreen.name
     val addTask = AppScreensEnum.AddTaskScreen.name
+    val workersUsed = AppScreensEnum.WorkersUsedScreen.name
+    val addHarvest = AppScreensEnum.AddHarvestScreen.name
 
     NavHost(navController = navController,
         startDestination = if (!taskScreen) home else AppScreensEnum.GardenTasksScreen.name
@@ -118,7 +124,7 @@ fun NavGraphGardenProfile(
         }
 
         composable(
-            route = "${addActivity}"
+            route = addActivity
         ){
             //AddActivity(navController = navController)
         }
@@ -144,7 +150,7 @@ fun NavGraphGardenProfile(
             )
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
-            GardenHarvestScreen(gardenName = gardenName!!)
+            GardenHarvestScreen(gardenName = gardenName!!, navController)
         }
 
         composable(
@@ -270,6 +276,25 @@ fun NavGraphGardenProfile(
         ){ entry ->
             val gardenName = entry.arguments?.getString("gardenName")
             AddTask(navController)
+        }
+
+        composable(
+            route = "$workersUsed/{gardenName}",
+            arguments = listOf(
+                navArgument("gardenName"){
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val gardenName = entry.arguments?.getString("gardenName")
+            WorkerUsedScreen(gardenName!!, navController)
+        }
+
+        composable(
+            route = addHarvest
+        ){
+            val harvestViewModel : HarvestViewModel = hiltViewModel()
+            AddHarvestCompose(harvestViewModel, navController)
         }
     }
 }

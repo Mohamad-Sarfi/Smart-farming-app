@@ -52,8 +52,8 @@ class GardenRepo @Inject constructor(
     }
 
     @WorkerThread
-    fun getTasksForGarden(gardenName: String) : Flow<List<Task>>{
-        return taskDao.getTasksForGarden("%${gardenName}%")
+    fun getTasksForGarden(gardenIds: Int) : Flow<List<Task>>{
+        return taskDao.getTasksForGarden("%${gardenIds}%")
     }
 
     @WorkerThread

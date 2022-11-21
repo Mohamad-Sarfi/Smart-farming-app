@@ -35,15 +35,16 @@ import com.example.smartfarming.utils.getTaskList
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostController){
 
     viewModel.getAllGardens()
+    if (viewModel.garden.value != null){
+        viewModel.getGardenTasks()
+    }
+    viewModel.getGardenTasks()
     val gardenList = viewModel.gardensList.collectAsState(initial = listOf())
-
     var tasks = listOf<Task>()
-
     if (gardenList.value.isNullOrEmpty()){
         tasks = listOf()
     } else {
@@ -73,12 +74,11 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
                                 inclusive = true
                             }
                         }
-
-                    } ,
+                    },
                     tint = MainGreen)
                 Text(
                     text = "باغداری باغ " + "${viewModel.garden.value?.title}",
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.h5,
                     color = MainGreen,
                     modifier = Modifier.padding(5.dp)
                 )
@@ -97,7 +97,7 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(5.dp)
             ){
-                items(tasks){
+                items(viewModel.gardenTasks){
                     TaskCard2(task = it, navController = navtController, oneStepClick = true, deleteTask = {viewModel.deleteTask(it)}){
                         navtController.navigate(route = "${getActivityScreen(it.activityType)}/${viewModel.garden.value?.title}")
                     }

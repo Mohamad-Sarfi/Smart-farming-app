@@ -21,6 +21,7 @@ enum class AppScreensEnum {
     FertilizationReportScreen,
     OthersReportScreen,
     ForgetPasswordScreen,
+    WorkersUsedScreen,
 
     /* Harvest screens */
     HarvestHomeScreen,

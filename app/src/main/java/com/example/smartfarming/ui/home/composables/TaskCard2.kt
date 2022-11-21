@@ -76,7 +76,12 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
                 tint = getTaskColor(task.activityType)
             )
             Text(text = task.name, color = Color.Black, style = MaterialTheme.typography.body1)
-            Text(text = " باغ -", color = BorderGray, style = MaterialTheme.typography.overline, textAlign = TextAlign.Justify)
+//            Text(text = " باغ ", color = BorderGray, style = MaterialTheme.typography.overline, textAlign = TextAlign.Justify)
+//
+//            task.gardenIds.forEach{ _ ->
+//
+//            }
+
             RemainingDays(task)
             if (clicked){
                 ButtonRow(task){

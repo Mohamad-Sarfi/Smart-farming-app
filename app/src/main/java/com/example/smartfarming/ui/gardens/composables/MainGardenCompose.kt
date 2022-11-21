@@ -32,9 +32,6 @@ import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.common_composables.CommonTopBar
 import com.example.smartfarming.ui.common_composables.NoGardenAdded
 import com.example.smartfarming.ui.gardens.GardensViewModel
-import com.example.smartfarming.ui.gardens.GardensViewModelFactory
-import com.example.smartfarming.ui.home.composables.MyFAB
-
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

@@ -39,6 +39,7 @@ fun Report(
     val coroutineScope = rememberCoroutineScope()
 
     viewModel.getAllActivitiesCount(gardenName)
+    viewModel.getHarvests(gardenName)
 
     BottomSheetScaffold(
         modifier = Modifier
@@ -73,9 +74,9 @@ fun Report(
             Text(text = "باغ " + gardenName, color = MainGreen, style = MaterialTheme.typography.body1, modifier = Modifier.padding(bottom = 10.dp))
             GraphsRow()
             ColdExposureTime()
-            WorkerReport()
+            WorkerReport(navHostController, gardenName)
             IrrigationReport(viewModel, navHostController, gardenName)
-            HarvestGraph(navHostController, gardenName )
+            HarvestGraph(viewModel, navHostController, gardenName)
             PesticideReport(viewModel, gardenName, navHostController)
             FertilizationReport(viewModel, gardenName, navHostController)
             OthersReport(viewModel, gardenName, navHostController)
@@ -84,12 +85,15 @@ fun Report(
 }
 
 @Composable
-fun WorkerReport(){
+fun WorkerReport(navHostController: NavHostController, gardenName: String){
     Card(
         modifier = Modifier
             .padding(horizontal = 5.dp, vertical = 2.dp)
             .fillMaxWidth()
             .height(135.dp)
+            .clickable {
+                navHostController.navigate("${AppScreensEnum.WorkersUsedScreen.name}/$gardenName")
+            }
             .padding(10.dp),
         shape = RoundedCornerShape(10.dp),
         elevation = 1.dp,
@@ -349,7 +353,7 @@ fun FertilizationReport(viewModel: ReportViewModel, gardenName: String, navHostC
 }
 
 @Composable
-fun OthersReport(viewModel: ReportViewModel, gardenName: String,navHostController: NavHostController){
+private fun OthersReport(viewModel: ReportViewModel, gardenName: String,navHostController: NavHostController){
     Card(
         modifier = Modifier
             .padding(horizontal = 5.dp, vertical = 0.dp)
@@ -384,11 +388,7 @@ fun OthersReport(viewModel: ReportViewModel, gardenName: String,navHostControlle
 }
 
 @Composable
-fun ColdExposureTime(){
-    var clicked by remember {
-        mutableStateOf(false)
-    }
-
+private fun ColdExposureTime(){
     Card(
         modifier = Modifier
             .padding(horizontal = 5.dp, vertical = 0.dp)
@@ -403,7 +403,7 @@ fun ColdExposureTime(){
         Column(
             Modifier
                 .fillMaxSize()
-                .clickable { clicked = !clicked },
+                .clickable {},
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

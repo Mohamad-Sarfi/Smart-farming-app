@@ -29,13 +29,16 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.smartfarming.FarmApplication
 import com.example.smartfarming.data.network.resources.weather_response.Current
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Harvest
+import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.harvest.HarvestViewModel
@@ -45,7 +48,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun GardenHarvestScreen(gardenName: String){
+fun GardenHarvestScreen(gardenName: String, navHostController: NavHostController){
 
     val activity = LocalContext.current as Activity
     val viewModel : HarvestViewModel =
@@ -114,7 +117,8 @@ fun GardenHarvestScreen(gardenName: String){
                     }
                 ,
                 harvestList = mHarvestList,
-                viewModel
+                viewModel,
+                navHostController
             )
         }
     }
@@ -170,9 +174,6 @@ fun FilterHarvest(
     }
 }
 
-
-
-
 @Composable
 fun FilterHarvestSpinner(
     title : String,
@@ -223,7 +224,7 @@ fun FilterHarvestSpinner(
 }
 
 @Composable
-fun HarvestListCompose(modifier: Modifier, harvestList: List<Harvest>?, viewModel: HarvestViewModel){
+fun HarvestListCompose(modifier: Modifier, harvestList: List<Harvest>?, viewModel: HarvestViewModel, navHostController: NavHostController){
     if (harvestList.isNullOrEmpty()){
         Column(
             modifier.fillMaxHeight(),
@@ -234,9 +235,24 @@ fun HarvestListCompose(modifier: Modifier, harvestList: List<Harvest>?, viewMode
                 Icons.Default.Warning,
                 contentDescription = null, tint = YellowPesticide,
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(5.dp)
                     .size(55.dp))
-            Text(text = "اطلاعاتی وارد نشده")
+            Text(text = "اطلاعاتی وارد نشده", style = MaterialTheme.typography.h5)
+            Row(
+                Modifier
+                    .padding(15.dp)
+                    .fillMaxWidth()
+                    .clickable {
+                        navHostController.navigate(route = AppScreensEnum.AddHarvestScreen.name)
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null, tint = MaterialTheme.colors.primary, modifier = Modifier
+                    .size(40.dp)
+                    .padding(5.dp))
+                Text(text = "افزودن محصول", style = MaterialTheme.typography.body1)
+            }
         }
 
     } else {
@@ -262,12 +278,16 @@ fun HarvestListItem(harvest: Harvest, viewModel: HarvestViewModel){
     }
     
     val height by animateDpAsState(
-        if (expanded) 120.dp else 70.dp,
+        if (expanded) 120.dp else 80.dp,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
         )
     )
+
+    var deleteClicked by remember {
+        mutableStateOf(false)
+    }
     
     Card(
         Modifier
@@ -298,28 +318,77 @@ fun HarvestListItem(harvest: Harvest, viewModel: HarvestViewModel){
                 Text(text = "${harvest.weight} kg", style = MaterialTheme.typography.h5, color = MainGreen)
                 Text(
                     text = harvest.day + " " + PersianCalender.getMonthNameFromNum(harvest.month.toInt()),
-                    style = MaterialTheme.typography.h5
+                    style = MaterialTheme.typography.body1
                 )
             }
             Row(
                 Modifier
                     .fillMaxWidth()
                     .clickable {
-                        deleteItem(harvest, viewModel)
-
+                        deleteClicked = !deleteClicked
                     },
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.End
             ) {
-                Text(text = "حذف", style = MaterialTheme.typography.body2, color = Color.Red, modifier = Modifier.padding(5.dp))
+                Text(text = "حذف", style = MaterialTheme.typography.body1, color = Color.Red, modifier = Modifier.padding(5.dp))
                 Icon(Icons.Outlined.Delete, contentDescription = null, tint = Color.Red, modifier = Modifier)
             }
 
         }
+
+        if (deleteClicked){
+            DeleteDialog(
+                harvest,
+                deleteClicked,
+                viewModel,
+            ){
+                deleteClicked = it
+            }
+        }
     }
 }
 
-fun deleteItem(harvest: Harvest, viewModel: HarvestViewModel){
+@Composable
+private fun DeleteDialog(harvest: Harvest, deleteClicked : Boolean, viewModel: HarvestViewModel, setDeleteClicked : (Boolean) -> Unit) {
+
+    AlertDialog(
+        onDismissRequest = { setDeleteClicked(!deleteClicked) },
+        buttons = {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
+                Button(
+                    onClick = { setDeleteClicked(!deleteClicked) },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.White,
+                        contentColor = MaterialTheme.colors.primary
+                    ),
+                    modifier = Modifier.padding(3.dp)
+                ) {
+                    Text(text = "لغو", style = MaterialTheme.typography.body2)
+                }
+
+                Button(
+                    onClick = { deleteItem(harvest, viewModel) },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.White,
+                        contentColor = MaterialTheme.colors.error
+                    ),
+                    modifier = Modifier.padding(3.dp)
+                ) {
+                    Text(text = "حذف", style = MaterialTheme.typography.body2)
+                }
+
+            }
+        },
+        title = {
+            Text(text = "حذف محصول", style = MaterialTheme.typography.h5)
+        },
+        text = {
+            Text(text ="آیا از حذف این مورد مطمئن هستید؟", style = MaterialTheme.typography.body2)
+        }
+    )
+}
+
+private fun deleteItem(harvest: Harvest, viewModel: HarvestViewModel){
     viewModel.mHarvestList.remove(harvest)
     viewModel.deleteHarvestItem(harvest)
 }

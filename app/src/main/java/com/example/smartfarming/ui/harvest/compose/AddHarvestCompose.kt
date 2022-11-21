@@ -234,7 +234,7 @@ fun AddHarvestBody(
                             )
                         )
                         Toast.makeText(context, "اطلاعات ثبت شد :)", Toast.LENGTH_SHORT).show()
-                        navController.navigate(route = AppScreensEnum.HarvestHomeScreen.name)
+                        navController.popBackStack()
                     }
                           },
                 shape = MaterialTheme.shapes.large,

@@ -10,6 +10,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Agriculture
+import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Compost
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -26,6 +30,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.smartfarming.R
+import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
@@ -34,13 +39,9 @@ import com.example.smartfarming.ui.gardens.GardensViewModel
 
 @Composable
 fun GardenCard(garden : Garden, viewModel : GardensViewModel){
-
     val context = LocalContext.current
-    viewModel.getTasks(garden.title)
-
-    val tasks = viewModel.gardenTasks.observeAsState()
-
-
+    viewModel.getTasks(garden.id)
+    setNotificationIcons(viewModel)
 
     Card(
         modifier = Modifier
@@ -90,23 +91,15 @@ fun GardenCard(garden : Garden, viewModel : GardensViewModel){
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Row() {
-                    if (garden.title == "محمد"){
-                        ActivityBadge(Blue500, Icons.Outlined.WaterDrop)
-                        ActivityBadge(Purple500, Icons.Outlined.Compost)
-                        ActivityBadge(MainGreen, Icons.Outlined.Agriculture)
-                        ActivityBadge(YellowPesticide, Icons.Outlined.PestControl)
-                    } else if (garden.title == "سعید"){
-                        ActivityBadge(Purple500, Icons.Outlined.Compost)
-                        ActivityBadge(Blue500, Icons.Outlined.WaterDrop)
-                    } else {
-                        ActivityBadge(MainGreen, Icons.Outlined.Agriculture)
-                        ActivityBadge(YellowPesticide, Icons.Outlined.PestControl)
+                    when {
+                        viewModel.hasIrrigation.value -> ActivityBadge(color = BlueIrrigationDark, icon = Icons.Default.WaterDrop)
+                        viewModel.hasFertilization.value -> ActivityBadge(color = Purple500, icon = Icons.Default.Compost)
+                        viewModel.hasPesticide.value -> ActivityBadge(color = YellowPesticide, icon = Icons.Default.BugReport)
+                        viewModel.hasOthers.value -> ActivityBadge(color = MainGreen, icon = Icons.Default.Agriculture)
                     }
                 }
             }
-
         }
-
     }
 }
 
@@ -194,5 +187,16 @@ class TicketShape(private val cornerRadius: Float) : Shape {
             // Draw your custom path here
             path = drawTicketPath(size = size, cornerRadius = cornerRadius)
         )
+    }
+}
+
+private fun setNotificationIcons(viewModel: GardensViewModel){
+    viewModel.gardenTasks.value.forEach {
+        when(it.activityType){
+            ActivityTypesEnum.IRRIGATION.name -> viewModel.hasIrrigation.value = true
+            ActivityTypesEnum.FERTILIZATION.name -> viewModel.hasFertilization.value = true
+            ActivityTypesEnum.PESTICIDE.name -> viewModel.hasPesticide.value = true
+            ActivityTypesEnum.Other.name -> viewModel.hasOthers.value = true
+        }
     }
 }

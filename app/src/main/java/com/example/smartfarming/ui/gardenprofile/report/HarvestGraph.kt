@@ -23,10 +23,12 @@ import androidx.navigation.NavHostController
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.BorderGray
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
+import com.example.smartfarming.utils.YEARS_LIST
 import java.time.Year
 
 @Composable
 fun HarvestGraph(
+    viewModel: ReportViewModel,
     navController: NavHostController,
     gardenName : String
 ){
@@ -61,8 +63,13 @@ fun HarvestGraph(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                val harvestList = listOf(15000.0, 10250.5, 11000.0, 1000.1, 16020.8, 9800.5)
-                val yearList = listOf("96", "97", "98", "99", "400", "401")
+                val harvestList = mutableListOf<Float>()
+                val yearList = YEARS_LIST
+
+                viewModel.harvestMap.forEach { (k, v) ->
+                    harvestList.add(v)
+                }
+
                 val normalized = normalizer(harvestList)
                 LazyRow{
                     items(harvestList.size){ index ->
@@ -75,7 +82,7 @@ fun HarvestGraph(
 }
 
 @Composable
-fun Bars(value : Float, year: String, realValue : Double){
+fun Bars(value : Float, year: String, realValue : Float){
 
     val maxHeight = 130
     var clicked by remember {
@@ -107,7 +114,7 @@ fun Bars(value : Float, year: String, realValue : Double){
     }
 }
 
-fun normalizer(harvestList : List<Double>) : List<Float> {
+fun normalizer(harvestList : List<Float>) : List<Float> {
     val normalizedList = mutableListOf<Float>()
 
     for (h in harvestList){

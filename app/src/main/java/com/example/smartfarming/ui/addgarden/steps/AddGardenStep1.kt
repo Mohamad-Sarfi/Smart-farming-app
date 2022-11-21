@@ -6,12 +6,15 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.rounded.Eco
 import androidx.compose.material.icons.rounded.Park
 import androidx.compose.material.icons.rounded.Pin
 import androidx.compose.runtime.*
@@ -37,7 +40,9 @@ fun AddGardenStep1(
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -70,7 +75,7 @@ fun AddGardenStep1(
                 }
             ),
             trailingIcon = {
-                Icon(Icons.Rounded.Park, contentDescription = "")
+                Icon(Icons.Rounded.Eco, contentDescription = "")
             },
             modifier = Modifier
                 .padding(10.dp)
@@ -152,7 +157,8 @@ fun PlanVarietySpinner(
         Icon(
             Icons.Filled.ArrowDropUp,
             contentDescription = "",
-            tint = MainGreen
+            tint = MainGreen,
+            modifier = Modifier.size(40.dp)
         )
         Text(
             text = "پیوندهای باغ",
@@ -192,7 +198,9 @@ fun plantVarietiesTexts(
     listt: State<List<String>>,
     removeVariety: (String) -> Unit
 ){
-    Row(modifier = Modifier.padding(10.dp)) {
+    Row(modifier = Modifier
+        .padding(10.dp)
+        .horizontalScroll(rememberScrollState())) {
         listt.value.forEach{
             Text(
                 text = it,
@@ -202,12 +210,10 @@ fun plantVarietiesTexts(
                     .clickable {
                         removeVariety(it)
                     }
-
             )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

@@ -7,10 +7,13 @@ import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Harvest
 import com.example.smartfarming.utils.HARVEST_TYPE
 import com.example.smartfarming.utils.PersianCalender
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class HarvestViewModel(val repo : GardenRepo) : ViewModel() {
+@HiltViewModel
+class HarvestViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
     var harvestDate = mutableStateOf(mutableMapOf("day" to "", "month" to "", "year" to ""))
     var selectedGarden = MutableLiveData<String>("")
     var harvestWeight = MutableLiveData<Float>()

@@ -3,6 +3,7 @@ package com.example.smartfarming.ui.harvest
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -24,6 +25,7 @@ fun HarvestNavGraph(
     val harvesthomeScreen = AppScreensEnum.HarvestHomeScreen.name
     val addScreen = AppScreensEnum.AddHarvestScreen.name
     val archiveScreen = AppScreensEnum.ArchiveHarvestScreen.name
+    val addHarvest = AppScreensEnum.AddHarvestScreen.name
 
     val activity = LocalContext.current as Activity
     val viewModel : HarvestViewModel = viewModel(factory = HarvestViewModelFactory((activity.application as FarmApplication).repo))
@@ -51,7 +53,7 @@ fun HarvestNavGraph(
             })
         ){ entry ->
             val gardenName = entry.arguments?.getString("name")
-            GardenHarvestScreen(gardenName!!)
+            GardenHarvestScreen(gardenName!!, navController)
         }
 
     }
