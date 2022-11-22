@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.smartfarming.data.room.GardenDb
+import com.example.smartfarming.ui.RouteNavGraph
 import com.example.smartfarming.ui.addactivities.AddActivities
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
@@ -53,7 +54,9 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MainGreen
                 ) {
-                    MainScreen()
+                    val navController = rememberNavController()
+
+                    RouteNavGraph(navHostController = navController)
                 }
             }
         }

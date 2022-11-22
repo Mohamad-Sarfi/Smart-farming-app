@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.addactivity.components
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -88,7 +90,8 @@ fun PicturedActivityCards(navController: NavHostController, gardenList : List<St
                 Modifier
                     .offset(y = 25.dp)
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                    .clip(MaterialTheme.shapes.medium)
+                    .padding(horizontal = 30.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -111,6 +114,7 @@ fun PicturedActivityCards(navController: NavHostController, gardenList : List<St
             }
             PicturedCard("سمپاشی", R.drawable.activities_pic, YellowPesticide, Icons.Default.BugReport){
                 checkIfGardenSelected(currentGarden, context){
+                    Log.i("TAG start screen", "${AppScreensEnum.PesticideScreen.name}/$currentGarden")
                     navController.navigate("${AppScreensEnum.PesticideScreen.name}/$currentGarden")
                 }
             }
@@ -133,6 +137,7 @@ private fun checkIfGardenSelected(currentGarden : String, context: Context, navi
      * checks if garden is selected, then navigates to the next screen (provided in lambda).
      * otherwise shows a toast
      */
+
     if (currentGarden.equals("انتخاب باغ")){
         Toast.makeText(context, "ابتدا باغ مورد نظر را انتخاب کنید", Toast.LENGTH_SHORT).show()
     } else {

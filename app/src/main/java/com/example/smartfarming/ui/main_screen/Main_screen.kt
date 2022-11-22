@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,7 +28,7 @@ import com.example.smartfarming.utils.isOnline
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(){
+fun MainScreen(mainNavHostController: NavHostController){
     val navController = rememberNavController()
 
     val context = LocalContext.current
@@ -70,7 +71,7 @@ fun MainScreen(){
             NavHost(navController = navController, startDestination = NAV_HOME ){
                 composable(NAV_HOME) {
                     val homeNavController = rememberNavController()
-                    HomeNavGraph(navController = homeNavController){ showFAB = it }
+                    HomeNavGraph(navController = homeNavController, mainNavHostController){ showFAB = it }
                 }
                 composable(NAV_GARDENS) { GardenCompose() }
                 composable(NAV_HARVEST) {

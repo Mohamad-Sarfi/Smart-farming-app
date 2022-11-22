@@ -1,6 +1,9 @@
 package com.example.smartfarming.ui
 
 enum class AppScreensEnum {
+    MainHomeScreen,
+
+    //
     AddActivityHomeScreen,
     LoginScreen,
     RegisterScreen,

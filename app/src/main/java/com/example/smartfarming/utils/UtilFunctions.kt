@@ -33,6 +33,15 @@ fun getTaskIcon(activityType: String) : ImageVector {
     }
 }
 
+fun getTaskName(activityType: String) : String {
+    return when (activityType) {
+        ActivityTypesEnum.FERTILIZATION.name -> "تغذیه"
+        ActivityTypesEnum.IRRIGATION.name -> "آبیاری"
+        ActivityTypesEnum.PESTICIDE.name -> "سم پاشی"
+        else -> "سایر"
+    }
+}
+
 fun getTaskColor(activityType: String) : Color {
     return when (activityType) {
         ActivityTypesEnum.FERTILIZATION.name -> Purple500

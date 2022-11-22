@@ -25,27 +25,28 @@ fun SetupNavGraph(
     val activityScreen = AppScreensEnum.OtherActivitiesScreen.name
     val pesticideScreen = AppScreensEnum.PesticideScreen.name
 
-
     NavHost(
         navController = navController,
-        startDestination = homeActivity
+        startDestination = if (startScreen.isNullOrEmpty()) homeActivity else startScreen
     ){
-            composable(
-                route = homeActivity
-            ){
-                AddActivity(navController = navController, viewModel)
-            }
-            composable(
-                route = "$irrigation/{name}",
-                arguments = listOf(
-                    navArgument("name") {
-                        type = NavType.StringType
-                    }
-                )
-            ){ entry ->
-                val gardenName = entry.arguments?.getString("name")
-                Irrigation(gardenName!! , navHostController = navController)
-            }
+        composable(
+            route = homeActivity
+        ){
+            AddActivity(navController = navController, viewModel)
+        }
+
+        composable(
+            route = "$irrigation/{name}",
+            arguments = listOf(
+                navArgument("name") {
+                    type = NavType.StringType
+                }
+            )
+        ){ entry ->
+            val gardenName = entry.arguments?.getString("name")
+            Irrigation(gardenName!! , navHostController = navController)
+        }
+
         composable(
                 route = "$fertilization/{name}",
                 arguments = listOf(
@@ -82,6 +83,7 @@ fun SetupNavGraph(
                 }
             )
         ){ entry ->
+
             val  gardenName = entry.arguments?.getString("name")
             Pesticide(gardenName!!, navController )
         }

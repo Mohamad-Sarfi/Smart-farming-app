@@ -15,7 +15,7 @@ import com.example.smartfarming.ui.home.composables.HomeCompose
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeNavGraph(navController : NavHostController, setShowFAB : (Boolean) -> Unit){
+fun HomeNavGraph(navController : NavHostController, mainController: NavHostController,setShowFAB : (Boolean) -> Unit){
 
     val homeScreen = AppScreensEnum.HomeScreen.name
     val irrigation = AppScreensEnum.IrrigationScreen.name
@@ -25,7 +25,7 @@ fun HomeNavGraph(navController : NavHostController, setShowFAB : (Boolean) -> Un
 
     NavHost(navController = navController, startDestination = homeScreen){
         composable(route = homeScreen){
-            HomeCompose(navController){setShowFAB(it)}
+            HomeCompose(navController, mainNavController = mainController){setShowFAB(it)}
         }
 
         composable(route = "$others/{name}",

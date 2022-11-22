@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import com.example.smartfarming.FarmApplication
+import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.SetupNavGraph
 import com.example.smartfarming.ui.addactivities.ui.theme.SmartFarmingTheme
 import com.example.smartfarming.ui.addactivities.viewModel.AddActivitiesViewModel
@@ -23,17 +24,19 @@ class AddActivityActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val activityName = intent.getStringExtra("activityName")
+        val activityScreen = intent.getStringExtra("activityScreen")
         val gardenId = intent.getIntExtra("gardenId", -1)
 
         setContent {
             SmartFarmingTheme {
                 val navController = rememberNavController()
+                Log.i("TAG start screen", "$activityScreen")
+                Log.i("TAG start screen", "${AppScreensEnum.PesticideScreen.name}")
 
                 SetupNavGraph(
                     navController = navController,
                     viewModel = viewModel,
-                    startScreen = activityName,
+                    startScreen = activityScreen,
                     gardenId = gardenId
                 )
             }

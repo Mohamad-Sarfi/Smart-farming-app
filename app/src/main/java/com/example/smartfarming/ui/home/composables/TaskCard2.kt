@@ -73,13 +73,11 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
                 getTaskIcon(task.activityType),
                 contentDescription = null,
                 modifier = Modifier.size(65.dp),
-                tint = getTaskColor(task.activityType)
-            )
+                tint = getTaskColor(task.activityType))
+
             Text(text = task.name, color = Color.Black, style = MaterialTheme.typography.body1)
 //            Text(text = " باغ ", color = BorderGray, style = MaterialTheme.typography.overline, textAlign = TextAlign.Justify)
-//
 //            task.gardenIds.forEach{ _ ->
-//
 //            }
 
             RemainingDays(task)
