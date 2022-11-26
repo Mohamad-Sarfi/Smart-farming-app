@@ -67,9 +67,11 @@ fun AddTask(navController: NavHostController) {
             .padding(0.dp),
     ) {
         Box(modifier = Modifier.fillMaxHeight()) {
-            Image(painterResource(id = R.drawable.task_back), contentDescription = null, modifier = Modifier
-                .fillMaxSize()
-                .blur(7.dp),
+            Image(painterResource(id = R.drawable.task_back),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .blur(7.dp),
                 contentScale = ContentScale.FillHeight
             )
             
@@ -134,6 +136,9 @@ private fun AddTaskBody(viewModel: AddTaskViewModel, navController: NavHostContr
                     BottomRow(viewModel)
                 }
 
+                if (viewModel.showToast.value){
+                    Toast.makeText(activity, viewModel.toastText, Toast.LENGTH_SHORT).show()
+                }
                 //checkSteps(viewModel, activity)
             }
         }
@@ -186,7 +191,7 @@ private fun Step0(viewModel: AddTaskViewModel) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(8.dp)) {
+                .padding(20.dp)) {
             viewModel.selectedGardens.forEach { gardenName ->
                 GardenBadge(gardenName){
                     viewModel.removeGarden(it)
@@ -200,8 +205,9 @@ private fun Step0(viewModel: AddTaskViewModel) {
 private fun GardenBadge(gardenName : String, deleteItem : (String) -> Unit) {
     Surface(
         modifier = Modifier
-            .padding(4.dp)
-            .clickable { deleteItem(gardenName) },
+            .padding(vertical = 4.dp, horizontal = 4.dp)
+            .clickable { deleteItem(gardenName) }
+            .padding(horizontal = 3.dp),
         color = MaterialTheme.colors.primary,
         shape = MaterialTheme.shapes.small
     ) {
@@ -272,6 +278,7 @@ private fun Step3(viewModel: AddTaskViewModel) {
             contentDescription = null, modifier = Modifier
                 .padding(bottom = 20.dp)
                 .size(60.dp), tint = MaterialTheme.colors.primary)
+
         DescriptionET(viewModel)
     }
 }
@@ -318,7 +325,10 @@ private fun DescriptionET(viewModel: AddTaskViewModel) {
 private fun BottomRow(viewModel: AddTaskViewModel) {
     val nextBtnWidth by animateFloatAsState(if (viewModel.step.value == 0) 1f else .8f)
 
-    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(10.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         ProgressDots(viewModel)
         Row(Modifier.padding(2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
             AnimatedVisibility(visible = viewModel.step.value != 0) {

@@ -37,4 +37,5 @@ enum class AppScreensEnum {
     /* Tasks */
     AddTaskScreen,
     TasksHome,
+    AllGardenTasks
 }

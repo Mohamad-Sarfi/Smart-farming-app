@@ -41,6 +41,7 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
         viewModelScope.launch {
             repo.getTasksForGarden(gardenIds = garden.value!!.id).collect{
                 tasksList.value = it
+                gardenTasks.clear()
 
                 for (task in tasksList.value){
                     gardenTasks.add(task)
@@ -52,6 +53,12 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
     fun deleteTask(task: Task){
         viewModelScope.launch {
             repo.deleteTask(task)
+        }
+    }
+
+    fun updateTaskStatus(taskId : Int, status : String) {
+        viewModelScope.launch {
+            repo.updateTaskStatus(taskId, status)
         }
     }
 }

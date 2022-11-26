@@ -55,6 +55,7 @@ fun NavGraphGardenProfile(
     val addTask = AppScreensEnum.AddTaskScreen.name
     val workersUsed = AppScreensEnum.WorkersUsedScreen.name
     val addHarvest = AppScreensEnum.AddHarvestScreen.name
+    val gardenTasks = AppScreensEnum.AllGardenTasks.name
 
     NavHost(navController = navController,
         startDestination = if (!taskScreen) home else AppScreensEnum.GardenTasksScreen.name
@@ -295,6 +296,12 @@ fun NavGraphGardenProfile(
         ){
             val harvestViewModel : HarvestViewModel = hiltViewModel()
             AddHarvestCompose(harvestViewModel, navController)
+        }
+
+        composable(
+            route = gardenTasks,
+        ) { _ ->
+            TaskScreen(viewModel = viewModel, navController)
         }
     }
 }

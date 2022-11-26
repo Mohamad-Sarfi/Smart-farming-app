@@ -53,6 +53,9 @@ class GardenRepo @Inject constructor(
 
     @WorkerThread
     fun getTasksForGarden(gardenIds: Int) : Flow<List<Task>>{
+        /**
+         * Returns the tasks that are not done
+         */
         return taskDao.getTasksForGarden("%${gardenIds}%")
     }
 
@@ -62,8 +65,23 @@ class GardenRepo @Inject constructor(
     }
 
     @WorkerThread
+    fun getAllUndoneTasks() : Flow<List<Task>> {
+        return taskDao.getAllUndoneTasks()
+    }
+
+    @WorkerThread
     suspend fun deleteTask(task: Task) {
         taskDao.delete(task)
+    }
+
+    @WorkerThread
+    suspend fun updateTask(taskId: Int){
+        taskDao.updateTaskStatus(taskId)
+    }
+
+    @WorkerThread
+    suspend fun updateTaskStatus(taskId: Int, status : String){
+        taskDao.setTaskStatus(taskId, status)
     }
 
     // Irrigation repo

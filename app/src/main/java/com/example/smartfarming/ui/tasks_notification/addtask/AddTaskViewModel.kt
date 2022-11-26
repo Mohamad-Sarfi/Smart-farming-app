@@ -43,6 +43,8 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
     val gardenNotSet = mutableStateOf(false)
     val activityNotSet = mutableStateOf(false)
     val dateNotSet = mutableStateOf(false)
+    val showToast = mutableStateOf(false)
+    var toastText = ""
 
     init {
         getGardens()
@@ -150,14 +152,18 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
         if (step.value == 0) {
             // garden
             if (selectedGardens.isEmpty()){
-
+                toastText = "نام باغ را وارد کنید"
+                showToast.value = true
+                showToast.value = false
             } else {
                 increaseStep()
             }
         } else if (step.value == 1){
             // activity type
             if (selectedActivity.value == ""){
-                Log.i("TAG xxx", "step1")
+                toastText = "نوع فعالیت را مشخص کنید"
+                showToast.value = true
+                showToast.value = false
             } else {
                 increaseStep()
             }
@@ -219,9 +225,11 @@ class AddTaskViewModel @Inject constructor(private val repo : GardenRepo) : View
     }
 
     fun addGarden(gardenName : String) {
-        selectedGardens.add(gardenName)
+        if (gardenName !in selectedGardens){
+            selectedGardens.add(gardenName)
+            gardensId.add(getGardenIdByName(gardenName))
+        }
 
-        gardensId.add(getGardenIdByName(gardenName))
     }
 
     private fun getGardenIdByName(gardenName : String) : Int{

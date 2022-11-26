@@ -29,23 +29,30 @@ class HomeViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
 
     init {
         getGardens()
-        getAllTasks()
+        getAllUndoneTasks()
     }
 
     private fun getAllTasks(){
         viewModelScope.launch {
             repo.getAllTasks().collect{
                 Log.i("TAG tasks list", "$it")
-
                 tasksList.clear()
-
                 for (t in it){
                     tasksList.add(t)
                 }
+            }
+        }
+    }
 
-//                for (t in getTaskList(gardensList.value ?: listOf())){
-//                    tasksList.add(t)
-//                }
+    private fun getAllUndoneTasks(){
+        viewModelScope.launch {
+            repo.getAllUndoneTasks().collect{
+                val rTasksList = it
+                tasksList.clear()
+
+                for (task in rTasksList){
+                    tasksList.add(task)
+                }
             }
         }
     }
@@ -90,4 +97,9 @@ class HomeViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
         }
     }
 
+    fun setTaskStatus(taskId : Int, status: String){
+        viewModelScope.launch {
+            repo.updateTaskStatus(taskId, status)
+        }
+    }
 }

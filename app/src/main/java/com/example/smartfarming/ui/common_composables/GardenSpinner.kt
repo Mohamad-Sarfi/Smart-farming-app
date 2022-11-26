@@ -81,14 +81,13 @@ fun GardenSpinner(
 
         }
             DropdownMenu(
+                modifier = Modifier.fillMaxWidth(fillWidthPercentage),
                 expanded = expanded,
                 onDismissRequest = { expanded = false }) {
                 gardensList.forEach { garden ->
                     DropdownMenuItem(onClick = {
                         expanded = false
                         updateCurrentGarden(garden)
-
-
                     }) {
                         Text(
                             text = garden,

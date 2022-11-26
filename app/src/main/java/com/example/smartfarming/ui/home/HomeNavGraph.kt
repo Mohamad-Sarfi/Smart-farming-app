@@ -48,8 +48,9 @@ fun HomeNavGraph(navController : NavHostController, mainController: NavHostContr
 
         composable(route = "$irrigation/{name}",
             arguments = listOf(navArgument("name"){
-                type = NavType.StringType
-            })
+                    type = NavType.StringType
+                }
+            )
         ) { entry ->
             val gardenName = entry.arguments?.getString("name")
             Irrigation(gardenName!!, navController)
@@ -63,11 +64,5 @@ fun HomeNavGraph(navController : NavHostController, mainController: NavHostContr
 //            val gardenName = entry.arguments?.getString("name")
 //            Pesticides(gardenName!!, navController)
 //        }
-
-
-
-
-
-
     }
 }

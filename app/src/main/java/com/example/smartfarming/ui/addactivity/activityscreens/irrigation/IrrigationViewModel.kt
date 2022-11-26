@@ -63,9 +63,23 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
         return garden
     }
 
-    fun submitClickHandler(){
+    fun submitClickHandler(taskId : Int){
         step.value++
         insertIrrigationDB()
+    }
+
+    private fun handleTask(taskId: Int){
+        /**
+         * If the activity is done through a task,
+         * here the task status will be updated.
+         * If no task is involved, (task id = -1)
+         * No task alteration happens
+         */
+        if (taskId != -1){
+            viewModelScope.launch {
+                repo.updateTask(taskId)
+            }
+        }
     }
 
     fun increaseStep(){

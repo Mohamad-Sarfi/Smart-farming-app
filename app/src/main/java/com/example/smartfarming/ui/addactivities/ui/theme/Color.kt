@@ -48,6 +48,10 @@ val LightGray = Color(0xFFF6F6F6)
 val LightGray2 = Color(0xFFF9F9F9)
 val LightBackground = Color(0xFFF9FAF7)
 
+val Gray200 = Color(0xFFEEEEEE)
+val Gray300 = Color(0xFFE0E0E0)
+val Gray500 = Color(0xFF9E9E9E)
+val Gray700 = Color(0xFF616161)
 
 val LightGreen1 = Color(0xff00e676)
 val LightGreen3 = Color(0xFFC9DCBD)

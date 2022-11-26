@@ -16,10 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -43,6 +40,7 @@ import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Article
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.data.room.entities.enums.TaskStatusEnum
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.addactivity.AddActivityActivity
@@ -269,6 +267,7 @@ fun TasksRow(
 ){
     val activity = LocalContext.current as Activity
     val tasks = viewModel.tasksList
+    Log.i("TAG tasks list", "$tasks")
 
     Card(
         modifier = Modifier.fillMaxHeight(1f),
@@ -368,10 +367,6 @@ fun RevealedFrontLayer(
     detailsClicked : Boolean,
     setSelectedTask: (Task) -> Unit,
     setShowFAB: (Boolean) -> Unit) {
-
-    val activity = LocalContext.current as Activity
-
-
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -430,7 +425,11 @@ fun RevealedFrontLayer(
         LazyRow() {
             items(tasks) { item ->
                 if (viewModel.selectedActivityGroup.value == "all") {
-                    TaskCard2(item, navController, deleteTask = {viewModel.deleteTask(it)}) {
+                    TaskCard2(
+                        item,
+                        navController,
+                        setTaskStatus = {stat -> viewModel.setTaskStatus(item.id, status = stat)},
+                        deleteTask = {viewModel.deleteTask(it)}) {
 //                        val intent = Intent(activity, GardenProfileActivity::class.java)
 //                        intent.putExtra("gardenName", "")
 //                        intent.putExtra("taskScreenShow", true)
@@ -439,7 +438,11 @@ fun RevealedFrontLayer(
                         setDetailsClicked(true)
                     }
                 } else if (viewModel.selectedActivityGroup.value == item.activityType) {
-                    TaskCard2(item, navController, deleteTask = {viewModel.deleteTask(it)}) {
+                    TaskCard2(
+                        item,
+                        navController,
+                        setTaskStatus = {stat -> viewModel.setTaskStatus(item.id, status = stat)},
+                        deleteTask = {viewModel.deleteTask(it)}) {
 //                        val intent = Intent(activity, GardenProfileActivity::class.java)
 //                        intent.putExtra("gardenName", "")
 //                        intent.putExtra("taskScreenShow", true)
@@ -476,6 +479,13 @@ private fun TaskDetailDialog(viewModel: HomeViewModel, navController: NavHostCon
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                if (task.status == TaskStatusEnum.IGNORED.name){
+                    Row(Modifier.fillMaxWidth().clip(MaterialTheme.shapes.small).background(MaterialTheme.colors.error.copy(.8f)), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                        Text(text = "مهلت انجام این یادآور تمام شده است.", style = MaterialTheme.typography.subtitle2, color = MaterialTheme.colors.onError)
+                        Icon(Icons.Default.Warning, contentDescription = null, tint = Yellow500, modifier = Modifier.padding(4.dp))
+                    }
+                }
+
                 Column(
                     Modifier
                         .fillMaxWidth()
@@ -507,7 +517,9 @@ private fun TaskDetailDialog(viewModel: HomeViewModel, navController: NavHostCon
 
                     Button(
                         onClick = {
+                            viewModel.setTaskStatus(task.id, TaskStatusEnum.DONE.name)
                             navController.navigate(route = "${getActivityScreen(task.activityType)}/${viewModel.gardensList.value!![0].title}")
+                            //navController.navigate(route = "${getActivityScreen(task.activityType)}/${3}/${2}")
                                   },
                         modifier = Modifier
                             .fillMaxWidth(1f)
@@ -629,7 +641,7 @@ fun ActivityGroupSelector(
         modifier = Modifier
             .width(groupSelectorWidth)
             .height(60.dp)
-            .padding(5.dp)
+            .padding(4.dp)
             .clip(CircleShape)
             .background(
                 if (activityName == selectedActivity) getTaskColor(activityName) else Color.White
@@ -645,7 +657,7 @@ fun ActivityGroupSelector(
                 .fillMaxWidth()
                 .padding(horizontal = 3.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly) {
+            horizontalArrangement = Arrangement.SpaceBetween) {
             Icon(
                 getTaskIcon(activityName),
                 contentDescription = null,
@@ -713,7 +725,7 @@ fun RevealedRow(
         LazyRow {
             items(tasks) { item ->
                 if (item.activityType == activityName) {
-                    TaskCard2(task = item, navController, deleteTask = {viewModel.deleteTask(it)}) {
+                    TaskCard2(task = item, navController, setTaskStatus = {stat -> viewModel.setTaskStatus(item.id ,stat)}, deleteTask = {viewModel.deleteTask(it)}) {
                         setSelectedTask(item)
                         setBackdropState(BackdropValue.Revealed)
                         setDetailsClicked(true)

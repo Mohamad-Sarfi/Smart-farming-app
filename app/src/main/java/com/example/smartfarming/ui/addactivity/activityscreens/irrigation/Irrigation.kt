@@ -54,15 +54,12 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun Irrigation(gardenName : String, navHostController: NavHostController){
-
-    val activity = LocalContext.current as Activity
+fun Irrigation(gardenName : String ,navHostController: NavHostController, taskId : Int = -1){
     val viewmodel : IrrigationViewModel = hiltViewModel()
     var step = viewmodel.step
     var startup by remember {
         mutableStateOf(false)
     }
-    val garden = viewmodel.getGarden(gardenName)
 
     LaunchedEffect(key1 = null) {
         delay(100)
@@ -83,18 +80,18 @@ fun Irrigation(gardenName : String, navHostController: NavHostController){
             ActivityTitle(gardenName = gardenName, activityName = "آبیاری", icon =Icons.Default.WaterDrop, Color.White)
             ActivitiesStepBars(viewmodel.step.value, Color.White, Color.White.copy(.6f))
             AnimatedVisibility(visible = startup) {
-                IrrigationBody(viewmodel, navHostController)
+                IrrigationBody(viewmodel, navHostController, taskId)
             }
         }
     }
 }
 
 @Composable
-fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostController){
+fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostController, taskId: Int){
     Card(
         modifier = Modifier
             .padding(horizontal = 20.dp, vertical = 15.dp)
-            .fillMaxHeight(.85f)
+            .fillMaxHeight(1f)
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = 3.dp
@@ -172,7 +169,7 @@ fun IrrigationBody(viewModel: IrrigationViewModel, navHostController: NavHostCon
                         if (viewModel.step.value == 0){
                             viewModel.increaseStep()
                         } else {
-                            viewModel.submitClickHandler()
+                            viewModel.submitClickHandler(taskId)
                         }
                               },
                     colors = ButtonDefaults.buttonColors(
@@ -205,8 +202,9 @@ fun IrrigationBody1(viewModel: IrrigationViewModel, navHostController: NavHostCo
             0 ->
                 Column(
                     Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 30.dp, vertical = 40.dp),
+                        .fillMaxWidth()
+                        .fillMaxHeight(.9f)
+                        .padding(start = 30.dp, end = 30.dp, top = 30.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
                 ) {

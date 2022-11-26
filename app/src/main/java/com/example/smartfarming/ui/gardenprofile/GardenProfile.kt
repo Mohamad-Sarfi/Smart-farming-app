@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Thermostat
+import androidx.compose.material.icons.outlined.Archive
+import androidx.compose.material.icons.outlined.Beenhere
 import androidx.compose.material.icons.outlined.Inventory
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.runtime.*
@@ -219,12 +221,22 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                                 .height(550.dp)
                                 .padding(horizontal = 12.dp),
                         ){
-                            items(viewModel.tasksList.value){
-                                TaskCard2(task = it, navController = navController, deleteTask = {viewModel.deleteTask(it)}) {
+                            items(viewModel.tasksList.value){ item ->
+                                TaskCard2(
+                                    task = item,
+                                    navController = navController,
+                                    setTaskStatus = {stat -> viewModel.updateTaskStatus(item.id, stat)},
+                                    deleteTask = {viewModel.deleteTask(it)}) {
                                 }
                             }
                         }
-
+                        
+                        Divider()
+                        
+                        Row(Modifier.fillMaxWidth().clickable { navController.navigate(AppScreensEnum.AllGardenTasks.name) }.padding(vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                            Icon(Icons.Outlined.Archive, contentDescription = null, modifier = Modifier.size(35.dp), tint = MaterialTheme.colors.primary)
+                            Text(text = "آرشیو یادآورها", style = MaterialTheme.typography.body1, modifier = Modifier.padding(15.dp))
+                        }
                     }
 
     //                LazyColumn(
