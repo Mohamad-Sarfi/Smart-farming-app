@@ -101,8 +101,8 @@ fun FertilizationBody(viewModel: FertilizationViewModel, navController: NavHostC
 
     Card(
         modifier = Modifier
-            .padding(horizontal = 15.dp, vertical = 30.dp)
-            .fillMaxHeight(.9f)
+            .padding(horizontal = 15.dp, vertical = 15.dp)
+            .fillMaxHeight(1f)
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         elevation = 3.dp

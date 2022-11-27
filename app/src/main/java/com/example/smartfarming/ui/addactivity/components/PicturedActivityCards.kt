@@ -69,13 +69,13 @@ fun PicturedActivityCards(navController: NavHostController, gardenList : List<St
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.dp),
+                    .padding(top = 18.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center) {
                 Text(
                     text = "افزودن فعالیت جدید",
                     style = MaterialTheme.typography.h5,
-                    modifier = Modifier.padding(6.dp),
+                    modifier = Modifier.padding(6.dp).offset(y = 7.dp),
                     color = MaterialTheme.colors.onPrimary
                 )
                 Icon(painterResource(id = R.drawable.shovel),
@@ -104,7 +104,7 @@ fun PicturedActivityCards(navController: NavHostController, gardenList : List<St
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 50.dp)
+                .padding(start = 20.dp, end = 20.dp, top = 40.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             PicturedCard("آبیاری", R.drawable.irrigation_pic, BlueIrrigationDark, Icons.Default.WaterDrop){

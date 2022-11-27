@@ -20,32 +20,45 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewModel() {
-    val tasksList = mutableStateOf<List<Task>>(listOf())
+    var tasksList = listOf<Task>()
     val gardenTasks = mutableStateListOf<Task>()
     val garden = mutableStateOf<Garden?>(null)
     var gardensList = flow<List<Garden>> {}
+    val shownList = mutableStateListOf<Task>()
 
     fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
             garden.value  = repo.getGardenByName(gardenName)
+            getGardenTasks()
         }
     }
 
     fun getAllGardens() {
         viewModelScope.launch {
-             gardensList = repo.getGardens()
+            gardensList = repo.getGardens()
+
         }
     }
 
     fun getGardenTasks() {
         viewModelScope.launch {
             repo.getTasksForGarden(gardenIds = garden.value!!.id).collect{
-                tasksList.value = it
+                tasksList = it
                 gardenTasks.clear()
 
-                for (task in tasksList.value){
+                for (task in tasksList){
                     gardenTasks.add(task)
                 }
+            }
+        }
+    }
+
+    fun setShownTaskList(status: String){
+        shownList.clear()
+
+        for (task in tasksList){
+            if (task.status == status){
+                shownList.add(task)
             }
         }
     }

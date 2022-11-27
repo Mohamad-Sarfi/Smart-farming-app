@@ -58,64 +58,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
 
     viewModel.getAllGardens()
 
-    val gardenList = viewModel.gardensList.collectAsState(initial = listOf())
-
     var tasks = listOf<Task>()
-
-//    if (gardenList.value.isNullOrEmpty()){
-//        tasks = listOf<Task>(
-//            Task(0,
-//                "ولک پاشی",
-//                activity_type = ActivityTypesEnum.FERTILIZATION.name,
-//                description = "به دلیل عدم تامین نیاز سرمایی",
-//                start_date = "",
-//                finish_date = "",
-//                garden_name = "محمد",
-//                recommendations = "روغن ولک",
-//                user_id = 5,
-//                seen = false
-//            ),
-//            Task(0,
-//                "سم پاشی",
-//                activity_type = ActivityTypesEnum.PESTICIDE.name,
-//                description = "مبارزه با پسیل",
-//                start_date = "",
-//                finish_date = "",
-//                garden_name = "محمد",
-//                recommendations = "روغن ولک",
-//                user_id = 5,
-//                seen = false
-//            )
-//            ,
-//            Task(0,
-//                "آبیاری اسفند",
-//                activity_type = ActivityTypesEnum.IRRIGATION.name,
-//                description = "موعد آبیاری اسفند",
-//                start_date = "",
-//                finish_date = "",
-//                garden_name = "محمد",
-//                recommendations = "",
-//                user_id = 5,
-//                seen = false
-//            )
-//            ,
-//            Task(0,
-//                "کود دامی",
-//                activity_type = ActivityTypesEnum.FERTILIZATION.name,
-//                description = "با توجه به ماده عالی خاک نیاز به تامین کود دامی",
-//                start_date = "",
-//                finish_date = "",
-//                garden_name = "اکبری",
-//                recommendations = "کود گاو",
-//                user_id = 5,
-//                seen = false
-//            )
-//        )
-//    } else {
-//        tasks = getTaskList(gardenList.value)
-//    }
-
-
 
     Scaffold(
         modifier = Modifier
@@ -204,10 +147,18 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                             )
 
                             Row(
+                                modifier = Modifier
+                                    .clickable { navController.navigate(route = AppScreensEnum.GardenTasksScreen.name) },
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center
                             ) {
-                                Text(text = "یادآور فعالیت ها", style = MaterialTheme.typography.body1, color = Color.Black)
+                                Text(
+                                    text = "یادآور فعالیت ها",
+                                    style = MaterialTheme.typography.body1,
+                                    color = Color.Black,
+                                    modifier = Modifier.padding(5.dp)
+                                )
+
                                 Icon(Icons.Default.Alarm, contentDescription = null, modifier = Modifier
                                     .size(40.dp)
                                     .padding(5.dp), tint = Color.Black)
@@ -221,7 +172,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                                 .height(550.dp)
                                 .padding(horizontal = 12.dp),
                         ){
-                            items(viewModel.tasksList.value){ item ->
+                            items(viewModel.tasksList){ item ->
                                 TaskCard2(
                                     task = item,
                                     navController = navController,
@@ -229,13 +180,6 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                                     deleteTask = {viewModel.deleteTask(it)}) {
                                 }
                             }
-                        }
-                        
-                        Divider()
-                        
-                        Row(Modifier.fillMaxWidth().clickable { navController.navigate(AppScreensEnum.AllGardenTasks.name) }.padding(vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                            Icon(Icons.Outlined.Archive, contentDescription = null, modifier = Modifier.size(35.dp), tint = MaterialTheme.colors.primary)
-                            Text(text = "آرشیو یادآورها", style = MaterialTheme.typography.body1, modifier = Modifier.padding(15.dp))
                         }
                     }
 

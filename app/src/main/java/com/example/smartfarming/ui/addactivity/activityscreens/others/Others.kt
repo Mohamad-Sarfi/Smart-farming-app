@@ -90,8 +90,8 @@ fun Others(gardenName : String, navHostController : NavHostController){
 fun OthersBody(viewModel: OthersViewModel, navHostController: NavHostController, gardenName: String){
     Card(
         modifier = Modifier
-            .padding(horizontal = 15.dp, vertical = 30.dp)
-            .fillMaxHeight(.85f)
+            .padding(horizontal = 15.dp, vertical = 15.dp)
+            .fillMaxHeight(1f)
             .fillMaxWidth()
         ,
         shape = RoundedCornerShape(20.dp),

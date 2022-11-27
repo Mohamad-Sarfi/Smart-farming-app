@@ -92,11 +92,9 @@ fun Pesticide(gardenName : String, navController : NavHostController){
 @Composable
 fun PesticideBody(viewModel: PesticideViewModel, navController: NavHostController, gardenName: String) {
 
-    val context = LocalContext.current
-
     Card(
         modifier = Modifier
-            .padding(horizontal = 15.dp, vertical = 30.dp)
+            .padding(horizontal = 15.dp, vertical = 15.dp)
             .fillMaxHeight()
             .fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -403,8 +401,7 @@ fun PesticideVolume(viewModel: PesticideViewModel){
                 .fillMaxWidth()
                 .height(55.dp)
                 .padding(horizontal = 0.dp)
-                .background(Purple100, RoundedCornerShape(20.dp))
-            ,
+                .background(Purple100, RoundedCornerShape(20.dp)),
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = Yellow100,

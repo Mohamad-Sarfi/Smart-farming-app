@@ -2,9 +2,13 @@ package com.example.smartfarming.ui.gardenprofile.taskScreen
 
 import android.annotation.SuppressLint
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -26,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.data.room.entities.enums.TaskStatusEnum
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.Blue500
 import com.example.smartfarming.ui.addactivities.ui.theme.LightBackground
@@ -47,6 +52,16 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
         mutableStateOf(false)
     }
 
+    var showDone by remember {
+        mutableStateOf(false)
+    }
+    var showUndone by remember {
+        mutableStateOf(false)
+    }
+    var showPending by remember {
+        mutableStateOf(false)
+    }
+
     if (viewModel.garden.value != null){
         viewModel.getGardenTasks()
     }
@@ -58,14 +73,20 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
         showCards = true
     }
 
+    BackHandler() {
+        backButtonClickHandler(navtController, showCards){
+            showCards = it
+        }
+    }
+
     Scaffold(
         backgroundColor = LightBackground,
         topBar = {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 10.dp, horizontal = 20.dp)
-                ,
+                    .background(MaterialTheme.colors.primary)
+                    .padding(vertical = 10.dp, horizontal = 20.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -75,17 +96,15 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
                     modifier = Modifier
                         .padding(10.dp)
                         .clickable {
-                            navtController.navigate(AppScreensEnum.GardenProfileHome.name) {
-                                popUpTo(AppScreensEnum.GardenTasksScreen.name) {
-                                    inclusive = true
-                                }
+                            backButtonClickHandler(navtController, showCards) {
+                                showCards = it
                             }
                         },
-                    tint = MainGreen)
+                    tint = MaterialTheme.colors.onPrimary)
                 Text(
                     text = "باغداری باغ " + "${viewModel.garden.value?.title}",
                     style = MaterialTheme.typography.h6,
-                    color = MainGreen,
+                    color = MaterialTheme.colors.onPrimary,
                     modifier = Modifier.padding(5.dp)
                 )
             }
@@ -98,67 +117,138 @@ fun TaskScreen(viewModel: GardenProfileViewModel, navtController: NavHostControl
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TaskStatusCard(title = "انجام شده", icon = Icons.Default.Done, color = MainGreen.copy(.6f), showCards){showCards = it}
-            TaskStatusCard(title = "منقضی شده", icon = Icons.Default.DisabledByDefault, color = Color.Red.copy(.6f), showCards){showCards = it}
-            TaskStatusCard(title = "در انتظار انجام", icon = Icons.Default.PendingActions, color = Yellow500.copy(.6f), showCards){showCards = it}
+            Crossfade(
+                targetState = showCards,
+                animationSpec = tween(200, 300)
+            ) { flag ->
+                when(flag){
+                    true -> Column() {
+                        TaskStatusCard(
+                            title = "در انتظار انجام",
+                            icon = Icons.Default.PendingActions,
+                            color = Yellow500.copy(.6f),
+                            showCards,
+                            showDetails = {
+                                showPending = it
+                                showDone = false
+                                showUndone = false
+                            }){showCards = it}
+
+                        TaskStatusCard(
+                            title = "انجام شده", icon = Icons.Default.Done,
+                            color = MainGreen.copy(.6f), showCards,
+                            showDetails = {
+                                showPending = false
+                                showDone = it
+                                showUndone = false
+                            }){showCards = it}
+
+                        TaskStatusCard(
+                            title = "منقضی شده",
+                            icon = Icons.Default.DisabledByDefault,
+                            color = Color.Red.copy(.6f), showCards,
+                            showDetails = {
+                                showPending = false
+                                showDone = false
+                                showUndone = it
+                            }
+                        ){showCards = it}
+                    }
+                    false -> Column(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(15.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
+                        TasksGrid(viewModel, navtController, showDone, showUndone, showPending)
+                    }
+                }
+            }
         }
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun TaskStatusCard(title : String, icon : ImageVector, color: Color, showCards : Boolean, setShowCard : (Boolean) -> Unit) {
-    AnimatedVisibility(
-        visible = showCards,
-        enter = slideInHorizontally() + fadeIn(),
-        exit = slideOutHorizontally() + fadeOut()
+private fun TaskStatusCard(
+    title : String,
+    icon : ImageVector,
+    color: Color,
+    showCards : Boolean,
+    showDetails : (Boolean) -> Unit,
+    setShowCard : (Boolean) -> Unit
+) {
+    Card(
+        onClick = {
+            setShowCard(false)
+            showDetails(true)
+                  },
+        elevation = 0.dp,
+        backgroundColor = color,
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .padding(7.dp)
+            .fillMaxWidth()
     ) {
-        Card(
-            onClick = {
-                      setShowCard(false)
-                      },
-            elevation = 0.dp,
-            backgroundColor = color,
-            shape = MaterialTheme.shapes.medium,
-            modifier = Modifier
-                .padding(7.dp)
-                .fillMaxWidth()
+        Row(
+            Modifier
+                .fillMaxWidth(.65f)
+                .padding(45.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Row(
-                Modifier
-                    .fillMaxWidth(.8f)
-                    .padding(30.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(text =title, style = MaterialTheme.typography.body1, color = Color.White)
-                Icon(icon, contentDescription = null, tint = Color.White, modifier = Modifier.padding(5.dp))
-            }
+            Text(text =title, style = MaterialTheme.typography.h6, color = Color.White)
+            Icon(icon, contentDescription = null, tint = Color.White, modifier = Modifier
+                .size(55.dp)
+                .padding(8.dp))
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun UndoneTasks(viewModel : GardenProfileViewModel, navtController: NavHostController) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(5.dp)
-    ){
-        items(viewModel.gardenTasks){
-            TaskCard2(task = it, navController = navtController, oneStepClick = true, setTaskStatus = {}, deleteTask = {viewModel.deleteTask(it)}){
-                navtController.navigate(route = "${getActivityScreen(it.activityType)}/${viewModel.garden.value?.title}")
+private fun TasksGrid(viewModel: GardenProfileViewModel, navtController: NavHostController,showDone: Boolean, showUndone : Boolean, showPending : Boolean) {
+    var title = ""
+
+    when {
+        showUndone -> {
+            viewModel.setShownTaskList(TaskStatusEnum.IGNORED.name)
+            title = "منقضی شده"
+        }
+        showDone -> {
+            viewModel.setShownTaskList(TaskStatusEnum.DONE.name)
+            title = "انجام شده"
+        }
+        showPending -> {
+            viewModel.setShownTaskList(TaskStatusEnum.TODO.name)
+            title = "در انتظار انجام"
+        }
+    }
+
+    Column() {
+        Row(
+            Modifier.fillMaxWidth().padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(text = title, style = MaterialTheme.typography.h6)
+        }
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(5.dp)
+        ){
+            items(viewModel.shownList){ item ->
+                TaskCard2(task = item, navController = navtController, oneStepClick = true, setTaskStatus = {}, deleteTask = {viewModel.deleteTask(it)}){
+                    navtController.navigate(route = "${getActivityScreen(item.activityType)}/${viewModel.garden.value?.title}")
+                }
             }
         }
     }
 }
 
-@Composable
-private fun DoneTasks() {
-    
-}
-
-@Composable
-private fun IgnoredTasks() {
-    
+private fun backButtonClickHandler(navtController: NavHostController, showCards: Boolean, setShowCard: (Boolean) -> Unit){
+    if (!showCards){
+        setShowCard(true)
+    } else {
+        navtController.popBackStack()
+    }
 }
