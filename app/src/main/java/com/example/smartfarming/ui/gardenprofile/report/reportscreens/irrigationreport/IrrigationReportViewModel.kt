@@ -18,6 +18,8 @@ class IrrigationReportViewModel @Inject constructor(val repo : GardenRepo) : Vie
     fun getIrrigationForGarden(gardenName : String){
         viewModelScope.launch {
             val irrigationListStatic = repo.getIrrigationByGardenName(gardenName)
+            Log.i("TAG irrigation", "$irrigationListStatic")
+
             updateStateList(irrigationListStatic)
         }
     }

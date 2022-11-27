@@ -6,27 +6,24 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Compost
-import androidx.compose.material.icons.filled.Eco
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Eco
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.addactivities.ui.theme.Purple500
+import com.example.smartfarming.ui.addactivities.ui.theme.*
 import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -52,7 +49,8 @@ fun WorkerUsedScreen(gardenName: String, navHostController: NavHostController) {
 
     Scaffold(
         Modifier.fillMaxSize(),
-        topBar = { WorkerUsedTopBar(gardenName, navHostController)}
+        topBar = { WorkerUsedTopBar(gardenName, navHostController)},
+        backgroundColor = LightBackground
     ) {
         Crossfade(
             targetState = clicked,
@@ -68,59 +66,76 @@ fun WorkerUsedScreen(gardenName: String, navHostController: NavHostController) {
 
 @Composable
 private fun DetailedWorkerScreen() {
-    Column(Modifier.fillMaxSize(),
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
-            DetailWorkersRow("تغذیه", 65.0)
-            DetailWorkersRow("آبیاری", 23.5)
-            DetailWorkersRow("سمپاشی", 19.0)
-            DetailWorkersRow("سایر", 30.5)
+            DetailWorkersRow("تغذیه", 65.0, Icons.Default.Compost, Purple500)
+            DetailWorkersRow("آبیاری", 23.5, Icons.Default.WaterDrop, Blue500)
+            DetailWorkersRow("سمپاشی", 19.0, Icons.Default.BugReport, Yellow500)
+            DetailWorkersRow("سایر", 30.5, Icons.Default.Agriculture, MainGreen)
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DetailWorkersRow(
     title : String,
     number : Double,
+    icon : ImageVector,
+    color: Color
 ) {
     var clicked by remember {
         mutableStateOf(false)
     }
     val rowHeight by animateDpAsState(targetValue = if (clicked) 190.dp else 140.dp)
-    val cornerSize by animateDpAsState(targetValue = if (clicked) 20.dp else 35.dp)
+    val cornerSize by animateDpAsState(targetValue = if (clicked) 20.dp else 30.dp)
 
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .height(rowHeight)
-            .padding(vertical = 20.dp, horizontal = 40.dp)
-            .clip(RoundedCornerShape(cornerSize))
-            .background(Color.Black.copy(.15f))
-            .clickable { clicked = !clicked }
-            .padding(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+    Card(
+        onClick = {},
+        shape = RoundedCornerShape(cornerSize),
+        //border = BorderStroke(1.dp, Gray500),
+        elevation = 2.dp,
+        backgroundColor = MaterialTheme.colors.background,
+        modifier = Modifier.padding(vertical = 7.dp, horizontal = 30.dp)
     ) {
-        Column(Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(text = title, style = MaterialTheme.typography.h6, )
-                Icon(Icons.Default.Compost, contentDescription = null, modifier = Modifier.size(45.dp), tint = Purple500)
-            }
-            if (clicked){
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(rowHeight)
+                .padding(3.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceAround,
+                horizontalAlignment = Alignment.CenterHorizontally) {
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .padding(top = 5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
-                    Text(text = "استفاده شده است.", style = MaterialTheme.typography.body2, modifier = Modifier.padding(horizontal = 0.dp))
-                    Text(text = "$title", style = MaterialTheme.typography.body2, modifier = Modifier.padding(horizontal = 0.dp))
-                    Text(text = "کارگر برای", style = MaterialTheme.typography.body2, modifier = Modifier.padding(horizontal = 2.dp))
-                    Text(text = "$number", style = MaterialTheme.typography.body2, modifier = Modifier.padding(horizontal = 5.dp))
+                        .padding(horizontal = 15.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row() {
+                        Text(text = title, style = MaterialTheme.typography.h6)
+                        
+                        Text(text = "نفر", style = MaterialTheme.typography.h6, modifier = Modifier.padding(start = 15.dp, end = 5.dp))
+                        Text(text = "$number", style = MaterialTheme.typography.h6)
+                    }
+                    
+                    Icon(icon, contentDescription = null, modifier = Modifier.size(45.dp), tint = color)
                 }
+//                if (clicked){
+//                    Row(
+//                        Modifier
+//                            .fillMaxWidth()
+//                            .padding(top = 5.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
+//                        Text(text = "استفاده شده است.", style = MaterialTheme.typography.body2, modifier = Modifier.padding(horizontal = 0.dp))
+//                        Text(text = title, style = MaterialTheme.typography.body2, modifier = Modifier.padding(horizontal = 0.dp))
+//                        Text(text = "کارگر برای", style = MaterialTheme.typography.body2, modifier = Modifier.padding(horizontal = 2.dp))
+//                        Text(text = "$number", style = MaterialTheme.typography.body2, modifier = Modifier.padding(horizontal = 5.dp))
+//                    }
+//                }
             }
         }
     }
@@ -156,6 +171,7 @@ private fun WorkerUsedTopBar(gardenName: String, navHostController: NavHostContr
     Row(
         Modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colors.primary)
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -167,11 +183,17 @@ private fun WorkerUsedTopBar(gardenName: String, navHostController: NavHostContr
         ) {
             Icon(Icons.Default.ArrowBack,
                 contentDescription = null,
-                modifier = Modifier.size(25.dp))
+                modifier = Modifier.size(25.dp),
+                tint = MaterialTheme.colors.onPrimary
+            )
         }
-        Row(Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-            Text(text = gardenName, style = MaterialTheme.typography.h5)
-            Icon(Icons.Outlined.Eco, contentDescription = null, modifier = Modifier.padding(horizontal = 8.dp))
+        Row(
+            Modifier.padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(text = gardenName, style = MaterialTheme.typography.h5, color = MaterialTheme.colors.onPrimary)
+            Icon(Icons.Outlined.Eco, contentDescription = null, modifier = Modifier.padding(horizontal = 8.dp), tint = MaterialTheme.colors.onPrimary)
         }
     }
 }

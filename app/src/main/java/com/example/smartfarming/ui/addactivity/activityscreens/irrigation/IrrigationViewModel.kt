@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.addactivity.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
@@ -29,6 +30,8 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
     var finished = mutableStateOf(false)
 
     private val garden = mutableStateOf(initialGarden)
+
+    var gardenName = ""
 
     var dateNotSet = mutableStateOf(false)
 
@@ -115,19 +118,13 @@ class IrrigationViewModel @Inject constructor(val repo : GardenRepo) : ViewModel
                     irrigation_duration = irrigationDuration.value,
                     irrigation_type = irrigationType.value,
                     irrigation_volume = waterVolume.value,
-                    garden_name = garden.value!!.title
+                    garden_name = gardenName
                 )
             )
-        }
-    }
-}
 
-class IrrigationViewModelFactory(private val repo : GardenRepo) : ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(IrrigationViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return IrrigationViewModel(repo) as T
+            repo.getAllIrrigation().collect{
+                Log.i("TAG irrigation", "$it")
+            }
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

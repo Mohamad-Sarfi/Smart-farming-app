@@ -105,6 +105,9 @@ class GardenRepo @Inject constructor(
         irrigationDao.delete(irrigationEntity)
     }
 
+    @WorkerThread
+    fun getAllIrrigation() = irrigationDao.getAllIrrigation()
+
     // Harvest
     @WorkerThread
     suspend fun getHarvestByYear(gardenName: String, year: String) : List<Harvest> {

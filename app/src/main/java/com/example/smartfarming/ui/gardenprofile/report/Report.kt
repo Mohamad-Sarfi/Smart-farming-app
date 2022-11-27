@@ -33,7 +33,6 @@ fun Report(
     navHostController: NavHostController,
     gardenName : String
 ){
-    val activity = LocalContext.current as Activity
     val viewModel : ReportViewModel = hiltViewModel()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -59,27 +58,44 @@ fun Report(
         scaffoldState = bottomSheetScaffoldState,
         sheetPeekHeight = 35.dp,
         floatingActionButtonPosition = FabPosition.Center,
-        sheetShape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp)
+        sheetShape = RoundedCornerShape(topEnd = 10.dp, topStart = 10.dp),
+        backgroundColor = LightGreenBackground
     ) {
         Column(
             Modifier
-                .fillMaxSize()
-                .background(LightGray2)
-                .verticalScroll(rememberScrollState())
-                .padding(vertical = 30.dp, horizontal = 16.dp),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "گزارش فعالیت های", color = MainGreen, style = MaterialTheme.typography.h5)
-            Text(text = "باغ " + gardenName, color = MainGreen, style = MaterialTheme.typography.body1, modifier = Modifier.padding(bottom = 10.dp))
-            GraphsRow()
-            ColdExposureTime()
-            WorkerReport(navHostController, gardenName)
-            IrrigationReport(viewModel, navHostController, gardenName)
-            HarvestGraph(viewModel, navHostController, gardenName)
-            PesticideReport(viewModel, gardenName, navHostController)
-            FertilizationReport(viewModel, gardenName, navHostController)
-            OthersReport(viewModel, gardenName, navHostController)
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.primary)
+                    .padding(10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "گزارش فعالیت های", color = MaterialTheme.colors.onPrimary, style = MaterialTheme.typography.h5)
+                Text(text = "باغ " + gardenName, color = MaterialTheme.colors.onPrimary, style = MaterialTheme.typography.body1, modifier = Modifier.padding(bottom = 10.dp))
+            }
+
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(vertical = 10.dp, horizontal = 16.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                GraphsRow()
+                ColdExposureTime()
+                WorkerReport(navHostController, gardenName)
+                IrrigationReport(viewModel, navHostController, gardenName)
+                HarvestGraph(viewModel, navHostController, gardenName)
+                PesticideReport(viewModel, gardenName, navHostController)
+                FertilizationReport(viewModel, gardenName, navHostController)
+                OthersReport(viewModel, gardenName, navHostController)
+            }
         }
     }
 }

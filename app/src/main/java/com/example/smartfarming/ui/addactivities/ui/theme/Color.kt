@@ -43,6 +43,7 @@ val lightRedFertilizer = Color(0xFFC8E6C9)
 val lightBlueIrrigation = Color(0xFFA8E4FF)
 val lightBrownOtherActivities = Color(0xFFFFEAE1)
 
+val LightGreenBackground = Color(0xFFe8f5e9)
 
 val LightGray = Color(0xFFF6F6F6)
 val LightGray2 = Color(0xFFF9F9F9)

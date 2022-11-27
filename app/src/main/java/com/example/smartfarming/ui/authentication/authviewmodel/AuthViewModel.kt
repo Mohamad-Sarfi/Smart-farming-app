@@ -25,47 +25,75 @@ class AuthViewModel @Inject constructor(private val authRepo: AuthRepo) : ViewMo
     val email = MutableLiveData<String>().apply {
         value = ""
     }
-    val phone = MutableLiveData<String>().apply {
-        value = ""
-    }
-    private val _password = MutableLiveData<String>().apply {
-        value = ""
-    }
+    val phone = mutableStateOf("")
+
+    val passwordWrong = mutableStateOf(false)
+    val repeatPasswordWrong = mutableStateOf(false)
+    val phoneNumberWrong = mutableStateOf(false)
+
     private val fullName : String = "${firstName.value} ${lastName.value}"
     private var age = 0
     private var state = ""
     private var city = ""
-    val password : LiveData<String> = _password
-
-    fun setPassword(pass : String){
-        _password.value = pass
-    }
-
-    fun setFirstName(name : String){
-        firstName.value = name
-    }
-
-    fun setLastName(name : String){
-        lastName.value = name
-    }
-
-    fun setEmail(userEmail : String){
-        email.value = userEmail
-    }
-    fun setPhone(userPhone : String){
-        phone.value = userPhone
-    }
-
-    fun setState(stateName : String){
-        state = stateName
-    }
-
-    fun setCity(cityName : String){
-        city = cityName
-    }
-
 
     val signupResponse : MutableLiveData<Resource<SignupResponse>> = MutableLiveData()
+    private val password = mutableStateOf("")
+    private val repeatPassword = mutableStateOf("")
+
+    fun checkRepeatPassword(){
+        repeatPasswordWrong.value = password == repeatPassword
+    }
+
+    fun checkPhoneNumber(){
+        phoneNumberWrong.value = (phone.value.length != 11)
+    }
+
+    fun getPhoneNumber() : String {
+        return phone.value
+    }
+
+    fun setPhoneNumber(value: String) {
+        phone.value = value
+    }
+
+    fun getRepeatPassword() : String{
+        return repeatPassword.value
+    }
+
+    fun setRepeatPassword(value : String) {
+        repeatPassword.value = value
+    }
+
+    fun setPassword(value: String) {
+        password.value = value
+    }
+
+    fun getPassword() : String {
+        return password.value
+    }
+
+    fun checkPassword(){
+        val lowerAlphabet = ('a'..'z').joinToString() + ('A' .. 'Z').joinToString()
+        val numbers = (0..9).toString()
+        var hasLetters = false
+        var hasNumbers = false
+
+        lowerAlphabet.forEach { char ->
+            if (char in password.value){
+                hasLetters = true
+            }
+        }
+
+        for (num in numbers){
+            if (num in password.value){
+                hasNumbers = true
+                break
+            }
+        }
+
+        passwordWrong.value = (password.value.length > 7 && hasLetters && hasNumbers)
+    }
+
 
     fun signup(){
         viewModelScope.launch {
@@ -83,6 +111,9 @@ class AuthViewModel @Inject constructor(private val authRepo: AuthRepo) : ViewMo
         }
     }
 
+    fun submitClickHandler(){
+
+    }
 }
 
 class AuthViewModelFactory(

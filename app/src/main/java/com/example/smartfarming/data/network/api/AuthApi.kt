@@ -21,6 +21,4 @@ interface AuthApi{
     suspend fun forgetPassword(
         @Body request: RequestBody
     ) : ForgetPasswordResponse
-
-
 }

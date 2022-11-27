@@ -8,7 +8,6 @@ import androidx.compose.ui.unit.sp
 import com.example.smartfarming.ui.authentication.ui.theme.sina
 
 
-
 // Set of Material typography styles to start with
 val Typography = Typography(
     subtitle1 = TextStyle(

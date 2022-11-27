@@ -17,7 +17,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
-import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
 
 @Composable
 fun Step2(
@@ -71,43 +70,7 @@ fun Step2(
             }
         )
 
-        ShowEmailHint(email)
 
-        OutlinedTextField(
-            value = phone,
-            onValueChange = {
-                setPhone(it)
-            },
-            textStyle = MaterialTheme.typography.body1,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Color.White,
-                unfocusedBorderColor = MainGreen,
-                focusedLabelColor = MainGreen,
-                focusedBorderColor = MainGreen,
-                unfocusedLabelColor = MainGreen
-            ),
-            shape = MaterialTheme.shapes.medium,
-            label = {
-                Text(
-                    text = "شماره همراه",
-                    style = MaterialTheme.typography.body1
-                )
-            },
-            modifier = Modifier
-                .padding(10.dp),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Phone
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                }
-            ),
-            trailingIcon = {
-                Icon(Icons.Default.Call, contentDescription = "", tint = MainGreen)
-            }
-        )
         ShowPhoneNumHint(phone)
 
     }
@@ -127,16 +90,3 @@ fun ShowPhoneNumHint(phone: String){
     }
 }
 
-@Composable
-fun ShowEmailHint(email: String){
-    if (email.length > 0){
-        if (!email.contains('@') || !email.contains(".com")){
-            Text(
-                text = "یک ایمیل معتبر وارد کنید",
-                style = MaterialTheme.typography.subtitle1,
-                color = MainGreen,
-                modifier = Modifier.padding(4.dp)
-            )
-        }
-    }
-}

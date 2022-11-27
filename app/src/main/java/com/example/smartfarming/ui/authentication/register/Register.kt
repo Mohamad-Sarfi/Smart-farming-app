@@ -1,19 +1,29 @@
 package com.example.smartfarming.ui.authentication
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Password
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,94 +35,42 @@ import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.register.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Register(
     viewModel : AuthViewModel = hiltViewModel()
     ){
-
-
-    val context = LocalContext.current
     val step = viewModel.step
-    val firstName by viewModel.firstName.observeAsState()
-    val lastName by viewModel.lastName.observeAsState()
-    val email by viewModel.email.observeAsState()
-    val phone by viewModel.phone.observeAsState()
-    val password by viewModel.password.observeAsState()
-    var repeatPassword by remember {
-        mutableStateOf("")
-    }
-
-    val response by viewModel.signupResponse.observeAsState()
-
-
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        ConstraintLayout(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            val (topRef, middleRef, bottomRef) = createRefs()
 
             RegisterTitle(
                 Modifier
                     .background(MainGreen)
                     .padding(20.dp)
                     .fillMaxWidth()
-                    .constrainAs(topRef) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        top.linkTo(parent.top)
-                    }
             )
 
-            Body(
-                modifier = Modifier
-                    .constrainAs(middleRef) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        top.linkTo(topRef.bottom)
-                        bottom.linkTo(bottomRef.top)
-                    }
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(5.dp),
-                step = step,
-                firstName = firstName!!,
-                lastName = lastName!!,
-                changeFirstName = {viewModel.setFirstName(it)},
-                changeLastName = {viewModel.setLastName(it)},
-                increaseStep = {step.value++},
-                phone = phone!!,
-                email = email!!,
-                setPhone = {viewModel.setPhone(it)},
-                setEmail = {viewModel.setEmail(it.trim())},
-                password = password!!,
-                setPassword = {viewModel.setPassword(it.trim())},
-                repeatPassword = repeatPassword,
-                setRepeatPassword = {repeatPassword = it.trim()},
-                setState = {viewModel.setState(it)},
-                setCity = {viewModel.setCity(it)}
-            )
+            SignUpBody(viewModel)
 
             Row(
                 modifier = Modifier
                     .padding(20.dp)
                     .fillMaxWidth()
-                    .constrainAs(bottomRef) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                    },
             ) {
 
                 IconButton(
-                    onClick = {
-                              if (step.value > 0) step.value--
-                              },
+                    onClick = { if (step.value > 0) step.value-- },
                     modifier = Modifier
                         .padding(10.dp)
                         .clip(MaterialTheme.shapes.medium)
@@ -127,40 +85,7 @@ fun Register(
                 }
 
                 Button(
-                    onClick = {
-                        when(step.value){
-                            0 -> clickHandlerStep1(
-                                context,
-                                name = firstName!!,
-                                lastName = lastName!!,
-                                step = step,
-                                MAX_STEP = viewModel.MAX_STEP
-                            )
-                            1 -> clickHandlerStep2(
-                                context = context,
-                                email = email!!,
-                                phone = phone!!,
-                                step = step,
-                                MAX_STEP = viewModel.MAX_STEP
-                            )
-                            2 ->  clickHandlerStep3(
-                                step = step,
-                                MAX_STEP = viewModel.MAX_STEP
-                            )
-                            3 -> clickHandlerStep4(
-                                context = context,
-                                password = password!!,
-                                repeatPassword = repeatPassword,
-                                step = step,
-                                MAX_STEP = viewModel.MAX_STEP
-                            )
-                            else -> clickHandler(
-                                context = context,
-                                response = response,
-                            ){
-                                viewModel.signup()
-                            }
-                        } },
+                    onClick = {viewModel.submitClickHandler()},
                     modifier = Modifier
                         .padding(10.dp)
                         .fillMaxWidth()
@@ -174,86 +99,146 @@ fun Register(
                     )
                 }
             }
-
         }
     }
 }
 
 @Composable
-fun Body(
-    modifier: Modifier,
-    step : MutableState<Int>,
-    firstName : String,
-    lastName : String,
-    changeFirstName : (String) -> Unit,
-    changeLastName : (String) -> Unit,
-    increaseStep : () -> Unit,
-    phone : String,
-    email : String,
-    setEmail : (String) -> Unit,
-    setPhone : (String) -> Unit,
-    password : String,
-    repeatPassword : String,
-    setPassword : (String) -> Unit,
-    setRepeatPassword : (String) -> Unit,
-    setState : (String) -> Unit,
-    setCity : (String) -> Unit
-){
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Column(
-            Modifier
-                .fillMaxHeight()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            StepCircle(step = step.value, numberTag = 0, color = MainGreen)
-            StepCircle(step = step.value, numberTag = 1, color = MainGreen)
-            StepCircle(step = step.value, numberTag = 2, color = MainGreen)
-            StepCircle(step = step.value, numberTag = 3, color = MainGreen)
-        }
-        Column(
-            Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            when(step.value){
-                0 -> Step1(
-                    firstName = firstName,
-                    lastName = lastName,
-                    changeFirstName = changeFirstName,
-                    changeLastName = changeLastName,
-                    increaseStep = increaseStep
-                    )
-                1 -> Step2(
-                    email = email,
-                    phone = phone,
-                    setEmail = setEmail,
-                    setPhone = setPhone,
-                    increaseStep = increaseStep
-                )
-                2 -> Step3(
-                    setState = {setState(it)},
-                    setCity = {setCity(it)}
-                )
-                3 -> Step4(
-                    password = password,
-                    repeatPassword = repeatPassword,
-                    setPassword = setPassword,
-                    setRepeatPassword = setRepeatPassword
-                )
+private fun SignUpBody(viewModel: AuthViewModel) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(.7f),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        val focusManager = LocalFocusManager.current
 
+        OutlinedTextField(
+            value = viewModel.getPhoneNumber(),
+            onValueChange = {
+                viewModel.setPhoneNumber(it)
+                viewModel.checkPhoneNumber()
+            },
+            textStyle = MaterialTheme.typography.body1,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White,
+                unfocusedBorderColor = MainGreen,
+                focusedLabelColor = MainGreen,
+                focusedBorderColor = MainGreen,
+                unfocusedLabelColor = MainGreen
+            ),
+            shape = MaterialTheme.shapes.medium,
+            label = {
+                Text(
+                    text = "شماره همراه",
+                    style = MaterialTheme.typography.body1
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 35.dp, vertical = 10.dp),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Phone
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            ),
+            trailingIcon = {
+                Icon(Icons.Default.Call, contentDescription = "", tint = MainGreen)
+            },
+
+        )
+
+        ShowEmailHint(viewModel.email.value ?: "")
+
+        OutlinedTextField(
+            value = viewModel.getPassword(),
+            onValueChange = {
+                viewModel.setPassword(it)
+                viewModel.checkPassword()
+            },
+            textStyle = MaterialTheme.typography.body1,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White,
+                unfocusedBorderColor = MainGreen,
+                focusedLabelColor = MainGreen,
+                focusedBorderColor = MainGreen,
+                unfocusedLabelColor = MainGreen
+            ),
+            shape = MaterialTheme.shapes.medium,
+            label = {
+                Text(
+                    text = "رمز عبور",
+                    style = MaterialTheme.typography.body1
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 35.dp, vertical = 10.dp),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Phone
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }
+            ),
+            trailingIcon = {
+                Icon(Icons.Default.Lock, contentDescription = "", tint = MainGreen)
             }
+        )
+
+        if (viewModel.passwordWrong.value){
+            WrongPassword()
+        }
+
+        OutlinedTextField(
+            value = viewModel.getRepeatPassword(),
+            onValueChange = {
+                viewModel.setRepeatPassword(it)
+                viewModel.checkRepeatPassword()
+            },
+            textStyle = MaterialTheme.typography.body1,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White,
+                unfocusedBorderColor = MainGreen,
+                focusedLabelColor = MainGreen,
+                focusedBorderColor = MainGreen,
+                unfocusedLabelColor = MainGreen
+            ),
+            shape = MaterialTheme.shapes.medium,
+            label = {
+                Text(
+                    text = "تکرار رمز عبور",
+                    style = MaterialTheme.typography.body1
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 35.dp, vertical = 10.dp),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Phone
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            ),
+            trailingIcon = {
+                Icon(Icons.Default.Lock, contentDescription = "", tint = MainGreen)
+            }
+        )
+
+        if (viewModel.repeatPasswordWrong.value){
+            WrongRepeatPassword()
         }
     }
 }
-
 
 fun clickHandler(
     response : Resource<SignupResponse>?,
@@ -268,58 +253,37 @@ fun clickHandler(
     }
 }
 
-fun increaseStep(
-    step : MutableState<Int>,
-    MAX_STEP : Int,
-){
-    if (step.value <= MAX_STEP) step.value++
-}
-
-fun clickHandlerStep1(
-    context: Context,
-    name : String,
-    lastName: String,
-    step: MutableState<Int>,
-    MAX_STEP: Int
-){
-    if (name.length < 3 || lastName.length < 3){
-        Toast.makeText(context, "نام و نام خانوادگی را به شکل صحیح وارد کنید", Toast.LENGTH_SHORT).show()
-    } else {
-        increaseStep(step, MAX_STEP )
+@Composable
+private fun ShowEmailHint(email: String){
+    if (email.isNotEmpty()){
+        if (!email.contains('@') || email.length < 4){
+            Text(text = "یک ایمیل معتبر وارد کنید", style = MaterialTheme.typography.subtitle2)
+        }
     }
 }
 
-fun clickHandlerStep2(
-    context: Context,
-    email: String,
-    phone: String,
-    step: MutableState<Int>,
-    MAX_STEP: Int
-){
-    if (!email.contains("@") || phone.length < 11){
-        Toast.makeText(context, "ایمیل و شماره تلفن را به شکل صحیح وارد کنید", Toast.LENGTH_SHORT).show()
-    } else {
-        increaseStep(step, MAX_STEP)
+@Composable
+fun WrongPassword() {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(5.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(text = "طول رمز عبور وارد شده باید حداقل 8 و شامل عدد و حروف انگلیسی باشد", style = MaterialTheme.typography.subtitle2, color = MaterialTheme.colors.error.copy(.7f))
     }
 }
 
-fun clickHandlerStep3(
-    step: MutableState<Int>,
-    MAX_STEP: Int
-){
-    increaseStep(step, MAX_STEP)
-}
-
-fun clickHandlerStep4(
-    context: Context,
-    password: String,
-    repeatPassword: String,
-    step: MutableState<Int>,
-    MAX_STEP: Int
-){
-    if (password.length < 7 || password != repeatPassword){
-        Toast.makeText(context, "پسورد را به شکل صحیح وارد کنید", Toast.LENGTH_SHORT).show()
-    } else {
-        increaseStep(step, MAX_STEP)
+@Composable
+fun WrongRepeatPassword() {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(5.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(text = "تکرار رمز عبور صحیح نیست", style = MaterialTheme.typography.subtitle2, color = MaterialTheme.colors.error.copy(.7f))
     }
 }

@@ -29,6 +29,6 @@ fun RegisterTitle(modifier: Modifier){
                 .size(120.dp),
             tint = Color.White
         )
-        Text(text = "ثبت نام کاربر", style = MaterialTheme.typography.h3, color = Color.White)
+        Text(text = "ثبت نام کاربر", style = MaterialTheme.typography.h5, color = Color.White)
     }
 }

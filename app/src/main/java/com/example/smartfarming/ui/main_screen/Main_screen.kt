@@ -1,5 +1,6 @@
 package com.example.smartfarming.ui.main_screen
 
+import UserProfileScreen
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -80,7 +81,7 @@ fun MainScreen(mainNavHostController: NavHostController){
                         navController = harvestNavController
                     )
                 }
-                composable(NAV_PROFILE) { AppScreen(text = "Profile Screen") }
+                composable(NAV_PROFILE) { UserProfileScreen() }
             }
         }
     }
