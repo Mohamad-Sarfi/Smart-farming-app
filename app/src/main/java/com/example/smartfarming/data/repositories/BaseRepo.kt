@@ -12,10 +12,9 @@ abstract class BaseRepo {
         apiCall : suspend () -> T
     ) : Resource<T>{
         return withContext(Dispatchers.IO){
-
             try {
+                Log.i("TAG Api", "Request sent")
                 Resource.Success(apiCall.invoke())
-
             } catch (throwable : Throwable){
                 when(throwable){
                     is HttpException -> {

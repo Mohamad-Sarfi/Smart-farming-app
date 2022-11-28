@@ -23,20 +23,11 @@ class AuthRepo @Inject constructor(
     }
 
     suspend fun signup(
-        email : String,
-        fullName : String,
-        password : String,
-        phoneNumber : String,
-        state : String,
-        city : String
+        phoneNumber: String,
+        password: String
     ) = safeApiCall {
-        api.signup(signUpReq2JSON(email = email,
-            fullName = fullName,
-            password = password,
-            phoneNumber = phoneNumber,
-            state = state,
-            city = city)
-            .toRequestBody("application/json".toMediaTypeOrNull())
+        api.signup(
+            signUpReq2JSON(password = password, phoneNumber = phoneNumber).toRequestBody("application/json".toMediaTypeOrNull())
         )
     }
 

@@ -12,9 +12,9 @@ import androidx.navigation.compose.composable
 import com.example.smartfarming.MainActivity
 import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.ui.AppScreensEnum
-import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModel
 import com.example.smartfarming.ui.authentication.forgetpassword.ForgetPassWordScreen
+import com.example.smartfarming.ui.authentication.register.Register
 
 @Composable
 fun AuthNavGraph(

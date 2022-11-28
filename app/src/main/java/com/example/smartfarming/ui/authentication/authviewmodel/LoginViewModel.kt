@@ -1,16 +1,18 @@
 package com.example.smartfarming.ui.authentication.authviewmodel
 
-import android.net.NetworkInfo
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.data.network.resources.user.LoginResponse
 import com.example.smartfarming.data.repositories.authentication.AuthRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class LoginViewModel(
+
+class LoginViewModel constructor(
     private val authRepo: AuthRepo,
     private val userPreferences: UserPreferences
 ) : ViewModel() {
@@ -51,5 +53,4 @@ class LoginViewModelFactory(
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
-
 }

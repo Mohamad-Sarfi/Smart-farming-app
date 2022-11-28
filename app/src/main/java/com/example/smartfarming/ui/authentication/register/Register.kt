@@ -1,7 +1,10 @@
-package com.example.smartfarming.ui.authentication
+package com.example.smartfarming.ui.authentication.register
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,9 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Password
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,15 +26,14 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.smartfarming.MainActivity
 import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.data.network.resources.userSignupResponse.SignupResponse
 import com.example.smartfarming.ui.addactivities.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
-import com.example.smartfarming.ui.authentication.register.*
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -41,6 +41,7 @@ fun Register(
     viewModel : AuthViewModel = hiltViewModel()
     ){
     val step = viewModel.step
+    val activity = LocalContext.current as Activity
 
     Scaffold(
         modifier = Modifier
@@ -52,7 +53,6 @@ fun Register(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
 
             RegisterTitle(
                 Modifier
@@ -85,7 +85,7 @@ fun Register(
                 }
 
                 Button(
-                    onClick = {viewModel.submitClickHandler()},
+                    onClick = { clickHandler(activity ,viewModel) },
                     modifier = Modifier
                         .padding(10.dp)
                         .fillMaxWidth()
@@ -93,12 +93,18 @@ fun Register(
                     shape = MaterialTheme.shapes.medium
 
                 ) {
-                    Text(
-                        text = if (step.value != viewModel.MAX_STEP) "بعدی" else "تایید",
-                        style = MaterialTheme.typography.h5
-                    )
+                    if (viewModel.waiting.value){
+                        CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
+                    } else {
+                        Text(
+                            text = "ثبت نام",
+                            style = MaterialTheme.typography.h5
+                        )
+                    }
                 }
             }
+
+            //if (viewModel.signupResponse.value.)
         }
     }
 }
@@ -152,7 +158,9 @@ private fun SignUpBody(viewModel: AuthViewModel) {
 
         )
 
-        ShowEmailHint(viewModel.email.value ?: "")
+        if (viewModel.phoneNumberWrong.value) {
+            WrongPhoneNumber()
+        }
 
         OutlinedTextField(
             value = viewModel.getPassword(),
@@ -180,7 +188,7 @@ private fun SignUpBody(viewModel: AuthViewModel) {
                 .padding(horizontal = 35.dp, vertical = 10.dp),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Phone
+                keyboardType = KeyboardType.Password
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -193,6 +201,7 @@ private fun SignUpBody(viewModel: AuthViewModel) {
         )
 
         if (viewModel.passwordWrong.value){
+            Log.i("TAG wrong pass", "wrong pass")
             WrongPassword()
         }
 
@@ -222,7 +231,7 @@ private fun SignUpBody(viewModel: AuthViewModel) {
                 .padding(horizontal = 35.dp, vertical = 10.dp),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Phone
+                keyboardType = KeyboardType.Password
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -241,16 +250,31 @@ private fun SignUpBody(viewModel: AuthViewModel) {
 }
 
 fun clickHandler(
-    response : Resource<SignupResponse>?,
-    context: Context,
-    signUp : () -> Unit
+    activity: Activity,
+    viewModel: AuthViewModel,
+
 ){
-    signUp()
-    when(response){
-        is Resource.Success -> Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-        is Resource.Failure -> Toast.makeText(context, "Signup failed", Toast.LENGTH_SHORT).show()
-        else -> Toast.makeText(context, "Signup failed2", Toast.LENGTH_SHORT).show()
+    viewModel.signup()
+
+    viewModel.signupResponse.let {
+        when(viewModel.signupResponse.value){
+            is Resource.Success -> {
+                viewModel.waiting.value = false
+                Toast.makeText(activity, "ثبت نام موفق", Toast.LENGTH_SHORT).show()
+                moveToHomeScreen(activity)
+            }
+            is Resource.Failure -> {
+                viewModel.waiting.value = false
+                Toast.makeText(activity, "ثبت نام ناموفق", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+}
+
+fun moveToHomeScreen(activity: Activity) {
+    val intent = Intent(activity, MainActivity::class.java)
+    activity.startActivity(intent)
+    activity.finish()
 }
 
 @Composable
@@ -263,15 +287,28 @@ private fun ShowEmailHint(email: String){
 }
 
 @Composable
+fun WrongPhoneNumber() {
+    Text(text = "یک شماره همراه معتبر بصورت 0912 وارد کنید",
+        style = MaterialTheme.typography.subtitle2,
+        color = MaterialTheme.colors.error.copy(.7f),
+        lineHeight = 23.sp)
+}
+
+@Composable
 fun WrongPassword() {
     Row(
         Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(.8f)
             .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Text(text = "طول رمز عبور وارد شده باید حداقل 8 و شامل عدد و حروف انگلیسی باشد", style = MaterialTheme.typography.subtitle2, color = MaterialTheme.colors.error.copy(.7f))
+        Text(
+            text = "طول رمز عبور وارد شده باید حداقل 8 و شامل عدد و حروف انگلیسی باشد",
+            style = MaterialTheme.typography.subtitle2,
+            color = MaterialTheme.colors.error.copy(.7f),
+            lineHeight = 23.sp
+        )
     }
 }
 
@@ -279,7 +316,7 @@ fun WrongPassword() {
 fun WrongRepeatPassword() {
     Row(
         Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(.8f)
             .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center

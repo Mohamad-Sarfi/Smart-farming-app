@@ -70,15 +70,13 @@ fun Step2(
             }
         )
 
-
         ShowPhoneNumHint(phone)
-
     }
 }
 
 @Composable
 fun ShowPhoneNumHint(phone: String){
-    if (phone.length > 0){
+    if (phone.isNotEmpty()){
         if (phone[0] != '0' || phone.length != 11){
             Text(
                 text = "شماره تماس را بصورت ... 0912 وارد کنید",

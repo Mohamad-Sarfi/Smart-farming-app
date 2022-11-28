@@ -9,26 +9,21 @@ data class UserRequest(val id: Int = 0,
 
 
 fun signUpReq2JSON(
-    email : String,
-    fullName : String,
     password : String,
     phoneNumber : String,
-    state : String,
-    city : String
 ) : String{
     val gson = Gson()
     return gson.toJson(UserRequest(
         user = User(
             password = password,
             phoneNumber = phoneNumber,
-            fullName = fullName,
-            email = email,
+            fullName = "",
+            email = "",
             language = Language(title = "FARSI"),
-            shipmentAddress = ShipmentAddress(country = "Iran", plainAddress = "NaN", state = "semnan", city = "damghan"),
-            address = Address(city = "damghan", state = "semnan", country = "Iran", plainAddress = "Nan"),
-            bio = "NaN"
+            shipmentAddress = ShipmentAddress(country = "Iran", plainAddress = "NaN", state = "NaN", city = "NaN"),
+            address = Address(city = "NaN", state = "NaN", country = "Iran", plainAddress = "NaN"),
+            bio = "NaN")
         )
-    )
     )
 }
 
@@ -36,6 +31,5 @@ fun forgetPassword2Json(
     phoneNumber : String
 ) : String {
     val gson = Gson()
-
     return gson.toJson(phoneNumber)
 }

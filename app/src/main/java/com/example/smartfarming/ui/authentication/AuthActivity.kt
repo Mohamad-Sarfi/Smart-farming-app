@@ -30,12 +30,6 @@ class AddUserActivity : ComponentActivity() {
 
     protected lateinit var userPreferences : UserPreferences
 
-    val viewModel : AuthViewModel by viewModels{
-        AuthViewModelFactory(
-            (application as FarmApplication).repo,
-            (application as FarmApplication).authRepo
-        )
-    }
 
     val loginViewModel : LoginViewModel by viewModels{
         LoginViewModelFactory(

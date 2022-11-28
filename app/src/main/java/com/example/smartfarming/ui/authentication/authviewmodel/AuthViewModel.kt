@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import com.example.smartfarming.data.network.Resource
+import com.example.smartfarming.data.network.resources.signup.SignUp
+import com.example.smartfarming.data.network.resources.signupresponse.SignUpResponse
 import com.example.smartfarming.data.network.resources.userSignupResponse.SignupResponse
 import com.example.smartfarming.data.repositories.authentication.AuthRepo
 import com.example.smartfarming.data.repositories.garden.GardenRepo
@@ -36,12 +38,14 @@ class AuthViewModel @Inject constructor(private val authRepo: AuthRepo) : ViewMo
     private var state = ""
     private var city = ""
 
-    val signupResponse : MutableLiveData<Resource<SignupResponse>> = MutableLiveData()
+    val signupResponse = mutableStateOf<Resource<SignUpResponse>?>(value = null)
     private val password = mutableStateOf("")
     private val repeatPassword = mutableStateOf("")
 
+    val waiting = mutableStateOf(false)
+
     fun checkRepeatPassword(){
-        repeatPasswordWrong.value = password == repeatPassword
+        repeatPasswordWrong.value = password.value != repeatPassword.value
     }
 
     fun checkPhoneNumber(){
@@ -72,9 +76,13 @@ class AuthViewModel @Inject constructor(private val authRepo: AuthRepo) : ViewMo
         return password.value
     }
 
+    fun fieldsValueOk() : Boolean {
+        return passwordWrong.value && repeatPasswordWrong.value && phoneNumberWrong.value
+    }
+
     fun checkPassword(){
         val lowerAlphabet = ('a'..'z').joinToString() + ('A' .. 'Z').joinToString()
-        val numbers = (0..9).toString()
+        val numbers = "0123456789"
         var hasLetters = false
         var hasNumbers = false
 
@@ -90,29 +98,20 @@ class AuthViewModel @Inject constructor(private val authRepo: AuthRepo) : ViewMo
                 break
             }
         }
-
-        passwordWrong.value = (password.value.length > 7 && hasLetters && hasNumbers)
+        passwordWrong.value = !(password.value.length > 7 && hasLetters && hasNumbers)
     }
-
 
     fun signup(){
+        waiting.value = true
+
         viewModelScope.launch {
             signupResponse.value = authRepo.signup(
-                email = email.value!!,
-                phoneNumber = phone.value!!,
-                fullName = fullName,
-                password = password.value!!,
-                state = state,
-                city = city
+                phoneNumber = phone.value,
+                password = password.value,
             )
-            if (signupResponse.value is Resource.Success){
-                Log.i("signup", "${signupResponse.value}")
-            }
+
+            Log.i("TAG signup1", "${signupResponse.value}")
         }
-    }
-
-    fun submitClickHandler(){
-
     }
 }
 
@@ -127,5 +126,4 @@ class AuthViewModelFactory(
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
-
 }
