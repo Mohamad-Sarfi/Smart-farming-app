@@ -38,7 +38,8 @@ import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Register(
-    viewModel : AuthViewModel = hiltViewModel()
+    viewModel : AuthViewModel = hiltViewModel(),
+    navHostController: NavHostController
     ){
     val step = viewModel.step
     val activity = LocalContext.current as Activity
@@ -66,16 +67,18 @@ fun Register(
             Row(
                 modifier = Modifier
                     .padding(20.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
 
                 IconButton(
-                    onClick = { if (step.value > 0) step.value-- },
+                    onClick = { backClickHandler(navHostController, step.value){step.value--} },
                     modifier = Modifier
-                        .padding(10.dp)
+                        .padding(13.dp)
                         .clip(MaterialTheme.shapes.medium)
                         .background(MainGreen)
-                        .padding(3.dp)
+
                 ) {
                     Icon(
                         Icons.Default.ArrowBack,
@@ -98,7 +101,7 @@ fun Register(
                     } else {
                         Text(
                             text = "ثبت نام",
-                            style = MaterialTheme.typography.h5
+                            style = MaterialTheme.typography.body1
                         )
                     }
                 }
@@ -322,5 +325,13 @@ fun WrongRepeatPassword() {
         horizontalArrangement = Arrangement.Center
     ) {
         Text(text = "تکرار رمز عبور صحیح نیست", style = MaterialTheme.typography.subtitle2, color = MaterialTheme.colors.error.copy(.7f))
+    }
+}
+
+private fun backClickHandler(navHostController: NavHostController, step : Int, decreaseStep : () -> Unit){
+    if (step > 0){
+        decreaseStep()
+    } else {
+        navHostController.popBackStack()
     }
 }

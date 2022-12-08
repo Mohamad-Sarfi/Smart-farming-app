@@ -1,6 +1,7 @@
 package com.example.smartfarming.ui.gardens.composables
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -13,10 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Thermostat
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Beenhere
 import androidx.compose.material.icons.outlined.Inventory
@@ -129,40 +127,43 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                         Divider(modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 20.dp), thickness = 1.dp, color = Color.Gray.copy(.3f))
-                        
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 30.dp),
-                            verticalAlignment = Alignment.CenterVertically, 
-                            horizontalArrangement = Arrangement.SpaceBetween) {
-                            Icon(Icons.Default.Add,
-                                contentDescription = null,
-                                tint = MaterialTheme.colors.primary,
-                                modifier = Modifier
-                                    .size(35.dp)
-                                    .clickable {
-                                        navController.navigate("${AppScreensEnum.AddTaskScreen.name}/${garden.value}")
-                                    }
-                            )
 
+                        Column {
                             Row(
-                                modifier = Modifier
-                                    .clickable { navController.navigate(route = AppScreensEnum.GardenTasksScreen.name) },
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 30.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = "یادآور فعالیت ها",
-                                    style = MaterialTheme.typography.body1,
-                                    color = Color.Black,
-                                    modifier = Modifier.padding(5.dp)
+                                horizontalArrangement = Arrangement.SpaceBetween) {
+                                Icon(Icons.Default.Add,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colors.primary,
+                                    modifier = Modifier
+                                        .size(35.dp)
+                                        .clickable {
+                                            navController.navigate("${AppScreensEnum.AddTaskScreen.name}/${garden.value}")
+                                        }
                                 )
 
-                                Icon(Icons.Default.Alarm, contentDescription = null, modifier = Modifier
-                                    .size(40.dp)
-                                    .padding(5.dp), tint = Color.Black)
+                                Row(
+                                    modifier = Modifier
+                                        .clickable { navController.navigate(route = AppScreensEnum.GardenTasksScreen.name) },
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = "یادآور فعالیت ها",
+                                        style = MaterialTheme.typography.body1,
+                                        color = Color.Black,
+                                        modifier = Modifier.padding(5.dp)
+                                    )
+
+                                    Icon(Icons.Default.Alarm, contentDescription = null, modifier = Modifier
+                                        .size(40.dp)
+                                        .padding(5.dp), tint = Color.Black)
+                                }
                             }
+                            TasksFilter()
                         }
 
                         LazyVerticalGrid(
@@ -172,7 +173,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                                 .height(550.dp)
                                 .padding(horizontal = 12.dp),
                         ){
-                            items(viewModel.tasksList){ item ->
+                            items(viewModel.gardenTasks){ item ->
                                 TaskCard2(
                                     task = item,
                                     navController = navController,
@@ -300,3 +301,53 @@ fun GardenTitle(gardenName : String, navController: NavHostController){
     }
 }
 
+@Composable
+private fun TasksFilter() {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 3.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        Surface(modifier = Modifier
+            .padding(3.dp)
+            .fillMaxWidth(.3f),
+            shape = MaterialTheme.shapes.small,
+            color = Yellow500.copy(.6f)
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp), horizontalArrangement = Arrangement.Center) {
+                Icon(Icons.Default.Done, contentDescription = null)
+            }
+        }
+        Surface(modifier = Modifier
+            .padding(horizontal = 3.dp)
+            .fillMaxWidth(.5f),
+            shape = MaterialTheme.shapes.small,
+            color = Color.Red.copy(.6f)
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp), horizontalArrangement = Arrangement.Center) {
+                Icon(Icons.Default.Done, contentDescription = null)
+            }
+        }
+        Surface(modifier = Modifier
+            .padding(3.dp)
+            .fillMaxWidth(1f),
+            shape = MaterialTheme.shapes.small,
+            color = MainGreen.copy(.6f)
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp), horizontalArrangement = Arrangement.Center) {
+                Text(text = "در انتظار انجام", style = MaterialTheme.typography.body1)
+            }
+        }
+    }
+}

@@ -30,16 +30,19 @@ class LoginViewModel constructor(
 
     fun login(){
         inProgress.value = true
+
         viewModelScope.launch {
-            loginResponse.value =authRepo.login(password = password.value!!, email = phoneNumber.value!!)
+            loginResponse.value = authRepo.login(password = password.value!!, email = phoneNumber.value!!)
+            //TODo Log response here
+
             gotResponse.value = true
+            inProgress.value = false
 
             if (loginResponse.value is Resource.Success){
                 userPreferences.saveAuthToken((loginResponse.value as Resource.Success<LoginResponse>).value.response.token)
             }
         }
     }
-
 }
 
 class LoginViewModelFactory(

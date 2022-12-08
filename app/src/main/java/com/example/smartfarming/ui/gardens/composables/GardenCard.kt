@@ -90,12 +90,19 @@ fun GardenCard(garden : Garden, viewModel : GardensViewModel){
                     color = MainGreen,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
+
                 Row() {
-                    when {
-                        viewModel.hasIrrigation.value -> ActivityBadge(color = BlueIrrigationDark, icon = Icons.Default.WaterDrop)
-                        viewModel.hasFertilization.value -> ActivityBadge(color = Purple500, icon = Icons.Default.Compost)
-                        viewModel.hasPesticide.value -> ActivityBadge(color = YellowPesticide, icon = Icons.Default.BugReport)
-                        viewModel.hasOthers.value -> ActivityBadge(color = MainGreen, icon = Icons.Default.Agriculture)
+                    if (viewModel.hasIrrigation.value){
+                        ActivityBadge(color = BlueIrrigationDark, icon = Icons.Default.WaterDrop)
+                    }
+                    if (viewModel.hasFertilization.value){
+                        ActivityBadge(color = Purple500, icon = Icons.Default.Compost)
+                    }
+                    if (viewModel.hasPesticide.value){
+                        ActivityBadge(color = YellowPesticide, icon = Icons.Default.BugReport)
+                    }
+                    if (viewModel.hasOthers.value){
+                        ActivityBadge(color = MainGreen, icon = Icons.Default.Agriculture)
                     }
                 }
             }

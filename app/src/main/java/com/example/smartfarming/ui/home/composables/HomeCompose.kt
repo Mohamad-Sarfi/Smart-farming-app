@@ -308,7 +308,7 @@ fun TasksRow(
                         color = MainGreen
                     )
                     Icon(
-                        if (backdropState.isRevealed) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
+                        if (backdropState.isRevealed) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                         contentDescription = "",
                         tint = MainGreen
                     )

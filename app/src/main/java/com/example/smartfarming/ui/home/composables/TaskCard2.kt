@@ -40,6 +40,7 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
     var clicked by remember {
         mutableStateOf(false)
     }
+
     val cardHeight by animateDpAsState(
         targetValue = if (clicked) 260.dp else 210.dp,
         animationSpec = spring(
@@ -73,8 +74,6 @@ fun TaskCard2(task: Task, navController: NavHostController, oneStepClick : Boole
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
             Icon(
                 getTaskIcon(task.activityType),
                 contentDescription = null,
@@ -115,7 +114,7 @@ fun RemainingDays(task: Task, setTaskStatus: (String) -> Unit = {}){
         val remainingPortion = calculateRemainingPortion(remained, task)
         Log.i("TAG remain", "task remaining days: $remained / ${task.executionTime.toFloat()} = $remainingPortion")
 
-        setTaskAsIgnored(remainingPortion, task){
+        setTaskAsIgnored(remained, task){
             setTaskStatus(it)
         }
 
@@ -133,9 +132,10 @@ fun RemainingDays(task: Task, setTaskStatus: (String) -> Unit = {}){
     }
 }
 
-private fun setTaskAsIgnored(remainingPortion : Float, task: Task, setTaskStatus: (String) -> Unit) {
-    if (remainingPortion == 0f && task.status != TaskStatusEnum.IGNORED.name){
-        setTaskStatus(TaskStatusEnum.IGNORED.name)
+private fun setTaskAsIgnored(remained : Long, task: Task, setTaskStatus: (String) -> Unit) {
+    if (remained <= 0 && task.status != TaskStatusEnum.IGNORED.name){
+        setTaskStatus(TaskStatusEnum.IGNORED.name, )
+        Log.i("TAG status", "${task.status}")
     }
 }
 

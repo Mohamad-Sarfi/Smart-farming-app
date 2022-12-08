@@ -38,17 +38,13 @@ fun AuthNavGraph(
                 // login process
                 loginViewModel.login()
 
-                if (response.value != null){
-                    loginViewModel.inProgress.value = false
-                }
-
                 if (loginViewModel.gotResponse.value){
                     when(response.value) {
                         is Resource.Success<*> -> {
+                            Toast.makeText(context, "ورود موفق", Toast.LENGTH_SHORT).show()
                             activity.startActivity(Intent(context, MainActivity::class.java))
                             activity.finish()
                         }
-
                         is Resource.Failure -> {
                             Log.i("TAG login response", "${response.value}")
                             if ((response.value as Resource.Failure).errorCode == 406) {
@@ -61,7 +57,6 @@ fun AuthNavGraph(
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-
                         else -> {
                             //Toast.makeText(context, "ورود ناموفق2", Toast.LENGTH_SHORT).show()
                             loginViewModel.inProgress.value = false
@@ -81,7 +76,7 @@ fun AuthNavGraph(
         composable(
             route = AppScreensEnum.RegisterScreen.name
         ){
-            Register()
+            Register(navHostController = navController)
         }
 
         composable(

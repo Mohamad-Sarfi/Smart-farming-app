@@ -51,5 +51,4 @@ class DatabaseModule {
     @Provides
     fun provideOtherActivitiesDao(gardenDb: GardenDb) : OtherActivitiesDao = gardenDb.otherActivitiesDao()
 
-
 }
