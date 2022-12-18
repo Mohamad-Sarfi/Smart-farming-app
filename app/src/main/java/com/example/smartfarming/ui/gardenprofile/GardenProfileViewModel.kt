@@ -13,6 +13,7 @@ import com.example.smartfarming.utils.initialGarden
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
@@ -23,8 +24,9 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
     var tasksList = listOf<Task>()
     val gardenTasks = mutableStateListOf<Task>()
     val garden = mutableStateOf<Garden?>(null)
-    var gardensList = flow<List<Garden>> {}
+    var gardensList = listOf<Garden>()
     val shownList = mutableStateListOf<Task>()
+    val allGardensName = mutableListOf<String>()
 
     fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
@@ -35,8 +37,22 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
 
     fun getAllGardens() {
         viewModelScope.launch {
-            gardensList = repo.getGardens()
+            repo.getGardens().collect{
+                gardensList = it
 
+                for(g in gardensList){
+                    allGardensName.add(g.title)
+                }
+            }
+        }
+    }
+
+    fun setCurrentGarden(gardenName: String){
+        for (g in gardensList){
+            if (g.title == gardenName){
+                garden.value = g
+                break
+            }
         }
     }
 

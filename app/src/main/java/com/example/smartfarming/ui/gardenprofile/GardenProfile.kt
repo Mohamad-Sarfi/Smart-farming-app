@@ -2,6 +2,8 @@ package com.example.smartfarming.ui.gardens.composables
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -30,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
@@ -80,7 +83,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                GardenTitle(gardenName = garden.value!!.title, navController)
+                GardenTitle(gardenName = garden.value!!.title, navController, viewModel)
                 Column(
                     Modifier
                         .fillMaxWidth()
@@ -270,32 +273,61 @@ fun MainIcons(
 }
 
 @Composable
-fun GardenTitle(gardenName : String, navController: NavHostController){
+private fun GardenTitle(gardenName : String, navController: NavHostController, viewModel : GardenProfileViewModel){
+    var clicked by remember {
+        mutableStateOf(false)
+    }
+    val cardHeight by animateDpAsState( if (clicked) 300.dp else 75.dp, animationSpec = tween(durationMillis = 1000))
+    val cardRadius by animateDpAsState(if (clicked) 25.dp else 40.dp, animationSpec = tween(durationMillis = 1000))
+
     Box(
         Modifier
             .padding(bottom = 55.dp, start = 0.dp, end = 0.dp)
             .fillMaxWidth()
             .height(140.dp)
             .background(MainGreen)
-            .padding(0.dp)) {
+            .padding(0.dp)
+            .zIndex(100f)) {
+
         Image(painterResource(id = R.drawable.background_pic), contentDescription = null, modifier = Modifier.fillMaxWidth(), contentScale = ContentScale.FillWidth)
+
         Box(modifier = Modifier
             .fillMaxSize()
             .background(MainGreen.copy(.4f)))
+
         Card( modifier = Modifier
             .offset(y = 105.dp)
             .padding(horizontal = 15.dp)
-            .fillMaxWidth(),
-            shape = RoundedCornerShape(bottomEnd = 40.dp, bottomStart = 40.dp, topEnd = 40.dp, topStart = 40.dp),
+            .clickable { clicked = !clicked }
+            .fillMaxWidth()
+            .height(cardHeight),
+            shape = RoundedCornerShape(cardRadius),
             elevation = 4.dp
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(horizontal = 30.dp, vertical = 5.dp)) {
-                Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier
-                    .clickable {
-                        navController.navigate(route = "${AppScreensEnum.GardenEditScreen.name}/$gardenName")
+            if (!clicked){
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.padding(horizontal = 30.dp, vertical = 5.dp)) {
+                    Icon(Icons.Default.Edit, contentDescription = "", tint = MainGreen, modifier = Modifier
+                        .clickable {
+                            navController.navigate(route = "${AppScreensEnum.GardenEditScreen.name}/$gardenName")
+                        }
+                        .padding(5.dp))
+                    Text(text = gardenName, style = MaterialTheme.typography.h5, color = MainGreen, modifier = Modifier.padding(5.dp))
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.padding(horizontal = 30.dp, vertical = 5.dp),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.End){
+                    items(viewModel.allGardensName){gardenName ->
+                        Text(text = gardenName, style = MaterialTheme.typography.h5, modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                viewModel.setCurrentGarden(gardenName)
+                                clicked = !clicked
+                            }
+                            .padding(5.dp), color = MaterialTheme.colors.primary)
                     }
-                    .padding(5.dp))
-                Text(text = gardenName, style = MaterialTheme.typography.h5, color = MainGreen, modifier = Modifier.padding(5.dp))
+                }
             }
         }
     }
