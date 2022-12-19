@@ -3,11 +3,11 @@ package com.example.smartfarming.ui.user
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.smartfarming.data.repositories.garden.GardenRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class UserProfileViewModel : ViewModel() {
+@HiltViewModel
+class UserProfileViewModel @Inject constructor(val repo: GardenRepo): ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-    val text: LiveData<String> = _text
 }

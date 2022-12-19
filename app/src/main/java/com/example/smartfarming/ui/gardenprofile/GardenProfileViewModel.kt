@@ -1,14 +1,12 @@
 package com.example.smartfarming.ui.gardenprofile
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.data.room.entities.enums.TaskStatusEnum
 import com.example.smartfarming.utils.initialGarden
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +25,8 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
     var gardensList = listOf<Garden>()
     val shownList = mutableStateListOf<Task>()
     val allGardensName = mutableListOf<String>()
+    val load = mutableStateOf(true)
+    var selectedTaskStatus  = mutableStateOf("")
 
     fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
@@ -40,6 +40,7 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
             repo.getGardens().collect{
                 gardensList = it
 
+                allGardensName.clear()
                 for(g in gardensList){
                     allGardensName.add(g.title)
                 }
@@ -69,6 +70,24 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
         }
     }
 
+    fun filterTasks(status: String){
+        val tasks = tasksList
+        gardenTasks.clear()
+
+        if (status == ""){
+            for (task in tasksList){
+                gardenTasks.add(task)
+            }
+        } else {
+            for (task in tasks){
+                if (task.status == status){
+                    gardenTasks.add(task)
+                }
+            }
+        }
+
+    }
+
     fun setShownTaskList(status: String){
         shownList.clear()
 
@@ -88,6 +107,16 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
     fun updateTaskStatus(taskId : Int, status : String) {
         viewModelScope.launch {
             repo.updateTaskStatus(taskId, status)
+        }
+    }
+
+    fun setSelectedTaskStatus(status : String){
+        if (selectedTaskStatus.value != status){
+            selectedTaskStatus.value = status
+            filterTasks(status)
+        } else {
+            selectedTaskStatus.value = ""
+            filterTasks("")
         }
     }
 }

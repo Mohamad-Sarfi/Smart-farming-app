@@ -6,7 +6,6 @@ import com.example.smartfarming.data.repositories.BaseRepo
 class WeatherRepo(
     private val weatherApi: WeatherApi
 ) : BaseRepo() {
-
     val apiKey = "b8bff1a924e0ab2766e553ba49b42838"
 
     suspend fun getWeather(

@@ -45,6 +45,7 @@ fun AuthNavGraph(
                             activity.startActivity(Intent(context, MainActivity::class.java))
                             activity.finish()
                         }
+
                         is Resource.Failure -> {
                             Log.i("TAG login response", "${response.value}")
                             if ((response.value as Resource.Failure).errorCode == 406) {

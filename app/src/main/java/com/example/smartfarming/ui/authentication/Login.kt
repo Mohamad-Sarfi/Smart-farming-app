@@ -1,8 +1,7 @@
 package com.example.smartfarming.ui.authentication
 
-import android.app.Activity
-import android.content.Intent
-import android.util.Log
+import android.annotation.SuppressLint
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
@@ -10,19 +9,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -30,21 +25,15 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.smartfarming.MainActivity
 import com.example.smartfarming.R
-import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.ui.AppScreensEnum
-import com.example.smartfarming.ui.authentication.authviewmodel.AuthViewModel
 import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModel
 import com.example.smartfarming.ui.authentication.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
-import com.example.smartfarming.ui.authentication.ui.theme.SmartFarmingTheme
-import retrofit2.Response
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun Login(
     navController: NavHostController,
@@ -52,9 +41,6 @@ fun Login(
     signIn : () -> Unit
 ){
     // Username TextField
-    val usernameText by viewModel.phoneNumber.observeAsState()
-    val passwordText by viewModel.password.observeAsState()
-
     var isUsernameEmpty by remember {
         mutableStateOf(false)
     }
@@ -63,166 +49,184 @@ fun Login(
     }
     val context = LocalContext.current
     val focus = LocalFocusManager.current
+    val snackBarState = remember {
+        SnackbarHostState()
+    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .fillMaxWidth()
+    ShowAuthToasts(viewModel, context)
+
+    Scaffold(
+        Modifier.fillMaxSize(),
+        scaffoldState = rememberScaffoldState(snackbarHostState = snackBarState)
     ) {
-        Title()
-
         Column(
             modifier = Modifier
-                .padding(vertical = 10.dp, horizontal = 20.dp)
-                .fillMaxWidth(1f)
-                .fillMaxHeight(1f),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .fillMaxWidth()
         ) {
-            Column() {
-                OutlinedTextField(
-                    value = usernameText!!,
-                    onValueChange = {
-                        viewModel.phoneNumber.value = it.trim()
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .background(Color.White)
-                        .width(300.dp)
-                        .padding(vertical = 10.dp)
-                    ,
-                    label = {
-                        Text(text = "نام کاربری", style = MaterialTheme.typography.body1)
-                    },
-                    singleLine = true,
-                    maxLines = 1,
-                    textStyle = MaterialTheme.typography.body1,
-                    shape = MaterialTheme.shapes.medium,
-                    trailingIcon = {
-                        Icon(
-                            Icons.Filled.Person,
-                            contentDescription = "icon",
-                            tint = if (isUsernameEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focus.moveFocus(FocusDirection.Down)}
-                    ),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedLabelColor = MainGreen,
-                        unfocusedLabelColor = MainGreen,
-                        unfocusedBorderColor = if (isUsernameEmpty) RedFertilizer else MainGreen
-                    )
-                )
-
-                // Password textField
-                OutlinedTextField(
-                    value = passwordText!!,
-                    onValueChange = {
-                        viewModel.password.value = it.trim() },
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .background(Color.White)
-                        .width(300.dp)
-                        .padding(vertical = 10.dp),
-                    label = {
-                        Text(text = "رمز عبور", style = MaterialTheme.typography.body1)
-                            },
-                    textStyle = MaterialTheme.typography.body1,
-                    shape = MaterialTheme.shapes.medium,
-                    trailingIcon = {
-                        Icon(
-                            Icons.Filled.Lock,
-                            contentDescription = "icon",
-                            tint = if (isPassEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
-                        )
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done,
-                        keyboardType = KeyboardType.Password
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {focus.clearFocus()}
-                    ),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedLabelColor = MainGreen,
-                        unfocusedLabelColor = MainGreen,
-                        unfocusedBorderColor = if (isPassEmpty) RedFertilizer else MainGreen
-                    )
-                )
-
-                Text(
-                    text = "فراموشی رمز",
-                    style = MaterialTheme.typography.subtitle1,
-                    color = MaterialTheme.colors.primary,
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate(route = AppScreensEnum.ForgetPasswordScreen.name)
-                        }
-                        .align(Alignment.CenterHorizontally)
-                        .padding(6.dp)
-                )
-
+            if (viewModel.isUserPassShort.value){
+                Snackbar(
+                    elevation = 4.dp,
+                ) {
+                    Text(text = "رمز عبور و شماره تلفن اشتباه وارد شده است", style = MaterialTheme.typography.body1)
+                }
             }
 
-            val loginBtnWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value) 0f else .4f )
 
-            Row(
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ){
-                if (!viewModel.inProgress.value){
-                    OutlinedButton(
+
+            Title()
+
+            Column(
+                modifier = Modifier
+                    .padding(vertical = 10.dp, horizontal = 20.dp)
+                    .fillMaxWidth(1f)
+                    .fillMaxHeight(1f),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Column() {
+                    OutlinedTextField(
+                        value = viewModel.phoneNumber.value,
+                        onValueChange = {
+                            viewModel.phoneNumber.value = it.trim()
+                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .background(Color.White)
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp)
+                        ,
+                        label = {
+                            Text(text = "شماره تلفن", style = MaterialTheme.typography.body1)
+                        },
+                        singleLine = true,
+                        maxLines = 1,
+                        textStyle = MaterialTheme.typography.body1,
+                        shape = MaterialTheme.shapes.small,
+                        trailingIcon = {
+                            Icon(
+                                Icons.Filled.Phone,
+                                contentDescription = "icon",
+                                tint = if (isUsernameEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Phone
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focus.moveFocus(FocusDirection.Down)}
+                        ),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedLabelColor = MainGreen,
+                            unfocusedLabelColor = MainGreen,
+                            unfocusedBorderColor = if (isUsernameEmpty) RedFertilizer else MainGreen
+                        )
+                    )
+
+                    // Password textField
+                    OutlinedTextField(
+                        value = viewModel.password.value,
+                        onValueChange = {
+                            viewModel.password.value = it.trim() },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .background(Color.White)
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp),
+                        label = {
+                            Text(text = "رمز عبور", style = MaterialTheme.typography.body1)
+                                },
+                        textStyle = MaterialTheme.typography.body1,
+                        shape = MaterialTheme.shapes.small,
+                        trailingIcon = {
+                            Icon(
+                                Icons.Filled.Lock,
+                                contentDescription = "icon",
+                                tint = if (isPassEmpty) MaterialTheme.colors.error else MaterialTheme.colors.primary
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Password
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {focus.clearFocus()}
+                        ),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedLabelColor = MainGreen,
+                            unfocusedLabelColor = MainGreen,
+                            unfocusedBorderColor = if (isPassEmpty) RedFertilizer else MainGreen
+                        )
+                    )
+
+                    Text(
+                        text = "فراموشی رمز",
+                        style = MaterialTheme.typography.subtitle1,
+                        color = MaterialTheme.colors.primary,
+                        modifier = Modifier
+                            .clickable {
+                                navController.navigate(route = AppScreensEnum.ForgetPasswordScreen.name)
+                            }
+                            .align(Alignment.CenterHorizontally)
+                            .padding(6.dp)
+                    )
+
+                }
+
+                val signUpWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value) 0f else 1f )
+                val loginWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value) 1f else .7f )
+
+                Row(
+                    Modifier.fillMaxWidth().padding(5.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+
+                ){
+                    Button(
                         onClick = {
-                            navController.navigate(route = AppScreensEnum.RegisterScreen.name)
+                            if (!viewModel.checkUserAndPassLength()){
+                                //signIn()
+                                viewModel.login()
+                            }
                         },
                         modifier = Modifier
                             .padding(5.dp)
-                            .fillMaxWidth(loginBtnWidth)
-                            .padding(top = 80.dp, bottom = 20.dp)
-                            .align(Alignment.CenterVertically)
-                        ,
-                        border = BorderStroke(2.dp, MaterialTheme.colors.primary),
-                        shape = MaterialTheme.shapes.medium
-                    ) {
-                        Text(
-                            text = "ثبت نام", style = MaterialTheme.typography.subtitle1,
-                            modifier = Modifier.padding(vertical = 2.dp)
-                        )
-                    }
-                }
+                            .fillMaxWidth(loginWidth)
+                            .padding(top = 80.dp, bottom = 20.dp),
+                        shape = MaterialTheme.shapes.medium,
 
-                // ******************************************************** Submit button
-                Button(
-                    onClick = {
-                        isUsernameEmpty = usernameText!!.length < 4
-                        isPassEmpty = passwordText!!.length < 6
-
-                        if (isUsernameEmpty || isPassEmpty){
-                            Toast.makeText(context, "نام کاربری و رمز عبور را بطور صحیح وارد کنید", Toast.LENGTH_SHORT).show()
-                        } else{
-                            signIn()
+                        ) {
+                        if (!viewModel.inProgress.value){
+                            Text(
+                                text = "ورود",
+                                style = MaterialTheme.typography.subtitle1,
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            )
+                        } else {
+                            CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
                         }
-                    },
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .fillMaxWidth(1f)
-                        .padding(top = 80.dp, bottom = 20.dp)
-                    ,
-                    shape = MaterialTheme.shapes.medium,
-
-                    ) {
-                    if (!viewModel.inProgress.value){
-                        Text(
-                            text = "ورود",
-                            style = MaterialTheme.typography.subtitle1,
-                            modifier = Modifier.padding(vertical = 2.dp)
-                        )
-                    } else {
-                        CircularProgressIndicator(color = MaterialTheme.colors.onPrimary)
                     }
+
+                    //if (!viewModel.inProgress.value){
+                        OutlinedButton(
+                            onClick = {
+                                navController.navigate(route = AppScreensEnum.RegisterScreen.name)
+                            },
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .fillMaxWidth(signUpWidth)
+                                .padding(top = 80.dp, bottom = 20.dp),
+                            border = BorderStroke(2.dp, MaterialTheme.colors.primary),
+                            shape = MaterialTheme.shapes.medium
+                        ) {
+                            Text(
+                                text = "ثبت نام", style = MaterialTheme.typography.subtitle1,
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            )
+                        }
+
+                    // ******************************************************** Submit button
                 }
             }
         }
@@ -230,7 +234,7 @@ fun Login(
 }
 
 @Composable
-fun Title(){
+private fun Title(){
     Column(
         modifier = Modifier
             .background(MaterialTheme.colors.primary)
@@ -244,12 +248,13 @@ fun Title(){
             contentDescription = "User icon",
             modifier = Modifier
                 .size(120.dp)
+                .padding(10.dp)
         )
 
         Text(
             text = "کشت افزار",
             color = Color.White,
-            style = MaterialTheme.typography.h3,
+            style = MaterialTheme.typography.h4,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(5.dp)
@@ -257,11 +262,22 @@ fun Title(){
 
         Text(
             text = "اپلیکشن مزرعه هوشمند",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.h5,
             color = Color.White,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(5.dp)
         )
     }
+}
+
+@Composable
+private fun ShowAuthToasts(viewModel: LoginViewModel, context: Context) {
+    when {
+        viewModel.authError.value -> Toast.makeText(context, "خطای ورود، مجدد تلاش کنید", Toast.LENGTH_SHORT).show()
+        viewModel.networkError.value -> Toast.makeText(context, "خطایی رخداده است، مجدد تلاش کنید", Toast.LENGTH_SHORT).show()
+        viewModel.loginSuccessful.value -> Toast.makeText(context, "ورود موفق، خوش آمدید :)", Toast.LENGTH_SHORT).show()
+    }
+
+    viewModel.setAllConditionsFalse()
 }

@@ -1,7 +1,10 @@
 package com.example.smartfarming.ui.gardens.composables
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
@@ -38,6 +41,7 @@ import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.data.room.entities.enums.TaskStatusEnum
 import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
@@ -49,6 +53,7 @@ import com.example.smartfarming.ui.home.composables.MyFAB
 import com.example.smartfarming.ui.home.composables.TaskCard2
 import com.example.smartfarming.utils.getTaskList
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GardenProfile(garden : State<Garden?>, navController: NavHostController, viewModel: GardenProfileViewModel){
@@ -60,6 +65,10 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
     viewModel.getAllGardens()
 
     var tasks = listOf<Task>()
+
+    LaunchedEffect(key1 = viewModel.load.value){
+        viewModel.load.value = false
+    }
 
     Scaffold(
         modifier = Modifier
@@ -166,7 +175,7 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                                         .padding(5.dp), tint = Color.Black)
                                 }
                             }
-                            TasksFilter()
+                            TasksFilter(viewModel)
                         }
 
                         LazyVerticalGrid(
@@ -207,8 +216,6 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
         }
     }
 }
-
-
 
 @Composable
 fun Report(navController: NavHostController, gardenName: String){
@@ -277,7 +284,7 @@ private fun GardenTitle(gardenName : String, navController: NavHostController, v
     var clicked by remember {
         mutableStateOf(false)
     }
-    val cardHeight by animateDpAsState( if (clicked) 300.dp else 75.dp, animationSpec = tween(durationMillis = 1000))
+    val cardHeight by animateDpAsState( if (clicked) 350.dp else 75.dp, animationSpec = tween(durationMillis = 1000))
     val cardRadius by animateDpAsState(if (clicked) 25.dp else 40.dp, animationSpec = tween(durationMillis = 1000))
 
     Box(
@@ -287,7 +294,7 @@ private fun GardenTitle(gardenName : String, navController: NavHostController, v
             .height(140.dp)
             .background(MainGreen)
             .padding(0.dp)
-            .zIndex(100f)) {
+            .zIndex(100f)){
 
         Image(painterResource(id = R.drawable.background_pic), contentDescription = null, modifier = Modifier.fillMaxWidth(), contentScale = ContentScale.FillWidth)
 
@@ -334,51 +341,71 @@ private fun GardenTitle(gardenName : String, navController: NavHostController, v
 }
 
 @Composable
-private fun TasksFilter() {
+private fun TasksFilter(viewModel: GardenProfileViewModel) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 3.dp),
+            .padding(start = 15.dp, end = 15.dp, top = 15.dp, bottom = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         Surface(modifier = Modifier
             .padding(3.dp)
-            .fillMaxWidth(.3f),
-            shape = MaterialTheme.shapes.small,
-            color = Yellow500.copy(.6f)
+            .clickable {
+                viewModel.setSelectedTaskStatus(TaskStatusEnum.TODO.name)
+                       },
+            shape = MaterialTheme.shapes.medium,
+            border = BorderStroke(1.dp, Yellow500)
         ) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp), horizontalArrangement = Arrangement.Center) {
-                Icon(Icons.Default.Done, contentDescription = null)
+            Row(Modifier
+                    .padding(vertical = 5.dp),
+                horizontalArrangement = Arrangement.Center) {
+                AnimatedVisibility(visible = viewModel.selectedTaskStatus.value == TaskStatusEnum.TODO.name) {
+                    Text(text = "در انتظار انجام", style = MaterialTheme.typography.body2, color = Yellow700, modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 12.dp))
+                }
+                Icon(Icons.Default.HourglassTop, tint = Yellow500, contentDescription = null, modifier = Modifier.padding(vertical = 8.dp, horizontal = 13.dp))
             }
         }
+
         Surface(modifier = Modifier
             .padding(horizontal = 3.dp)
-            .fillMaxWidth(.5f),
-            shape = MaterialTheme.shapes.small,
-            color = Color.Red.copy(.6f)
+            .clickable {
+                viewModel.setSelectedTaskStatus(TaskStatusEnum.DONE.name)
+
+                       },
+            shape = MaterialTheme.shapes.medium,
+            border = BorderStroke(1.dp, MainGreen)
         ) {
             Row(
                 Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp), horizontalArrangement = Arrangement.Center) {
-                Icon(Icons.Default.Done, contentDescription = null)
+                    .padding(vertical = 5.dp),
+                horizontalArrangement = Arrangement.Center) {
+
+                AnimatedVisibility(visible = viewModel.selectedTaskStatus.value == TaskStatusEnum.DONE.name) {
+                    Text(text = "انجام شده", style = MaterialTheme.typography.body2, color = MainGreen,modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 12.dp))
+                }
+
+                Icon(Icons.Default.Done, contentDescription = null, tint = MainGreen, modifier = Modifier.padding(vertical = 8.dp, horizontal = 13.dp))
             }
         }
+
         Surface(modifier = Modifier
             .padding(3.dp)
-            .fillMaxWidth(1f),
-            shape = MaterialTheme.shapes.small,
-            color = MainGreen.copy(.6f)
+            .clickable {
+                viewModel.setSelectedTaskStatus(TaskStatusEnum.IGNORED.name)
+                       },
+            shape = MaterialTheme.shapes.medium,
+            border = BorderStroke(1.dp, Color.Red)
         ) {
             Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp), horizontalArrangement = Arrangement.Center) {
-                Text(text = "در انتظار انجام", style = MaterialTheme.typography.body1)
+                Modifier.padding(vertical = 5.dp),
+                horizontalArrangement = Arrangement.Center) {
+
+                AnimatedVisibility(visible = viewModel.selectedTaskStatus.value == TaskStatusEnum.IGNORED.name) {
+                    Text(text = "منقضی", style = MaterialTheme.typography.body2, color = Color.Red,modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 12.dp))
+                }
+
+                Icon(Icons.Default.Close, contentDescription = null, tint = Color.Red,modifier = Modifier.padding(vertical = 8.dp, horizontal = 13.dp))
             }
         }
     }

@@ -7,7 +7,6 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
 abstract class BaseRepo {
-
     suspend fun <T> safeApiCall(
         apiCall : suspend () -> T
     ) : Resource<T>{
