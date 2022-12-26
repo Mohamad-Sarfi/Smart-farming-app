@@ -1,20 +1,15 @@
 package com.example.smartfarming.ui.gardenprofile
 
-import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import com.example.smartfarming.data.repositories.garden.GardenRepo
+import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
 import com.example.smartfarming.data.room.entities.Task
 import com.example.smartfarming.data.room.entities.enums.TaskStatusEnum
-import com.example.smartfarming.utils.initialGarden
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +22,7 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
     val allGardensName = mutableListOf<String>()
     val load = mutableStateOf(true)
     var selectedTaskStatus  = mutableStateOf("")
+    val irrigationPercentage = mutableStateOf(0f)
 
     fun getGardenByName(gardenName : String) {
         viewModelScope.launch(Dispatchers.Main) {
@@ -85,7 +81,6 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
                 }
             }
         }
-
     }
 
     fun setShownTaskList(status: String){
@@ -117,6 +112,34 @@ class GardenProfileViewModel @Inject constructor(val repo : GardenRepo) : ViewMo
         } else {
             selectedTaskStatus.value = ""
             filterTasks("")
+        }
+    }
+
+    fun calculatePercentage(){
+        getGardenTasks()
+        irrigationPercentage.value = calculateIrrigationPercentage()
+    }
+
+    private fun calculateIrrigationPercentage(): Float {
+        var todosCount = 0
+        var doneCount = 0
+        var ignoredCount = 0
+
+        for (task in gardenTasks) {
+            if (task.activityType == ActivityTypesEnum.IRRIGATION.name) {
+                when (task.status) {
+                    TaskStatusEnum.TODO.name -> todosCount++
+                    TaskStatusEnum.DONE.name -> doneCount++
+                    TaskStatusEnum.IGNORED.name -> ignoredCount++
+                }
+            }
+        }
+
+        return try {
+            (doneCount / (gardenTasks.size)).toFloat()
+        } catch (e : java.lang.Exception){
+            e.printStackTrace()
+            1f
         }
     }
 }

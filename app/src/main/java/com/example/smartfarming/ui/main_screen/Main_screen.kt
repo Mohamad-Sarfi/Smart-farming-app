@@ -74,13 +74,16 @@ fun MainScreen(mainNavHostController: NavHostController){
                     val homeNavController = rememberNavController()
                     HomeNavGraph(navController = homeNavController, mainNavHostController){ showFAB = it }
                 }
+
                 composable(NAV_GARDENS) { GardenCompose() }
+
                 composable(NAV_HARVEST) {
                     val harvestNavController = rememberNavController()
                     HarvestNavGraph(
                         navController = harvestNavController
                     )
                 }
+
                 composable(NAV_PROFILE) { UserProfileScreen() }
             }
         }

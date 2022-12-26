@@ -32,6 +32,7 @@ import com.example.smartfarming.ui.AppScreensEnum
 import com.example.smartfarming.ui.authentication.authviewmodel.LoginViewModel
 import com.example.smartfarming.ui.authentication.ui.theme.MainGreen
 import com.example.smartfarming.ui.authentication.ui.theme.RedFertilizer
+import com.example.smartfarming.utils.isOnline
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -55,6 +56,11 @@ fun Login(
 
     ShowAuthToasts(viewModel, context)
 
+    if (!isOnline(context)){
+        Toast.makeText(context, "ارتباط اینترنت برقرار نیست", Toast.LENGTH_SHORT).show()
+        viewModel.isOffline.value = true
+    }
+
     Scaffold(
         Modifier.fillMaxSize(),
         scaffoldState = rememberScaffoldState(snackbarHostState = snackBarState)
@@ -71,8 +77,6 @@ fun Login(
                     Text(text = "رمز عبور و شماره تلفن اشتباه وارد شده است", style = MaterialTheme.typography.body1)
                 }
             }
-
-
 
             Title()
 
@@ -91,7 +95,7 @@ fun Login(
                             viewModel.phoneNumber.value = it.trim()
                         },
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
+                            .padding(horizontal = 15.dp, vertical = 5.dp)
                             .background(Color.White)
                             .fillMaxWidth()
                             .padding(vertical = 10.dp)
@@ -130,7 +134,7 @@ fun Login(
                         onValueChange = {
                             viewModel.password.value = it.trim() },
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
+                            .padding(horizontal = 15.dp, vertical = 2.dp)
                             .background(Color.White)
                             .fillMaxWidth()
                             .padding(vertical = 10.dp),
@@ -178,7 +182,9 @@ fun Login(
                 val loginWidth by animateFloatAsState(targetValue = if (viewModel.inProgress.value) 1f else .7f )
 
                 Row(
-                    Modifier.fillMaxWidth().padding(5.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
 
@@ -268,6 +274,19 @@ private fun Title(){
                 .align(Alignment.CenterHorizontally)
                 .padding(5.dp)
         )
+    }
+}
+
+@Composable
+private fun submitClickHandler(context: Context, viewModel: LoginViewModel){
+    if (isOnline(context)){
+        if (viewModel.checkUserAndPassLength()){
+            viewModel.login()
+        } else {
+            Toast.makeText(context, "شماره ", Toast.LENGTH_SHORT).show()
+        }
+    } else {
+        Toast.makeText(context, "اتصال اینترنت برقرار نیست", Toast.LENGTH_SHORT).show()
     }
 }
 

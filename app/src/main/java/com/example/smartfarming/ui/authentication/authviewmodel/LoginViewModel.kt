@@ -10,6 +10,7 @@ import com.example.smartfarming.data.UserPreferences
 import com.example.smartfarming.data.network.Resource
 import com.example.smartfarming.data.network.resources.user.LoginResponse
 import com.example.smartfarming.data.repositories.authentication.AuthRepo
+import com.example.smartfarming.utils.isOnline
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
@@ -27,6 +28,7 @@ class LoginViewModel constructor(
     val networkError = mutableStateOf(false)
     val loginSuccessful = mutableStateOf(false)
     val authError = mutableStateOf(false)
+    val isOffline = mutableStateOf(false)
 
     // LOGIN FUNCTION
     val loginResponse = mutableStateOf<Resource<LoginResponse>?>(null)

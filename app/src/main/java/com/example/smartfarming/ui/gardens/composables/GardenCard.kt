@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.example.smartfarming.R
 import com.example.smartfarming.data.room.entities.ActivityTypesEnum
 import com.example.smartfarming.data.room.entities.Garden
+import com.example.smartfarming.data.room.entities.Task
+import com.example.smartfarming.data.room.entities.enums.TaskStatusEnum
 import com.example.smartfarming.ui.addactivities.ui.theme.*
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 import com.example.smartfarming.ui.gardenprofile.GardenProfileActivity
@@ -40,8 +42,29 @@ import com.example.smartfarming.ui.gardens.GardensViewModel
 @Composable
 fun GardenCard(garden : Garden, viewModel : GardensViewModel){
     val context = LocalContext.current
-    viewModel.getTasks(garden.id)
-    setNotificationIcons(viewModel)
+    var hasIrrigation = remember {
+        mutableStateOf(false)
+    }
+    var hasFertilization = remember {
+        mutableStateOf(false)
+    }
+    var hasPesticide = remember {
+        mutableStateOf(false)
+    }
+    var hasOthers = remember {
+        mutableStateOf(false)
+    }
+    //setNotificationIcons(viewModel)
+
+    val gardenTasks = getGardenTasks(garden.id, viewModel.allTasks)
+
+    setNotificationIcons(
+        gardenTasks,
+        setIrrigationState = {hasIrrigation.value = it},
+        setFertilizationState = {hasFertilization.value = it},
+        setPesticideState = {hasPesticide.value = it},
+        setOthersState = {hasOthers.value = it}
+    )
 
     Card(
         modifier = Modifier
@@ -92,16 +115,16 @@ fun GardenCard(garden : Garden, viewModel : GardensViewModel){
                 )
 
                 Row() {
-                    if (viewModel.hasIrrigation.value){
+                    if (hasIrrigation.value){
                         ActivityBadge(color = BlueIrrigationDark, icon = Icons.Default.WaterDrop)
                     }
-                    if (viewModel.hasFertilization.value){
+                    if (hasFertilization.value){
                         ActivityBadge(color = Purple500, icon = Icons.Default.Compost)
                     }
-                    if (viewModel.hasPesticide.value){
+                    if (hasPesticide.value){
                         ActivityBadge(color = YellowPesticide, icon = Icons.Default.BugReport)
                     }
-                    if (viewModel.hasOthers.value){
+                    if (hasOthers.value){
                         ActivityBadge(color = MainGreen, icon = Icons.Default.Agriculture)
                     }
                 }
@@ -197,13 +220,30 @@ class TicketShape(private val cornerRadius: Float) : Shape {
     }
 }
 
-private fun setNotificationIcons(viewModel: GardensViewModel){
-    viewModel.gardenTasks.value.forEach {
+private fun setNotificationIcons(
+    gardenTasks : MutableList<Task>,
+    setIrrigationState : (Boolean) -> Unit,
+    setPesticideState : (Boolean) -> Unit,
+    setFertilizationState : (Boolean) -> Unit,
+    setOthersState : (Boolean) -> Unit,
+){
+    gardenTasks.forEach {
         when(it.activityType){
-            ActivityTypesEnum.IRRIGATION.name -> viewModel.hasIrrigation.value = true
-            ActivityTypesEnum.FERTILIZATION.name -> viewModel.hasFertilization.value = true
-            ActivityTypesEnum.PESTICIDE.name -> viewModel.hasPesticide.value = true
-            ActivityTypesEnum.Other.name -> viewModel.hasOthers.value = true
+            ActivityTypesEnum.IRRIGATION.name -> setIrrigationState(true)
+            ActivityTypesEnum.FERTILIZATION.name -> setPesticideState(true)
+            ActivityTypesEnum.PESTICIDE.name -> setFertilizationState(true)
+            ActivityTypesEnum.Other.name -> setOthersState(true)
         }
     }
+}
+
+private fun getGardenTasks(gardenId : Int ,allTasks: List<Task>) : MutableList<Task>{
+    val gardenTasks = mutableListOf<Task>()
+
+    for (task in allTasks){
+        if (task.gardenIds.contains(gardenId) && task.status == TaskStatusEnum.TODO.name){
+            gardenTasks.add(task)
+        }
+    }
+    return gardenTasks
 }

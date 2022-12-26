@@ -70,6 +70,10 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
         viewModel.load.value = false
     }
 
+    if (viewModel.garden.value != null){
+        viewModel.calculatePercentage()
+    }
+
     Scaffold(
         modifier = Modifier
             .background(Color.LightGray)
@@ -97,7 +101,10 @@ fun GardenProfile(garden : State<Garden?>, navController: NavHostController, vie
                     Modifier
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())) {
-                    ReportDiagram()
+                    ReportDiagram(
+                        irrigationProgress = viewModel.irrigationPercentage.value,
+
+                    )
 
                     Report(navController, garden.value!!.title)
 

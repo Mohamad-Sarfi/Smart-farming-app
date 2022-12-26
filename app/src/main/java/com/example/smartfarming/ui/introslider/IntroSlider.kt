@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Agriculture
+import androidx.compose.material.icons.filled.Login
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,8 +55,9 @@ fun IntroSlider(viewModel: IntroSliderViewModel ,setShownValue: (Boolean) -> Uni
                 Modifier
                     .fillMaxWidth()
                     .padding(10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                Text(text = "به کشت افزار خوش آمدید", style = MaterialTheme.typography.h4, color = MainGreen, modifier = Modifier.padding(top = 30.dp))
+                Text(text = "به کشت افزار خوش آمدید", style = MaterialTheme.typography.h5, color = MainGreen, modifier = Modifier.padding(top = 30.dp))
             }
+
             Crossfade(
                 targetState = viewModel.step.value,
                 animationSpec = tween(1000, 100,easing = FastOutLinearInEasing)
@@ -67,6 +69,7 @@ fun IntroSlider(viewModel: IntroSliderViewModel ,setShownValue: (Boolean) -> Uni
                     3 -> Step3()
                 }
             }
+
             BottomRow(viewModel){
                 setShownValue(it)
             }
@@ -78,7 +81,10 @@ fun IntroSlider(viewModel: IntroSliderViewModel ,setShownValue: (Boolean) -> Uni
 private fun BottomRow(viewModel: IntroSliderViewModel, setShownValue : (Boolean) -> Unit) {
     val activity = LocalContext.current as Activity
 
-    Column(Modifier.fillMaxWidth()) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
             HorizontalStepCircle(step = viewModel.step.value, numberTag = 0, color = MainGreen)
             HorizontalStepCircle(step = viewModel.step.value, numberTag = 1, color = MainGreen)
@@ -99,7 +105,8 @@ private fun BottomRow(viewModel: IntroSliderViewModel, setShownValue : (Boolean)
                     } else {
                         nextBtnClickHandler(activity)
                         setShownValue(true)
-                        }},
+                        }
+                          },
                 Modifier.fillMaxWidth(.6f),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MainGreen,
@@ -107,14 +114,20 @@ private fun BottomRow(viewModel: IntroSliderViewModel, setShownValue : (Boolean)
                 ),
                 shape = RoundedCornerShape(15.dp)
             ) {
-                Text(text = if (viewModel.step.value == 3) "ورود" else "بعدی", style = MaterialTheme.typography.body1)
+                Row() {
+                    Text(text = if (viewModel.step.value == 3) "ورود" else "بعدی", style = MaterialTheme.typography.body1)
+                    AnimatedVisibility(visible = viewModel.step.value == 3) {
+                        Icon(Icons.Default.Login, contentDescription =null ,tint = MaterialTheme.colors.onPrimary, modifier = Modifier.padding(horizontal = 5.dp))
+                    }
+                }
             }
         }
     }
 }
 
 private fun nextBtnClickHandler(activity : Activity){
-    activity.startActivity(Intent(activity, AddUserActivity::class.java))
+    val intent = Intent(activity, AddUserActivity::class.java)
+    activity.startActivity(intent)
 }
 
 @Composable

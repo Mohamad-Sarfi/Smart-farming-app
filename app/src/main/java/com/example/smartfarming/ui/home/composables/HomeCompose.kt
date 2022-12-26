@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
@@ -17,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.OfflinePin
+import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -29,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
@@ -60,7 +64,9 @@ fun HomeCompose(navController: NavHostController, mainNavController: NavHostCont
     val gardensList by viewModel.gardensList.observeAsState()
     val backDropState = rememberBackdropScaffoldState( BackdropValue.Revealed)
     val composableScope = rememberCoroutineScope()
-
+    val offline = remember {
+        mutableStateOf(false)
+    }
 
 //    if (isNetworkStatePermissionGranted(activity) || isWriteSettingPermissionGranted(activity)){
 //        val connectivityManager = activity.getSystemService(ConnectivityManager::class.java) as ConnectivityManager
@@ -73,7 +79,9 @@ fun HomeCompose(navController: NavHostController, mainNavController: NavHostCont
 ////        )
 //        Toast.makeText(activity, "not granted", Toast.LENGTH_SHORT).show()
 //    }
-
+    if (!isOnline(activity)){
+        offline.value = true
+    }
 
     BackdropScaffold(
         appBar = { 
@@ -84,8 +92,7 @@ fun HomeCompose(navController: NavHostController, mainNavController: NavHostCont
                              composableScope.launch {
                                  backDropState.reveal()
                              }
-                         }
-                     ,
+                         },
                      verticalAlignment = Alignment.CenterVertically,
                      horizontalArrangement = Arrangement.Center
                  ) {
@@ -93,7 +100,7 @@ fun HomeCompose(navController: NavHostController, mainNavController: NavHostCont
                      Text(text = "افزودن باغ", style = MaterialTheme.typography.body2, color = Color.White)
                  }
         },
-        backLayerContent = { BackdropBackLayer(activity) },
+        backLayerContent = { BackdropBackLayer(activity, offline.value){offline.value = it} },
         scaffoldState = backDropState,
         frontLayerContent = {
             TasksRow(
@@ -117,15 +124,13 @@ fun HomeCompose(navController: NavHostController, mainNavController: NavHostCont
 }
 
 @Composable
-fun BackdropBackLayer(activity: Activity){
-
+fun BackdropBackLayer(activity: Activity, offline : Boolean, setOffline : (Boolean) -> Unit){
     Box(
         modifier = Modifier
             .padding(0.dp)
             .fillMaxWidth()
             .height(230.dp)
     ) {
-
         Image(
             painter = painterResource(id = R.drawable.background_pic),
             contentDescription = null,
@@ -149,18 +154,47 @@ fun BackdropBackLayer(activity: Activity){
                 ),
         )
 
-        Column(
+        ConstraintLayout(
             modifier = Modifier
                 .padding(0.dp)
                 .fillMaxSize()
-                .padding(top = 60.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .padding(top = 0.dp),
         ) {
+            val (offlineIcon, addGarden) = createRefs()
+
+            if (offline){
+                Row(
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                        .constrainAs(offlineIcon) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                        }
+                        .clip(RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp))
+                        .clickable {
+                            if (isOnline(activity)){
+                                setOffline(false)
+                                Toast.makeText(activity, "اتصال به اینترنت برقرار است :)", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        .background(Color.White.copy(.9f))
+                        .padding(end = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(Icons.Outlined.WifiOff, contentDescription = null, modifier = Modifier.size(25.dp), tint = Color.Black)
+                    Text(text = "آفلاین", style = MaterialTheme.typography.subtitle2, color = Color.Black, modifier = Modifier.padding(start = 0.dp))
+                }
+            }
 
             Card(
                 Modifier
-                    .padding(bottom = 30.dp)
+                    .constrainAs(addGarden) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    }
                     .height(50.dp)
                     .width(230.dp),
                 shape = RoundedCornerShape(30.dp)
@@ -195,18 +229,9 @@ fun BackdropBackLayer(activity: Activity){
                     )
                 }
             }
-//            Image(
-//                painter = painterResource(id = R.drawable.sprout_white),
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .size(135.dp)
-//                    .padding(15.dp)
-//            )
         }
     }
-
 }
-
 
 @Composable
 fun FarmingArticlesPreview(articlesList : List<Article>?){
@@ -480,7 +505,11 @@ private fun TaskDetailDialog(viewModel: HomeViewModel, navController: NavHostCon
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (task.status == TaskStatusEnum.IGNORED.name){
-                    Row(Modifier.fillMaxWidth().clip(MaterialTheme.shapes.small).background(MaterialTheme.colors.error.copy(.8f)), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(MaterialTheme.shapes.small)
+                            .background(MaterialTheme.colors.error.copy(.8f)), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                         Text(text = "مهلت انجام این یادآور تمام شده است.", style = MaterialTheme.typography.subtitle2, color = MaterialTheme.colors.onError)
                         Icon(Icons.Default.Warning, contentDescription = null, tint = Yellow500, modifier = Modifier.padding(4.dp))
                     }

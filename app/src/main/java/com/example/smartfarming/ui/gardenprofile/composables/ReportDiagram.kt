@@ -18,7 +18,11 @@ import com.example.smartfarming.ui.authentication.ui.theme.BlueWatering
 import com.example.smartfarming.ui.authentication.ui.theme.YellowPesticide
 
 @Composable
-fun ReportDiagram(){
+fun ReportDiagram(
+    irrigationProgress: Float = 0.9f,
+    fertilizationProgress: Float = 0.6f,
+    pesticideProgress: Float = 0.3f
+){
 
     val animateProgress by animateFloatAsState(
         targetValue = 0.6f,
@@ -27,9 +31,7 @@ fun ReportDiagram(){
     var selected by remember {
         mutableStateOf("")
     }
-    val irrigationProgress = 0.9f
-    val fertilizationProgress = 0.6f
-    val pesticideProgress = 0.3f
+
 
     Row(
         Modifier

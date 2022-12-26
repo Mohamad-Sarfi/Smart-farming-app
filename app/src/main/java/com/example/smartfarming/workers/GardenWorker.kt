@@ -7,11 +7,12 @@ import androidx.work.WorkerParameters
 class GardenWorker(ctx : Context, params: WorkerParameters) : Worker(ctx, params) {
 
     override fun doWork(): Result {
+        val appContext = applicationContext
+
         return try {
             Result.success()
         } catch (throwable : Throwable){
             Result.failure()
         }
     }
-
 }
